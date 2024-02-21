@@ -8,8 +8,6 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
-app
-    .UseHttpsRedirection()
-    .UseRouting();
+app.UseHttpsRedirection();
 
 app.Run();
