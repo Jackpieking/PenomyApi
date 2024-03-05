@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PenomyPlatform.Common.Configuration.V1\PenomyPlatform.Common.Configuration.V1.csproj" />
+    <ProjectReference Include="..\PenomyPlatform.Core.Application\PenomyPlatform.Core.Application.csproj" />
+  </ItemGroup>
+
+</Project>

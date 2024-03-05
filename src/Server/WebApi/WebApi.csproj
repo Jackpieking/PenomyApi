@@ -14,4 +14,14 @@
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PenomyPlatform.BackgroundJob.HangFire.V1\PenomyPlatform.BackgroundJob.HangFire.V1.csproj" />
+    <ProjectReference Include="..\PenomyPlatform.Common.Configuration.V1\PenomyPlatform.Common.Configuration.V1.csproj" />
+    <ProjectReference Include="..\PenomyPlatform.FileStorage.OneDrive.V1\PenomyPlatform.FileStorage.OneDrive.V1.csproj" />
+    <ProjectReference Include="..\PenomyPlatform.Notification.Mail.GoogleSmtp.V1\PenomyPlatform.Notification.Mail.GoogleSmtp.V1.csproj" />
+    <ProjectReference Include="..\PenomyPlatform.Persistence.Cache.Redis.V1\PenomyPlatform.Persistence.Cache.Redis.V1.csproj" />
+    <ProjectReference Include="..\PenomyPlatform.Persistence.NonRelational.MongoDb.V1\PenomyPlatform.Persistence.NonRelational.MongoDb.V1.csproj" />
+    <ProjectReference Include="..\PenomyPlatform.Persistence.Relational.PostgresSql.V1\PenomyPlatform.Persistence.Relational.PostgresSql.V1.csproj" />
+  </ItemGroup>
+
 </Project>

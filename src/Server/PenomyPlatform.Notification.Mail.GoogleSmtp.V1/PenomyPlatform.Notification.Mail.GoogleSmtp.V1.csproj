@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Application\Application.csproj" />
-    <ProjectReference Include="..\Configuration\Configuration.csproj" />
+    <ProjectReference Include="..\PenomyPlatform.Common.Configuration.V1\PenomyPlatform.Common.Configuration.V1.csproj" />
+    <ProjectReference Include="..\PenomyPlatform.Core.Application\PenomyPlatform.Core.Application.csproj" />
   </ItemGroup>
 
 </Project>
