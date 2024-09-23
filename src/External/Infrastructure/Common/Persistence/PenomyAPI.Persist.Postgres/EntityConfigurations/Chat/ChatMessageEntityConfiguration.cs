@@ -19,9 +19,13 @@ internal sealed class ChatMessageEntityConfiguration : IEntityConfiguration<Chat
             .HasMaxLength(ChatMessage.MetaData.ContentLength)
             .IsUnicode(true);
 
+        builder.Property(chatMessage => chatMessage.MessageType).IsRequired();
+
         builder.Property(chatMessage => chatMessage.ChatGroupId).IsRequired();
 
         builder.Property(chatMessage => chatMessage.ReplyToAnotherMessage).IsRequired();
+
+        builder.Property(chatMessage => chatMessage.IsRevoked).IsRequired();
 
         builder.Property(chatMessage => chatMessage.CreatedBy).IsRequired();
 
@@ -29,6 +33,7 @@ internal sealed class ChatMessageEntityConfiguration : IEntityConfiguration<Chat
             .Property(chatGroup => chatGroup.CreatedAt)
             .HasColumnType(DatabaseNativeTypes.TIMESTAMPTZ)
             .IsRequired();
+
         builder
             .Property(chatMessage => chatMessage.UpdatedAt)
             .HasColumnType(DatabaseNativeTypes.TIMESTAMPTZ)

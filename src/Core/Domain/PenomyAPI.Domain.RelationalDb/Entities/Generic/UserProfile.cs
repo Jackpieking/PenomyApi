@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using PenomyAPI.Domain.RelationalDb.Entities.Artworks;
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Entities.Base;
 using PenomyAPI.Domain.RelationalDb.Entities.Chat;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
@@ -32,7 +32,12 @@ public sealed class UserProfile : IEntity
     public DateTime UpdatedAt { get; set; }
 
     #region Navigation
+    // Generic domain
     public CreatorProfile CreatorProfile { get; set; }
+
+    public IEnumerable<UserFollowedCreator> FollowedCreators { get; set; }
+
+    public IEnumerable<UserFollowedCreator> Followers { get; set; }
 
     public IEnumerable<BugReport> CreatedBugReports { get; set; }
 
@@ -46,6 +51,7 @@ public sealed class UserProfile : IEntity
 
     public IEnumerable<UserRegisterSubscriptionPlan> RegisterSubscriptionPlans { get; set; }
 
+    // Chat domain
     public IEnumerable<ChatGroup> CreatedChatGroups { get; set; }
 
     public IEnumerable<ChatGroupMember> JoinedChatGroupMembers { get; set; }
@@ -54,6 +60,9 @@ public sealed class UserProfile : IEntity
 
     public IEnumerable<ChatMessage> ChatMessages { get; set; }
 
+    public IEnumerable<UserLikeChatMessage> UserLikeChatMessages { get; set; }
+
+    // Social media domain
     public IEnumerable<UserChatGroupActiveHistory> ChatGroupActiveHistories { get; set; }
 
     public IEnumerable<UserLikeUserPostComment> UserLikeUserPostComments { get; set; }
@@ -88,14 +97,9 @@ public sealed class UserProfile : IEntity
 
     public IEnumerable<UserLikeUserPost> UserLikeUserPosts { get; set; }
 
-    public IEnumerable<UserLikeChatMessage> UserLikeChatMessages { get; set; }
-
     public IEnumerable<UserPostComment> CreatedUserPostComments { get; set; }
 
-    public IEnumerable<UserFollowedCreator> FollowedCreators { get; set; }
-
-    public IEnumerable<UserFollowedCreator> Followers { get; set; }
-
+    // Artwork creation domain
     public IEnumerable<Artwork> CreatedArtworks { get; set; }
 
     public IEnumerable<Artwork> UpdatedArtworks { get; set; }
@@ -117,6 +121,8 @@ public sealed class UserProfile : IEntity
     public IEnumerable<ArtworkComment> CreatedArtworkComments { get; set; }
 
     public IEnumerable<ArtworkReport> CreatedArtworkReports { get; set; }
+
+    public IEnumerable<ArtworkChapterReport> CreatedChapterReports { get; set; }
 
     public IEnumerable<UserManagedArtwork> CollaboratedArtworks { get; set; }
 

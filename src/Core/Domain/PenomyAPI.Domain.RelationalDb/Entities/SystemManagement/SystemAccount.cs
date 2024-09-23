@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using PenomyAPI.Domain.RelationalDb.Entities.Artworks;
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Entities.Base;
 using PenomyAPI.Domain.RelationalDb.Entities.Generic;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
@@ -66,7 +66,7 @@ public sealed class SystemAccount : EntityWithId<long>
 
     public IEnumerable<ArtworkOrigin> UpdatedOrigins { get; set; }
 
-    public IEnumerable<ArtworkReportReason> CreatedArtworkReportProblems { get; set; }
+    public IEnumerable<ArtworkReportProblem> CreatedArtworkReportProblems { get; set; }
 
     public IEnumerable<ArtworkViolationFlag> CreatedArtworkViolationFlags { get; set; }
 

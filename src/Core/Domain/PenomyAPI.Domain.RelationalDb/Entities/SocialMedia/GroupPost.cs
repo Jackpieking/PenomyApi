@@ -15,7 +15,7 @@ public sealed class GroupPost : EntityWithId<long>, ICreatedEntity<long>
 
     public bool AllowComment { get; set; }
 
-    public bool IsApproved { get; set; }
+    public GroupPostStatus PostStatus { get; set; } = GroupPostStatus.Pending;
 
     public long ApprovedBy { get; set; }
 

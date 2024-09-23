@@ -9,9 +9,13 @@ public sealed class ChatMessage : EntityWithId<long>, ICreatedEntity<long>
 {
     public string Content { get; set; }
 
+    public ChatMessageType MessageType { get; set; } = ChatMessageType.NormalMessage;
+
     public long ChatGroupId { get; set; }
 
     public bool ReplyToAnotherMessage { get; set; }
+
+    public bool IsRevoked { get; set; }
 
     public long CreatedBy { get; set; }
 

@@ -25,7 +25,7 @@ internal sealed class GroupPostEntityConfiguration : IEntityConfiguration<GroupP
 
         builder.Property(post => post.AllowComment).IsRequired();
 
-        builder.Property(post => post.IsApproved).IsRequired();
+        builder.Property(post => post.PostStatus).IsRequired();
 
         builder.Property(post => post.ApprovedBy).IsRequired();
 
