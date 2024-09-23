@@ -1,4 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\Common\BackgroundJob\PenomyAPI.BackgroundJob.Quartz\PenomyAPI.BackgroundJob.Quartz.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Common\Notification\Mail\PenomyAPI.Noti.Mail.GoogleGmail\PenomyAPI.Noti.Mail.GoogleGmail.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Common\Notification\Mail\PenomyAPI.Noti.Mail.MailCow\PenomyAPI.Noti.Mail.MailCow.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Common\Persistence\PenomyAPI.Persist.Postgres\PenomyAPI.Persist.Postgres.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Common\Persistence\PenomyAPI.Persist.Redis\PenomyAPI.Persist.Redis.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Common\Persistence\PenomyAPI.Persist.Typesense\PenomyAPI.Persist.Typesense.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\ArtworkCreation\PenomyAPI.Infra.FeatArt1\PenomyAPI.Infra.FeatArt1.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Generic\PenomyAPI.Infra.FeatG1\PenomyAPI.Infra.FeatG1.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Generic\PenomyAPI.Infra.FeatG32\PenomyAPI.Infra.FeatG32.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Generic\PenomyAPI.Infra.FeatG34\PenomyAPI.Infra.FeatG34.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\PenomyAPI.App.Common\PenomyAPI.App.Common.csproj" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+  </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>disable</ImplicitUsings>
