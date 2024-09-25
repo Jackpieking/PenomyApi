@@ -18,7 +18,7 @@ public sealed class ArtworkChapter
 
     public int UploadOrder { get; set; }
 
-    public PublicLevel PublicLevel { get; set; }
+    public ArtworkPublicLevel PublicLevel { get; set; }
 
     public string ThumbnailUrl { get; set; }
 

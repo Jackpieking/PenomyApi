@@ -6,9 +6,11 @@ namespace PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
 /// </summary>
 public enum UserPostPublicLevel
 {
-    OnlyMe = 1,
+    Everyone = 1,
 
-    OnlyFriends = 2,
+    OnlyFriend = 2,
 
-    Everyone = 3
+    Private = 3,
+
+    PrivateWithLimitedUsers = 4
 }

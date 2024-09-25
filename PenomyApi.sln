@@ -9,31 +9,31 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{1A7B0D86-3
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{57406E75-93BB-4C2F-B55E-1B138503C518}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.Domain.RelationalDb", "src\Core\Domain\PenomyAPI.Domain.RelationalDb\PenomyAPI.Domain.RelationalDb.csproj", "{9E494464-298F-4FD7-84F7-A2FF3C00FF46}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.Domain.RelationalDb", "src\Core\Domain\PenomyAPI.Domain.RelationalDb\PenomyAPI.Domain.RelationalDb.csproj", "{9E494464-298F-4FD7-84F7-A2FF3C00FF46}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{C7998BF0-3926-407F-B624-14FB64D69BB2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.Common", "src\Core\Application\PenomyAPI.App.Common\PenomyAPI.App.Common.csproj", "{D29128E1-6A44-4349-ACDA-8E0CAC53320E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.Common", "src\Core\Application\PenomyAPI.App.Common\PenomyAPI.App.Common.csproj", "{D29128E1-6A44-4349-ACDA-8E0CAC53320E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Generic", "Generic", "{93238DD1-0977-422A-A564-56BD09E1EC18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.FeatG1", "src\Core\Application\Generic\PenomyAPI.App.FeatG1\PenomyAPI.App.FeatG1.csproj", "{CFDED708-E648-45DE-B5A4-34E51D11D69B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatG1", "src\Core\Application\Generic\PenomyAPI.App.FeatG1\PenomyAPI.App.FeatG1.csproj", "{CFDED708-E648-45DE-B5A4-34E51D11D69B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.FeatG31", "src\Core\Application\Generic\PenomyAPI.App.FeatG31\PenomyAPI.App.FeatG31.csproj", "{9974A3E3-06CA-4F87-B24F-4ECDD147A9D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatG31", "src\Core\Application\Generic\PenomyAPI.App.FeatG31\PenomyAPI.App.FeatG31.csproj", "{9974A3E3-06CA-4F87-B24F-4ECDD147A9D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.FeatG32", "src\Core\Application\Generic\PenomyAPI.App.FeatG32\PenomyAPI.App.FeatG32.csproj", "{BC4C7BA6-C944-4B90-A5BD-A4222B04C4B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatG32", "src\Core\Application\Generic\PenomyAPI.App.FeatG32\PenomyAPI.App.FeatG32.csproj", "{BC4C7BA6-C944-4B90-A5BD-A4222B04C4B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.FeatG34", "src\Core\Application\Generic\PenomyAPI.App.FeatG34\PenomyAPI.App.FeatG34.csproj", "{7E26357A-2824-46AD-A0AC-67879DDC45F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatG34", "src\Core\Application\Generic\PenomyAPI.App.FeatG34\PenomyAPI.App.FeatG34.csproj", "{7E26357A-2824-46AD-A0AC-67879DDC45F8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{902AF40D-0B9F-44A1-ABD2-01ACC732DDAB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildingBlock", "BuildingBlock", "{A44BC94E-0956-4797-9016-28E909D94369}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.BuildingBlock.FeatRegister", "src\External\BuildingBlock\PenomyAPI.BuildingBlock.FeatRegister\PenomyAPI.BuildingBlock.FeatRegister.csproj", "{C7A97CE7-0709-4E9D-928E-EB5F66F61FB2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.BuildingBlock.FeatRegister", "src\External\BuildingBlock\PenomyAPI.BuildingBlock.FeatRegister\PenomyAPI.BuildingBlock.FeatRegister.csproj", "{C7A97CE7-0709-4E9D-928E-EB5F66F61FB2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{1E4B1744-7ED9-4E48-94C7-C41E4E695A39}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.Presentation.FastEndpointBasedApi", "src\External\Presentation\PenomyAPI.Presentation.FastEndpointBasedApi\PenomyAPI.Presentation.FastEndpointBasedApi.csproj", "{5971C90F-4F01-448D-9AE6-C990D7EAE158}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.Presentation.FastEndpointBasedApi", "src\External\Presentation\PenomyAPI.Presentation.FastEndpointBasedApi\PenomyAPI.Presentation.FastEndpointBasedApi.csproj", "{5971C90F-4F01-448D-9AE6-C990D7EAE158}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{4B81C059-1850-49E8-AB12-182A45679AB5}"
 EndProject
@@ -41,35 +41,35 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{D99290
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BackgroundJob", "BackgroundJob", "{B3185EB6-76B7-4E08-97E3-AE8A1DD0408B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.BackgroundJob.Quartz", "src\External\Infrastructure\Common\BackgroundJob\PenomyAPI.BackgroundJob.Quartz\PenomyAPI.BackgroundJob.Quartz.csproj", "{54504FF6-FD23-47BE-814A-5761AEE224E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.BackgroundJob.Quartz", "src\External\Infrastructure\Common\BackgroundJob\PenomyAPI.BackgroundJob.Quartz\PenomyAPI.BackgroundJob.Quartz.csproj", "{54504FF6-FD23-47BE-814A-5761AEE224E0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notification", "Notification", "{8BEDEA2C-E2CC-4F76-9E58-C605AEED97EC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mail", "Mail", "{4CFC37E0-3454-44E7-A14D-4E05C8D65B32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.Noti.Mail.GoogleGmail", "src\External\Infrastructure\Common\Notification\Mail\PenomyAPI.Noti.Mail.GoogleGmail\PenomyAPI.Noti.Mail.GoogleGmail.csproj", "{29A161EB-558B-45B3-BB1E-4409F6F8A412}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.Noti.Mail.GoogleGmail", "src\External\Infrastructure\Common\Notification\Mail\PenomyAPI.Noti.Mail.GoogleGmail\PenomyAPI.Noti.Mail.GoogleGmail.csproj", "{29A161EB-558B-45B3-BB1E-4409F6F8A412}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.Noti.Mail.MailCow", "src\External\Infrastructure\Common\Notification\Mail\PenomyAPI.Noti.Mail.MailCow\PenomyAPI.Noti.Mail.MailCow.csproj", "{E46D173A-E669-46A4-869B-F9A26B957D80}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.Noti.Mail.MailCow", "src\External\Infrastructure\Common\Notification\Mail\PenomyAPI.Noti.Mail.MailCow\PenomyAPI.Noti.Mail.MailCow.csproj", "{E46D173A-E669-46A4-869B-F9A26B957D80}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.Infra.Configuration", "src\External\Infrastructure\Common\PenomyAPI.Infra.Configuration\PenomyAPI.Infra.Configuration.csproj", "{8A36F8A3-E739-40FE-B527-836433110EA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.Infra.Configuration", "src\External\Infrastructure\Common\PenomyAPI.Infra.Configuration\PenomyAPI.Infra.Configuration.csproj", "{8A36F8A3-E739-40FE-B527-836433110EA4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Persistence", "Persistence", "{F51BFF3B-DEF2-4D5F-A9F2-2E2D3C5E138A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.Persist.Postgres", "src\External\Infrastructure\Common\Persistence\PenomyAPI.Persist.Postgres\PenomyAPI.Persist.Postgres.csproj", "{5212DB77-3B2A-40AB-92F9-064B9C28C402}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.Persist.Postgres", "src\External\Infrastructure\Common\Persistence\PenomyAPI.Persist.Postgres\PenomyAPI.Persist.Postgres.csproj", "{5212DB77-3B2A-40AB-92F9-064B9C28C402}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Generic", "Generic", "{95730BA5-6C50-4F20-9F88-6C23EB104BF6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.Infra.FeatG1", "src\External\Infrastructure\Generic\PenomyAPI.Infra.FeatG1\PenomyAPI.Infra.FeatG1.csproj", "{7A6BCDBE-AB75-4B86-9527-C61FF1C120EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.Infra.FeatG1", "src\External\Infrastructure\Generic\PenomyAPI.Infra.FeatG1\PenomyAPI.Infra.FeatG1.csproj", "{7A6BCDBE-AB75-4B86-9527-C61FF1C120EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.Persist.Redis", "src\External\Infrastructure\Common\Persistence\PenomyAPI.Persist.Redis\PenomyAPI.Persist.Redis.csproj", "{825BD3CC-FD67-435A-AD0B-70FC3875B03C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.Persist.Redis", "src\External\Infrastructure\Common\Persistence\PenomyAPI.Persist.Redis\PenomyAPI.Persist.Redis.csproj", "{825BD3CC-FD67-435A-AD0B-70FC3875B03C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.Infra.FeatG31", "src\External\Infrastructure\Generic\PenomyAPI.Infra.FeatG31\PenomyAPI.Infra.FeatG31.csproj", "{A5CCD674-9AA2-42C1-B50C-EB94BD522248}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.Infra.FeatG31", "src\External\Infrastructure\Generic\PenomyAPI.Infra.FeatG31\PenomyAPI.Infra.FeatG31.csproj", "{A5CCD674-9AA2-42C1-B50C-EB94BD522248}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.Persist.Typesense", "src\External\Infrastructure\Common\Persistence\PenomyAPI.Persist.Typesense\PenomyAPI.Persist.Typesense.csproj", "{9C5D9C07-EDEE-4345-BFD2-EF28096C01D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.Persist.Typesense", "src\External\Infrastructure\Common\Persistence\PenomyAPI.Persist.Typesense\PenomyAPI.Persist.Typesense.csproj", "{9C5D9C07-EDEE-4345-BFD2-EF28096C01D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.Infra.FeatG32", "src\External\Infrastructure\Generic\PenomyAPI.Infra.FeatG32\PenomyAPI.Infra.FeatG32.csproj", "{50D29BF6-0130-44DF-93D7-A9B834B30C8A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.Infra.FeatG32", "src\External\Infrastructure\Generic\PenomyAPI.Infra.FeatG32\PenomyAPI.Infra.FeatG32.csproj", "{50D29BF6-0130-44DF-93D7-A9B834B30C8A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.Infra.FeatG34", "src\External\Infrastructure\Generic\PenomyAPI.Infra.FeatG34\PenomyAPI.Infra.FeatG34.csproj", "{23A12FE0-BBDD-4D18-9E0E-96F68DA85285}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.Infra.FeatG34", "src\External\Infrastructure\Generic\PenomyAPI.Infra.FeatG34\PenomyAPI.Infra.FeatG34.csproj", "{23A12FE0-BBDD-4D18-9E0E-96F68DA85285}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ArtworkCreation", "ArtworkCreation", "{315DDDD8-6E85-4C09-9F74-B81ECD9CD65A}"
 EndProject
@@ -79,9 +79,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SocialMedia", "SocialMedia"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SystemManagement", "SystemManagement", "{2DC1F414-67D8-4A02-ADAD-E2C21B8E074E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.FeatArt1", "src\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt1\PenomyAPI.App.FeatArt1.csproj", "{A4F1F026-7A62-4771-A44D-1E63117D5140}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatArt4", "src\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt1\PenomyAPI.App.FeatArt4.csproj", "{A4F1F026-7A62-4771-A44D-1E63117D5140}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.FeatG10", "src\Core\Application\Generic\PenomyAPI.App.FeatG10\PenomyAPI.App.FeatG10.csproj", "{04A31EF0-41DF-460B-BE78-9D7AF0E6F99F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatG10", "src\Core\Application\Generic\PenomyAPI.App.FeatG10\PenomyAPI.App.FeatG10.csproj", "{04A31EF0-41DF-460B-BE78-9D7AF0E6F99F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ArtworkCreation", "ArtworkCreation", "{7FE9F6F6-8D8B-489A-8C9A-B9174D77C050}"
 EndProject
@@ -91,21 +91,30 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SocialMedia", "SocialMedia"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SystemManagement", "SystemManagement", "{36290690-0A54-48CF-92C5-FE4D2F580629}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.Infra.FeatArt1", "src\External\Infrastructure\ArtworkCreation\PenomyAPI.Infra.FeatArt1\PenomyAPI.Infra.FeatArt1.csproj", "{17923694-78FA-491C-95FA-ADE35824CD96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.Infra.FeatArt4", "src\External\Infrastructure\ArtworkCreation\PenomyAPI.Infra.FeatArt1\PenomyAPI.Infra.FeatArt4.csproj", "{17923694-78FA-491C-95FA-ADE35824CD96}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.Infra.FeatChat1", "src\External\Infrastructure\Chat\PenomyAPI.Infra.FeatChat1\PenomyAPI.Infra.FeatChat1.csproj", "{DF0007CD-791C-4AA9-9D87-724BB458DDBD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.Infra.FeatChat1", "src\External\Infrastructure\Chat\PenomyAPI.Infra.FeatChat1\PenomyAPI.Infra.FeatChat1.csproj", "{DF0007CD-791C-4AA9-9D87-724BB458DDBD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.Infra.FeatSM1", "src\External\Infrastructure\SocialMedia\PenomyAPI.Infra.FeatSM1\PenomyAPI.Infra.FeatSM1.csproj", "{AFB6A402-813A-40A0-BD17-65A6CDE7050C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.Infra.FeatSM1", "src\External\Infrastructure\SocialMedia\PenomyAPI.Infra.FeatSM1\PenomyAPI.Infra.FeatSM1.csproj", "{AFB6A402-813A-40A0-BD17-65A6CDE7050C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.Infra.FeatSys1", "src\External\Infrastructure\SystemManagement\PenomyAPI.Infra.FeatSys1\PenomyAPI.Infra.FeatSys1.csproj", "{B816901F-87FB-4DDC-9E2A-7957AF76BEC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.Infra.FeatSys1", "src\External\Infrastructure\SystemManagement\PenomyAPI.Infra.FeatSys1\PenomyAPI.Infra.FeatSys1.csproj", "{B816901F-87FB-4DDC-9E2A-7957AF76BEC0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatG3", "src\Core\Application\Generic\PenomyAPI.App.FeatG3\PenomyAPI.App.FeatG3.csproj", "{EC8EA48E-81AC-41DD-9CCB-CD62E0BF07D0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.Infra.FeatG3", "src\External\Infrastructure\Generic\PenomyAPI.Infra.FeatG3\PenomyAPI.Infra.FeatG3.csproj", "{6DAB38FA-B48B-4B56-9CDD-8EF4E291DC90}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatChat1", "src\Core\Application\Chat\PenomyAPI.App.FeatChat1\PenomyAPI.App.FeatChat1.csproj", "{AA8D5E1F-C3DE-4025-9A24-1759798661B6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatSM1", "src\Core\Application\SocialMedia\PenomyAPI.App.FeatSM1\PenomyAPI.App.FeatSM1.csproj", "{E2453C4A-690C-4213-A08D-A4B9308608D1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatSys1", "src\Core\Application\SystemManagement\PenomyAPI.App.FeatSys1\PenomyAPI.App.FeatSys1.csproj", "{F28B99F4-29F5-452B-BAD8-93C0B20644F3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SnowflakeIdGenerator", "SnowflakeIdGenerator\SnowflakeIdGenerator.csproj", "{EFBB4FD3-E81D-4E2F-8224-72F99470F6C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{9E494464-298F-4FD7-84F7-A2FF3C00FF46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -208,16 +217,35 @@ Global
 		{B816901F-87FB-4DDC-9E2A-7957AF76BEC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B816901F-87FB-4DDC-9E2A-7957AF76BEC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B816901F-87FB-4DDC-9E2A-7957AF76BEC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC8EA48E-81AC-41DD-9CCB-CD62E0BF07D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC8EA48E-81AC-41DD-9CCB-CD62E0BF07D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC8EA48E-81AC-41DD-9CCB-CD62E0BF07D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC8EA48E-81AC-41DD-9CCB-CD62E0BF07D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DAB38FA-B48B-4B56-9CDD-8EF4E291DC90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DAB38FA-B48B-4B56-9CDD-8EF4E291DC90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DAB38FA-B48B-4B56-9CDD-8EF4E291DC90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DAB38FA-B48B-4B56-9CDD-8EF4E291DC90}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA8D5E1F-C3DE-4025-9A24-1759798661B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA8D5E1F-C3DE-4025-9A24-1759798661B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA8D5E1F-C3DE-4025-9A24-1759798661B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA8D5E1F-C3DE-4025-9A24-1759798661B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2453C4A-690C-4213-A08D-A4B9308608D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2453C4A-690C-4213-A08D-A4B9308608D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2453C4A-690C-4213-A08D-A4B9308608D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2453C4A-690C-4213-A08D-A4B9308608D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F28B99F4-29F5-452B-BAD8-93C0B20644F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F28B99F4-29F5-452B-BAD8-93C0B20644F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F28B99F4-29F5-452B-BAD8-93C0B20644F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F28B99F4-29F5-452B-BAD8-93C0B20644F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFBB4FD3-E81D-4E2F-8224-72F99470F6C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFBB4FD3-E81D-4E2F-8224-72F99470F6C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFBB4FD3-E81D-4E2F-8224-72F99470F6C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFBB4FD3-E81D-4E2F-8224-72F99470F6C1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{36290690-0A54-48CF-92C5-FE4D2F580629} = {4B81C059-1850-49E8-AB12-182A45679AB5}
-		{A766D3D1-58B3-4BE6-BAC4-A9507C364EEC} = {4B81C059-1850-49E8-AB12-182A45679AB5}
-		{55776849-8550-4D92-B00B-FF736143DF28} = {4B81C059-1850-49E8-AB12-182A45679AB5}
-		{7FE9F6F6-8D8B-489A-8C9A-B9174D77C050} = {4B81C059-1850-49E8-AB12-182A45679AB5}
-		{2DC1F414-67D8-4A02-ADAD-E2C21B8E074E} = {C7998BF0-3926-407F-B624-14FB64D69BB2}
-		{AD061D85-C1FB-4F50-8B36-93E3D49AAEF2} = {C7998BF0-3926-407F-B624-14FB64D69BB2}
-		{41F9078E-BF7D-4632-AFD5-85C47A975399} = {C7998BF0-3926-407F-B624-14FB64D69BB2}
-		{315DDDD8-6E85-4C09-9F74-B81ECD9CD65A} = {C7998BF0-3926-407F-B624-14FB64D69BB2}
 		{1A7B0D86-3AEC-43CF-921B-DBE59C80171C} = {D558BFB6-D8E3-4B0D-AD5D-5C1A4EBA67A6}
 		{57406E75-93BB-4C2F-B55E-1B138503C518} = {1A7B0D86-3AEC-43CF-921B-DBE59C80171C}
 		{9E494464-298F-4FD7-84F7-A2FF3C00FF46} = {57406E75-93BB-4C2F-B55E-1B138503C518}
@@ -251,11 +279,28 @@ Global
 		{9C5D9C07-EDEE-4345-BFD2-EF28096C01D9} = {F51BFF3B-DEF2-4D5F-A9F2-2E2D3C5E138A}
 		{50D29BF6-0130-44DF-93D7-A9B834B30C8A} = {95730BA5-6C50-4F20-9F88-6C23EB104BF6}
 		{23A12FE0-BBDD-4D18-9E0E-96F68DA85285} = {95730BA5-6C50-4F20-9F88-6C23EB104BF6}
+		{315DDDD8-6E85-4C09-9F74-B81ECD9CD65A} = {C7998BF0-3926-407F-B624-14FB64D69BB2}
+		{41F9078E-BF7D-4632-AFD5-85C47A975399} = {C7998BF0-3926-407F-B624-14FB64D69BB2}
+		{AD061D85-C1FB-4F50-8B36-93E3D49AAEF2} = {C7998BF0-3926-407F-B624-14FB64D69BB2}
+		{2DC1F414-67D8-4A02-ADAD-E2C21B8E074E} = {C7998BF0-3926-407F-B624-14FB64D69BB2}
 		{A4F1F026-7A62-4771-A44D-1E63117D5140} = {315DDDD8-6E85-4C09-9F74-B81ECD9CD65A}
 		{04A31EF0-41DF-460B-BE78-9D7AF0E6F99F} = {93238DD1-0977-422A-A564-56BD09E1EC18}
+		{7FE9F6F6-8D8B-489A-8C9A-B9174D77C050} = {4B81C059-1850-49E8-AB12-182A45679AB5}
+		{55776849-8550-4D92-B00B-FF736143DF28} = {4B81C059-1850-49E8-AB12-182A45679AB5}
+		{A766D3D1-58B3-4BE6-BAC4-A9507C364EEC} = {4B81C059-1850-49E8-AB12-182A45679AB5}
+		{36290690-0A54-48CF-92C5-FE4D2F580629} = {4B81C059-1850-49E8-AB12-182A45679AB5}
 		{17923694-78FA-491C-95FA-ADE35824CD96} = {7FE9F6F6-8D8B-489A-8C9A-B9174D77C050}
 		{DF0007CD-791C-4AA9-9D87-724BB458DDBD} = {55776849-8550-4D92-B00B-FF736143DF28}
 		{AFB6A402-813A-40A0-BD17-65A6CDE7050C} = {A766D3D1-58B3-4BE6-BAC4-A9507C364EEC}
 		{B816901F-87FB-4DDC-9E2A-7957AF76BEC0} = {36290690-0A54-48CF-92C5-FE4D2F580629}
+		{EC8EA48E-81AC-41DD-9CCB-CD62E0BF07D0} = {93238DD1-0977-422A-A564-56BD09E1EC18}
+		{6DAB38FA-B48B-4B56-9CDD-8EF4E291DC90} = {95730BA5-6C50-4F20-9F88-6C23EB104BF6}
+		{AA8D5E1F-C3DE-4025-9A24-1759798661B6} = {41F9078E-BF7D-4632-AFD5-85C47A975399}
+		{E2453C4A-690C-4213-A08D-A4B9308608D1} = {AD061D85-C1FB-4F50-8B36-93E3D49AAEF2}
+		{F28B99F4-29F5-452B-BAD8-93C0B20644F3} = {2DC1F414-67D8-4A02-ADAD-E2C21B8E074E}
+		{EFBB4FD3-E81D-4E2F-8224-72F99470F6C1} = {D992902E-3588-4E21-A1D5-488D283107B1}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D57C122E-3458-4428-82FB-FF6E7A97A032}
 	EndGlobalSection
 EndGlobal

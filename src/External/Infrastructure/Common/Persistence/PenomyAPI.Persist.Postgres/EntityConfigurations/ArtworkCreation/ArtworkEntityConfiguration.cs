@@ -15,7 +15,7 @@ internal sealed class ArtworkEntityConfiguration : IEntityConfiguration<Artwork>
         builder.HasKey(artwork => artwork.Id);
 
         builder
-            .Property(artwork => artwork.Name)
+            .Property(artwork => artwork.Title)
             .HasMaxLength(Artwork.MetaData.NameLength)
             .IsRequired();
 

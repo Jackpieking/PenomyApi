@@ -12,11 +12,11 @@ public sealed class Artwork
         IUpdatedEntity<long>,
         ITemporarilyRemovedEntity<long>
 {
-    public string Name { get; set; }
+    public string Title { get; set; }
 
     public string OtherName { get; set; }
 
-    public PublicLevel PublicLevel { get; set; }
+    public ArtworkPublicLevel PublicLevel { get; set; }
 
     public string AuthorName { get; set; }
 
@@ -73,7 +73,7 @@ public sealed class Artwork
     ///     Only system account with role equal Artwork Manager
     ///     can set the value for this property.
     /// </remarks>
-    public bool IsTakenDown { get; set; }
+    public bool IsTakenDown { get; set; } = false;
 
     #region Navigation
     public ArtworkOrigin Origin { get; set; }

@@ -11,7 +11,7 @@ public sealed class UserPost : EntityWithId<long>, ICreatedEntity<long>
 
     public long TotalLikes { get; set; }
 
-    public UserPostPublicLevel PublicLevel { get; set; } = UserPostPublicLevel.OnlyMe;
+    public UserPostPublicLevel PublicLevel { get; set; } = UserPostPublicLevel.Private;
 
     public bool AllowComment { get; set; }
 

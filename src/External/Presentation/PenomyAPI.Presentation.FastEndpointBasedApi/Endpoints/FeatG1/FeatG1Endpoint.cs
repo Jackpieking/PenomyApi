@@ -1,18 +1,11 @@
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
+using PenomyAPI.App.FeatArt4;
+using PenomyAPI.BuildingBlock.FeatRegister.Features;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG1;
 
-public class FeatG1Endpoint : Endpoint<FeatArt1Req, FeatArt1Response>
+public class FeatG1Endpoint
 {
-    public override void Configure()
-    {
-        base.Configure();
-    }
-
-    public override Task<string> ExecuteAsync(string req, CancellationToken ct)
-    {
-        return base.ExecuteAsync(req, ct);
-    }
 }
