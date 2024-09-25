@@ -117,7 +117,7 @@ public sealed class Artwork
     #region MetaData
     public static class MetaData
     {
-        public const int NameLength = 200;
+        public const int TitleLength = 200;
 
         public const int OtherNameLength = 200;
 

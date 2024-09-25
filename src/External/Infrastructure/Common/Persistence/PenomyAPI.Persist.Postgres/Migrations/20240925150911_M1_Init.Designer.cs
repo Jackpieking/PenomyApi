@@ -12,7 +12,7 @@ using PenomyAPI.Persist.Postgres.Data.DbContexts;
 namespace PenomyAPI.Persist.Postgres.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240923100907_M1_Init")]
+    [Migration("20240925150911_M1_Init")]
     partial class M1_Init
     {
         /// <inheritdoc />
@@ -234,11 +234,6 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Property<int>("LastChapterUploadOrder")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
                     b.Property<string>("OtherName")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -257,6 +252,11 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TIMESTAMPTZ");
@@ -461,6 +461,11 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<long>("TotalComments")
                         .HasColumnType("bigint");

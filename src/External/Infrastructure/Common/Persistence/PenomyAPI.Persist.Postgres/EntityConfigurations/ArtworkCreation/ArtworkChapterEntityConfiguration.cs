@@ -16,6 +16,11 @@ internal sealed class ArtworkChapterEntityConfiguration : IEntityConfiguration<A
 
         builder.Property(chapter => chapter.ArtworkId).IsRequired();
 
+        builder
+            .Property(chapter => chapter.Title)
+            .HasMaxLength(ArtworkChapter.MetaData.TitleLength)
+            .IsRequired();
+
         builder.Property(chapter => chapter.UploadOrder).IsRequired();
 
         builder.Property(chapter => chapter.PublicLevel).IsRequired();

@@ -16,6 +16,8 @@ public sealed class ArtworkChapter
 
     public long ArtworkId { get; set; }
 
+    public string Title { get; set; }
+
     public int UploadOrder { get; set; }
 
     public ArtworkPublicLevel PublicLevel { get; set; }
@@ -67,6 +69,8 @@ public sealed class ArtworkChapter
     #region MetaData
     public static class MetaData
     {
+        public const int TitleLength = 200;
+
         public const int ThumbnailUrlLength = 256;
     }
     #endregion

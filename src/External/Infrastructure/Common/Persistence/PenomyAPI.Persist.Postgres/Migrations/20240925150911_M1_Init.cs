@@ -731,7 +731,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    Title = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     OtherName = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     PublicLevel = table.Column<int>(type: "integer", nullable: false),
                     AuthorName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
@@ -1329,6 +1329,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ArtworkId = table.Column<long>(type: "bigint", nullable: false),
+                    Title = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     UploadOrder = table.Column<int>(type: "integer", nullable: false),
                     PublicLevel = table.Column<int>(type: "integer", nullable: false),
                     ThumbnailUrl = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),

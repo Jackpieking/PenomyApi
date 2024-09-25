@@ -1,4 +1,4 @@
-namespace PenomyAPI.Domain.RelationalDb.UnitOfWorks; // L?u ý namespace
+namespace PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 
 /// <summary>
 ///     This UnitOfWork file is only contain the Common Repositories.
