@@ -9,7 +9,6 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\SnowflakeIdGenerator\SnowflakeIdGenerator.csproj" />
     <ProjectReference Include="..\..\..\..\..\Core\Application\PenomyAPI.App.Common\PenomyAPI.App.Common.csproj" />
     <ProjectReference Include="..\..\PenomyAPI.Infra.Configuration\PenomyAPI.Infra.Configuration.csproj" />
   </ItemGroup>
