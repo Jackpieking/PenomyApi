@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PenomyAPI.App.Common.UserIdentity;
+using PenomyAPI.Domain.RelationalDb.Entities.UserIdentity;
 using PenomyAPI.Persist.Postgres.Common.DatabaseConstants;
 using PenomyAPI.Persist.Postgres.Data.UserIdentity;
 using PenomyAPI.Persist.Postgres.EntityConfigurations.Base;

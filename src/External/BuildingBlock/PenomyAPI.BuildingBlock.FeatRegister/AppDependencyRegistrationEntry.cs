@@ -6,7 +6,6 @@ using PenomyAPI.BuildingBlock.FeatRegister.ServiceExtensions;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 using PenomyAPI.Persist.Postgres.Data.DbContexts;
 using PenomyAPI.Persist.Postgres.UnitOfWorks;
-using System;
 
 namespace PenomyAPI.BuildingBlock.FeatRegister;
 
@@ -20,7 +19,7 @@ public static class AppDependencyRegistrationEntry
     )
     {
         FeatureHandlerRegistration.Register(services, configuration);
-                                                          
+
         services.AddDbContextPool<AppDbContext>(options =>
         {
             var connectionString = configuration.GetConnectionString(

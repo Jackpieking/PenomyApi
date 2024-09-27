@@ -1,11 +1,11 @@
+using System.Threading;
+using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatArt4;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatArt4.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3.HttpResponse;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatArt4;
 
@@ -35,7 +35,10 @@ public class FeatArt4Endpoint : Endpoint<FeatArt4RequestDto, FeatArt4HttpRespons
         });
     }
 
-    public override async Task<FeatArt4HttpResponse> ExecuteAsync(FeatArt4RequestDto requestDto, CancellationToken ct)
+    public override async Task<FeatArt4HttpResponse> ExecuteAsync(
+        FeatArt4RequestDto requestDto,
+        CancellationToken ct
+    )
     {
         var featArt4Request = new FeatArt4Request
         {
@@ -48,7 +51,10 @@ public class FeatArt4Endpoint : Endpoint<FeatArt4RequestDto, FeatArt4HttpRespons
         };
 
         // Get FeatureHandler response.
-        var featResponse = await FeatureExtensions.ExecuteAsync<FeatArt4Request, FeatArt4Response>(featArt4Request, ct);
+        var featResponse = await FeatureExtensions.ExecuteAsync<FeatArt4Request, FeatArt4Response>(
+            featArt4Request,
+            ct
+        );
 
         var httpResponse = FeatArt4HttpResponseManager
             .Resolve(featResponse.StatusCode)
@@ -56,10 +62,7 @@ public class FeatArt4Endpoint : Endpoint<FeatArt4RequestDto, FeatArt4HttpRespons
 
         if (featResponse.IsSuccess)
         {
-            httpResponse.Body = new FeatArt4ResponseDto
-            {
-                ComicId = featArt4Request.ComicId,
-            };
+            httpResponse.Body = new FeatArt4ResponseDto { ComicId = featArt4Request.ComicId, };
 
             return httpResponse;
         }

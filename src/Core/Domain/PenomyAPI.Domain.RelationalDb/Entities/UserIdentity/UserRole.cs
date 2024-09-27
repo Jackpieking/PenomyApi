@@ -1,4 +1,4 @@
-﻿namespace PenomyAPI.App.Common.UserIdentity;
+namespace PenomyAPI.Domain.RelationalDb.Entities.UserIdentity;
 
 public sealed class UserRole
 {

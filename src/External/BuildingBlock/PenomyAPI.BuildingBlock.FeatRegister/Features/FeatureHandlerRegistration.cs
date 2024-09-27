@@ -4,7 +4,6 @@ using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PenomyAPI.BuildingBlock.FeatRegister.FeatureRegistration.Common;
-using PenomyAPI.BuildingBlock.FeatRegister.FeatureRegistration.FeatG3;
 
 namespace PenomyAPI.BuildingBlock.FeatRegister.Features;
 

@@ -1,5 +1,4 @@
 using PenomyAPI.App.Common;
-using PenomyAPI.App.Common.IdGenerator.Snowflake;
 using PenomyAPI.App.FeatArt4.Infrastructures;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
@@ -13,7 +12,8 @@ public class FeatArt4Handler : IFeatureHandler<FeatArt4Request, FeatArt4Response
 
     public FeatArt4Handler(
         Lazy<IUnitOfWork> unitOfWork,
-        Lazy<IFeatArt4FileUploadService> fileUploadService)
+        Lazy<IFeatArt4FileUploadService> fileUploadService
+    )
     {
         _unitOfWork = unitOfWork;
         _fileUploadService = fileUploadService;
@@ -50,7 +50,11 @@ public class FeatArt4Handler : IFeatureHandler<FeatArt4Request, FeatArt4Response
 
         var comicCategories = request.ArtworkCategories;
 
-        var result = await unitOfWork.FeatArt4Repository.CreateComicAsync(newComic, comicCategories, ct);
+        var result = await unitOfWork.FeatArt4Repository.CreateComicAsync(
+            newComic,
+            comicCategories,
+            ct
+        );
 
         // If result is false.
         if (!result)
