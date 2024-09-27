@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatArt4.HttpResponse
 {
-    public class FeatArt4LoadCategoryHttpResponse
+    public class FeatG3LoadCategoryHttpResponse
     {
         public IEnumerable<CategoryDto> Categories { get; set; }
     }

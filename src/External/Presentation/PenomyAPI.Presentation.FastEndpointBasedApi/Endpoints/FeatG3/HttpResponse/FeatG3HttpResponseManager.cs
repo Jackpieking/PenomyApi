@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Http;
-using PenomyAPI.App.FeatArt4;
+using PenomyAPI.App.FeatG3;
 using System;
 using System.Collections.Concurrent;
 
-namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatArt4.HttpResponse
+namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3.HttpResponse
 {
-    public static class FeatArt4HttpResponseManager
+    public static class FeatG3HttpResponseManager
     {
         private static ConcurrentDictionary<
-            FeatArt4ResponseStatusCode,
-            Func<FeatArt4Request, FeatArt4Response, FeatArt4HttpResponse>> _dictionary;
+            FeatG3ResponseStatusCode,
+            Func<FeatG3Request, FeatG3Response, FeatG3HttpResponse>> _dictionary;
 
         private static void Init()
         {
@@ -17,24 +17,24 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatArt4.HttpRes
 
             // Add each feature status code with its HttpResponse information.
             _dictionary.TryAdd(
-                key: FeatArt4ResponseStatusCode.SUCCESS,
+                key: FeatG3ResponseStatusCode.SUCCESS,
                 value: (_, response) => new()
                 {
-                    AppCode = $"Art4.{FeatArt4ResponseStatusCode.SUCCESS}",
+                    AppCode = $"G3.{FeatG3ResponseStatusCode.SUCCESS}",
                     HttpCode = StatusCodes.Status200OK,
                 });
 
             _dictionary.TryAdd(
-                key: FeatArt4ResponseStatusCode.DATABASE_ERROR,
+                key: FeatG3ResponseStatusCode.DATABASE_ERROR,
                 value: (_, response) => new()
                 {
-                    AppCode = $"Art4.{FeatArt4ResponseStatusCode.DATABASE_ERROR}",
+                    AppCode = $"G3.{FeatG3ResponseStatusCode.DATABASE_ERROR}",
                     HttpCode = StatusCodes.Status400BadRequest,
                 });
         }
 
-        internal static Func<FeatArt4Request, FeatArt4Response, FeatArt4HttpResponse> Resolve(
-            FeatArt4ResponseStatusCode statusCode)
+        internal static Func<FeatG3Request, FeatG3Response, FeatG3HttpResponse> Resolve(
+            FeatG3ResponseStatusCode statusCode)
         {
             if (Equals(objA: _dictionary, objB: default))
             {

@@ -1,9 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PenomyAPI.App.FeatG3;
-using PenomyAPI.App.FeatG3.Infrastructures;
 using PenomyAPI.BuildingBlock.FeatRegister.FeatureRegistration.Common;
-using PenomyAPI.Infra.FeatG3;
 using System;
 
 namespace PenomyAPI.BuildingBlock.FeatRegister.FeatureRegistration.FeatG3
@@ -16,7 +14,6 @@ namespace PenomyAPI.BuildingBlock.FeatRegister.FeatureRegistration.FeatG3
 
         public override void AddFeatureDependency(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<IFeatG3MailHandler, FeatG3MailHandler>();
         }
     }
 }

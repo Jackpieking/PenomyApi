@@ -5,4 +5,5 @@ namespace PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 public partial interface IUnitOfWork
 {
     IFeatG3Repository FeatG3Repository { get; }
+    
 }

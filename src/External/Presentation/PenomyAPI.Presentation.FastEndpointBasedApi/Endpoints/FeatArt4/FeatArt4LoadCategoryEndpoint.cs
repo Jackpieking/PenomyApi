@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatArt4
 {
-    public class FeatArt4LoadCategoryEndpoint : Endpoint<EmptyDto, FeatArt4LoadCategoryHttpResponse>
+    public class FeatArt4LoadCategoryEndpoint : Endpoint<EmptyDto, FeatG3LoadCategoryHttpResponse>
     {
         public override void Configure()
         {
@@ -17,13 +17,13 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatArt4
             AllowAnonymous();
         }
 
-        public override async Task<FeatArt4LoadCategoryHttpResponse> ExecuteAsync(EmptyDto req, CancellationToken ct)
+        public override async Task<FeatG3LoadCategoryHttpResponse> ExecuteAsync(EmptyDto req, CancellationToken ct)
         {
             var featRequest = Art4LoadCategoryRequest.Empty;
 
             var featResponse = await FeatureExtensions.ExecuteAsync<Art4LoadCategoryRequest, Art4LoadCategoryResponse>(featRequest, ct);
 
-            return new FeatArt4LoadCategoryHttpResponse
+            return new FeatG3LoadCategoryHttpResponse
             {
                 Categories = [],
             };

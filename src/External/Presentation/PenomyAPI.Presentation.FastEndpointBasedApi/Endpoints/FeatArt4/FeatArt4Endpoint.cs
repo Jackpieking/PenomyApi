@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatArt4;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatArt4.DTOs;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3.HttpResponse;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatArt4.HttpResponse;
 using System.Threading;
 using System.Threading.Tasks;
 

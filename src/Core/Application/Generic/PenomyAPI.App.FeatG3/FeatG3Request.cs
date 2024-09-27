@@ -5,5 +5,5 @@ namespace PenomyAPI.App.FeatG3;
 
 public class FeatG3Request : IFeatureRequest<FeatG3Response>
 {
-    public bool Empty { get; set; } = true;
+    public bool empty { get; set; }
 }
