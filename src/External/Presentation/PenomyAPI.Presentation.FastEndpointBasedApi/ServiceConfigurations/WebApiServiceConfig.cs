@@ -1,10 +1,10 @@
-﻿using FastEndpoints.Swagger;
+﻿using System;
+using FastEndpoints.Swagger;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NSwag;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Options;
-using System;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.ServiceConfigurations
 {
@@ -13,9 +13,9 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.ServiceConfigurations
         internal static void Configure(IServiceCollection services, IConfiguration configuration)
         {
             var swaggerOption = configuration
-             .GetRequiredSection(key: "Swagger")
-             .GetRequiredSection(key: "NSwag")
-             .Get<NSwagOptions>();
+                .GetRequiredSection(key: "Swagger")
+                .GetRequiredSection(key: "NSwag")
+                .Get<NSwagOptions>();
 
             services.SwaggerDocument(documentOption =>
             {

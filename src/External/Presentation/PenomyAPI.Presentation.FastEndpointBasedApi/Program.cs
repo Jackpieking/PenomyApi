@@ -33,7 +33,6 @@ app.UseSwaggerGen()
     .UseSwaggerUi(configure: options =>
     {
         options.Path = string.Empty;
-        
     });
 
 await app.RunAsync();

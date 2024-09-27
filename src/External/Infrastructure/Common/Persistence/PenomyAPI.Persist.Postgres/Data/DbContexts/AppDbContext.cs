@@ -9,6 +9,11 @@ public sealed class AppDbContext : IdentityDbContext<PgUser, PgRole, long>
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options) { }
 
+    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //{
+    //    optionsBuilder.UseNpgsql("Server=localhost; Port= 5433; Database=Penomy_local; User Id=postgres; Password=123123");
+    //}
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         // Apply the configuration from the Identity.

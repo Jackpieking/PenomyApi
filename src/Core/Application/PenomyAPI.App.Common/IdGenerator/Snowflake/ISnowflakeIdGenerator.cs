@@ -1,13 +1,12 @@
-﻿namespace PenomyAPI.App.Common.IdGenerator.Snowflake
+﻿namespace PenomyAPI.App.Common.IdGenerator.Snowflake;
+
+public interface ISnowflakeIdGenerator
 {
-    public interface ISnowflakeIdGenerator
-    {
-        /// <summary>
-        ///     Generate a random id using Snowflake scheme.
-        /// </summary>
-        /// <returns>
-        ///     The random id.
-        /// </returns>
-        public long GetId();
-    }
+    /// <summary>
+    ///     Generate a random id using Snowflake scheme.
+    /// </summary>
+    /// <returns>
+    ///     The random id.
+    /// </returns>
+    public long Get();
 }

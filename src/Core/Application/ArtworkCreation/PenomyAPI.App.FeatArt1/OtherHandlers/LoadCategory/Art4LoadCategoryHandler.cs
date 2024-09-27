@@ -3,8 +3,8 @@ using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 
 namespace PenomyAPI.App.FeatArt4.OtherHandlers.LoadCategory;
 
-public class Art4LoadCategoryHandler :
-    IFeatureHandler<Art4LoadCategoryRequest, Art4LoadCategoryResponse>
+public class Art4LoadCategoryHandler
+    : IFeatureHandler<Art4LoadCategoryRequest, Art4LoadCategoryResponse>
 {
     private readonly Lazy<IUnitOfWork> _unitOfWork;
 
@@ -13,7 +13,10 @@ public class Art4LoadCategoryHandler :
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<Art4LoadCategoryResponse> ExecuteAsync(Art4LoadCategoryRequest request, CancellationToken ct)
+    public async Task<Art4LoadCategoryResponse> ExecuteAsync(
+        Art4LoadCategoryRequest request,
+        CancellationToken ct
+    )
     {
         var unitOfWork = _unitOfWork.Value;
 
@@ -28,7 +31,7 @@ public class Art4LoadCategoryHandler :
                 Categories = categories,
             };
         }
-        catch (Exception)
+        catch
         {
             return new Art4LoadCategoryResponse
             {
