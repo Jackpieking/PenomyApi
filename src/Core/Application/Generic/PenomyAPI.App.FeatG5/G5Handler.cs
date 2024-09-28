@@ -24,7 +24,7 @@ namespace PenomyAPI.App.FeatG5
                 {
                     return new G5Response { StatusCode = G5ResponseStatusCode.INVALID_REQUEST };
                 }
-                result = await _IG5Repository.GetArtWorkDetailByIdAsync(rq);
+                result = await _IG5Repository.GetArtWorkDetailByIdAsync(rq, ct);
             }
             catch (Exception)
             {

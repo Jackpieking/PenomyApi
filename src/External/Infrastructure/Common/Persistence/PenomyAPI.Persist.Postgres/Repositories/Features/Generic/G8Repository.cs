@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
@@ -17,10 +18,11 @@ public class G8Repository : IG8Repository
         _dbContext = dbContext;
     }
 
-    public async Task<List<ArtworkChapter>> GetArtWorkChapterById(
+    public async Task<List<ArtworkChapter>> GetArtWorkChapterByIdAsync(
         long id,
         int startPage = 1,
-        int pageSize = 10
+        int pageSize = 10,
+        CancellationToken cancellationToken = default
     )
     {
         return await _dbContext
@@ -59,9 +61,10 @@ public class G8Repository : IG8Repository
                 TotalViews = x.TotalViews,
                 TotalFavorites = x.TotalFavorites,
                 TotalComments = x.TotalComments,
+                ThumbnailUrl = x.ThumbnailUrl,
             })
             .Skip((startPage - 1) * pageSize)
             .Take(pageSize)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 }

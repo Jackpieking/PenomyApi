@@ -76,7 +76,8 @@ public class G5Endpoint : Endpoint<G5Request, G5HttpResponse>
                         / featResponse.Result.UserRatingArtworks.Count()
                     ),
                     ViewCount = featResponse.Result.Chapters.Sum(x => x.TotalViews),
-                    FavoriteCount = featResponse.Result.Chapters.Sum(x => x.TotalFavorites)
+                    FavoriteCount = featResponse.Result.Chapters.Sum(x => x.TotalFavorites),
+                    ThumbnailUrl = featResponse.Result.ThumbnailUrl
                 };
             }
         }

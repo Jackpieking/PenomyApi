@@ -19,14 +19,15 @@ namespace PenomyAPI.App.FeatG8
             List<ArtworkChapter> chapters = [];
             try
             {
-                if (request.Id == 0 || request.StartPage <= 0)
+                if (request.Id == 0 || request.StartPage <= 0 || request.PageSize <= 0)
                 {
                     return new G8Response { StatusCode = G8ResponseStatusCode.INVALID_REQUEST };
                 }
-                chapters = await _g8Repository.GetArtWorkChapterById(
+                chapters = await _g8Repository.GetArtWorkChapterByIdAsync(
                     request.Id,
                     request.StartPage,
-                    request.PageSize
+                    request.PageSize,
+                    ct
                 );
             }
             catch (Exception)

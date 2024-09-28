@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
@@ -18,7 +19,10 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic
             _dbContext = dbContext;
         }
 
-        public async Task<Artwork> GetArtWorkDetailByIdAsync(long artworkId)
+        public async Task<Artwork> GetArtWorkDetailByIdAsync(
+            long artworkId,
+            CancellationToken token = default
+        )
         {
             var artwork = await _dbContext
                 .Set<Artwork>()
@@ -51,9 +55,10 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic
                         TotalViews = y.TotalViews,
                         TotalFavorites = y.TotalFavorites,
                         TotalComments = y.TotalComments,
-                    })
+                    }),
+                    ThumbnailUrl = x.ThumbnailUrl,
                 })
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(token);
             return artwork;
         }
     }

@@ -16,7 +16,7 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG8
     {
         public override void Configure()
         {
-            Get("/g5/artwork-chapters");
+            Get("/g8/artwork-chapters");
 
             AllowAnonymous();
 
@@ -75,7 +75,8 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG8
                                 CreatedTime = chapter.CreatedAt,
                                 CommentCount = chapter.TotalComments,
                                 FavoriteCount = chapter.TotalFavorites,
-                                ViewCount = chapter.TotalViews
+                                ViewCount = chapter.TotalViews,
+                                ThumbnailUrl = chapter.ThumbnailUrl
                             }
                         );
                     }

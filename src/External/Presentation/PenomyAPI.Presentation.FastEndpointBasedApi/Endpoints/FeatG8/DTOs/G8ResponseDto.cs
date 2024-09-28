@@ -16,5 +16,6 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG8.DTOs
         public long ViewCount { get; set; }
         public long FavoriteCount { get; set; }
         public long CommentCount { get; set; }
+        public string ThumbnailUrl { get; set; }
     }
 }
