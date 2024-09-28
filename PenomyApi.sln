@@ -109,11 +109,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatSM1", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatSys1", "src\Core\Application\SystemManagement\PenomyAPI.App.FeatSys1\PenomyAPI.App.FeatSys1.csproj", "{F28B99F4-29F5-452B-BAD8-93C0B20644F3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SnowflakeIdGenerator", "src\External\Infrastructure\Common\SnowflakeIdGenerator\SnowflakeIdGenerator.csproj", "{8E251108-4F7C-45FB-84CD-FC1A304F1EEF}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatG5", "src\Core\Application\Generic\PenomyAPI.App.FeatG5\PenomyAPI.App.FeatG5.csproj", "{187F214F-8C16-4761-B22A-B989E762B46C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatG8", "src\Core\Application\Generic\PenomyAPI.App.FeatG8\PenomyAPI.App.FeatG8.csproj", "{BA9AF094-5240-481A-BD66-D6E2D81B2000}"
+
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnowflakeIdGenerator", "src\External\Infrastructure\Common\SnowflakeIdGenerator\SnowflakeIdGenerator.csproj", "{8E251108-4F7C-45FB-84CD-FC1A304F1EEF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -253,6 +253,7 @@ Global
 		{BA9AF094-5240-481A-BD66-D6E2D81B2000}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA9AF094-5240-481A-BD66-D6E2D81B2000}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA9AF094-5240-481A-BD66-D6E2D81B2000}.Release|Any CPU.Build.0 = Release|Any CPU
+
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -313,6 +314,7 @@ Global
 		{8E251108-4F7C-45FB-84CD-FC1A304F1EEF} = {D992902E-3588-4E21-A1D5-488D283107B1}
 		{187F214F-8C16-4761-B22A-B989E762B46C} = {93238DD1-0977-422A-A564-56BD09E1EC18}
 		{BA9AF094-5240-481A-BD66-D6E2D81B2000} = {93238DD1-0977-422A-A564-56BD09E1EC18}
+
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D57C122E-3458-4428-82FB-FF6E7A97A032}
