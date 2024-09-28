@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
-using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
+using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic
 {
@@ -20,7 +20,8 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic
 
         public async Task<Artwork> GetArtWorkDetailByIdAsync(long artworkId)
         {
-            var artwork = await _dbContext.Set<Artwork>()
+            var artwork = await _dbContext
+                .Set<Artwork>()
                 .Where(x => x.Id == artworkId)
                 .Select(x => new Artwork
                 {
@@ -40,7 +41,17 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic
                         ArtworkId = y.ArtworkId,
                         Series = y.Series,
                     }),
-                    ArtworkStatus = x.ArtworkStatus
+                    ArtworkStatus = x.ArtworkStatus,
+                    UserRatingArtworks = x.UserRatingArtworks.Select(y => new UserRatingArtwork
+                    {
+                        StarRates = y.StarRates,
+                    }),
+                    Chapters = x.Chapters.Select(y => new ArtworkChapter
+                    {
+                        TotalViews = y.TotalViews,
+                        TotalFavorites = y.TotalFavorites,
+                        TotalComments = y.TotalComments,
+                    })
                 })
                 .FirstOrDefaultAsync();
             return artwork;

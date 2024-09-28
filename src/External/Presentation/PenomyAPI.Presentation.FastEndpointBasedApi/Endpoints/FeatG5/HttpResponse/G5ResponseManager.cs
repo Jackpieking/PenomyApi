@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using System.Collections.Concurrent;
+using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatArt4;
 using PenomyAPI.App.FeatG5;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3.HttpResponse;
-using System;
-using System.Collections.Concurrent;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5.HttpResponse
 {
@@ -11,7 +11,8 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5.HttpRespo
     {
         private static ConcurrentDictionary<
             G5ResponseStatusCode,
-            Func<G5Request, G5Response, G5HttpResponse>> _dictionary;
+            Func<G5Request, G5Response, G5HttpResponse>
+        > _dictionary;
 
         private static void Init()
         {
@@ -20,30 +21,37 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5.HttpRespo
             // Add each feature status code with its HttpResponse information.
             _dictionary.TryAdd(
                 key: G5ResponseStatusCode.SUCCESS,
-                value: (_, response) => new()
-                {
-                    AppCode = $"G5.{G5ResponseStatusCode.SUCCESS}",
-                    HttpCode = StatusCodes.Status200OK,
-                });
+                value: (_, response) =>
+                    new()
+                    {
+                        AppCode = $"G5.{G5ResponseStatusCode.SUCCESS}",
+                        HttpCode = StatusCodes.Status200OK,
+                    }
+            );
 
             _dictionary.TryAdd(
                 key: G5ResponseStatusCode.FAILED,
-                value: (_, response) => new()
-                {
-                    AppCode = $"G5.{G5ResponseStatusCode.FAILED}",
-                    HttpCode = StatusCodes.Status400BadRequest,
-                });
+                value: (_, response) =>
+                    new()
+                    {
+                        AppCode = $"G5.{G5ResponseStatusCode.FAILED}",
+                        HttpCode = StatusCodes.Status500InternalServerError,
+                    }
+            );
             _dictionary.TryAdd(
-                key: G5ResponseStatusCode.ID_NOT_FOUND,
-                value: (_, response) => new()
-                {
-                    AppCode = $"G5.{G5ResponseStatusCode.ID_NOT_FOUND}",
-                    HttpCode = StatusCodes.Status400BadRequest,
-                });
+                key: G5ResponseStatusCode.INVALID_REQUEST,
+                value: (_, response) =>
+                    new()
+                    {
+                        AppCode = $"G5.{G5ResponseStatusCode.INVALID_REQUEST}",
+                        HttpCode = StatusCodes.Status400BadRequest,
+                    }
+            );
         }
 
         internal static Func<G5Request, G5Response, G5HttpResponse> Resolve(
-            G5ResponseStatusCode statusCode)
+            G5ResponseStatusCode statusCode
+        )
         {
             if (Equals(objA: _dictionary, objB: default))
             {

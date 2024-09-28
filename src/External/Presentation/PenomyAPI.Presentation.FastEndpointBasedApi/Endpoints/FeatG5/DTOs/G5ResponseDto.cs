@@ -11,5 +11,8 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5.DTOs
         public List<string> Categories { get; set; }
         public string ArtworkStatus { get; set; }
         public List<string> SeriesName { get; set; }
+        public long ViewCount { get; set; }
+        public long FavoriteCount { get; set; }
+        public byte StarRates { get; set; }
     }
 }
