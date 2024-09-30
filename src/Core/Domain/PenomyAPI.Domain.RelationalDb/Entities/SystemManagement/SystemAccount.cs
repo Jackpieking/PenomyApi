@@ -1,10 +1,11 @@
-using System;
-using System.Collections.Generic;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Entities.Base;
 using PenomyAPI.Domain.RelationalDb.Entities.Generic;
+using PenomyAPI.Domain.RelationalDb.Entities.Monetization;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
-using PenomyAPI.Domain.RelationalDb.Entities.Subscriptions;
+using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common;
+using System;
+using System.Collections.Generic;
 
 namespace PenomyAPI.Domain.RelationalDb.Entities.SystemManagement;
 
@@ -31,12 +32,6 @@ public sealed class SystemAccount : EntityWithId<long>
     public DateTime CreatedAt { get; set; }
 
     #region Navigation
-    // Subscription section.
-    /// <summary>
-    ///     Contains all subscription plan this system account created.
-    /// </summary>
-    public IEnumerable<SubscriptionPlan> CreatedSubscriptionPlans { get; set; }
-
     public IEnumerable<SystemAccountRole> SystemAccountRoles { get; set; }
 
     // Generic section.
@@ -46,7 +41,7 @@ public sealed class SystemAccount : EntityWithId<long>
 
     public IEnumerable<BugType> CreatedBugTypes { get; set; }
 
-    public IEnumerable<UserReportProblem> CreatedUserReportProblems { get; set; }
+    public IEnumerable<UserProfileReportProblem> CreatedUserProfileReportProblems { get; set; }
 
     public IEnumerable<GrantedAuthorizedUser> GrantedAuthorizedUsers { get; set; }
 
@@ -56,6 +51,12 @@ public sealed class SystemAccount : EntityWithId<long>
 
     // Social media section.
     public IEnumerable<PostReportProblem> CreatedPostReportProblems { get; set; }
+
+    public IEnumerable<SocialGroupReportProblem> CreatedSocialGroupReportProblems { get; set; }
+
+    public IEnumerable<SocialGroupViolationFlag> CreatedSocialGroupViolationFlags { get; set; }
+
+    public IEnumerable<UserLikeValue> CreatedUserLikeValues { get; set; }
 
     // Artwork section.
     public IEnumerable<Category> CreatedCategories { get; set; }
@@ -72,9 +73,28 @@ public sealed class SystemAccount : EntityWithId<long>
 
     public IEnumerable<ArtworkViolationFlagType> CreatedArtworkViolationFlagTypes { get; set; }
 
+    public IEnumerable<ArtworkViolationFlagType> UpdatedArtworkViolationFlagTypes { get; set; }
+
     public IEnumerable<ArtworkBugReport> ResolvedArtworkBugReports { get; set; }
 
     public IEnumerable<ArtworkBugType> CreatedArtworkBugTypes { get; set; }
+
+    // Monetization section.
+    public IEnumerable<Bank> CreatedBanks { get; set; }
+
+    public IEnumerable<Bank> UpdatedBanks { get; set; }
+
+    public IEnumerable<CreatorWalletTransactionType> CreatedTransactionTypes { get; set; }
+
+    public IEnumerable<AdRevenueProgram> CreatedAdRevenuePrograms { get; set; }
+
+    public IEnumerable<AdRevenueProgram> UpdatedAdRevenuePrograms { get; set; }
+
+    public IEnumerable<ArtworkAppliedAdRevenueProgram> ApprovedArtworkAppliedAdRevenuePrograms { get; set; }
+
+    public IEnumerable<DonationItem> CreatedDonationItems { get; set; }
+
+    public IEnumerable<DonationItem> UpdatedDonationItems { get; set; }
     #endregion
 
     #region MetaData

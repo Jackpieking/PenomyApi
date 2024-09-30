@@ -7,7 +7,7 @@ public sealed class UserPostCommentLikeStatistic : IEntity
 {
     public long CommentId { get; set; }
 
-    public UserLikeValue Value { get; set; }
+    public long ValueId { get; set; }
 
     /// <summary>
     ///     The total of a specific user like value.
@@ -16,6 +16,8 @@ public sealed class UserPostCommentLikeStatistic : IEntity
 
     #region Navigation
     public UserPostComment UserPostComment { get; set; }
+
+    public UserLikeValue LikeValue { get; set; }
     #endregion
 
     #region MetaData

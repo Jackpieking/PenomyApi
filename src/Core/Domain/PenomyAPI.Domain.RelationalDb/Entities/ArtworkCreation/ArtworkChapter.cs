@@ -1,8 +1,8 @@
-using System;
-using System.Collections.Generic;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
 using PenomyAPI.Domain.RelationalDb.Entities.Base;
 using PenomyAPI.Domain.RelationalDb.Entities.Generic;
+using System;
+using System.Collections.Generic;
 
 namespace PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 
@@ -24,15 +24,9 @@ public sealed class ArtworkChapter
 
     public string ThumbnailUrl { get; set; }
 
-    public ChapterStatus ChapterStatus { get; set; }
+    public PublishStatus PublishStatus { get; set; }
 
     public bool AllowComment { get; set; }
-
-    public long TotalViews { get; set; }
-
-    public long TotalFavorites { get; set; }
-
-    public long TotalComments { get; set; }
 
     public long CreatedBy { get; set; }
 
@@ -52,6 +46,8 @@ public sealed class ArtworkChapter
 
     #region Navigation
     public Artwork BelongedArtwork { get; set; }
+
+    public ArtworkChapterMetaData ChapterMetaData { get; set; }
 
     public UserProfile Creator { get; set; }
 

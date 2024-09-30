@@ -1,7 +1,6 @@
-﻿namespace SnowflakeIdGenerator
-{
-    public class Class1
-    {
+﻿namespace SnowflakeIdGenerator;
 
-    }
+public class Class1
+{
+
 }

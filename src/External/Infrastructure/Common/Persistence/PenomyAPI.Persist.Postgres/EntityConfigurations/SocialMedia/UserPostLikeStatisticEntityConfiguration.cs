@@ -12,7 +12,7 @@ internal sealed class UserPostLikeStatisticEntityConfiguration
     {
         builder.ToTable("penomy_user_post_like_statistics");
 
-        builder.HasKey(likeStatistic => new { likeStatistic.PostId, likeStatistic.Value });
+        builder.HasKey(likeStatistic => new { likeStatistic.PostId, likeStatistic.ValueId });
 
         builder.Property(likeStatistic => likeStatistic.Total).IsRequired();
 

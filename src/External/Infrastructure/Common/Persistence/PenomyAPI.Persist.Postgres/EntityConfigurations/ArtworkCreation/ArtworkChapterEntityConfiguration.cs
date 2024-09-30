@@ -30,15 +30,9 @@ internal sealed class ArtworkChapterEntityConfiguration : IEntityConfiguration<A
             .HasMaxLength(ArtworkChapter.MetaData.ThumbnailUrlLength)
             .IsRequired();
 
-        builder.Property(chapter => chapter.ChapterStatus).IsRequired();
+        builder.Property(chapter => chapter.PublishStatus).IsRequired();
 
         builder.Property(chapter => chapter.AllowComment).IsRequired();
-
-        builder.Property(chapter => chapter.TotalViews).IsRequired();
-
-        builder.Property(chapter => chapter.TotalFavorites).IsRequired();
-
-        builder.Property(chapter => chapter.TotalComments).IsRequired();
 
         builder.Property(chapter => chapter.CreatedBy).IsRequired();
 

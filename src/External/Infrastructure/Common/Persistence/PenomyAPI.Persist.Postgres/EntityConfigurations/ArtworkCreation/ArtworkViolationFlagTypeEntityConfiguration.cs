@@ -16,7 +16,7 @@ internal sealed class ArtworkViolationFlagTypeEntityConfiguration
         builder.HasKey(flagType => flagType.Id);
 
         builder
-            .Property(flagType => flagType.Name)
+            .Property(flagType => flagType.Title)
             .HasMaxLength(ArtworkViolationFlagType.MetaData.NameLength)
             .IsRequired();
 
@@ -32,7 +32,7 @@ internal sealed class ArtworkViolationFlagTypeEntityConfiguration
             .HasColumnType(DatabaseNativeTypes.TIMESTAMPTZ)
             .IsRequired();
 
-        builder.Property(flagType => flagType.CreatedBy).IsRequired();
+        builder.Property(flagType => flagType.UpdatedBy).IsRequired();
 
         builder
             .Property(flagType => flagType.UpdatedAt)
@@ -45,6 +45,13 @@ internal sealed class ArtworkViolationFlagTypeEntityConfiguration
             .WithMany(systemAccount => systemAccount.CreatedArtworkViolationFlagTypes)
             .HasForeignKey(violationFlagType => violationFlagType.CreatedBy)
             .HasPrincipalKey(systemAccount => systemAccount.Id)
+            .OnDelete(DeleteBehavior.NoAction);
+        
+        builder
+            .HasOne(violationFlagType => violationFlagType.Updater)
+            .WithMany(systemAccount => systemAccount.UpdatedArtworkViolationFlagTypes)
+            .HasPrincipalKey(systemAccount => systemAccount.Id)
+            .HasForeignKey(violationFlagType => violationFlagType.UpdatedBy)
             .OnDelete(DeleteBehavior.NoAction);
         #endregion
 

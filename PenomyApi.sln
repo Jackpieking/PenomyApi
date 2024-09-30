@@ -109,7 +109,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatSM1", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatSys1", "src\Core\Application\SystemManagement\PenomyAPI.App.FeatSys1\PenomyAPI.App.FeatSys1.csproj", "{F28B99F4-29F5-452B-BAD8-93C0B20644F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnowflakeIdGenerator", "src\External\Infrastructure\Common\SnowflakeIdGenerator\SnowflakeIdGenerator.csproj", "{8E251108-4F7C-45FB-84CD-FC1A304F1EEF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SnowflakeIdGenerator", "src\External\Infrastructure\Common\SnowflakeIdGenerator\SnowflakeIdGenerator.csproj", "{8E251108-4F7C-45FB-84CD-FC1A304F1EEF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

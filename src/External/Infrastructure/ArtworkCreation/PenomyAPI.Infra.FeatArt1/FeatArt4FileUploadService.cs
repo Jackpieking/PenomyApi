@@ -1,7 +1,7 @@
 ﻿using PenomyAPI.App.Common.Models.ArtworkCreation;
 using PenomyAPI.App.FeatArt4.Infrastructures;
 
-namespace PenomyAPI.Infra.FeatArt1;
+namespace PenomyAPI.Infra.FeatArt4;
 
 public class FeatArt4FileUploadService : IFeatArt4FileUploadService
 {

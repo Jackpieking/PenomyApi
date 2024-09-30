@@ -1,5 +1,7 @@
-using System;
 using PenomyAPI.Domain.RelationalDb.Entities.Base;
+using PenomyAPI.Domain.RelationalDb.Entities.Monetization;
+using System;
+using System.Collections.Generic;
 
 namespace PenomyAPI.Domain.RelationalDb.Entities.Generic;
 
@@ -24,6 +26,16 @@ public sealed class CreatorProfile : IEntity
     ///     The creator who has this profile.
     /// </summary>
     public UserProfile ProfileOwner { get; set; }
+
+    public CreatorWallet CreatorWallet { get; set; }
+
+    public IEnumerable<UserDonationTransaction> ReceivedUserDonations { get; set; }
+
+    //public IEnumerable<ArtworkAppliedSubscriptionPlan> AppliedSubscriptionPlans { get; set; }
+
+    public IEnumerable<ArtworkAppliedAdRevenueProgram> AppliedAdRevenuePrograms { get; set; }
+
+    public IEnumerable<DonationThank> DonationThanks { get; set; }
     #endregion
 
     #region MetaData

@@ -25,6 +25,10 @@ internal sealed class UserArtworkViewHistoryEntityConfiguration
             .HasColumnType(DatabaseNativeTypes.TIMESTAMPTZ)
             .IsRequired();
 
+        builder
+            .Property(viewHistory => viewHistory.ArtworkType)
+            .IsRequired();
+
         #region Relationships
         builder
             .HasOne(viewHistory => viewHistory.Artwork)

@@ -19,7 +19,7 @@ internal sealed class UserLikeChatMessageEntityConfiguration
             userLikeChatMessage.UserId
         });
 
-        builder.Property(userLikeChatMessage => userLikeChatMessage.Value).IsRequired();
+        builder.Property(userLikeChatMessage => userLikeChatMessage.ValueId).IsRequired();
 
         builder
             .Property(report => report.LikedAt)
