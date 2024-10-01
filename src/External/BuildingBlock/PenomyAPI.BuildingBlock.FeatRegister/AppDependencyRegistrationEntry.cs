@@ -1,20 +1,13 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
-using PenomyAPI.BuildingBlock.FeatRegister.ServiceExtensions;
-using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
-using PenomyAPI.Persist.Postgres.Data.DbContexts;
-using PenomyAPI.Persist.Postgres.Data.UserIdentity;
-using PenomyAPI.Persist.Postgres.UnitOfWorks;
+using PenomyAPI.BuildingBlock.FeatRegister.ServicesRegistration.Handler;
+using PenomyAPI.Infra.Configuration.ServiceExtensions;
 
 namespace PenomyAPI.BuildingBlock.FeatRegister;
 
 public static class AppDependencyRegistrationEntry
 {
-    const string AivenDevDBConnectionString = "AivenDevDB";
-
     public static void AddAppDependency(
         this IServiceCollection services,
         IConfiguration configuration
@@ -22,24 +15,8 @@ public static class AppDependencyRegistrationEntry
     {
         FeatureHandlerRegistration.Register(services, configuration);
 
-        services.AddDbContextPool<AppDbContext>(options =>
-        {
-            var connectionString = configuration.GetConnectionString(
-                name: AivenDevDBConnectionString
-            );
+        AppOptionsRegistration.Register(services, configuration);
 
-            options.UseNpgsql(connectionString);
-        });
-
-        services.AddCommonInfrastructure();
-    }
-
-    private static void AddCommonInfrastructure(this IServiceCollection services)
-    {
-        // Add dependencies from Common.Infrastructure.
-        services.AddAspNetIdentityConfiguration();
-        services.AddScoped<IUnitOfWork, UnitOfWork>().MakeScopedLazy<IUnitOfWork>();
-        services.AddScoped<UserManager<PgUser>>().MakeScopedLazy<UserManager<PgUser>>();
-        services.AddScoped<RoleManager<PgRole>>().MakeScopedLazy<RoleManager<PgRole>>();
+        InfrastructureServicesRegistration.Register(services, configuration);
     }
 }

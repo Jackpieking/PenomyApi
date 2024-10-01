@@ -58,8 +58,7 @@ internal static class FeatureHandlerRegistration
     {
         foreach (var type in featureDefinitionRegTypes)
         {
-            var featureDefinitionRegistration = (IFeatureDefinitionRegistration)
-                Activator.CreateInstance(type);
+            var featureDefinitionRegistration = Activator.CreateInstance(type) as IFeatureDefinitionRegistration;
 
             if (!featureDefinitionRegistration.IsRequestAndHanlderMatched())
             {

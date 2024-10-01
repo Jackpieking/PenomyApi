@@ -1,12 +1,13 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using PenomyAPI.App.Common.Models.Common;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.ArtworkCreation;
 using PenomyAPI.Persist.Postgres.Repositories.Helpers;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.ArtworkCreation;
 
@@ -49,10 +50,12 @@ public sealed class Art4Repository : IArt4Repository
         Result<bool> result
     )
     {
-        await using var transaction = await RepositoryHelper.CreateTransactionAsync(_dbContext, ct);
+        IDbContextTransaction transaction = null;
 
         try
         {
+            transaction = await RepositoryHelper.CreateTransactionAsync(_dbContext, ct);
+
             await _artworkDbSet.AddAsync(comic);
 
             await _artworkCategoryDbSet.AddRangeAsync(artworkCategories);
@@ -63,7 +66,11 @@ public sealed class Art4Repository : IArt4Repository
         }
         catch (System.Exception)
         {
-            await transaction.RollbackAsync(ct);
+            if (transaction != null)
+            {
+                await transaction.RollbackAsync(ct);
+                await transaction.DisposeAsync();
+            }
         }
     }
 
