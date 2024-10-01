@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Http;
-using PenomyAPI.App.FeatG3;
+using PenomyAPI.App.FeatG4;
 using System;
 using System.Collections.Concurrent;
 
-namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3.HttpResponse
+namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4.HttpResponse
 {
-    public static class G3HttpResponseManager
+    public static class G4HttpResponseManager
     {
         private static ConcurrentDictionary<
-            FeatG3ResponseStatusCode,
-            Func<FeatG3Request, FeatG3Response, G3HttpResponse>> _dictionary;
+            G4ResponseStatusCode,
+            Func<G4Request, G4Response, G4HttpResponse>> _dictionary;
 
         private static void Init()
         {
@@ -17,24 +17,24 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3.HttpRespo
 
             // Add each feature status code with its HttpResponse information.
             _dictionary.TryAdd(
-                key: FeatG3ResponseStatusCode.SUCCESS,
+                key: G4ResponseStatusCode.SUCCESS,
                 value: (_, response) => new()
                 {
-                    AppCode = $"G3.{FeatG3ResponseStatusCode.SUCCESS}",
+                    AppCode = $"G4.{G4ResponseStatusCode.SUCCESS}",
                     HttpCode = StatusCodes.Status200OK,
                 });
 
             _dictionary.TryAdd(
-                key: FeatG3ResponseStatusCode.DATABASE_ERROR,
+                key: G4ResponseStatusCode.DATABASE_ERROR,
                 value: (_, response) => new()
                 {
-                    AppCode = $"G3.{FeatG3ResponseStatusCode.DATABASE_ERROR}",
+                    AppCode = $"G4.{G4ResponseStatusCode.DATABASE_ERROR}",
                     HttpCode = StatusCodes.Status400BadRequest,
                 });
         }
 
-        internal static Func<FeatG3Request, FeatG3Response, G3HttpResponse> Resolve(
-            FeatG3ResponseStatusCode statusCode)
+        internal static Func<G4Request, G4Response, G4HttpResponse> Resolve(
+            G4ResponseStatusCode statusCode)
         {
             if (Equals(objA: _dictionary, objB: default))
             {

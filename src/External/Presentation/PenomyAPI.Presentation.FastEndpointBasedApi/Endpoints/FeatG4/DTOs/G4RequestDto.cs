@@ -2,10 +2,10 @@
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Common;
 
-namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3.DTOs
+namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4.DTOs
 {
-    public class G3RequestDto
+    public class G4RequestDto
     {
-        public EmptyDto param { get; set; }
+        public string Category{ get; set; }
     }
 }

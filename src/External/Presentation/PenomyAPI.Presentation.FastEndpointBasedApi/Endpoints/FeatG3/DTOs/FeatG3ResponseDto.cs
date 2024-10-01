@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3.DTOs
 {
-    public class FeatG3ResponseDto
+    public class G3ResponseDto
     {
         public List<Artwork> ArtworkList { get; set; }
     }

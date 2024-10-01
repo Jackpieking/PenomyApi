@@ -12,16 +12,12 @@ public class FeatG3Repository : IFeatG3Repository
     private readonly DbContext _dbContext;
     private readonly DbSet<Artwork> _artworkDbSet;
     private readonly DbSet<ArtworkStatistic> _statisticDbSet;
-    private readonly DbSet<ArtworkCategory> _artworkCategoryDbSet;
-    private readonly DbSet<Category> _categoryDbSet;
 
     public FeatG3Repository(DbContext dbContext)
     {
         _dbContext = dbContext;
         _artworkDbSet = dbContext.Set<Artwork>();
         _statisticDbSet = dbContext.Set<ArtworkStatistic>();
-        _artworkCategoryDbSet = dbContext.Set<ArtworkCategory>();
-        _categoryDbSet = dbContext.Set<Category>();
     }
 
     public async Task<List<Artwork>> GetRecentlyUpdatedComicsAsync()

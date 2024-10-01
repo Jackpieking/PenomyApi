@@ -9,7 +9,7 @@ using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using System.Linq;
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3;
 
-public class FeatG3Endpoint : Endpoint<FeatG3Request, FeatG3HttpResponse>
+public class G3Endpoint : Endpoint<FeatG3Request, G3HttpResponse>
 {
     public override void Configure()
     {
@@ -25,14 +25,14 @@ public class FeatG3Endpoint : Endpoint<FeatG3Request, FeatG3HttpResponse>
         {
             summary.Summary = "Endpoint for getting recently updated comic.";
             summary.Description = "This endpoint is used for getting recently updated comic.";
-            summary.Response<FeatG3HttpResponse>(
+            summary.Response<G3HttpResponse>(
                 description: "Represent successful operation response.",
                 example: new() { AppCode = FeatG3ResponseStatusCode.SUCCESS.ToString() }
             );
         });
     }
 
-    public override async Task<FeatG3HttpResponse> ExecuteAsync(FeatG3Request req, CancellationToken ct)
+    public override async Task<G3HttpResponse> ExecuteAsync(FeatG3Request req, CancellationToken ct)
     {
         var featG3Request = new FeatG3Request
         {
@@ -42,13 +42,13 @@ public class FeatG3Endpoint : Endpoint<FeatG3Request, FeatG3HttpResponse>
         // Get FeatureHandler response.
         var featResponse = await FeatureExtensions.ExecuteAsync<FeatG3Request, FeatG3Response>(featG3Request, ct);
 
-        var httpResponse = FeatG3HttpResponseManager
+        var httpResponse = G3HttpResponseManager
             .Resolve(featResponse.StatusCode)
             .Invoke(featG3Request, featResponse);
 
         if (featResponse.IsSuccess)
         {
-            httpResponse.Body = new FeatG3ResponseDto
+            httpResponse.Body = new G3ResponseDto
             {
                 ArtworkList = featResponse.Result.ToList()
             };

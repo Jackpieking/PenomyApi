@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 using PenomyAPI.Persist.Postgres.Data.DbContexts;
 using PenomyAPI.Persist.Postgres.Data.UserIdentity;
