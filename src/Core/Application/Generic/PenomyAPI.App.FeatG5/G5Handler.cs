@@ -1,4 +1,4 @@
-﻿using PenomyAPI.App.Common;
+using PenomyAPI.App.Common;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
@@ -30,7 +30,7 @@ namespace PenomyAPI.App.FeatG5
             {
                 return new G5Response { StatusCode = G5ResponseStatusCode.FAILED };
             }
-            return new G5Response { Result = result, StatusCode = G5ResponseStatusCode.SUCCESS };
+            return new() { Result = result, StatusCode = G5ResponseStatusCode.SUCCESS };
         }
     }
 }

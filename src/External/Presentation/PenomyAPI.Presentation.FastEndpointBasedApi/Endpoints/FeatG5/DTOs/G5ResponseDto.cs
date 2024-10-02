@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5.DTOs
 {
@@ -10,7 +10,7 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5.DTOs
         public string CountryName { get; set; }
         public List<string> Categories { get; set; }
         public string ArtworkStatus { get; set; }
-        public List<string> SeriesName { get; set; }
+        public string SeriesName { get; set; }
         public long ViewCount { get; set; }
         public long FavoriteCount { get; set; }
         public byte StarRates { get; set; }
