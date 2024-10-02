@@ -9,6 +9,8 @@ public sealed class UserFollowedArtwork : IEntity
 
     public long ArtworkId { get; set; }
 
+    public ArtworkType ArtworkType { get; set; }
+
     public DateTime StartedAt { get; set; }
 
     #region Navigation

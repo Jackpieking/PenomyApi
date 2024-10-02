@@ -1,6 +1,7 @@
-using System;
 using PenomyAPI.Domain.RelationalDb.Entities.Base;
 using PenomyAPI.Domain.RelationalDb.Entities.Generic;
+using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common;
+using System;
 
 namespace PenomyAPI.Domain.RelationalDb.Entities.Chat;
 
@@ -10,7 +11,7 @@ public sealed class UserLikeChatMessage : IEntity
 
     public long UserId { get; set; }
 
-    public UserLikeChatMessageValue Value { get; set; } = UserLikeChatMessageValue.Like;
+    public long ValueId { get; set; }
 
     public DateTime LikedAt { get; set; }
 
@@ -21,6 +22,8 @@ public sealed class UserLikeChatMessage : IEntity
     public ChatMessage LikedChatMessage { get; set; }
 
     public UserProfile User { get; set; }
+
+    public UserLikeValue LikeValue { get; set; }
     #endregion
 
     #region MetaData

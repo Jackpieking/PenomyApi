@@ -22,7 +22,7 @@ public class Art4LoadCategoryHandler
 
         try
         {
-            var categories = await unitOfWork.FeatArt4Repository.GetAllCategoriesAsync(ct);
+            var categories = await unitOfWork.Art4Repository.GetAllCategoriesAsync(ct);
 
             return new Art4LoadCategoryResponse
             {

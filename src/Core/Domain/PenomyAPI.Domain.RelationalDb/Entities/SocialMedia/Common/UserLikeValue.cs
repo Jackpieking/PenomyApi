@@ -1,16 +1,48 @@
+﻿using PenomyAPI.Domain.RelationalDb.Entities.Base;
+using PenomyAPI.Domain.RelationalDb.Entities.SystemManagement;
+using System;
+using System.Collections.Generic;
+
 namespace PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common;
 
-public enum UserLikeValue
+public sealed class UserLikeValue :
+    EntityWithId<long>,
+    ICreatedEntity<long>
 {
-    Like = 1,
+    public string Name { get; set; }
 
-    Love = 2,
+    public int DisplayOrder { get; set; }
 
-    HappyFace = 3,
+    public bool ForDefaultDisplay { get; set; }
 
-    SurpriseFace = 4,
+    public string Value { get; set; }
 
-    SadFace = 5,
+    public string EmojiUrl { get; set; }
 
-    AngryFace = 6
+    public long CreatedBy { get; set; }
+
+    public DateTime CreatedAt { get; set; }
+
+    #region Navigation
+    public SystemAccount Creator { get; set; }
+
+    public IEnumerable<UserPostLikeStatistic> UserPostLikeStatistics { get; set; }
+
+    public IEnumerable<UserPostCommentLikeStatistic> UserPostCommentLikeStatistics { get; set; }
+
+    public IEnumerable<GroupPostLikeStatistic> GroupPostLikeStatistics { get; set; }
+
+    public IEnumerable<GroupPostCommentLikeStatistic> GroupPostCommentLikeStatistics { get; set; }
+    #endregion
+
+    #region MetaData
+    public static class MetaData
+    {
+        public const int NameLength = 64;
+
+        public const int ValueLength = 100;
+
+        public const int EmojiUrlLength = 256;
+    }
+    #endregion
 }

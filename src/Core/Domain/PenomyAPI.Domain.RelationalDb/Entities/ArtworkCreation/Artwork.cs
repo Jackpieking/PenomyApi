@@ -1,8 +1,9 @@
-using System;
-using System.Collections.Generic;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
 using PenomyAPI.Domain.RelationalDb.Entities.Base;
 using PenomyAPI.Domain.RelationalDb.Entities.Generic;
+using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
+using System;
+using System.Collections.Generic;
 
 namespace PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 
@@ -58,11 +59,11 @@ public sealed class Artwork
 
     public DateTime UpdatedAt { get; set; }
 
+    public bool IsTemporarilyRemoved { get; set; }
+
     public long TemporarilyRemovedBy { get; set; }
 
     public DateTime TemporarilyRemovedAt { get; set; }
-
-    public bool IsTemporarilyRemoved { get; set; }
 
     /// <summary>
     ///     Only the artwork that violated the platform's
@@ -78,7 +79,7 @@ public sealed class Artwork
     #region Navigation
     public ArtworkOrigin Origin { get; set; }
 
-    public ArtworkStatistic Statistic { get; set; }
+    public ArtworkMetaData ArtworkMetaData { get; set; }
 
     public UserProfile Creator { get; set; }
 
@@ -100,6 +101,8 @@ public sealed class Artwork
 
     public IEnumerable<UserArtworkViewHistory> UserArtworkViewHistories { get; set; }
 
+    public IEnumerable<UserWatchingHistory> UserWatchingHistories { get; set; }
+
     public IEnumerable<UserManagedArtwork> UserManagedArtworks { get; set; }
 
     public IEnumerable<ArtworkCommentReference> CommentReferences { get; set; }
@@ -112,6 +115,9 @@ public sealed class Artwork
     public IEnumerable<ArtworkBugReport> ArtworkBugReports { get; set; }
 
     public IEnumerable<ArtworkViolationFlag> ViolationFlags { get; set; }
+
+    // Social Media section
+    public IEnumerable<SocialGroupRelatedArtwork> SocialGroupRelatedArtworks { get; set; }
     #endregion
 
     #region MetaData

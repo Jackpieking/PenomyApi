@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace PenomyAPI.Domain.RelationalDb.Entities.Base;
 
 /// <summary>
@@ -8,5 +10,6 @@ namespace PenomyAPI.Domain.RelationalDb.Entities.Base;
 /// </typeparam>
 public abstract class EntityWithId<TEntityId> : IEntity
 {
+    [DatabaseGenerated(DatabaseGeneratedOption.None)]
     public TEntityId Id { get; set; }
 }

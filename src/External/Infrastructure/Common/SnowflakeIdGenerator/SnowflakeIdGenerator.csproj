@@ -7,7 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SnowflakeGenerator" Version="2.0.0" />
+    <PackageReference Include="IdGen" Version="3.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Core\Application\PenomyAPI.App.Common\PenomyAPI.App.Common.csproj" />
+    <ProjectReference Include="..\PenomyAPI.Infra.Configuration\PenomyAPI.Infra.Configuration.csproj" />
   </ItemGroup>
 
 </Project>

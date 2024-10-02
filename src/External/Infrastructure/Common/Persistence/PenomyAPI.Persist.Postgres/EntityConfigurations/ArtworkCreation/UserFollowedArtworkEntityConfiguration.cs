@@ -20,6 +20,10 @@ internal sealed class UserFollowedArtworkEntityConfiguration
             .HasColumnType(DatabaseNativeTypes.TIMESTAMPTZ)
             .IsRequired();
 
+        builder
+            .Property(userFollow => userFollow.ArtworkType)
+            .IsRequired();
+
         #region Relationships
         builder
             .HasOne(userFollowedArtwork => userFollowedArtwork.FollowedArtwork)

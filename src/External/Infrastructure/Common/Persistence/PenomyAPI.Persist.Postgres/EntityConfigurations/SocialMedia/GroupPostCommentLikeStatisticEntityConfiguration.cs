@@ -12,7 +12,7 @@ internal sealed class GroupPostCommentLikeStatisticEntityConfiguration
     {
         builder.ToTable("penomy_group_post_comment_like_statistic");
 
-        builder.HasKey(likeStatistic => new { likeStatistic.CommentId, likeStatistic.Value });
+        builder.HasKey(likeStatistic => new { likeStatistic.CommentId, likeStatistic.ValueId });
 
         builder.Property(likeStatistic => likeStatistic.Total).IsRequired();
 

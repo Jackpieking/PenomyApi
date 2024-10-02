@@ -15,7 +15,7 @@ internal sealed class UserLikeGroupPostCommentEntityConfiguration
 
         builder.HasKey(userLike => new { userLike.CommentId, userLike.UserId });
 
-        builder.Property(userLike => userLike.Value).IsRequired();
+        builder.Property(userLike => userLike.ValueId).IsRequired();
 
         builder
             .Property(userLike => userLike.LikedAt)

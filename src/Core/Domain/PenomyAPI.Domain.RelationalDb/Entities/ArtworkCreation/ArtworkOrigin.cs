@@ -8,7 +8,10 @@ namespace PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 /// <summary>
 ///     Store the original country of the artworks.
 /// </summary>
-public sealed class ArtworkOrigin : EntityWithId<long>, ICreatedEntity<long>, IUpdatedEntity<long>
+public sealed class ArtworkOrigin :
+    EntityWithId<long>,
+    ICreatedEntity<long>,
+    IUpdatedEntity<long>
 {
     /// <summary>
     ///     The name of the country.
@@ -27,6 +30,8 @@ public sealed class ArtworkOrigin : EntityWithId<long>, ICreatedEntity<long>, IU
     ///     For more information: https://allanimangas.medium.com/manga-manhwa-and-manhua-whats-the-difference-651e29a96d
     /// </remarks>
     public string Label { get; set; }
+
+    public string ImageUrl { get; set; }
 
     public long CreatedBy { get; set; }
 
@@ -50,6 +55,8 @@ public sealed class ArtworkOrigin : EntityWithId<long>, ICreatedEntity<long>, IU
         public const int CountryNameLength = 64;
 
         public const int LabelLength = 64;
+
+        public const int ImageUrlLength = 256;
     }
     #endregion
 }
