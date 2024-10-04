@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,7 +25,7 @@ public class G8Repository : IG8Repository
         CancellationToken cancellationToken = default
     )
     {
-        return await _dbContext
+        List<ArtworkChapter> res = await _dbContext
             .Set<ArtworkChapter>()
             .Where(x => x.ArtworkId == id)
             .Select(x => new ArtworkChapter
@@ -56,15 +56,33 @@ public class G8Repository : IG8Repository
                 Title = x.Title,
                 PublishedAt = x.PublishedAt,
                 CreatedAt = x.CreatedAt,
-                ChapterStatus = x.ChapterStatus,
                 UploadOrder = x.UploadOrder,
-                TotalViews = x.TotalViews,
-                TotalFavorites = x.TotalFavorites,
-                TotalComments = x.TotalComments,
                 ThumbnailUrl = x.ThumbnailUrl,
             })
             .Skip((startPage - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync(cancellationToken);
+        res.ForEach(async x =>
+            x.ChapterMetaData = await GetArtworkChapterMetaDataAsync(x.Id, cancellationToken)
+        );
+        return res;
+    }
+
+    public async Task<ArtworkChapterMetaData> GetArtworkChapterMetaDataAsync(
+        long id,
+        CancellationToken token = default
+    )
+    {
+        return await _dbContext
+            .Set<ArtworkChapterMetaData>()
+            .Where(x => x.ChapterId == id)
+            .Select(x => new ArtworkChapterMetaData
+            {
+                ChapterId = x.ChapterId,
+                TotalComments = x.TotalComments,
+                TotalFavorites = x.TotalFavorites,
+                TotalViews = x.TotalViews,
+            })
+            .FirstOrDefaultAsync(token);
     }
 }

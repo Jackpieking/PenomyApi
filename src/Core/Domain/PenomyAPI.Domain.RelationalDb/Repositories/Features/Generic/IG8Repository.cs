@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
@@ -12,5 +12,9 @@ public interface IG8Repository
         int startPage = 1,
         int pageSize = 10,
         CancellationToken cancellationToken = default
+    );
+    Task<ArtworkChapterMetaData> GetArtworkChapterMetaDataAsync(
+        long id,
+        CancellationToken token = default
     );
 }

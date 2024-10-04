@@ -66,12 +66,9 @@ public class G5Endpoint : Endpoint<G5Request, G5HttpResponse>
                     .FirstOrDefault(),
                 HasSeries = featResponse.Result.HasSeries,
                 ArtworkStatus = featResponse.Result.ArtworkStatus.ToString(),
-                StarRates = (byte)(
-                    featResponse.Result.UserRatingArtworks.Sum(x => x.StarRates)
-                    / featResponse.Result.UserRatingArtworks.Count()
-                ),
-                ViewCount = featResponse.Result.Chapters.Sum(x => x.TotalViews),
-                FavoriteCount = featResponse.Result.Chapters.Sum(x => x.TotalFavorites),
+                StarRates = featResponse.Result.ArtworkMetaData.AverageStarRate,
+                ViewCount = featResponse.Result.ArtworkMetaData.TotalViews,
+                FavoriteCount = featResponse.Result.ArtworkMetaData.TotalFavorites,
                 ThumbnailUrl = featResponse.Result.ThumbnailUrl
             };
         }

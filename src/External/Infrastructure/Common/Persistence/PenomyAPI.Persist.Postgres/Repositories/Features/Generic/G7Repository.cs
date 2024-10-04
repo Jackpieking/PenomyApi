@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,7 +13,10 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic
     {
         private readonly AppDbContext _context;
 
-        public G7Repository(AppDbContext context) { }
+        public G7Repository(AppDbContext context)
+        {
+            _context = context;
+        }
 
         public async Task<List<Artwork>> GetArkworkBySeriesAsync(
             long currentArkworkId,
@@ -61,19 +64,38 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic
                         {
                             StarRates = y.StarRates,
                         }),
-                        Chapters = x.Chapters.Select(y => new ArtworkChapter
-                        {
-                            TotalViews = y.TotalViews,
-                            TotalFavorites = y.TotalFavorites,
-                            TotalComments = y.TotalComments,
-                        })
                     })
                     .OrderBy(x => x.Id)
                     .Skip((startPage - 1) * pageSize)
                     .Take(pageSize)
                     .ToListAsync(cancellationToken);
+                artworks.ForEach(async x =>
+                {
+                    x.ArtworkMetaData = await GetArtworkMetaDataAsync(x.Id, cancellationToken);
+                });
             }
             return artworks;
+        }
+
+        public async Task<ArtworkMetaData> GetArtworkMetaDataAsync(
+            long artworkId,
+            CancellationToken token = default
+        )
+        {
+            return await _context
+                .Set<ArtworkMetaData>()
+                .Where(x => x.ArtworkId == artworkId)
+                .Select(x => new ArtworkMetaData
+                {
+                    ArtworkId = x.ArtworkId,
+                    TotalComments = x.TotalComments,
+                    TotalFavorites = x.TotalFavorites,
+                    TotalViews = x.TotalViews,
+                    TotalStarRates = x.TotalStarRates,
+                    TotalUsersRated = x.TotalUsersRated,
+                    AverageStarRate = x.AverageStarRate,
+                })
+                .FirstOrDefaultAsync(token);
         }
     }
 }
