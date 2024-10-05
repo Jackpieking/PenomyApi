@@ -6,7 +6,7 @@ using System;
 
 namespace PenomyAPI.BuildingBlock.FeatRegister.FeatureRegistration.FeatG4
 {
-    internal sealed class G4Reg : FeatureDefinitionRegistration
+    internal sealed class G54Reg : FeatureDefinitionRegistration
     {
         public override Type FeatRequestType => typeof(G4Request);
 

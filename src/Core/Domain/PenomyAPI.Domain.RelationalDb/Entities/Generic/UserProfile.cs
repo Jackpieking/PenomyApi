@@ -1,11 +1,11 @@
-using System;
-using System.Collections.Generic;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Entities.Base;
 using PenomyAPI.Domain.RelationalDb.Entities.Chat;
+using PenomyAPI.Domain.RelationalDb.Entities.Monetization;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
-using PenomyAPI.Domain.RelationalDb.Entities.Subscriptions;
 using PenomyAPI.Domain.RelationalDb.Entities.SystemManagement;
+using System;
+using System.Collections.Generic;
 
 namespace PenomyAPI.Domain.RelationalDb.Entities.Generic;
 
@@ -41,15 +41,13 @@ public sealed class UserProfile : IEntity
 
     public IEnumerable<BugReport> CreatedBugReports { get; set; }
 
-    public IEnumerable<UserReport> CreatedUserReports { get; set; }
+    public IEnumerable<UserProfileReport> CreatedUserReports { get; set; }
 
-    public IEnumerable<UserReport> ReceivedUserReports { get; set; }
+    public IEnumerable<UserProfileReport> ReceivedUserReports { get; set; }
 
     public IEnumerable<UserBan> UserBans { get; set; }
 
     public IEnumerable<GrantedAuthorizedUser> GrantedTickets { get; set; }
-
-    public IEnumerable<UserRegisterSubscriptionPlan> RegisterSubscriptionPlans { get; set; }
 
     // Chat domain
     public IEnumerable<ChatGroup> CreatedChatGroups { get; set; }
@@ -99,6 +97,10 @@ public sealed class UserProfile : IEntity
 
     public IEnumerable<UserPostComment> CreatedUserPostComments { get; set; }
 
+    public IEnumerable<SocialGroupReport> CreatedSocialGroupReports { get; set; }
+
+    public IEnumerable<SocialGroupViolationFlag> ResolvedSocialGroupViolationFlags { get; set; }
+
     // Artwork creation domain
     public IEnumerable<Artwork> CreatedArtworks { get; set; }
 
@@ -131,6 +133,9 @@ public sealed class UserProfile : IEntity
     public IEnumerable<ArtworkBugReport> CreatedArtworkBugReports { get; set; }
 
     public IEnumerable<ArtworkViolationFlag> ResolvedViolationFlags { get; set; }
+
+    // Monetization section.
+    public IEnumerable<UserDonationTransaction> UserDonationTransactions { get; set; }
     #endregion
 
     #region MetaData

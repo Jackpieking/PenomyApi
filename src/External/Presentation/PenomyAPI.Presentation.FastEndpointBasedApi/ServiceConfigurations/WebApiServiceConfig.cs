@@ -13,9 +13,9 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.ServiceConfigurations
         internal static void Configure(IServiceCollection services, IConfiguration configuration)
         {
             var swaggerOption = configuration
-             .GetRequiredSection(key: "Swagger")
-             .GetRequiredSection(key: "NSwag")
-             .Get<NSwagOptions>();
+                .GetRequiredSection(key: "Swagger")
+                .GetRequiredSection(key: "NSwag")
+                .Get<NSwagOptions>();
 
             services.SwaggerDocument(documentOption =>
             {

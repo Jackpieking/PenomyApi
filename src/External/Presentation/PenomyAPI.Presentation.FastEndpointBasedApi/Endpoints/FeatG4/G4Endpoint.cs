@@ -1,15 +1,14 @@
 using FastEndpoints;
-using PenomyAPI.App.FeatG4;
-using System.Threading.Tasks;
-using System.Threading;
 using Microsoft.AspNetCore.Http;
+using PenomyAPI.App.FeatG4;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
-using System.Linq;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4.HttpResponse;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4.DTOs;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4.HttpResponse;
+using System.Threading;
+using System.Threading.Tasks;
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4;
 
-public class G4Endpoint : Endpoint<G4Request, G4HttpResponse>
+public class G54Endpoint : Endpoint<G4Request, G4HttpResponse>
 {
     public override void Configure()
     {
@@ -50,7 +49,7 @@ public class G4Endpoint : Endpoint<G4Request, G4HttpResponse>
         {
             httpResponse.Body = new G4ResponseDto
             {
-                ArtworkList = featResponse.Result.ToList()
+                ArtworkList = featResponse.Result
             };
 
             return httpResponse;

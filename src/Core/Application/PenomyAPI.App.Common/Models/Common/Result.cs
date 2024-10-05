@@ -6,6 +6,6 @@
 
         public Result() { }
 
-        public Result(TValue value) {  Value = value; }
+        public Result(TValue value) { Value = value; }
     }
 }

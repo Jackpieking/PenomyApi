@@ -12,7 +12,7 @@ internal sealed class GroupPostLikeStatisticEntityConfiguration
     {
         builder.ToTable("penomy_group_post_like_statistic");
 
-        builder.HasKey(likeStatistic => new { likeStatistic.PostId, likeStatistic.Value });
+        builder.HasKey(likeStatistic => new { likeStatistic.PostId, likeStatistic.ValueId });
 
         builder.Property(likeStatistic => likeStatistic.Total).IsRequired();
 
@@ -22,6 +22,13 @@ internal sealed class GroupPostLikeStatisticEntityConfiguration
             .WithMany(post => post.LikeStatistics)
             .HasForeignKey(likeStatistic => likeStatistic.PostId)
             .HasPrincipalKey(post => post.Id)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder
+            .HasOne(likeStatistic => likeStatistic.LikeValue)
+            .WithMany(post => post.GroupPostLikeStatistics)
+            .HasPrincipalKey(post => post.Id)
+            .HasForeignKey(likeStatistic => likeStatistic.PostId)
             .OnDelete(DeleteBehavior.NoAction);
         #endregion
     }

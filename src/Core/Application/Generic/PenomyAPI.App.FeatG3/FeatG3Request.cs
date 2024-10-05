@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using PenomyAPI.App.Common;
 
 namespace PenomyAPI.App.FeatG3;

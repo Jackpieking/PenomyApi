@@ -1,7 +1,7 @@
-using System;
-using System.Collections.Generic;
 using PenomyAPI.Domain.RelationalDb.Entities.Base;
 using PenomyAPI.Domain.RelationalDb.Entities.SystemManagement;
+using System;
+using System.Collections.Generic;
 
 namespace PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 
@@ -30,9 +30,9 @@ public sealed class Category : EntityWithId<long>, ICreatedEntity<long>, IUpdate
     #region MetaData
     public static class MetaData
     {
-        public const int NameLength = 32;
+        public const int NameLength = 64;
 
-        public const int DescriptionLength = 100;
+        public const int DescriptionLength = 640;
     }
     #endregion
 }

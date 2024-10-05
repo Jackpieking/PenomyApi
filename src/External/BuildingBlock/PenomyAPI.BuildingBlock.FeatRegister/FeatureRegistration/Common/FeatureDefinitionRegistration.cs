@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PenomyAPI.App.Common;
 using System;
 
 namespace PenomyAPI.BuildingBlock.FeatRegister.FeatureRegistration.Common
@@ -20,6 +19,9 @@ namespace PenomyAPI.BuildingBlock.FeatRegister.FeatureRegistration.Common
 
         public FeatureHandlerDefinition HandlerDefinition => _handlerDefinition;
 
-        public abstract void AddFeatureDependency(IServiceCollection services, IConfiguration configuration);
+        public abstract void AddFeatureDependency(
+            IServiceCollection services,
+            IConfiguration configuration
+        );
     }
 }

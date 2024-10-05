@@ -5,6 +5,6 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3.HttpRespo
 {
     public class G3HttpResponse : AppHttpResponse<G3ResponseDto>
     {
-        
+
     }
 }

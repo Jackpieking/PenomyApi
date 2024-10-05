@@ -12,7 +12,7 @@ internal sealed class UserPostCommentLikeStatisticEntityConfiguration
     {
         builder.ToTable("penomy_user_post_comment_like_statistics");
 
-        builder.HasKey(likeStatistic => new { likeStatistic.CommentId, likeStatistic.Value });
+        builder.HasKey(likeStatistic => new { likeStatistic.CommentId, likeStatistic.ValueId });
 
         builder.Property(likeStatistic => likeStatistic.Total).IsRequired();
 
@@ -22,6 +22,13 @@ internal sealed class UserPostCommentLikeStatisticEntityConfiguration
             .WithMany(comment => comment.LikeStatistics)
             .HasForeignKey(likeStatistic => likeStatistic.CommentId)
             .HasPrincipalKey(comment => comment.Id)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder
+            .HasOne(likeStatistic => likeStatistic.LikeValue)
+            .WithMany(likeValue => likeValue.UserPostCommentLikeStatistics)
+            .HasForeignKey(likeStatistic => likeStatistic.CommentId)
+            .HasPrincipalKey(likeValue => likeValue.Id)
             .OnDelete(DeleteBehavior.NoAction);
         #endregion
     }

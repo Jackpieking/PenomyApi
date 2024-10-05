@@ -16,7 +16,7 @@ public class FeatG3Handler : IFeatureHandler<FeatG3Request, FeatG3Response>
     {
         var unitOfWork = _unitOfWork.Value;
         var result = await unitOfWork.FeatG3Repository.GetRecentlyUpdatedComicsAsync();
-        
+
         return new FeatG3Response
         {
             Result = result,

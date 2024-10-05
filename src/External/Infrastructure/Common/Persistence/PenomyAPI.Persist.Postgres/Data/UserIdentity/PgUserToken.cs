@@ -1,6 +1,6 @@
-﻿using System;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using PenomyAPI.Domain.RelationalDb.Entities.Base;
+using System;
 
 namespace PenomyAPI.Persist.Postgres.Data.UserIdentity;
 

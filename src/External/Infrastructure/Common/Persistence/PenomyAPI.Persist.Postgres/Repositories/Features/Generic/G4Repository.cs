@@ -1,10 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
 
@@ -12,7 +11,7 @@ public class G4Repository : IG4Repository
 {
     private readonly DbContext _dbContext;
     private readonly DbSet<Artwork> _artworkDbSet;
-    private readonly DbSet<ArtworkStatistic> _statisticDbSet;
+    private readonly DbSet<ArtworkMetaData> _statisticDbSet;
     private readonly DbSet<ArtworkCategory> _artworkCategoryDbSet;
     private readonly DbSet<Category> _categoryDbSet;
 
@@ -35,10 +34,10 @@ public class G4Repository : IG4Repository
                  Id = a.Id,
                  Title = a.Title,
                  ThumbnailUrl = a.ThumbnailUrl,
-                 Statistic = new ArtworkStatistic
+                 ArtworkMetaData = new ArtworkMetaData
                  {
-                     TotalFavorites = a.Statistic.TotalFavorites,
-                     AverageStarRate = a.Statistic.AverageStarRate
+                     TotalFavorites = a.ArtworkMetaData.TotalFavorites,
+                     AverageStarRate = a.ArtworkMetaData.AverageStarRate
                  }
              }).ToListAsync();
         return result;

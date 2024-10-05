@@ -1,7 +1,7 @@
-using System;
-using System.Collections.Generic;
 using PenomyAPI.Domain.RelationalDb.Entities.Base;
 using PenomyAPI.Domain.RelationalDb.Entities.SystemManagement;
+using System;
+using System.Collections.Generic;
 
 namespace PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 
@@ -10,7 +10,7 @@ public sealed class ArtworkViolationFlagType
         ICreatedEntity<long>,
         IUpdatedEntity<long>
 {
-    public string Name { get; set; }
+    public string Title { get; set; }
 
     public string Description { get; set; }
 
@@ -24,6 +24,8 @@ public sealed class ArtworkViolationFlagType
 
     #region Navigation
     public SystemAccount Creator { get; set; }
+
+    public SystemAccount Updater { get; set; }
 
     public IEnumerable<ArtworkViolationFlag> ArtworkViolationFlags { get; set; }
     #endregion

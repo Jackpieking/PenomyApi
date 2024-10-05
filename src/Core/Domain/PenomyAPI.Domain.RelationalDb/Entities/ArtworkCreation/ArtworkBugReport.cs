@@ -1,8 +1,8 @@
-using System;
-using System.Collections.Generic;
 using PenomyAPI.Domain.RelationalDb.Entities.Base;
 using PenomyAPI.Domain.RelationalDb.Entities.Generic;
 using PenomyAPI.Domain.RelationalDb.Entities.SystemManagement;
+using System;
+using System.Collections.Generic;
 
 namespace PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 
@@ -60,7 +60,7 @@ public sealed class ArtworkBugReport : EntityWithId<long>, ICreatedEntity<long>
     #region MetaData
     public static class MetaData
     {
-        public const int TitleLength = 500;
+        public const int TitleLength = 640;
 
         public const int OverviewLength = 1000;
 

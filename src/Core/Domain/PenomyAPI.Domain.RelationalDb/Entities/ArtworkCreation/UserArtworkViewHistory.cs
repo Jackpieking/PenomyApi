@@ -1,5 +1,5 @@
-using System;
 using PenomyAPI.Domain.RelationalDb.Entities.Base;
+using System;
 
 namespace PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 
@@ -10,6 +10,8 @@ public sealed class UserArtworkViewHistory : IEntity
     public long ArtworkId { get; set; }
 
     public long ChapterId { get; set; }
+
+    public ArtworkType ArtworkType { get; set; }
 
     public DateTime ViewedAt { get; set; }
 

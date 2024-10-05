@@ -20,6 +20,10 @@ internal sealed class UserFavoriteArtworkEntityConfiguration
             .HasColumnType(DatabaseNativeTypes.TIMESTAMPTZ)
             .IsRequired();
 
+        builder
+            .Property(userFavorite => userFavorite.ArtworkType)
+            .IsRequired();
+
         #region Relationships
         builder
             .HasOne(userFavorite => userFavorite.FavoriteArtwork)

@@ -1,6 +1,6 @@
-using System;
 using PenomyAPI.Domain.RelationalDb.Entities.Base;
 using PenomyAPI.Domain.RelationalDb.Entities.SystemManagement;
+using System;
 
 namespace PenomyAPI.Domain.RelationalDb.Entities.Generic;
 

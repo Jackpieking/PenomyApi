@@ -1,5 +1,4 @@
 ﻿using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
-using System;
 using System.Collections.Generic;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4.DTOs
@@ -8,5 +7,5 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4.DTOs
     {
         public List<Artwork> ArtworkList { get; set; }
     }
-    
+
 }

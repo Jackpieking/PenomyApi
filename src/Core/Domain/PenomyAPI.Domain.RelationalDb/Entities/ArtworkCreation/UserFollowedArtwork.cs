@@ -1,5 +1,5 @@
-using System;
 using PenomyAPI.Domain.RelationalDb.Entities.Base;
+using System;
 
 namespace PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 
@@ -8,6 +8,8 @@ public sealed class UserFollowedArtwork : IEntity
     public long UserId { get; set; }
 
     public long ArtworkId { get; set; }
+
+    public ArtworkType ArtworkType { get; set; }
 
     public DateTime StartedAt { get; set; }
 

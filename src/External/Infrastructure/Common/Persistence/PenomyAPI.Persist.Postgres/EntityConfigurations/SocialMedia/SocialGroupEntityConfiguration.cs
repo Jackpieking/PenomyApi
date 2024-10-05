@@ -35,6 +35,8 @@ internal sealed class SocialGroupEntityConfiguration : IEntityConfiguration<Soci
 
         builder.Property(group => group.RequireApprovedWhenPost).IsRequired();
 
+        builder.Property(group => group.GroupStatus).IsRequired();
+
         builder.Property(group => group.CreatedBy).IsRequired();
 
         builder
