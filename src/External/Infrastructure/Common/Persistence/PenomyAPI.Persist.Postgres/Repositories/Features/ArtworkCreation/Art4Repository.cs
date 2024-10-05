@@ -16,20 +16,51 @@ public sealed class Art4Repository : IArt4Repository
     private readonly DbContext _dbContext;
     private readonly DbSet<Category> _categoryDbSet;
     private readonly DbSet<Artwork> _artworkDbSet;
+    private readonly DbSet<ArtworkMetaData> _artworkMetaDataDbSet;
     private readonly DbSet<ArtworkCategory> _artworkCategoryDbSet;
+    private readonly DbSet<ArtworkOrigin> _originDbSet;
 
     public Art4Repository(DbContext dbContext)
     {
         _dbContext = dbContext;
         _categoryDbSet = dbContext.Set<Category>();
         _artworkDbSet = dbContext.Set<Artwork>();
+        _artworkMetaDataDbSet = dbContext.Set<ArtworkMetaData>();
         _artworkCategoryDbSet = dbContext.Set<ArtworkCategory>();
+        _originDbSet = dbContext.Set<ArtworkOrigin>();
+    }
+
+    public async Task<IEnumerable<Category>> GetAllCategoriesAsync(CancellationToken cancellationToken)
+    {
+        return await _categoryDbSet
+            .AsNoTracking()
+            .Select(category => new Category
+            {
+                Id = category.Id,
+                Name = category.Name,
+            })
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<ArtworkOrigin>> GetAllOriginsAsync(
+        CancellationToken cancellationToken)
+    {
+        return await _originDbSet
+            .AsNoTracking()
+            .Select(origin => new ArtworkOrigin
+            {
+                Id = origin.Id,
+                CountryName = origin.CountryName,
+                ImageUrl = origin.ImageUrl,
+            })
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<bool> CreateComicAsync(
         Artwork comic,
+        ArtworkMetaData comicMetaData,
         IEnumerable<ArtworkCategory> artworkCategories,
-        CancellationToken ct
+        CancellationToken cancellationToken
     )
     {
         var result = new Result<bool>(false);
@@ -37,7 +68,12 @@ public sealed class Art4Repository : IArt4Repository
         var executionStrategy = RepositoryHelper.CreateExecutionStrategy(_dbContext);
 
         await executionStrategy.ExecuteAsync(
-            async () => await InternalCreateComicAsync(comic, artworkCategories, ct, result)
+            operation: async () => await InternalCreateComicAsync(
+                comic: comic,
+                comicMetaData: comicMetaData,
+                artworkCategories: artworkCategories,
+                cancellationToken: cancellationToken,
+                result: result)
         );
 
         return result.Value;
@@ -45,8 +81,9 @@ public sealed class Art4Repository : IArt4Repository
 
     private async Task InternalCreateComicAsync(
         Artwork comic,
+        ArtworkMetaData comicMetaData,
         IEnumerable<ArtworkCategory> artworkCategories,
-        CancellationToken ct,
+        CancellationToken cancellationToken,
         Result<bool> result
     )
     {
@@ -54,13 +91,17 @@ public sealed class Art4Repository : IArt4Repository
 
         try
         {
-            transaction = await RepositoryHelper.CreateTransactionAsync(_dbContext, ct);
+            transaction = await RepositoryHelper.CreateTransactionAsync(_dbContext, cancellationToken);
 
-            await _artworkDbSet.AddAsync(comic);
+            await _artworkDbSet.AddAsync(comic, cancellationToken);
 
-            await _artworkCategoryDbSet.AddRangeAsync(artworkCategories);
+            await _artworkMetaDataDbSet.AddAsync(comicMetaData, cancellationToken);
 
-            await transaction.CommitAsync(ct);
+            await _artworkCategoryDbSet.AddRangeAsync(artworkCategories, cancellationToken);
+
+            await _dbContext.SaveChangesAsync(cancellationToken);
+
+            await transaction.CommitAsync(cancellationToken);
 
             result.Value = true;
         }
@@ -68,44 +109,9 @@ public sealed class Art4Repository : IArt4Repository
         {
             if (transaction != null)
             {
-                await transaction.RollbackAsync(ct);
+                await transaction.RollbackAsync(cancellationToken);
                 await transaction.DisposeAsync();
             }
         }
-    }
-
-    public async Task<IEnumerable<Category>> GetAllCategoriesAsync(CancellationToken ct)
-    {
-        return await _categoryDbSet
-            .Select(category => new Category
-            {
-                Id = category.Id,
-                Name = category.Name,
-                Description = category.Description,
-            })
-            .ToListAsync(ct);
-    }
-
-    public async Task<IEnumerable<Artwork>> GetArtworks(long artworkId)
-    {
-        var result = await _artworkDbSet
-            .Select(artwork => new Artwork
-            {
-                Id = artwork.Id,
-                Origin = new ArtworkOrigin // Làm tương tự với các navigation prop khác
-                {
-                    Id = artwork.Origin.Id,
-                    CountryName = artwork.Origin.CountryName,
-                    Label = artwork.Origin.Label
-                },
-                ArtworkMetaData = new ArtworkMetaData
-                {
-                    TotalFavorites = artwork.ArtworkMetaData.TotalFavorites,
-                    AverageStarRate = artwork.ArtworkMetaData.AverageStarRate,
-                },
-            })
-            .ToListAsync();
-
-        return result;
     }
 }

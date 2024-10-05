@@ -1,14 +1,16 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using FastEndpoints;
+﻿using FastEndpoints;
+using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatArt4.OtherHandlers.LoadCategory;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Common;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatArt4.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatArt4.HttpResponse;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatArt4
 {
-    public class Art4LoadCategoryEndpoint : Endpoint<EmptyDto, Art4LoadCategoryHttpResponse>
+    public class Art4LoadCategoryEndpoint : EndpointWithoutRequest<IResult>
     {
         public override void Configure()
         {
@@ -17,19 +19,25 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatArt4
             AllowAnonymous();
         }
 
-        public override async Task<Art4LoadCategoryHttpResponse> ExecuteAsync(
-            EmptyDto req,
-            CancellationToken ct
+        public override async Task<IResult> ExecuteAsync(CancellationToken ct
         )
         {
-            var featRequest = Art4LoadCategoryRequest.Empty;
-
             var featResponse = await FeatureExtensions.ExecuteAsync<
                 Art4LoadCategoryRequest,
                 Art4LoadCategoryResponse
-            >(featRequest, ct);
+            >(Art4LoadCategoryRequest.Empty, ct);
 
-            return new Art4LoadCategoryHttpResponse { Categories = [], };
+            var responseBody = new Art4LoadCategoryHttpResponse
+            {
+                HttpCode = StatusCodes.Status200OK,
+                Body = featResponse.Categories.Select(category => new CategoryDto
+                {
+                    Id = category.Id.ToString(),
+                    Label = category.Name,
+                })
+            };
+
+            return Results.Ok(responseBody);
         }
     }
 }
