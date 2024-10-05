@@ -19,8 +19,5 @@ internal sealed class Art4Reg : FeatureDefinitionRegistration
     // Override lại hàm này để đăng ký các dependencies cần thiết cho feat-handler.
     public override void AddFeatureDependency(IServiceCollection services, IConfiguration configuration)
     {
-        services
-            .AddScoped<IFeatArt4FileUploadService, FeatArt4FileUploadService>()
-            .MakeScopedLazy<IFeatArt4FileUploadService>();
     }
 }

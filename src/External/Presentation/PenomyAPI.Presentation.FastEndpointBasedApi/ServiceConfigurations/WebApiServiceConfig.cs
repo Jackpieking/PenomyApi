@@ -1,16 +1,19 @@
-﻿using System;
-using FastEndpoints.Swagger;
+﻿using FastEndpoints.Swagger;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NSwag;
+using PenomyAPI.Infra.Configuration.Options;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Options;
+using System;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.ServiceConfigurations
 {
     public static class WebApiServiceConfig
     {
-        internal static void Configure(IServiceCollection services, IConfiguration configuration)
+        internal static void Configure(
+            IServiceCollection services,
+            IConfiguration configuration)
         {
             var swaggerOption = configuration
                 .GetRequiredSection(key: "Swagger")
@@ -63,6 +66,28 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.ServiceConfigurations
                 };
 
                 documentOption.EnableJWTBearerAuth = swaggerOption.EnableJWTBearerAuth;
+            });
+
+            services.ConfigureCORS(configuration);
+        }
+
+        private static void ConfigureCORS(
+            this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            var corsOptions = new PenomyCorsOptions();
+            corsOptions.Bind(configuration);
+
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(policy =>
+                {
+                    //policy.WithOrigins(corsOptions.AllowOrigins);
+                    policy.AllowAnyOrigin();
+                    policy.AllowAnyHeader();
+                    policy.AllowAnyMethod();
+                    //policy.AllowCredentials();
+                });
             });
         }
     }
