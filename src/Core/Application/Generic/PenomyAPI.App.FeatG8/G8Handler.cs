@@ -23,7 +23,11 @@ namespace PenomyAPI.App.FeatG8
             List<ArtworkChapter> chapters = [];
             if (request.Id == 0 || request.StartPage <= 0 || request.PageSize <= 0)
             {
-                return new() { StatusCode = G8ResponseStatusCode.INVALID_REQUEST };
+                return new()
+                {
+                    StatusCode = G8ResponseStatusCode.INVALID_REQUEST,
+                    IsSuccess = false
+                };
             }
             chapters = await _g8Repository.GetArtWorkChapterByIdAsync(
                 request.Id,
@@ -32,7 +36,12 @@ namespace PenomyAPI.App.FeatG8
                 ct
             );
 
-            return new() { Result = chapters, StatusCode = G8ResponseStatusCode.SUCCESS };
+            return new()
+            {
+                Result = chapters,
+                StatusCode = G8ResponseStatusCode.SUCCESS,
+                IsSuccess = true
+            };
         }
     }
 }

@@ -59,6 +59,7 @@ public class G8Repository : IG8Repository
                 UploadOrder = x.UploadOrder,
                 ThumbnailUrl = x.ThumbnailUrl,
             })
+            .AsNoTracking()
             .Skip((startPage - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync(cancellationToken);
@@ -83,6 +84,7 @@ public class G8Repository : IG8Repository
                 TotalFavorites = x.TotalFavorites,
                 TotalViews = x.TotalViews,
             })
+            .AsNoTracking()
             .FirstOrDefaultAsync(token);
     }
 }

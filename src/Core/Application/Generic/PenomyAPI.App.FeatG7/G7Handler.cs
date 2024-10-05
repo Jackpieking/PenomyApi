@@ -32,6 +32,11 @@ public class G7Handler : IFeatureHandler<G7Request, G7Response>
             ct
         );
 
-        return new() { Result = result, StatusCode = G7ResponseStatusCode.SUCCESS };
+        return new()
+        {
+            Result = result,
+            StatusCode = G7ResponseStatusCode.SUCCESS,
+            IsSuccess = true
+        };
     }
 }

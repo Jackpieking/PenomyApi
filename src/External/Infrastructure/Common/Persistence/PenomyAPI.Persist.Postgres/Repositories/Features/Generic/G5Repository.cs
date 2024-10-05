@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -61,7 +58,13 @@ public class G5Repository : IG5Repository
                 },
                 ThumbnailUrl = x.ThumbnailUrl,
             })
+            .AsNoTracking()
             .FirstOrDefaultAsync(token);
         return artwork;
+    }
+
+    public Task<bool> IsArtworkExistAsync(long artworkId, CancellationToken ct = default)
+    {
+        return _dbContext.Set<Artwork>().AnyAsync(x => x.Id == artworkId, ct);
     }
 }

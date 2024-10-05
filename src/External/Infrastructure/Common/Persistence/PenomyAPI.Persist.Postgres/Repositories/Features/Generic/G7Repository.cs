@@ -65,6 +65,7 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic
                             StarRates = y.StarRates,
                         }),
                     })
+                    .AsNoTracking()
                     .OrderBy(x => x.Id)
                     .Skip((startPage - 1) * pageSize)
                     .Take(pageSize)
