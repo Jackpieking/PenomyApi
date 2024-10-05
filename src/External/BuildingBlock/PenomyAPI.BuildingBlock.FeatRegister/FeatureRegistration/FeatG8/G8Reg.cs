@@ -10,7 +10,7 @@ namespace PenomyAPI.BuildingBlock.FeatRegister.FeatureRegistration.FeatG8
     {
         public override Type FeatRequestType => typeof(G8Request);
 
-        public override Type FeatHandlerType => typeof(G8Response);
+        public override Type FeatHandlerType => typeof(G8Handler);
 
         public override void AddFeatureDependency(
             IServiceCollection services,

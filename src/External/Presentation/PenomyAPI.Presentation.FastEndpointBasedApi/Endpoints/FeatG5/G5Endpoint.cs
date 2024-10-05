@@ -55,6 +55,7 @@ public class G5Endpoint : Endpoint<G5Request, G5HttpResponse>
         {
             httpResponse.Body = new DTOs.G5ResponseDto
             {
+                Id = featResponse.Result.Id,
                 Name = featResponse.Result.Title,
                 AuthorName = featResponse.Result.AuthorName,
                 CountryName = featResponse.Result.Origin.CountryName,

@@ -10,7 +10,7 @@ namespace PenomyAPI.BuildingBlock.FeatRegister.FeatureRegistration.FeatG7
     {
         public override Type FeatRequestType => typeof(G7Request);
 
-        public override Type FeatHandlerType => typeof(G7Response);
+        public override Type FeatHandlerType => typeof(G7Handler);
 
         public override void AddFeatureDependency(
             IServiceCollection services,
