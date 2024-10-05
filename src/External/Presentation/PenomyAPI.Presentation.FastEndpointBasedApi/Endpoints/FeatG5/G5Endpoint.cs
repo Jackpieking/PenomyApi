@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -42,47 +42,35 @@ public class G5Endpoint : Endpoint<G5Request, G5HttpResponse>
     {
         var httpResponse = new G5HttpResponse();
 
-        try
+        var g5req = new G5Request { Id = requestDto.Id };
+
+        // Get FeatureHandler response.
+        var featResponse = await FeatureExtensions.ExecuteAsync<G5Request, G5Response>(g5req, ct);
+
+        httpResponse = G5ResponseManager
+            .Resolve(featResponse.StatusCode)
+            .Invoke(g5req, featResponse);
+
+        if (featResponse.IsSuccess)
         {
-            var g5req = new G5Request { Id = requestDto.Id };
-
-            // Get FeatureHandler response.
-            var featResponse = await FeatureExtensions.ExecuteAsync<G5Request, G5Response>(
-                g5req,
-                ct
-            );
-
-            httpResponse = G5ResponseManager
-                .Resolve(featResponse.StatusCode)
-                .Invoke(g5req, featResponse);
-
-            if (featResponse.IsSuccess)
+            httpResponse.Body = new DTOs.G5ResponseDto
             {
-                httpResponse.Body = new DTOs.G5ResponseDto
-                {
-                    Name = featResponse.Result.Title,
-                    AuthorName = featResponse.Result.AuthorName,
-                    CountryName = featResponse.Result.Origin.CountryName,
-                    Categories = featResponse
-                        .Result.ArtworkCategories.Select(x => x.Category.Name)
-                        .ToList(),
-                    SeriesName = featResponse
-                        .Result.ArtworkSeries.Select(x => x.Series.Title)
-                        .ToList(),
-                    HasSeries = featResponse.Result.HasSeries,
-                    ArtworkStatus = featResponse.Result.ArtworkStatus.ToString(),
-                    StarRates = (byte)(
-                        featResponse.Result.UserRatingArtworks.Sum(x => x.StarRates)
-                        / featResponse.Result.UserRatingArtworks.Count()
-                    ),
-                    ViewCount = featResponse.Result.Chapters.Sum(x => x.TotalViews),
-                    FavoriteCount = featResponse.Result.Chapters.Sum(x => x.TotalFavorites)
-                };
-            }
-        }
-        catch (Exception ex)
-        {
-            httpResponse.Errors = new List<string> { ex.Message };
+                Name = featResponse.Result.Title,
+                AuthorName = featResponse.Result.AuthorName,
+                CountryName = featResponse.Result.Origin.CountryName,
+                Categories = featResponse
+                    .Result.ArtworkCategories.Select(x => x.Category.Name)
+                    .ToList(),
+                SeriesName = featResponse
+                    .Result.ArtworkSeries.Select(x => x.Series.Title)
+                    .FirstOrDefault(),
+                HasSeries = featResponse.Result.HasSeries,
+                ArtworkStatus = featResponse.Result.ArtworkStatus.ToString(),
+                StarRates = featResponse.Result.ArtworkMetaData.AverageStarRate,
+                ViewCount = featResponse.Result.ArtworkMetaData.TotalViews,
+                FavoriteCount = featResponse.Result.ArtworkMetaData.TotalFavorites,
+                ThumbnailUrl = featResponse.Result.ThumbnailUrl
+            };
         }
 
         return httpResponse;

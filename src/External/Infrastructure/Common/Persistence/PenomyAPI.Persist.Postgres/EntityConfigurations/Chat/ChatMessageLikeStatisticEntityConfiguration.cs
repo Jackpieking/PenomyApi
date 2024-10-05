@@ -12,7 +12,7 @@ internal sealed class ChatMessageLikeStatisticEntityConfiguration
     {
         builder.ToTable("penomy_chat_message_like_statistic");
 
-        builder.HasKey(likeStatistic => new { likeStatistic.ChatMessageId, likeStatistic.Value });
+        builder.HasKey(likeStatistic => new { likeStatistic.ChatMessageId, likeStatistic.ValueId });
 
         #region Relationships
         builder

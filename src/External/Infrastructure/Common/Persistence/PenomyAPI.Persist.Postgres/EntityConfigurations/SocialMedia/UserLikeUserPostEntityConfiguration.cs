@@ -14,7 +14,7 @@ internal sealed class UserLikeUserPostEntityConfiguration : IEntityConfiguration
 
         builder.HasKey(userLike => new { userLike.PostId, userLike.UserId });
 
-        builder.Property(userLike => userLike.Value).IsRequired();
+        builder.Property(userLike => userLike.ValueId).IsRequired();
 
         builder
             .Property(userLike => userLike.LikedAt)

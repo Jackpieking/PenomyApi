@@ -23,6 +23,11 @@ internal sealed class ArtworkOriginEntityConfiguration : IEntityConfiguration<Ar
             .Property(origin => origin.Label)
             .HasMaxLength(ArtworkOrigin.MetaData.LabelLength)
             .IsRequired();
+        
+        builder
+            .Property(origin => origin.ImageUrl)
+            .HasMaxLength(ArtworkOrigin.MetaData.ImageUrlLength)
+            .IsRequired();
 
         builder.Property(origin => origin.CreatedBy).IsRequired();
 

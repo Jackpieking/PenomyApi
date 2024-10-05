@@ -60,7 +60,7 @@ public sealed class ArtworkBugReport : EntityWithId<long>, ICreatedEntity<long>
     #region MetaData
     public static class MetaData
     {
-        public const int TitleLength = 500;
+        public const int TitleLength = 640;
 
         public const int OverviewLength = 1000;
 

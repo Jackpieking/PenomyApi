@@ -20,6 +20,8 @@ public sealed class SocialGroup : EntityWithId<long>, ICreatedEntity<long>
 
     public bool RequireApprovedWhenPost { get; set; }
 
+    public SocialGroupStatus GroupStatus { get; set; }
+
     public long CreatedBy { get; set; }
 
     public DateTime CreatedAt { get; set; }
@@ -36,6 +38,10 @@ public sealed class SocialGroup : EntityWithId<long>, ICreatedEntity<long>
     public IEnumerable<GroupPinnedPost> GroupPinnedPosts { get; set; }
 
     public IEnumerable<GroupPost> GroupPosts { get; set; }
+
+    public IEnumerable<SocialGroupReport> ReceivedSocialGroupReports { get; set; }
+
+    public IEnumerable<SocialGroupRelatedArtwork> SocialGroupRelatedArtworks { get; set; }
     #endregion
 
     #region MetaData

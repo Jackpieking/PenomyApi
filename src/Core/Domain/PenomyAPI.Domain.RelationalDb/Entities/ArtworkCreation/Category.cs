@@ -30,9 +30,9 @@ public sealed class Category : EntityWithId<long>, ICreatedEntity<long>, IUpdate
     #region MetaData
     public static class MetaData
     {
-        public const int NameLength = 32;
+        public const int NameLength = 64;
 
-        public const int DescriptionLength = 100;
+        public const int DescriptionLength = 640;
     }
     #endregion
 }

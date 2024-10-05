@@ -79,7 +79,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SocialMedia", "SocialMedia"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SystemManagement", "SystemManagement", "{2DC1F414-67D8-4A02-ADAD-E2C21B8E074E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatArt4", "src\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt1\PenomyAPI.App.FeatArt4.csproj", "{A4F1F026-7A62-4771-A44D-1E63117D5140}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatArt4", "src\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt4\PenomyAPI.App.FeatArt4.csproj", "{A4F1F026-7A62-4771-A44D-1E63117D5140}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatG10", "src\Core\Application\Generic\PenomyAPI.App.FeatG10\PenomyAPI.App.FeatG10.csproj", "{04A31EF0-41DF-460B-BE78-9D7AF0E6F99F}"
 EndProject
@@ -91,7 +91,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SocialMedia", "SocialMedia"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SystemManagement", "SystemManagement", "{36290690-0A54-48CF-92C5-FE4D2F580629}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.Infra.FeatArt4", "src\External\Infrastructure\ArtworkCreation\PenomyAPI.Infra.FeatArt1\PenomyAPI.Infra.FeatArt4.csproj", "{17923694-78FA-491C-95FA-ADE35824CD96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.Infra.FeatArt4", "src\External\Infrastructure\ArtworkCreation\PenomyAPI.Infra.FeatArt4\PenomyAPI.Infra.FeatArt4.csproj", "{17923694-78FA-491C-95FA-ADE35824CD96}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.Infra.FeatChat1", "src\External\Infrastructure\Chat\PenomyAPI.Infra.FeatChat1\PenomyAPI.Infra.FeatChat1.csproj", "{DF0007CD-791C-4AA9-9D87-724BB458DDBD}"
 EndProject
@@ -114,6 +114,16 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatG8", "src\Core\Application\Generic\PenomyAPI.App.FeatG8\PenomyAPI.App.FeatG8.csproj", "{BA9AF094-5240-481A-BD66-D6E2D81B2000}"
 
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnowflakeIdGenerator", "src\External\Infrastructure\Common\SnowflakeIdGenerator\SnowflakeIdGenerator.csproj", "{8E251108-4F7C-45FB-84CD-FC1A304F1EEF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SnowflakeIdGenerator", "src\External\Infrastructure\Common\SnowflakeIdGenerator\SnowflakeIdGenerator.csproj", "{8E251108-4F7C-45FB-84CD-FC1A304F1EEF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FileService", "FileService", "{09E13B1B-2547-4FC2-840E-063389AA49F6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatArt7", "src\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt7\PenomyAPI.App.FeatArt7.csproj", "{578A9FC8-4AAE-4C2A-B193-9FC4AB0E1E29}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.FileService.CloudinaryService", "src\External\Infrastructure\Common\FileService\PenomyAPI.FileService.CloudinaryService\PenomyAPI.FileService.CloudinaryService.csproj", "{E1EFF5F3-25DC-4452-B85F-4F9C306F7BEB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.FeatG7", "src\Core\Application\Generic\PenomyAPI.App.FeatG7\PenomyAPI.App.FeatG7.csproj", "{167DCF5E-1461-42C1-8360-1408CA254AAA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -241,10 +251,6 @@ Global
 		{F28B99F4-29F5-452B-BAD8-93C0B20644F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F28B99F4-29F5-452B-BAD8-93C0B20644F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F28B99F4-29F5-452B-BAD8-93C0B20644F3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8E251108-4F7C-45FB-84CD-FC1A304F1EEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8E251108-4F7C-45FB-84CD-FC1A304F1EEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8E251108-4F7C-45FB-84CD-FC1A304F1EEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8E251108-4F7C-45FB-84CD-FC1A304F1EEF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{187F214F-8C16-4761-B22A-B989E762B46C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{187F214F-8C16-4761-B22A-B989E762B46C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{187F214F-8C16-4761-B22A-B989E762B46C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -253,7 +259,22 @@ Global
 		{BA9AF094-5240-481A-BD66-D6E2D81B2000}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA9AF094-5240-481A-BD66-D6E2D81B2000}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA9AF094-5240-481A-BD66-D6E2D81B2000}.Release|Any CPU.Build.0 = Release|Any CPU
-
+		{8E251108-4F7C-45FB-84CD-FC1A304F1EEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E251108-4F7C-45FB-84CD-FC1A304F1EEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E251108-4F7C-45FB-84CD-FC1A304F1EEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E251108-4F7C-45FB-84CD-FC1A304F1EEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{578A9FC8-4AAE-4C2A-B193-9FC4AB0E1E29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{578A9FC8-4AAE-4C2A-B193-9FC4AB0E1E29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{578A9FC8-4AAE-4C2A-B193-9FC4AB0E1E29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{578A9FC8-4AAE-4C2A-B193-9FC4AB0E1E29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1EFF5F3-25DC-4452-B85F-4F9C306F7BEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1EFF5F3-25DC-4452-B85F-4F9C306F7BEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1EFF5F3-25DC-4452-B85F-4F9C306F7BEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1EFF5F3-25DC-4452-B85F-4F9C306F7BEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{167DCF5E-1461-42C1-8360-1408CA254AAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{167DCF5E-1461-42C1-8360-1408CA254AAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{167DCF5E-1461-42C1-8360-1408CA254AAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{167DCF5E-1461-42C1-8360-1408CA254AAA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -311,10 +332,13 @@ Global
 		{AA8D5E1F-C3DE-4025-9A24-1759798661B6} = {41F9078E-BF7D-4632-AFD5-85C47A975399}
 		{E2453C4A-690C-4213-A08D-A4B9308608D1} = {AD061D85-C1FB-4F50-8B36-93E3D49AAEF2}
 		{F28B99F4-29F5-452B-BAD8-93C0B20644F3} = {2DC1F414-67D8-4A02-ADAD-E2C21B8E074E}
-		{8E251108-4F7C-45FB-84CD-FC1A304F1EEF} = {D992902E-3588-4E21-A1D5-488D283107B1}
 		{187F214F-8C16-4761-B22A-B989E762B46C} = {93238DD1-0977-422A-A564-56BD09E1EC18}
 		{BA9AF094-5240-481A-BD66-D6E2D81B2000} = {93238DD1-0977-422A-A564-56BD09E1EC18}
-
+		{8E251108-4F7C-45FB-84CD-FC1A304F1EEF} = {D992902E-3588-4E21-A1D5-488D283107B1}
+		{09E13B1B-2547-4FC2-840E-063389AA49F6} = {D992902E-3588-4E21-A1D5-488D283107B1}
+		{578A9FC8-4AAE-4C2A-B193-9FC4AB0E1E29} = {315DDDD8-6E85-4C09-9F74-B81ECD9CD65A}
+		{E1EFF5F3-25DC-4452-B85F-4F9C306F7BEB} = {09E13B1B-2547-4FC2-840E-063389AA49F6}
+		{167DCF5E-1461-42C1-8360-1408CA254AAA} = {93238DD1-0977-422A-A564-56BD09E1EC18}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D57C122E-3458-4428-82FB-FF6E7A97A032}

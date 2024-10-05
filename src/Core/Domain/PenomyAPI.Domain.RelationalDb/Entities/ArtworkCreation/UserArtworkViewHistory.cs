@@ -11,6 +11,8 @@ public sealed class UserArtworkViewHistory : IEntity
 
     public long ChapterId { get; set; }
 
+    public ArtworkType ArtworkType { get; set; }
+
     public DateTime ViewedAt { get; set; }
 
     #region Navigation

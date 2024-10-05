@@ -1,9 +1,8 @@
-﻿using PenomyAPI.App.Common;
+using PenomyAPI.App.Common;
 
-namespace PenomyAPI.App.FeatG5
+namespace PenomyAPI.App.FeatG5;
+
+public class G5Request : IFeatureRequest<G5Response>
 {
-    public class G5Request : IFeatureRequest<G5Response>
-    {
-        public long Id { get; set; }
-    }
+    public long Id { get; set; }
 }

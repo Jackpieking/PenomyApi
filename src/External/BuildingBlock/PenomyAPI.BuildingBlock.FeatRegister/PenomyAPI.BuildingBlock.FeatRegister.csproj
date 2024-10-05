@@ -1,14 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\PenomyAPI.App.FeatG8\PenomyAPI.App.FeatG8.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG5\PenomyAPI.App.FeatG5.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG7\PenomyAPI.App.FeatG7.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG8\PenomyAPI.App.FeatG8.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Common\BackgroundJob\PenomyAPI.BackgroundJob.Quartz\PenomyAPI.BackgroundJob.Quartz.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Common\FileService\PenomyAPI.FileService.CloudinaryService\PenomyAPI.FileService.CloudinaryService.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Common\Notification\Mail\PenomyAPI.Noti.Mail.GoogleGmail\PenomyAPI.Noti.Mail.GoogleGmail.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Common\Notification\Mail\PenomyAPI.Noti.Mail.MailCow\PenomyAPI.Noti.Mail.MailCow.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Common\PenomyAPI.Infra.Configuration\PenomyAPI.Infra.Configuration.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Common\Persistence\PenomyAPI.Persist.Postgres\PenomyAPI.Persist.Postgres.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Common\Persistence\PenomyAPI.Persist.Redis\PenomyAPI.Persist.Redis.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Common\Persistence\PenomyAPI.Persist.Typesense\PenomyAPI.Persist.Typesense.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\ArtworkCreation\PenomyAPI.Infra.FeatArt1\PenomyAPI.Infra.FeatArt4.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\ArtworkCreation\PenomyAPI.Infra.FeatArt4\PenomyAPI.Infra.FeatArt4.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Common\SnowflakeIdGenerator\SnowflakeIdGenerator.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Generic\PenomyAPI.Infra.FeatG1\PenomyAPI.Infra.FeatG1.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Generic\PenomyAPI.Infra.FeatG32\PenomyAPI.Infra.FeatG32.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Generic\PenomyAPI.Infra.FeatG34\PenomyAPI.Infra.FeatG34.csproj" />
