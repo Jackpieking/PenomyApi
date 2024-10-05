@@ -112,8 +112,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatG5", "src\Core\Application\Generic\PenomyAPI.App.FeatG5\PenomyAPI.App.FeatG5.csproj", "{187F214F-8C16-4761-B22A-B989E762B46C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatG8", "src\Core\Application\Generic\PenomyAPI.App.FeatG8\PenomyAPI.App.FeatG8.csproj", "{BA9AF094-5240-481A-BD66-D6E2D81B2000}"
-
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnowflakeIdGenerator", "src\External\Infrastructure\Common\SnowflakeIdGenerator\SnowflakeIdGenerator.csproj", "{8E251108-4F7C-45FB-84CD-FC1A304F1EEF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SnowflakeIdGenerator", "src\External\Infrastructure\Common\SnowflakeIdGenerator\SnowflakeIdGenerator.csproj", "{8E251108-4F7C-45FB-84CD-FC1A304F1EEF}"
 EndProject
@@ -123,7 +121,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatArt7", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.FileService.CloudinaryService", "src\External\Infrastructure\Common\FileService\PenomyAPI.FileService.CloudinaryService\PenomyAPI.FileService.CloudinaryService.csproj", "{E1EFF5F3-25DC-4452-B85F-4F9C306F7BEB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.FeatG7", "src\Core\Application\Generic\PenomyAPI.App.FeatG7\PenomyAPI.App.FeatG7.csproj", "{167DCF5E-1461-42C1-8360-1408CA254AAA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatG7", "src\Core\Application\Generic\PenomyAPI.App.FeatG7\PenomyAPI.App.FeatG7.csproj", "{167DCF5E-1461-42C1-8360-1408CA254AAA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
