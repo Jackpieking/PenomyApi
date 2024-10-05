@@ -15,6 +15,6 @@ public sealed class CloudinaryOptions : AppOptions
 
     public override void Bind(IConfiguration configuration)
     {
-        configuration.Bind(RootSectionName, this);
+        configuration.GetRequiredSection(RootSectionName).Bind(this);
     }
 }
