@@ -1,10 +1,11 @@
-﻿using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatArt4.DTOs;
+﻿using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Common;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatArt4.DTOs;
 using System.Collections.Generic;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatArt4.HttpResponse
 {
-    public class Art4LoadCategoryHttpResponse
+    public sealed class Art4LoadCategoryHttpResponse
+        : AppHttpResponse<IEnumerable<CategoryDto>>
     {
-        public IEnumerable<CategoryDto> Categories { get; set; }
     }
 }

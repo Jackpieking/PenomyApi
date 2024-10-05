@@ -51,4 +51,23 @@ public sealed class ArtworkMetaData : IEntity
     #region MetaData
     public static class MetaData { }
     #endregion
+
+    #region Static Methods
+    public static ArtworkMetaData Empty(long artworkId)
+    {
+        return new ArtworkMetaData
+        {
+            ArtworkId = artworkId,
+            TotalViews = 0,
+            TotalComments = 0,
+            TotalFollowers = 0,
+            TotalFavorites = 0,
+            TotalStarRates = 0,
+            TotalUsersRated = 0,
+            AverageStarRate = 0,
+            HasFanGroup = false,
+            HasAdRevenueEnabled = false,
+        };
+    }
+    #endregion
 }

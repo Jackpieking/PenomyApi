@@ -29,6 +29,7 @@ if (app.Environment.IsStaging()) { }
 if (app.Environment.IsProduction()) { }
 
 app.UseFastEndpoints();
+app.UseCors();
 app.UseSwaggerGen()
     .UseSwaggerUi(configure: options =>
     {
