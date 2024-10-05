@@ -6,13 +6,6 @@ namespace PenomyAPI.Persist.Postgres.Data.DbContexts;
 
 public sealed class AppDbContext : IdentityDbContext<PgUser, PgRole, long>
 {
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseNpgsql(
-            "Server = 172.29.197.143; Port = 8537;Database = penomy;Username = penomy;Password = PenomyAdmin123@;sslmode = require;Trust Server Certificate = true;"
-        );
-    }
-
     protected override void OnModelCreating(ModelBuilder builder)
     {
         // Apply the configuration from the Identity.
