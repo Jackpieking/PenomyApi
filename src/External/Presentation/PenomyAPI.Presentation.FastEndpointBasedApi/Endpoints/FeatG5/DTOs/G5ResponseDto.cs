@@ -4,6 +4,7 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5.DTOs
 {
     public class G5ResponseDto
     {
+        public long Id { get; set; }
         public string Name { get; set; }
         public bool HasSeries { get; set; }
         public string AuthorName { get; set; }

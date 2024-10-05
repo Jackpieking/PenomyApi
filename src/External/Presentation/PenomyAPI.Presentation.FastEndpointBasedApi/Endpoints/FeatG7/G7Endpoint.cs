@@ -71,6 +71,7 @@ public class G7Endpoint : Endpoint<G7Request, G7HttpResponse>
                 g7ResponseDtos.Add(
                     new ArtworkDto()
                     {
+                        Id = response.Id,
                         AuthorName = response.AuthorName,
                         CategoryName = response
                             .ArtworkCategories.Select(x => x.Category.Name)

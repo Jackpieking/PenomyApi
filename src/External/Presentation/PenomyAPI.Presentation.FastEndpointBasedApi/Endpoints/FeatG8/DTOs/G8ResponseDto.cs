@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG8.DTOs
@@ -10,6 +10,7 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG8.DTOs
 
     public class ArtworkChapterDto
     {
+        public long Id { get; set; }
         public int UploadOrder { get; set; }
         public string ChapterName { get; set; }
         public DateTime CreatedTime { get; set; }

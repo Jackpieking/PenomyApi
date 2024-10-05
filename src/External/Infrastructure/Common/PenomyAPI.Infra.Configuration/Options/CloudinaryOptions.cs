@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using PenomyAPI.Infra.Configuration.Common;
 
 namespace PenomyAPI.Infra.Configuration.Options;
@@ -15,8 +15,6 @@ public sealed class CloudinaryOptions : AppOptions
 
     public override void Bind(IConfiguration configuration)
     {
-        configuration
-            .GetRequiredSection(RootSectionName)
-            .Bind(this);
+        configuration.Bind(RootSectionName, this);
     }
 }
