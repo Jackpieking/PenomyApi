@@ -33,7 +33,6 @@ public sealed class G1Handler : IFeatureHandler<G1Request, G1Response>
             email: request.Email,
             ct: ct
         );
-
         // User with email already exists.
         if (isUserFound)
         {
