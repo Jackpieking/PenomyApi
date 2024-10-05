@@ -12,7 +12,7 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G25
     {
         public override void Configure()
         {
-            Get("/profile/user/history/save");
+            Post("/profile/user/history/save");
 
             AllowAnonymous();
 
