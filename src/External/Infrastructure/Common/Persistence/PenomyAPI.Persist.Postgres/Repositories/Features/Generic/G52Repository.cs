@@ -25,7 +25,7 @@ public class G52Repository : IG52Repository
     {
         var option = new SnowflakeIdOptions();
         var Generator = new AppSnowflakeIdGenerator(option);
-
+        Comment.Id = Generator.Get();
         try
         {
             _artworkCommentDbSet.Add(Comment);
