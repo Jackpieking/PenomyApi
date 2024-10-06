@@ -87,4 +87,9 @@ public class G8Repository : IG8Repository
             .AsNoTracking()
             .FirstOrDefaultAsync(token);
     }
+
+    public Task<bool> IsArtworkExistAsync(long id, CancellationToken token = default)
+    {
+        return _dbContext.Set<ArtworkChapter>().AnyAsync(x => x.ArtworkId == id, token);
+    }
 }

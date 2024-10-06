@@ -29,6 +29,10 @@ namespace PenomyAPI.App.FeatG8
                     IsSuccess = false
                 };
             }
+            if (!await _g8Repository.IsArtworkExistAsync(request.Id, ct))
+            {
+                return new() { StatusCode = G8ResponseStatusCode.NOT_FOUND, IsSuccess = false };
+            }
             chapters = await _g8Repository.GetArtWorkChapterByIdAsync(
                 request.Id,
                 request.StartPage,

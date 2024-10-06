@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG8;
@@ -43,6 +43,15 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG8.HttpRespo
                     {
                         AppCode = $"G8.{G8ResponseStatusCode.INVALID_REQUEST}",
                         HttpCode = StatusCodes.Status400BadRequest,
+                    }
+            );
+            _dictionary.TryAdd(
+                key: G8ResponseStatusCode.NOT_FOUND,
+                value: (_, response) =>
+                    new()
+                    {
+                        AppCode = $"G8.{G8ResponseStatusCode.NOT_FOUND}",
+                        HttpCode = StatusCodes.Status404NotFound,
                     }
             );
         }

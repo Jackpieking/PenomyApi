@@ -68,10 +68,11 @@ public class G5Endpoint : Endpoint<G5Request, G5HttpResponse>
                 StarRates = featResponse.Result.ArtworkMetaData.AverageStarRate,
                 ViewCount = featResponse.Result.ArtworkMetaData.TotalViews,
                 FavoriteCount = featResponse.Result.ArtworkMetaData.TotalFavorites,
-                ThumbnailUrl = featResponse.Result.ThumbnailUrl
+                ThumbnailUrl = featResponse.Result.ThumbnailUrl,
+                Introduction = featResponse.Result.Introduction,
             };
         }
-
+        await SendAsync(httpResponse, httpResponse.HttpCode, ct);
         return httpResponse;
     }
 }

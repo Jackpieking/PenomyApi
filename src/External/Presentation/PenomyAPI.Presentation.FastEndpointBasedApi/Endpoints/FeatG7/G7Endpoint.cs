@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -7,11 +6,9 @@ using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG5;
 using PenomyAPI.App.FeatG7;
-using PenomyAPI.App.FeatG8;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG7.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG7.HttpResponse;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG8.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG8.HttpResponse;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG7;
@@ -85,7 +82,7 @@ public class G7Endpoint : Endpoint<G7Request, G7HttpResponse>
             httpResponse.Body = new G7ResponseDto { Result = g7ResponseDtos };
             return httpResponse;
         }
-
+        await SendAsync(httpResponse, httpResponse.HttpCode, ct);
         return httpResponse;
     }
 }

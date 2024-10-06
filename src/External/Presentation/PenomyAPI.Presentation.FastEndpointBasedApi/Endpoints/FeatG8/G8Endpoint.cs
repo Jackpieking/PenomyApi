@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -79,7 +78,7 @@ public class G8Endpoint : Endpoint<G8Request, G8HttpResponse>
             httpResponse.Body = new G8ResponseDto { Result = g8ResponseDtos };
             return httpResponse;
         }
-
+        await SendAsync(httpResponse, httpResponse.HttpCode, ct);
         return httpResponse;
     }
 }

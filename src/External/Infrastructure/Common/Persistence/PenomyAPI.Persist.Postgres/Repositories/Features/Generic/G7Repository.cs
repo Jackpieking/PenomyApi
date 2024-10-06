@@ -98,5 +98,10 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic
                 })
                 .FirstOrDefaultAsync(token);
         }
+
+        public Task<bool> IsArtworkExistAsync(long artworkId, CancellationToken token = default)
+        {
+            return _context.Set<Artwork>().AnyAsync(x => x.Id == artworkId, token);
+        }
     }
 }

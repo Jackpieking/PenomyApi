@@ -26,6 +26,9 @@ public class G5Repository : IG5Repository
             .Where(x => x.Id == artworkId)
             .Select(x => new Artwork
             {
+                Title = x.Title,
+                AuthorName = x.AuthorName,
+                Introduction = x.Introduction,
                 Id = x.Id,
                 Origin = new ArtworkOrigin
                 {

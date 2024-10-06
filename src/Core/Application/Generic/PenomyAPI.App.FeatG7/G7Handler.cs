@@ -23,7 +23,11 @@ public class G7Handler : IFeatureHandler<G7Request, G7Response>
         List<Artwork> result = [];
         if (request.Id == 0 || request.StartPage <= 0 || request.PageSize <= 0)
         {
-            return new() { StatusCode = G7ResponseStatusCode.INVALID_REQUEST };
+            return new() { StatusCode = G7ResponseStatusCode.INVALID_REQUEST, IsSuccess = false };
+        }
+        if (!await _g7Repository.IsArtworkExistAsync(request.Id, ct))
+        {
+            return new() { StatusCode = G7ResponseStatusCode.NOT_FOUND, IsSuccess = false };
         }
         result = await _g7Repository.GetArkworkBySeriesAsync(
             request.Id,
