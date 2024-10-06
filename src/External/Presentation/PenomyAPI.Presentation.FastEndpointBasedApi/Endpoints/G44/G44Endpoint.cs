@@ -13,7 +13,7 @@ public class G44Endpoint : Endpoint<G44Request, G44HttpResponse>
 {
     public override void Configure()
     {
-        Post("/profile/user/followed-artworks");
+        Post("/profile/user/unfollowed-artworks");
 
         AllowAnonymous();
 
