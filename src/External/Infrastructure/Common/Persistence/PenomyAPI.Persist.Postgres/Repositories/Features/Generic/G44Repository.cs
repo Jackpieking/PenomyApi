@@ -11,11 +11,14 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic
     {
         private readonly DbContext _dbContext;
         private readonly DbSet<UserFollowedArtwork> _userFollowedArtwork;
+        private readonly DbSet<ArtworkMetaData> _artworkMetaData;
 
         public G44Repository(DbContext dbContext)
         {
             _dbContext = dbContext;
             _userFollowedArtwork = dbContext.Set<UserFollowedArtwork>();
+            _artworkMetaData = dbContext.Set<ArtworkMetaData>();
+
         }
 
         public async Task<bool> UnFollowArtwork(long userId, long artworkId, ArtworkType artworkType, CancellationToken ct)
@@ -25,6 +28,14 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic
                 await _userFollowedArtwork
                     .Where(o => o.UserId == userId && o.ArtworkId == artworkId)
                     .ExecuteDeleteAsync(ct);
+
+                var artworkMetaData = await _artworkMetaData
+                    .FirstOrDefaultAsync(o => o.ArtworkId == artworkId);
+
+                if (artworkMetaData != null)
+                {
+                    artworkMetaData.TotalFollowers--;
+                }
 
                 _dbContext.SaveChanges();
             }
