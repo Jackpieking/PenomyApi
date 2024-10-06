@@ -1,7 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\PenomyAPI.Infra.FeatG44\PenomyAPI.Infra.G44.csproj" />
-    <ProjectReference Include="..\..\..\..\PenomyAPI.Infra.G43\PenomyAPI.Infra.G43.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG5\PenomyAPI.App.FeatG5.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG7\PenomyAPI.App.FeatG7.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG8\PenomyAPI.App.FeatG8.csproj" />
@@ -24,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Infrastructure\Generic\PenomyAPI.Infra.FeatG3\PenomyAPI.Infra.FeatG3.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG3\PenomyAPI.App.FeatG3.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Generic\PenomyAPI.Infra.G43\PenomyAPI.Infra.G43.csproj" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
