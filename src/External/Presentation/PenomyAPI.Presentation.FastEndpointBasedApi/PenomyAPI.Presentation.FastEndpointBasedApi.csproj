@@ -16,4 +16,8 @@
 		<PackageReference Include="FastEndpoints.Swagger" Version="5.25.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Endpoints\FeatG53\DTOs\" />
+	</ItemGroup>
 </Project>
