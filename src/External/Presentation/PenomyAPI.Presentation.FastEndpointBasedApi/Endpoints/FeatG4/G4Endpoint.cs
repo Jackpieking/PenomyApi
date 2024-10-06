@@ -8,11 +8,11 @@ using System.Threading;
 using System.Threading.Tasks;
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4;
 
-public class G54Endpoint : Endpoint<G4Request, G4HttpResponse>
+public class G54Endpoint : Endpoint<G4RequestDto, G4HttpResponse>
 {
     public override void Configure()
     {
-        Get("/g4/ComicsByCategory/get");
+        Get("g4/ComicsByCategory/get");
         AllowAnonymous();
 
         Description(builder: builder =>
@@ -31,11 +31,11 @@ public class G54Endpoint : Endpoint<G4Request, G4HttpResponse>
         });
     }
 
-    public override async Task<G4HttpResponse> ExecuteAsync(G4Request req, CancellationToken ct)
+    public override async Task<G4HttpResponse> ExecuteAsync(G4RequestDto req, CancellationToken ct)
     {
         var G4Request = new G4Request
         {
-            Category = req.Category
+            Category = req.CategoryId
         };
 
         // Get FeatureHandler response.
@@ -45,15 +45,11 @@ public class G54Endpoint : Endpoint<G4Request, G4HttpResponse>
             .Resolve(featResponse.StatusCode)
             .Invoke(G4Request, featResponse);
 
-        if (featResponse.IsSuccess)
+        httpResponse.Body = new G4ResponseDto
         {
-            httpResponse.Body = new G4ResponseDto
-            {
-                ArtworkList = featResponse.Result
-            };
+            ArtworkList = featResponse.Result
+        };
 
-            return httpResponse;
-        }
 
         return httpResponse;
     }

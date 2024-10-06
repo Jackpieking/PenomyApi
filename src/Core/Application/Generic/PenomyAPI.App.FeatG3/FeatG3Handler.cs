@@ -19,7 +19,7 @@ public class FeatG3Handler : IFeatureHandler<FeatG3Request, FeatG3Response>
 
         return new FeatG3Response
         {
-            Result = result,
+            Artworks = result,
             StatusCode = FeatG3ResponseStatusCode.SUCCESS
         };
     }

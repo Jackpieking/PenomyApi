@@ -4,5 +4,5 @@ namespace PenomyAPI.App.FeatG54;
 
 public class G54Request : IFeatureRequest<G54Response>
 {
-    public Guid ArtworkCommentId { get; set; }
+    public long ArtworkCommentId { get; set; }
 }

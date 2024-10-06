@@ -1,5 +1,8 @@
 ﻿using PenomyAPI.App.Common;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.App.FeatG10;
 
@@ -16,8 +19,7 @@ public class G10Handler : IFeatureHandler<G10Request, G10Response>
     {
         var unitOfWork = _unitOfWork.Value;
         var result = await unitOfWork.G10Repository.GetCommentsAsync(
-            request.ArtworkId,
-            request.IsCommentOnChapter
+            request.ArtworkId
         );
 
         return new G10Response { Result = result, StatusCode = G10ResponseStatusCode.SUCCESS };

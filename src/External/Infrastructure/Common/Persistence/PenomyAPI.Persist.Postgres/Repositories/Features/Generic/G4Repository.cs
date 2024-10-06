@@ -11,7 +11,6 @@ public class G4Repository : IG4Repository
 {
     private readonly DbContext _dbContext;
     private readonly DbSet<Artwork> _artworkDbSet;
-    private readonly DbSet<ArtworkMetaData> _statisticDbSet;
     private readonly DbSet<ArtworkCategory> _artworkCategoryDbSet;
     private readonly DbSet<Category> _categoryDbSet;
 
@@ -23,23 +22,29 @@ public class G4Repository : IG4Repository
         _categoryDbSet = dbContext.Set<Category>();
     }
 
-    public Task<List<Artwork>> GetComicsByCategoryAsync(string Category)
+    public async Task<List<ArtworkCategory>> GetComicsByCategoryAsync(long CategoryId)
     {
-        var result = _categoryDbSet
-             .Where(c => c.Name.Equals(Category))
-             .Join(_artworkCategoryDbSet, c => c.Id, ac => ac.CategoryId, (c, ac) => ac.ArtworkId)
-             .Join(_artworkDbSet, ac => ac, a => a.Id, (ac, a) => a)
-             .Select(a => new Artwork
+        var result = await _artworkCategoryDbSet
+             .Where(c => c.CategoryId == CategoryId)
+             .Select(a => new ArtworkCategory
              {
-                 Id = a.Id,
-                 Title = a.Title,
-                 ThumbnailUrl = a.ThumbnailUrl,
-                 ArtworkMetaData = new ArtworkMetaData
+                 Category = new Category
                  {
-                     TotalFavorites = a.ArtworkMetaData.TotalFavorites,
-                     AverageStarRate = a.ArtworkMetaData.AverageStarRate
-                 }
-             }).ToListAsync();
+                     Name = a.Category.Name
+                 },
+                 Artwork = new Artwork
+                 {
+
+                     Id = a.Artwork.Id,
+                     Title = a.Artwork.Title,
+                     ThumbnailUrl = a.Artwork.ThumbnailUrl,
+                     ArtworkMetaData = new ArtworkMetaData
+                     {
+                         TotalFavorites = a.Artwork.ArtworkMetaData.TotalFavorites,
+                         AverageStarRate = a.Artwork.ArtworkMetaData.AverageStarRate
+                     }
+                 },
+             }).AsNoTracking().ToListAsync();
         return result;
     }
 }

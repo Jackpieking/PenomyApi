@@ -26,11 +26,10 @@ public class G10Repository : IG10Repository
         _artworkCommentParentChildDbSet = dbContext.Set<ArtworkCommentParentChild>();
     }
 
-    public async Task<List<ArtworkComment>> GetCommentsAsync(Guid ArtworkId, bool IsCommentOnChapter)
+    public async Task<List<ArtworkComment>> GetCommentsAsync(long ArtworkId)
     {
-        var result = await _artworkCommentReferenceDbSet
-            .Join(_artworkCommentDbSet, acr => acr.ArtworkId, c => c.ArtworkId, (ac, c) => c)
-            .Where(acr => acr.ArtworkId.Equals(ArtworkId))
+        var result = await _artworkCommentDbSet
+            .Where(acr => acr.ArtworkId == ArtworkId)
             .Select(c => new ArtworkComment
             {
                 Id = c.Id,
@@ -46,7 +45,7 @@ public class G10Repository : IG10Repository
                 },
 
 
-            }).ToListAsync();
+            }).AsNoTracking().ToListAsync();
         return result;
     }
 }

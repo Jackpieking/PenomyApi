@@ -113,7 +113,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SnowflakeIdGenerator", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatG4", "src\Core\Application\Generic\PenomyAPI.App.FeatG4\PenomyAPI.App.FeatG4.csproj", "{CD9A858D-89A3-42D8-856C-6D17D2BDA6F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.FeatG54", "src\Core\Application\Generic\PenomyAPI.App.FeatG54\PenomyAPI.App.FeatG54.csproj", "{89FA9D73-5D6B-4C1D-9043-698180E1EC1F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatG54", "src\Core\Application\Generic\PenomyAPI.App.FeatG54\PenomyAPI.App.FeatG54.csproj", "{89FA9D73-5D6B-4C1D-9043-698180E1EC1F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatG52", "src\Core\Application\Generic\PenomyAPI.App.FeatG52\PenomyAPI.App.FeatG52.csproj", "{468B43C9-7701-405E-90FC-E32EDB0AC701}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -253,6 +255,10 @@ Global
 		{89FA9D73-5D6B-4C1D-9043-698180E1EC1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89FA9D73-5D6B-4C1D-9043-698180E1EC1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{89FA9D73-5D6B-4C1D-9043-698180E1EC1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{468B43C9-7701-405E-90FC-E32EDB0AC701}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{468B43C9-7701-405E-90FC-E32EDB0AC701}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{468B43C9-7701-405E-90FC-E32EDB0AC701}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{468B43C9-7701-405E-90FC-E32EDB0AC701}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -313,6 +319,7 @@ Global
 		{8E251108-4F7C-45FB-84CD-FC1A304F1EEF} = {D992902E-3588-4E21-A1D5-488D283107B1}
 		{CD9A858D-89A3-42D8-856C-6D17D2BDA6F1} = {93238DD1-0977-422A-A564-56BD09E1EC18}
 		{89FA9D73-5D6B-4C1D-9043-698180E1EC1F} = {93238DD1-0977-422A-A564-56BD09E1EC18}
+		{468B43C9-7701-405E-90FC-E32EDB0AC701} = {93238DD1-0977-422A-A564-56BD09E1EC18}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D57C122E-3458-4428-82FB-FF6E7A97A032}

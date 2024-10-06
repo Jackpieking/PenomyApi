@@ -7,7 +7,7 @@ public class G4Response : IFeatureResponse
 {
     public bool IsSuccess { get; set; }
 
-    public List<Artwork> Result { get; set; }
+    public List<ArtworkCategory> Result { get; set; }
 
     public G4ResponseStatusCode StatusCode { get; set; }
 }

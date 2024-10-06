@@ -46,15 +46,11 @@ public class G10Endpoint : Endpoint<G10Request, G10HttpResponse>
             .Resolve(featResponse.StatusCode)
             .Invoke(featG10Request, featResponse);
 
-        if (featResponse.IsSuccess)
+        httpResponse.Body = new G10ResponseDto
         {
-            httpResponse.Body = new G10ResponseDto
-            {
-                ArtworkList = featResponse.Result.ToList()
-            };
+            ArtworkList = featResponse.Result
+        };
 
-            return httpResponse;
-        }
 
         return httpResponse;
     }

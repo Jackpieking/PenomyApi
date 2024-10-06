@@ -1,8 +1,10 @@
-﻿using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
+using System;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 
 public interface IG52Repository
 {
-    long CreateCommentAsync(ArtworkComment Comment);
+    Task<long> CreateCommentAsync(ArtworkComment comment);
 }

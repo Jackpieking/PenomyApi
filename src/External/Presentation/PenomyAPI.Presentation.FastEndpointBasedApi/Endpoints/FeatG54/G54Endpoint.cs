@@ -12,7 +12,7 @@ public class G54Endpoint : Endpoint<G54Request, G54HttpResponse>
 {
     public override void Configure()
     {
-        Delete("/g54/ArtworkComment/delete");
+        Delete("/g54/ArtworkComment/delete/{ArtworkCommentId}");
         AllowAnonymous();
 
         Description(builder: builder =>

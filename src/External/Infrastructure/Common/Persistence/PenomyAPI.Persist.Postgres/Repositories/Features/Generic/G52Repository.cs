@@ -3,6 +3,7 @@ using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using PenomyAPI.Infra.Configuration.Options;
 using SnowflakeIdGenerator;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
 
@@ -21,15 +22,15 @@ public class G52Repository : IG52Repository
         _commentReferenceDbSet = dbContext.Set<ArtworkCommentReference>();
     }
 
-    public long CreateCommentAsync(ArtworkComment Comment)
+    public async Task<long> CreateCommentAsync(ArtworkComment Comment)
     {
-        var option = new SnowflakeIdOptions();
-        var Generator = new AppSnowflakeIdGenerator(option);
-        Comment.Id = Generator.Get();
+        //var option = new SnowflakeIdOptions();
+        //var Generator = new AppSnowflakeIdGenerator(option);
+        Comment.Id = 123123123;
         try
         {
             _artworkCommentDbSet.Add(Comment);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
             return Comment.Id;
         }
         catch

@@ -21,7 +21,7 @@ public class G54Repository : IG54Repository
         _commentReferenceDbSet = dbContext.Set<ArtworkCommentReference>();
     }
 
-    public Task<bool> RemoveCommentAsync(Guid CommentId)
+    public Task<bool> RemoveCommentAsync(long CommentId)
     {
         try
         {

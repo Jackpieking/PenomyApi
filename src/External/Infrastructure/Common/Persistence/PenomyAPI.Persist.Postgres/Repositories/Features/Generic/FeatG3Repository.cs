@@ -36,7 +36,7 @@ public class FeatG3Repository : IFeatG3Repository
                     AverageStarRate = a.ArtworkMetaData.AverageStarRate
                 }
             })
-            .OrderByDescending(a => a.UpdatedAt).Take(20).ToListAsync();
+            .OrderByDescending(a => a.UpdatedAt).Take(20).AsNoTracking().ToListAsync();
         return result;
     }
 }

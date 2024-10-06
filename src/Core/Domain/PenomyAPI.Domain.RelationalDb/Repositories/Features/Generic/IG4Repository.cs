@@ -6,5 +6,5 @@ namespace PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 
 public interface IG4Repository
 {
-    Task<List<Artwork>> GetComicsByCategoryAsync(string Category);
+    Task<List<ArtworkCategory>> GetComicsByCategoryAsync(long CategoryId);
 }

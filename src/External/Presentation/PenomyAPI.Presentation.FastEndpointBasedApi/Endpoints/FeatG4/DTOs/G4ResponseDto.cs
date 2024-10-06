@@ -5,7 +5,7 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4.DTOs
 {
     public class G4ResponseDto
     {
-        public List<Artwork> ArtworkList { get; set; }
+        public List<ArtworkCategory> ArtworkList { get; set; }
     }
 
 }

@@ -2,6 +2,9 @@ using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG3;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Common;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatArt4.DTOs;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatArt4.HttpResponse;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3.HttpResponse;
 using System.Linq;
@@ -9,11 +12,11 @@ using System.Threading;
 using System.Threading.Tasks;
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3;
 
-public class G3Endpoint : Endpoint<FeatG3Request, G3HttpResponse>
+public class G3Endpoint : Endpoint<EmptyDto, G3HttpResponse>
 {
     public override void Configure()
     {
-        Get("/g3/RecentlyUpdatedComics/get");
+        Get("/g3/RecentlyUpdatedComics");
         AllowAnonymous();
 
         Description(builder: builder =>
@@ -32,12 +35,9 @@ public class G3Endpoint : Endpoint<FeatG3Request, G3HttpResponse>
         });
     }
 
-    public override async Task<G3HttpResponse> ExecuteAsync(FeatG3Request req, CancellationToken ct)
+    public override async Task<G3HttpResponse> ExecuteAsync(EmptyDto req, CancellationToken ct)
     {
-        var featG3Request = new FeatG3Request
-        {
-            empty = req.empty
-        };
+        var featG3Request = FeatG3Request.Empty;
 
         // Get FeatureHandler response.
         var featResponse = await FeatureExtensions.ExecuteAsync<FeatG3Request, FeatG3Response>(featG3Request, ct);
@@ -46,16 +46,10 @@ public class G3Endpoint : Endpoint<FeatG3Request, G3HttpResponse>
             .Resolve(featResponse.StatusCode)
             .Invoke(featG3Request, featResponse);
 
-        if (featResponse.IsSuccess)
-        {
-            httpResponse.Body = new G3ResponseDto
-            {
-                ArtworkList = featResponse.Result.ToList()
-            };
 
-            return httpResponse;
-        }
+        httpResponse.Body = new G3ResponseDto { ArtworkList = featResponse.Artworks, };
 
         return httpResponse;
+
     }
 }
