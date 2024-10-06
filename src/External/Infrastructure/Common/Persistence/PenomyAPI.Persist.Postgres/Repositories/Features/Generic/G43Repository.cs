@@ -11,14 +11,21 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic
     {
         private readonly DbContext _dbContext;
         private readonly DbSet<UserFollowedArtwork> _userFollowedArtwork;
+        private readonly DbSet<ArtworkMetaData> _artworkMetaData;
 
         public G43Repository(DbContext dbContext)
         {
             _dbContext = dbContext;
             _userFollowedArtwork = dbContext.Set<UserFollowedArtwork>();
+            _artworkMetaData = dbContext.Set<ArtworkMetaData>();
         }
 
-        public async Task<bool> FollowArtwork(long userId, long artworkId, ArtworkType artworkType, CancellationToken ct)
+        public async Task<bool> FollowArtwork(
+            long userId,
+            long artworkId,
+            ArtworkType artworkType,
+            CancellationToken ct
+        )
         {
             try
             {
@@ -30,6 +37,22 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic
                         ArtworkType = artworkType,
                         StartedAt = DateTime.UtcNow
                     });
+
+                var artWorkMetaData = await _artworkMetaData
+                    .FirstOrDefaultAsync(o => o.ArtworkId == artworkId);
+
+                if (artWorkMetaData == null)
+                {
+                    await _artworkMetaData.AddAsync(new ArtworkMetaData
+                    {
+                        ArtworkId = artworkId,
+                        TotalFollowers = 1
+                    });
+                }
+                else
+                {
+                    artWorkMetaData.TotalFollowers++;
+                }
 
                 _dbContext.SaveChanges();
             }
