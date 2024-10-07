@@ -17,4 +17,5 @@ public interface IG8Repository
         long id,
         CancellationToken token = default
     );
+    Task<bool> IsArtworkExistAsync(long id, CancellationToken token = default);
 }

@@ -1,6 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt7\PenomyAPI.App.FeatArt7.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG10\PenomyAPI.App.FeatG10.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG4\PenomyAPI.App.FeatG4.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG52\PenomyAPI.App.FeatG52.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG53\PenomyAPI.App.FeatG53.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG54\PenomyAPI.App.FeatG54.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG5\PenomyAPI.App.FeatG5.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG7\PenomyAPI.App.FeatG7.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG8\PenomyAPI.App.FeatG8.csproj" />

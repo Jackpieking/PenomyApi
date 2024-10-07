@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -43,53 +42,43 @@ public class G8Endpoint : Endpoint<G8Request, G8HttpResponse>
     {
         var httpResponse = new G8HttpResponse();
 
-        try
+        var g8Req = new G8Request
         {
-            var g8Req = new G8Request
+            Id = requestDto.Id,
+            PageSize = requestDto.PageSize,
+            StartPage = requestDto.StartPage
+        };
+
+        // Get FeatureHandler response.
+        var featResponse = await FeatureExtensions.ExecuteAsync<G8Request, G8Response>(g8Req, ct);
+
+        httpResponse = G8ResponseManager
+            .Resolve(featResponse.StatusCode)
+            .Invoke(g8Req, featResponse);
+
+        if (featResponse.IsSuccess && featResponse.Result.Count > 0)
+        {
+            List<ArtworkChapterDto> g8ResponseDtos = [];
+            foreach (var chapter in featResponse.Result)
             {
-                Id = requestDto.Id,
-                PageSize = requestDto.PageSize,
-                StartPage = requestDto.StartPage
-            };
-
-            // Get FeatureHandler response.
-            var featResponse = await FeatureExtensions.ExecuteAsync<G8Request, G8Response>(
-                g8Req,
-                ct
-            );
-
-            httpResponse = G8ResponseManager
-                .Resolve(featResponse.StatusCode)
-                .Invoke(g8Req, featResponse);
-
-            if (featResponse.IsSuccess && featResponse.Result.Count > 0)
-            {
-                List<ArtworkChapterDto> g8ResponseDtos = [];
-                foreach (var chapter in featResponse.Result)
-                {
-                    g8ResponseDtos.Add(
-                        new ArtworkChapterDto
-                        {
-                            Id = chapter.Id,
-                            ChapterName = chapter.Title,
-                            UploadOrder = chapter.UploadOrder,
-                            CreatedTime = chapter.CreatedAt,
-                            CommentCount = chapter.ChapterMetaData.TotalComments,
-                            FavoriteCount = chapter.ChapterMetaData.TotalFavorites,
-                            ViewCount = chapter.ChapterMetaData.TotalViews,
-                            ThumbnailUrl = chapter.ThumbnailUrl
-                        }
-                    );
-                }
-                httpResponse.Body = new G8ResponseDto { Result = g8ResponseDtos };
-                return httpResponse;
+                g8ResponseDtos.Add(
+                    new ArtworkChapterDto
+                    {
+                        Id = chapter.Id,
+                        ChapterName = chapter.Title,
+                        UploadOrder = chapter.UploadOrder,
+                        CreatedTime = chapter.CreatedAt,
+                        CommentCount = chapter.ChapterMetaData.TotalComments,
+                        FavoriteCount = chapter.ChapterMetaData.TotalFavorites,
+                        ViewCount = chapter.ChapterMetaData.TotalViews,
+                        ThumbnailUrl = chapter.ThumbnailUrl
+                    }
+                );
             }
+            httpResponse.Body = new G8ResponseDto { Result = g8ResponseDtos };
+            return httpResponse;
         }
-        catch (Exception ex)
-        {
-            httpResponse.Errors = new List<string> { ex.Message };
-        }
-
+        await SendAsync(httpResponse, httpResponse.HttpCode, ct);
         return httpResponse;
     }
 }

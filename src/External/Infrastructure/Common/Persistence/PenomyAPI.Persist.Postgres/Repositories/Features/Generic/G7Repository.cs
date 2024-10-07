@@ -65,6 +65,7 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic
                             StarRates = y.StarRates,
                         }),
                     })
+                    .AsNoTracking()
                     .OrderBy(x => x.Id)
                     .Skip((startPage - 1) * pageSize)
                     .Take(pageSize)
@@ -96,6 +97,11 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic
                     AverageStarRate = x.AverageStarRate,
                 })
                 .FirstOrDefaultAsync(token);
+        }
+
+        public Task<bool> IsArtworkExistAsync(long artworkId, CancellationToken token = default)
+        {
+            return _context.Set<Artwork>().AnyAsync(x => x.Id == artworkId, token);
         }
     }
 }

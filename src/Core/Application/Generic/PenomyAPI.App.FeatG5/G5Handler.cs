@@ -24,10 +24,27 @@ public class G5Handler : IFeatureHandler<G5Request, G5Response>
         var rq = request.Id;
         if (rq == 0)
         {
-            return new G5Response { StatusCode = G5ResponseStatusCode.INVALID_REQUEST };
+            return new G5Response
+            {
+                StatusCode = G5ResponseStatusCode.INVALID_REQUEST,
+                IsSuccess = false
+            };
+        }
+        if (!await _IG5Repository.IsArtworkExistAsync(rq, ct))
+        {
+            return new G5Response
+            {
+                StatusCode = G5ResponseStatusCode.NOT_FOUND,
+                IsSuccess = false
+            };
         }
         result = await _IG5Repository.GetArtWorkDetailByIdAsync(rq, ct);
 
-        return new() { Result = result, StatusCode = G5ResponseStatusCode.SUCCESS };
+        return new()
+        {
+            Result = result,
+            StatusCode = G5ResponseStatusCode.SUCCESS,
+            IsSuccess = true
+        };
     }
 }
