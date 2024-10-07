@@ -71,7 +71,7 @@ public class G8Endpoint : Endpoint<G8Request, G8HttpResponse>
                         CommentCount = chapter.ChapterMetaData.TotalComments,
                         FavoriteCount = chapter.ChapterMetaData.TotalFavorites,
                         ViewCount = chapter.ChapterMetaData.TotalViews,
-                        ThumbnailUrl = chapter.ThumbnailUrl
+                        ThumbnailUrl = chapter.ThumbnailUrl,
                     }
                 );
             }
