@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using PenomyAPI.App.Common;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
@@ -21,24 +25,31 @@ namespace PenomyAPI.App.FeatG8
         public async Task<G8Response> ExecuteAsync(G8Request request, CancellationToken ct)
         {
             List<ArtworkChapter> chapters = [];
-            try
+            if (request.Id == 0 || request.StartPage <= 0 || request.PageSize <= 0)
             {
-                if (request.Id == 0 || request.StartPage <= 0 || request.PageSize <= 0)
+                return new()
                 {
-                    return new G8Response { StatusCode = G8ResponseStatusCode.INVALID_REQUEST };
-                }
-                chapters = await _g8Repository.GetArtWorkChapterByIdAsync(
-                    request.Id,
-                    request.StartPage,
-                    request.PageSize,
-                    ct
-                );
+                    StatusCode = G8ResponseStatusCode.INVALID_REQUEST,
+                    IsSuccess = false
+                };
             }
-            catch (Exception)
+            if (!await _g8Repository.IsArtworkExistAsync(request.Id, ct))
             {
-                return new G8Response { StatusCode = G8ResponseStatusCode.FAILED };
+                return new() { StatusCode = G8ResponseStatusCode.NOT_FOUND, IsSuccess = false };
             }
-            return new G8Response { Result = chapters, StatusCode = G8ResponseStatusCode.SUCCESS };
+            chapters = await _g8Repository.GetArtWorkChapterByIdAsync(
+                request.Id,
+                request.StartPage,
+                request.PageSize,
+                ct
+            );
+
+            return new()
+            {
+                Result = chapters,
+                StatusCode = G8ResponseStatusCode.SUCCESS,
+                IsSuccess = true
+            };
         }
     }
 }

@@ -16,5 +16,6 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5.DTOs
         public long FavoriteCount { get; set; }
         public double StarRates { get; set; }
         public string ThumbnailUrl { get; set; }
+        public string Introduction { get; set; }
     }
 }

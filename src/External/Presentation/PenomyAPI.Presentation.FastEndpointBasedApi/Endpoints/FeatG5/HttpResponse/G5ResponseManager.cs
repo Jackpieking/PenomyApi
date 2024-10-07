@@ -1,9 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using Microsoft.AspNetCore.Http;
-using PenomyAPI.App.FeatArt4;
 using PenomyAPI.App.FeatG5;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3.HttpResponse;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5.HttpResponse
 {
@@ -45,6 +43,15 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5.HttpRespo
                     {
                         AppCode = $"G5.{G5ResponseStatusCode.INVALID_REQUEST}",
                         HttpCode = StatusCodes.Status400BadRequest,
+                    }
+            );
+            _dictionary.TryAdd(
+                key: G5ResponseStatusCode.NOT_FOUND,
+                value: (_, response) =>
+                    new()
+                    {
+                        AppCode = $"G5.{G5ResponseStatusCode.NOT_FOUND}",
+                        HttpCode = StatusCodes.Status404NotFound,
                     }
             );
         }

@@ -1,8 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG7;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG7.HttpResponse;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG7.HttpResponse
 {
@@ -44,6 +43,15 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG7.HttpRespo
                     {
                         AppCode = $"G7.{G7ResponseStatusCode.INVALID_REQUEST}",
                         HttpCode = StatusCodes.Status400BadRequest,
+                    }
+            );
+            _dictionary.TryAdd(
+                key: G7ResponseStatusCode.NOT_FOUND,
+                value: (_, response) =>
+                    new()
+                    {
+                        AppCode = $"G7.{G7ResponseStatusCode.NOT_FOUND}",
+                        HttpCode = StatusCodes.Status404NotFound,
                     }
             );
         }
