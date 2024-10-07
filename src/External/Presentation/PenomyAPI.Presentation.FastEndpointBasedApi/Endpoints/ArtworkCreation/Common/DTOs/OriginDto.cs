@@ -1,4 +1,4 @@
-﻿namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatArt4.DTOs
+﻿namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.Common.DTOs
 {
     public sealed class OriginDto
     {

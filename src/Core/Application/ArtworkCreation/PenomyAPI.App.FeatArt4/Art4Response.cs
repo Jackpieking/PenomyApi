@@ -6,6 +6,8 @@ public class Art4Response : IFeatureResponse
 {
     public bool IsSuccess { get; set; }
 
+    public long ComicId { get; set; }
+
     public string[] ErrorMessages { get; set; }
 
     public Art4ResponseStatusCode StatusCode { get; set; }

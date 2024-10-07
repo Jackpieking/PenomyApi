@@ -17,9 +17,15 @@ namespace PenomyAPI.Domain.RelationalDb.Repositories.Features.ArtworkCreation
             long comicId,
             CancellationToken cancellationToken);
 
+        Task<bool> IsComicExistedByIdAsync(
+            long comicId,
+            CancellationToken cancellationToken);
+
         Task<bool> UpdateComicAsync(
             Artwork comic,
             IEnumerable<ArtworkCategory> artworkCategories,
+            bool isThumbnailUpdated,
+            bool isCategoriesUpdated,
             CancellationToken cancellationToken);
     }
 }
