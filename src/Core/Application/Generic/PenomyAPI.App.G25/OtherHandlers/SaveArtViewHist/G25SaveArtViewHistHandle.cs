@@ -4,7 +4,7 @@ using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 
 namespace PenomyAPI.App.G25.OtherHandlers.SaveArtViewHist
 {
-    public class G25SaveArtViewHistHandle : IFeatureHandler<G25SaveHistRequest, G25SaveArtViewHistResponse>
+    public class G25SaveArtViewHistHandle : IFeatureHandler<G25SaveArtViewHistRequest, G25SaveArtViewHistResponse>
     {
         private readonly IG25Repository _g25Repository;
 
@@ -15,7 +15,7 @@ namespace PenomyAPI.App.G25.OtherHandlers.SaveArtViewHist
             _g25Repository = unitOfWork.Value.G25Repository;
         }
 
-        public async Task<G25SaveArtViewHistResponse> ExecuteAsync(G25SaveHistRequest request, CancellationToken ct)
+        public async Task<G25SaveArtViewHistResponse> ExecuteAsync(G25SaveArtViewHistRequest request, CancellationToken ct)
         {
             if (request.UserId == 0)
             {

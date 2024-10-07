@@ -8,7 +8,7 @@ namespace PenomyAPI.BuildingBlock.FeatRegister.FeatureRegistration.G25Reg
 {
     internal sealed class G25Reg : FeatureDefinitionRegistration
     {
-        public override Type FeatRequestType => typeof(G25SaveHistRequest);
+        public override Type FeatRequestType => typeof(G25SaveArtViewHistRequest);
 
         public override Type FeatHandlerType => typeof(G25Handler);
 
