@@ -31,10 +31,8 @@ public class Art4Handler : IFeatureHandler<Art4Request, Art4Response>
 
     public async Task<Art4Response> ExecuteAsync(Art4Request request, CancellationToken ct)
     {
-        // Last chapter order must be 0 because comic is created new.
-        const int IntialOrder = 0;
-        var dateTimeUtcNow = DateTime.UtcNow;
-        var dateTimeMinUtc = CommonValues.DateTimes.MinUtc;
+        // The name of the artwork folder will be similar to the id of that artwork.
+        var artworkFolderName = request.ComicId.ToString();
 
         // The info of folder to store the thumbnail of this comic.
         var folderInfo = new AppFolderInfo
@@ -43,7 +41,7 @@ public class Art4Handler : IFeatureHandler<Art4Request, Art4Response>
             RelativePath = DirectoryPathHelper.BuildPath(
                 pathSeparator: DirectoryPathHelper.WebPathSeparator,
                 rootDirectory: _options.ComicRootFolder,
-                childFolders: request.ComicId.ToString())
+                childFolders: artworkFolderName)
         };
 
         var fileService = _fileService.Value;
@@ -74,6 +72,11 @@ public class Art4Handler : IFeatureHandler<Art4Request, Art4Response>
 
         // Get the storage url after upload the success.
         thumnailFileInfo.StorageUrl = uploadFileResult.Value.StorageUrl;
+
+        // Last chapter order must be 0 because comic is created new.
+        const int IntialOrder = 0;
+        var dateTimeUtcNow = DateTime.UtcNow;
+        var dateTimeMinUtc = CommonValues.DateTimes.MinUtc;
 
         var newComic = new Artwork
         {
@@ -125,6 +128,7 @@ public class Art4Handler : IFeatureHandler<Art4Request, Art4Response>
         return new Art4Response
         {
             IsSuccess = true,
+            ComicId = newComic.Id,
             StatusCode = Art4ResponseStatusCode.SUCCESS
         };
     }

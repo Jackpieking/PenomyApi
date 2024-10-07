@@ -1,12 +1,17 @@
 ﻿using Microsoft.AspNetCore.Http;
+using PenomyAPI.App.Common.FileServices.Models;
 using PenomyAPI.App.Common.Models.Common;
+using PenomyAPI.App.FeatArt4;
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatArt4.Helpers;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.Common.DTOs;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt4.Helpers;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text.Json;
 
-namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatArt4.DTOs
+namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt4.DTOs
 {
     public class Art4RequestDto
     {
@@ -117,6 +122,35 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatArt4.DTOs
             }
 
             return _jsonSerializerOptions;
+        }
+
+        public Art4Request MapToFeatureRequest(long comicId, long createdBy)
+        {
+            const string thumbnailImageName = "thumbnail";
+            var fileExtension = IFormFileHelper.GetFileExtension(ThumbnailImageFile);
+
+            return new Art4Request
+            {
+                ComicId = comicId,
+                Title = Title,
+                Introduction = Introduction,
+                OriginId = OriginId,
+                PublicLevel = PublicLevel,
+                AllowComment = AllowComment,
+                ArtworkCategories = ArtworkCategories.Select(category => new ArtworkCategory
+                {
+                    ArtworkId = comicId,
+                    CategoryId = long.Parse(category.Id),
+                }),
+                AuthorName = "Default",
+                CreatedBy = createdBy,
+                ThumbnailFileInfo = new ImageFileInfo
+                {
+                    FileId = comicId.ToString(),
+                    FileName = $"{thumbnailImageName}.{fileExtension}",
+                    FileDataStream = ThumbnailImageFile.OpenReadStream(),
+                }
+            };
         }
     }
 }

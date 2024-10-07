@@ -1,7 +1,7 @@
 ﻿using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
 using PenomyAPI.Domain.RelationalDb.Entities.Helper.ArtworkCreation;
 
-namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatArt4.DTOs
+namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.Common.DTOs
 {
     public class PublicLevelDto
     {

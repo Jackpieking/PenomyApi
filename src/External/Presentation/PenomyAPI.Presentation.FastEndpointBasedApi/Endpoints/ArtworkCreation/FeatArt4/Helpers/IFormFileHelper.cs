@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Linq;
 
-namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatArt4.Helpers
+namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt4.Helpers
 {
     public static class IFormFileHelper
     {
@@ -15,6 +15,12 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatArt4.Helpers
 
         public static bool IsValidFileExtension(IFormFile formFile, string[] validFileExtensions)
         {
+            // Return false when form file is null.
+            if (Equals(formFile, null))
+            {
+                return false;
+            }
+
             var fileExtension = GetFileExtension(formFile);
 
             return validFileExtensions.Any(
