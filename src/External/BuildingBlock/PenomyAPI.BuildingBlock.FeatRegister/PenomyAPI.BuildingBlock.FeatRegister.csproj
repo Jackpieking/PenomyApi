@@ -28,6 +28,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Infrastructure\Generic\PenomyAPI.Infra.FeatG3\PenomyAPI.Infra.FeatG3.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG3\PenomyAPI.App.FeatG3.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Generic\PenomyAPI.Infra.G25\PenomyAPI.Infra.G25.csproj" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
