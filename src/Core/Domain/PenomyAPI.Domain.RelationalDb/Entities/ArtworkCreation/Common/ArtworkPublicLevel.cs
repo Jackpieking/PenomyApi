@@ -11,5 +11,5 @@ public enum ArtworkPublicLevel
 
     Private = 3,
 
-    PrivateWithLimitedUsers = 4
+    PrivateWithLimitedUsers = 4,
 }
