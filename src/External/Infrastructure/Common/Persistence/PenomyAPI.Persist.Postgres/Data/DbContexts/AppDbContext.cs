@@ -6,9 +6,9 @@ namespace PenomyAPI.Persist.Postgres.Data.DbContexts;
 
 public sealed class AppDbContext : IdentityDbContext<PgUser, PgRole, long>
 {
-    public AppDbContext(DbContextOptions options) : base(options)
-    {
-    }
+    //public AppDbContext(DbContextOptions options) : base(options)
+    //{
+    //}
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -18,6 +18,11 @@ public sealed class AppDbContext : IdentityDbContext<PgUser, PgRole, long>
         builder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 
         RemoveAspNetPrefixInIdentityTable(builder);
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseNpgsql("Server=172.23.241.0; Port= 8534; Database=penomy;Username = penomy;Password = PenomyAdmin123@;sslmode = prefer;Trust Server Certificate = true;");
     }
 
     private static void RemoveAspNetPrefixInIdentityTable(ModelBuilder builder)

@@ -40,7 +40,7 @@ internal sealed class ArtworkBugReportEntityConfiguration : IEntityConfiguration
             .HasColumnType(DatabaseNativeTypes.TIMESTAMPTZ)
             .IsRequired();
 
-        builder.Property(report => report.IsResolved).IsRequired();
+        builder.Property(report => report.ResolveStatus).IsRequired();
 
         builder
             .Property(report => report.ResolveNote)

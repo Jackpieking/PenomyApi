@@ -4,7 +4,7 @@ using System;
 
 namespace PenomyAPI.Domain.RelationalDb.Entities.Monetization;
 
-public sealed class AdRevenueProgram :
+public sealed class RevenueProgram :
     EntityWithId<long>,
     ICreatedEntity<long>,
     IUpdatedEntity<long>
@@ -17,7 +17,7 @@ public sealed class AdRevenueProgram :
 
     public int MinTotalFollowersToApply { get; set; }
 
-    public long LastUpdateCode { get; set; }
+    public int MinTotalFavoritesToApply { get; set; }
 
     public long CreatedBy { get; set; }
 

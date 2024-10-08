@@ -16,14 +16,5 @@ internal sealed class ChatMessageReplyEntityConfiguration : IEntityConfiguration
             chatMessageReply.RootChatMessageId,
             chatMessageReply.RepliedMessageId,
         });
-
-        #region Relationships
-        builder
-            .HasOne(repliedMessage => repliedMessage.RootChatMessage)
-            .WithMany(rootMessage => rootMessage.RepliedMessages)
-            .HasForeignKey(repliedMessage => repliedMessage.RootChatMessageId)
-            .HasPrincipalKey(rootMessage => rootMessage.Id)
-            .OnDelete(DeleteBehavior.NoAction);
-        #endregion
     }
 }

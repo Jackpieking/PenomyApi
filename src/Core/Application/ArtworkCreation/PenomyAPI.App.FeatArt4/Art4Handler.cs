@@ -98,7 +98,6 @@ public class Art4Handler : IFeatureHandler<Art4Request, Art4Response>
             TemporarilyRemovedAt = dateTimeMinUtc,
             HasSeries = false,
             IsTakenDown = false,
-            OtherName = request.Title,
             LastChapterUploadOrder = IntialOrder,
             IsCreatedByAuthorizedUser = false,
             IsTemporarilyRemoved = false,

@@ -58,7 +58,7 @@ internal sealed class CreatorWalletEntityConfiguration
         builder
             .HasOne(wallet => wallet.Creator)
             .WithOne(creator => creator.CreatorWallet)
-            .HasPrincipalKey<CreatorProfile>(creator => creator.UserId)
+            .HasPrincipalKey<CreatorProfile>(creator => creator.CreatorId)
             .HasForeignKey<CreatorWallet>(wallet => wallet.CreatorId)
             .OnDelete(DeleteBehavior.NoAction);
         #endregion;

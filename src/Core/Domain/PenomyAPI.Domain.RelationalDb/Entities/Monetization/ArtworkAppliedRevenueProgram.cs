@@ -7,11 +7,11 @@ using System;
 
 namespace PenomyAPI.Domain.RelationalDb.Entities.Monetization;
 
-public sealed class ArtworkAppliedAdRevenueProgram : IEntity
+public sealed class ArtworkAppliedRevenueProgram : IEntity
 {
     public long ArtworkId { get; set; }
 
-    public long AdRevenueProgramId { get; set; }
+    public long RevenueProgramId { get; set; }
 
     public AppliedStatus AppliedStatus { get; set; }
 

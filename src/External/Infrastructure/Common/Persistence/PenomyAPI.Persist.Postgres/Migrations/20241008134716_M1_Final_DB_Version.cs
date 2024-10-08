@@ -7,11 +7,23 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace PenomyAPI.Persist.Postgres.Migrations
 {
     /// <inheritdoc />
-    public partial class M1_Init : Migration
+    public partial class M1_Final_DB_Version : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "penomy_chat_message_reply",
+                columns: table => new
+                {
+                    RootChatMessageId = table.Column<long>(type: "bigint", nullable: false),
+                    RepliedMessageId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_penomy_chat_message_reply", x => new { x.RootChatMessageId, x.RepliedMessageId });
+                });
+
             migrationBuilder.CreateTable(
                 name: "penomy_identity_role",
                 columns: table => new
@@ -160,7 +172,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     NickName = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
                     Gender = table.Column<int>(type: "integer", nullable: false),
-                    AvatarUrl = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    AvatarUrl = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     AboutMe = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     RegisterAsCreator = table.Column<bool>(type: "boolean", nullable: false),
                     TotalFollowedCreators = table.Column<int>(type: "integer", nullable: false),
@@ -287,36 +299,6 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "penomy_ad_revenue_program",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false),
-                    Title = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    Description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
-                    MinTotalViewsToApply = table.Column<int>(type: "integer", nullable: false),
-                    MinTotalFollowersToApply = table.Column<int>(type: "integer", nullable: false),
-                    LastUpdateCode = table.Column<long>(type: "bigint", nullable: false),
-                    CreatedBy = table.Column<long>(type: "bigint", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: false),
-                    UpdatedBy = table.Column<long>(type: "bigint", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_penomy_ad_revenue_program", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_penomy_ad_revenue_program_penomy_system_account_CreatedBy",
-                        column: x => x.CreatedBy,
-                        principalTable: "penomy_system_account",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_penomy_ad_revenue_program_penomy_system_account_UpdatedBy",
-                        column: x => x.UpdatedBy,
-                        principalTable: "penomy_system_account",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "penomy_artwork_bug_type",
                 columns: table => new
                 {
@@ -344,7 +326,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false),
                     CountryName = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
                     Label = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
-                    ImageUrl = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    ImageUrl = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     CreatedBy = table.Column<long>(type: "bigint", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: false),
                     UpdatedBy = table.Column<long>(type: "bigint", nullable: false),
@@ -444,7 +426,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     Code = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false),
                     Bin = table.Column<string>(type: "character varying(8)", maxLength: 8, nullable: false),
                     ShortName = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
-                    LogoUrl = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    LogoUrl = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     SwiftCode = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
                     CreatedBy = table.Column<long>(type: "bigint", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: false),
@@ -566,6 +548,27 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "penomy_other_info",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false),
+                    Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    DataType = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "character varying(640)", maxLength: 640, nullable: false),
+                    CreatedBy = table.Column<long>(type: "bigint", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_penomy_other_info", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_penomy_other_info_penomy_system_account_CreatedBy",
+                        column: x => x.CreatedBy,
+                        principalTable: "penomy_system_account",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "penomy_post_report_problem",
                 columns: table => new
                 {
@@ -582,6 +585,36 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     table.ForeignKey(
                         name: "FK_penomy_post_report_problem_penomy_system_account_CreatedBy",
                         column: x => x.CreatedBy,
+                        principalTable: "penomy_system_account",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "penomy_revenue_program",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false),
+                    Title = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    Description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
+                    MinTotalViewsToApply = table.Column<int>(type: "integer", nullable: false),
+                    MinTotalFollowersToApply = table.Column<int>(type: "integer", nullable: false),
+                    MinTotalFavoritesToApply = table.Column<int>(type: "integer", nullable: false),
+                    CreatedBy = table.Column<long>(type: "bigint", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: false),
+                    UpdatedBy = table.Column<long>(type: "bigint", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_penomy_revenue_program", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_penomy_revenue_program_penomy_system_account_CreatedBy",
+                        column: x => x.CreatedBy,
+                        principalTable: "penomy_system_account",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_penomy_revenue_program_penomy_system_account_UpdatedBy",
+                        column: x => x.UpdatedBy,
                         principalTable: "penomy_system_account",
                         principalColumn: "Id");
                 });
@@ -616,7 +649,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     DisplayOrder = table.Column<int>(type: "integer", nullable: false),
                     ForDefaultDisplay = table.Column<bool>(type: "boolean", nullable: false),
                     Value = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    EmojiUrl = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    EmojiUrl = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     CreatedBy = table.Column<long>(type: "bigint", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: false)
                 },
@@ -705,7 +738,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false),
                     ChatGroupType = table.Column<int>(type: "integer", nullable: false),
                     GroupName = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    CoverPhotoUrl = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    CoverPhotoUrl = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     IsPublic = table.Column<bool>(type: "boolean", nullable: false),
                     TotalMembers = table.Column<int>(type: "integer", nullable: false),
                     CreatedBy = table.Column<long>(type: "bigint", nullable: false),
@@ -725,7 +758,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                 name: "penomy_creator_profile",
                 columns: table => new
                 {
-                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    CreatorId = table.Column<long>(type: "bigint", nullable: false),
                     TotalFollowers = table.Column<int>(type: "integer", nullable: false),
                     TotalArtworks = table.Column<int>(type: "integer", nullable: false),
                     ReportedCount = table.Column<int>(type: "integer", nullable: false),
@@ -733,10 +766,10 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_penomy_creator_profile", x => x.UserId);
+                    table.PrimaryKey("PK_penomy_creator_profile", x => x.CreatorId);
                     table.ForeignKey(
-                        name: "FK_penomy_creator_profile_penomy_user_profile_UserId",
-                        column: x => x.UserId,
+                        name: "FK_penomy_creator_profile_penomy_user_profile_CreatorId",
+                        column: x => x.CreatorId,
                         principalTable: "penomy_user_profile",
                         principalColumn: "UserId");
                 });
@@ -779,7 +812,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     Title = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     Description = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
                     LastItemOrder = table.Column<int>(type: "integer", nullable: false),
-                    ThumbnailUrl = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    ThumbnailUrl = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     CreatedBy = table.Column<long>(type: "bigint", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: false),
                     UpdatedBy = table.Column<long>(type: "bigint", nullable: false),
@@ -816,7 +849,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     IsPublic = table.Column<bool>(type: "boolean", nullable: false),
                     Description = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
-                    CoverPhotoUrl = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    CoverPhotoUrl = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     TotalMembers = table.Column<int>(type: "integer", nullable: false),
                     RequireApprovedWhenPost = table.Column<bool>(type: "boolean", nullable: false),
                     GroupStatus = table.Column<int>(type: "integer", nullable: false),
@@ -885,13 +918,13 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false),
                     Title = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    OtherName = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     PublicLevel = table.Column<int>(type: "integer", nullable: false),
                     AuthorName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     HasSeries = table.Column<bool>(type: "boolean", nullable: false),
-                    ThumbnailUrl = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    ThumbnailUrl = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     Introduction = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     LastChapterUploadOrder = table.Column<int>(type: "integer", nullable: false),
+                    FixedTotalChapters = table.Column<int>(type: "integer", nullable: false),
                     ArtworkStatus = table.Column<int>(type: "integer", nullable: false),
                     ArtworkType = table.Column<int>(type: "integer", nullable: false),
                     ArtworkOriginId = table.Column<long>(type: "bigint", nullable: false),
@@ -974,7 +1007,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     Overview = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
                     UserDetailNote = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: false),
-                    IsResolved = table.Column<bool>(type: "boolean", nullable: false),
+                    ResolveStatus = table.Column<int>(type: "integer", nullable: false),
                     ResolveNote = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     ResolvedBy = table.Column<long>(type: "bigint", nullable: false),
                     ResolvedAt = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: false)
@@ -1008,7 +1041,10 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     ReportProblemId = table.Column<long>(type: "bigint", nullable: false),
                     DetailNote = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     CreatedBy = table.Column<long>(type: "bigint", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: false),
+                    ResolveNote = table.Column<string>(type: "text", nullable: true),
+                    ResolvedBy = table.Column<long>(type: "bigint", nullable: false),
+                    ResolvedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1101,6 +1137,36 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "penomy_chat_message",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false),
+                    Content = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: true),
+                    MessageType = table.Column<int>(type: "integer", nullable: false),
+                    ChatGroupId = table.Column<long>(type: "bigint", nullable: false),
+                    ReplyToAnotherMessage = table.Column<bool>(type: "boolean", nullable: false),
+                    IsRevoked = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedBy = table.Column<long>(type: "bigint", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_penomy_chat_message", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_penomy_chat_message_penomy_chat_group_ChatGroupId",
+                        column: x => x.ChatGroupId,
+                        principalTable: "penomy_chat_group",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_penomy_chat_message_penomy_user_profile_CreatedBy",
+                        column: x => x.CreatedBy,
+                        principalTable: "penomy_user_profile",
+                        principalColumn: "UserId");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "penomy_user_chat_group_active_history",
                 columns: table => new
                 {
@@ -1148,7 +1214,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         name: "FK_penomy_creator_wallet_penomy_creator_profile_CreatorId",
                         column: x => x.CreatorId,
                         principalTable: "penomy_creator_profile",
-                        principalColumn: "UserId");
+                        principalColumn: "CreatorId");
                 });
 
             migrationBuilder.CreateTable(
@@ -1363,7 +1429,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     FileName = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
                     MediaType = table.Column<int>(type: "integer", nullable: false),
                     UploadOrder = table.Column<int>(type: "integer", nullable: false),
-                    StorageUrl = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false)
+                    StorageUrl = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1484,11 +1550,11 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "penomy_artwork_applied_ad_revenue_program",
+                name: "penomy_artwork_applied_revenue_program",
                 columns: table => new
                 {
                     ArtworkId = table.Column<long>(type: "bigint", nullable: false),
-                    AdRevenueProgramId = table.Column<long>(type: "bigint", nullable: false),
+                    RevenueProgramId = table.Column<long>(type: "bigint", nullable: false),
                     AppliedStatus = table.Column<int>(type: "integer", nullable: false),
                     ProposedBy = table.Column<long>(type: "bigint", nullable: false),
                     ProposedAt = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: false),
@@ -1498,20 +1564,20 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_penomy_artwork_applied_ad_revenue_program", x => new { x.ArtworkId, x.AdRevenueProgramId });
+                    table.PrimaryKey("PK_penomy_artwork_applied_revenue_program", x => new { x.ArtworkId, x.RevenueProgramId });
                     table.ForeignKey(
-                        name: "FK_penomy_artwork_applied_ad_revenue_program_penomy_artwork_Ar~",
+                        name: "FK_penomy_artwork_applied_revenue_program_penomy_artwork_Artwo~",
                         column: x => x.ArtworkId,
                         principalTable: "penomy_artwork",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_penomy_artwork_applied_ad_revenue_program_penomy_creator_pr~",
+                        name: "FK_penomy_artwork_applied_revenue_program_penomy_creator_profi~",
                         column: x => x.ProposedBy,
                         principalTable: "penomy_creator_profile",
-                        principalColumn: "UserId");
+                        principalColumn: "CreatorId");
                     table.ForeignKey(
-                        name: "FK_penomy_artwork_applied_ad_revenue_program_penomy_system_acc~",
+                        name: "FK_penomy_artwork_applied_revenue_program_penomy_system_accoun~",
                         column: x => x.ApprovedBy,
                         principalTable: "penomy_system_account",
                         principalColumn: "Id");
@@ -1529,7 +1595,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     Overview = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
                     UserDetailNote = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: false),
-                    IsResolved = table.Column<bool>(type: "boolean", nullable: false),
+                    ResolveStatus = table.Column<int>(type: "integer", nullable: false),
                     ResolveNote = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     ResolvedBy = table.Column<long>(type: "bigint", nullable: false),
                     ResolvedAt = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: false)
@@ -1588,9 +1654,10 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false),
                     ArtworkId = table.Column<long>(type: "bigint", nullable: false),
                     Title = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    Description = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     UploadOrder = table.Column<int>(type: "integer", nullable: false),
                     PublicLevel = table.Column<int>(type: "integer", nullable: false),
-                    ThumbnailUrl = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    ThumbnailUrl = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     PublishStatus = table.Column<int>(type: "integer", nullable: false),
                     AllowComment = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedBy = table.Column<long>(type: "bigint", nullable: false),
@@ -1675,6 +1742,30 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "penomy_artwork_other_info",
+                columns: table => new
+                {
+                    ArtworkId = table.Column<long>(type: "bigint", nullable: false),
+                    OtherInfoId = table.Column<long>(type: "bigint", nullable: false),
+                    InfoName = table.Column<string>(type: "text", nullable: true),
+                    Value = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_penomy_artwork_other_info", x => new { x.ArtworkId, x.OtherInfoId });
+                    table.ForeignKey(
+                        name: "FK_penomy_artwork_other_info_penomy_artwork_ArtworkId",
+                        column: x => x.ArtworkId,
+                        principalTable: "penomy_artwork",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_penomy_artwork_other_info_penomy_other_info_OtherInfoId",
+                        column: x => x.OtherInfoId,
+                        principalTable: "penomy_other_info",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "penomy_artwork_report",
                 columns: table => new
                 {
@@ -1683,7 +1774,12 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     ReportProblemId = table.Column<long>(type: "bigint", nullable: false),
                     DetailNote = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     CreatedBy = table.Column<long>(type: "bigint", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: false),
+                    ResolveStatus = table.Column<int>(type: "integer", nullable: false),
+                    ResolveNote = table.Column<string>(type: "text", nullable: true),
+                    ResolvedBy = table.Column<long>(type: "bigint", nullable: false),
+                    ResolvedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ResolverCreatorId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1698,6 +1794,11 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         column: x => x.ReportProblemId,
                         principalTable: "penomy_artwork_report_problem",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_penomy_artwork_report_penomy_creator_profile_ResolverCreato~",
+                        column: x => x.ResolverCreatorId,
+                        principalTable: "penomy_creator_profile",
+                        principalColumn: "CreatorId");
                     table.ForeignKey(
                         name: "FK_penomy_artwork_report_penomy_user_profile_CreatedBy",
                         column: x => x.CreatedBy,
@@ -1738,7 +1839,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     DetailNote = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     CreatedBy = table.Column<long>(type: "bigint", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: false),
-                    IsResolved = table.Column<bool>(type: "boolean", nullable: false),
+                    ResolveStatus = table.Column<int>(type: "integer", nullable: false),
                     ResolveNote = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     ResolvedBy = table.Column<long>(type: "bigint", nullable: false),
                     ResolvedAt = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: false)
@@ -1757,15 +1858,45 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         principalTable: "penomy_artwork_violation_flag_type",
                         principalColumn: "Id");
                     table.ForeignKey(
+                        name: "FK_penomy_artwork_violation_flag_penomy_creator_profile_Resolv~",
+                        column: x => x.ResolvedBy,
+                        principalTable: "penomy_creator_profile",
+                        principalColumn: "CreatorId");
+                    table.ForeignKey(
                         name: "FK_penomy_artwork_violation_flag_penomy_system_account_Created~",
                         column: x => x.CreatedBy,
                         principalTable: "penomy_system_account",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "penomy_creator_collaborated_artwork",
+                columns: table => new
+                {
+                    CreatorId = table.Column<long>(type: "bigint", nullable: false),
+                    ArtworkId = table.Column<long>(type: "bigint", nullable: false),
+                    RoleId = table.Column<long>(type: "bigint", nullable: false),
+                    GrantedBy = table.Column<long>(type: "bigint", nullable: false),
+                    GrantedAt = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_penomy_creator_collaborated_artwork", x => new { x.CreatorId, x.ArtworkId, x.RoleId, x.GrantedBy });
                     table.ForeignKey(
-                        name: "FK_penomy_artwork_violation_flag_penomy_user_profile_ResolvedBy",
-                        column: x => x.ResolvedBy,
-                        principalTable: "penomy_user_profile",
-                        principalColumn: "UserId");
+                        name: "FK_penomy_creator_collaborated_artwork_penomy_artwork_ArtworkId",
+                        column: x => x.ArtworkId,
+                        principalTable: "penomy_artwork",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_penomy_creator_collaborated_artwork_penomy_creator_profile_~",
+                        column: x => x.CreatorId,
+                        principalTable: "penomy_creator_profile",
+                        principalColumn: "CreatorId");
+                    table.ForeignKey(
+                        name: "FK_penomy_creator_collaborated_artwork_penomy_creator_profile~1",
+                        column: x => x.GrantedBy,
+                        principalTable: "penomy_creator_profile",
+                        principalColumn: "CreatorId");
                 });
 
             migrationBuilder.CreateTable(
@@ -1829,36 +1960,6 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "penomy_user_managed_artwork",
-                columns: table => new
-                {
-                    UserId = table.Column<long>(type: "bigint", nullable: false),
-                    ArtworkId = table.Column<long>(type: "bigint", nullable: false),
-                    RoleId = table.Column<long>(type: "bigint", nullable: false),
-                    GrantedBy = table.Column<long>(type: "bigint", nullable: false),
-                    GrantedAt = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_penomy_user_managed_artwork", x => new { x.UserId, x.ArtworkId, x.RoleId, x.GrantedBy });
-                    table.ForeignKey(
-                        name: "FK_penomy_user_managed_artwork_penomy_artwork_ArtworkId",
-                        column: x => x.ArtworkId,
-                        principalTable: "penomy_artwork",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_penomy_user_managed_artwork_penomy_user_profile_GrantedBy",
-                        column: x => x.GrantedBy,
-                        principalTable: "penomy_user_profile",
-                        principalColumn: "UserId");
-                    table.ForeignKey(
-                        name: "FK_penomy_user_managed_artwork_penomy_user_profile_UserId",
-                        column: x => x.UserId,
-                        principalTable: "penomy_user_profile",
-                        principalColumn: "UserId");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "penomy_user_rating_artwork",
                 columns: table => new
                 {
@@ -1885,7 +1986,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     BugReportId = table.Column<long>(type: "bigint", nullable: false),
                     FileName = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
                     UploadOrder = table.Column<int>(type: "integer", nullable: false),
-                    StorageUrl = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false)
+                    StorageUrl = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1895,6 +1996,81 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         column: x => x.BugReportId,
                         principalTable: "penomy_bug_report",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "penomy_chat_message_attached_media",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false),
+                    ChatMessageId = table.Column<long>(type: "bigint", nullable: false),
+                    FileName = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
+                    MediaType = table.Column<int>(type: "integer", nullable: false),
+                    UploadOrder = table.Column<int>(type: "integer", nullable: false),
+                    StorageUrl = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_penomy_chat_message_attached_media", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_penomy_chat_message_attached_media_penomy_chat_message_Chat~",
+                        column: x => x.ChatMessageId,
+                        principalTable: "penomy_chat_message",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "penomy_chat_message_like_statistic",
+                columns: table => new
+                {
+                    ChatMessageId = table.Column<long>(type: "bigint", nullable: false),
+                    ValueId = table.Column<long>(type: "bigint", nullable: false),
+                    Total = table.Column<long>(type: "bigint", nullable: false),
+                    LikeValueId = table.Column<long>(type: "bigint", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_penomy_chat_message_like_statistic", x => new { x.ChatMessageId, x.ValueId });
+                    table.ForeignKey(
+                        name: "FK_penomy_chat_message_like_statistic_penomy_chat_message_Chat~",
+                        column: x => x.ChatMessageId,
+                        principalTable: "penomy_chat_message",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_penomy_chat_message_like_statistic_penomy_user_like_value_L~",
+                        column: x => x.LikeValueId,
+                        principalTable: "penomy_user_like_value",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "penomy_user_like_chat_message",
+                columns: table => new
+                {
+                    ChatMessageId = table.Column<long>(type: "bigint", nullable: false),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    ValueId = table.Column<long>(type: "bigint", nullable: false),
+                    LikedAt = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: false),
+                    LikeValueId = table.Column<long>(type: "bigint", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_penomy_user_like_chat_message", x => new { x.ChatMessageId, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_penomy_user_like_chat_message_penomy_chat_message_ChatMessa~",
+                        column: x => x.ChatMessageId,
+                        principalTable: "penomy_chat_message",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_penomy_user_like_chat_message_penomy_user_like_value_LikeVa~",
+                        column: x => x.LikeValueId,
+                        principalTable: "penomy_user_like_value",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_penomy_user_like_chat_message_penomy_user_profile_UserId",
+                        column: x => x.UserId,
+                        principalTable: "penomy_user_profile",
+                        principalColumn: "UserId");
                 });
 
             migrationBuilder.CreateTable(
@@ -1963,7 +2139,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     FileName = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
                     MediaType = table.Column<int>(type: "integer", nullable: false),
                     UploadOrder = table.Column<int>(type: "integer", nullable: false),
-                    StorageUrl = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false)
+                    StorageUrl = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -2150,7 +2326,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     FileName = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
                     MediaType = table.Column<int>(type: "integer", nullable: false),
                     UploadOrder = table.Column<int>(type: "integer", nullable: false),
-                    StorageUrl = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false)
+                    StorageUrl = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -2216,7 +2392,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     BugReportId = table.Column<long>(type: "bigint", nullable: false),
                     FileName = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
                     UploadOrder = table.Column<int>(type: "integer", nullable: false),
-                    StorageUrl = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false)
+                    StorageUrl = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -2237,7 +2413,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     UploadOrder = table.Column<int>(type: "integer", nullable: false),
                     MediaType = table.Column<int>(type: "integer", nullable: false),
                     FileName = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
-                    StorageUrl = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false)
+                    FileSize = table.Column<long>(type: "bigint", nullable: false),
+                    StorageUrl = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -2279,7 +2456,12 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     ReportProblemId = table.Column<long>(type: "bigint", nullable: false),
                     DetailNote = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     CreatedBy = table.Column<long>(type: "bigint", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: false),
+                    ResolveStatus = table.Column<int>(type: "integer", nullable: false),
+                    ResolveNote = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
+                    ResolvedBy = table.Column<long>(type: "bigint", nullable: false),
+                    ResolvedAt = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: false),
+                    ResolverCreatorId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -2299,6 +2481,11 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         column: x => x.ReportProblemId,
                         principalTable: "penomy_artwork_report_problem",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_penomy_artwork_chapter_report_penomy_creator_profile_Resolv~",
+                        column: x => x.ResolverCreatorId,
+                        principalTable: "penomy_creator_profile",
+                        principalColumn: "CreatorId");
                     table.ForeignKey(
                         name: "FK_penomy_artwork_chapter_report_penomy_user_profile_CreatedBy",
                         column: x => x.CreatedBy,
@@ -2367,7 +2554,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     FileName = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
                     MediaType = table.Column<int>(type: "integer", nullable: false),
                     UploadOrder = table.Column<int>(type: "integer", nullable: false),
-                    StorageUrl = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false)
+                    StorageUrl = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -2402,7 +2589,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         name: "FK_penomy_user_donation_transaction_penomy_creator_profile_Cre~",
                         column: x => x.CreatorId,
                         principalTable: "penomy_creator_profile",
-                        principalColumn: "UserId");
+                        principalColumn: "CreatorId");
                     table.ForeignKey(
                         name: "FK_penomy_user_donation_transaction_penomy_creator_wallet_tran~",
                         column: x => x.WalletTransactionId,
@@ -2425,7 +2612,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     FileName = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
                     MediaType = table.Column<int>(type: "integer", nullable: false),
                     UploadOrder = table.Column<int>(type: "integer", nullable: false),
-                    StorageUrl = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false)
+                    StorageUrl = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -2523,7 +2710,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     FileName = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
                     MediaType = table.Column<int>(type: "integer", nullable: false),
                     UploadOrder = table.Column<int>(type: "integer", nullable: false),
-                    StorageUrl = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false)
+                    StorageUrl = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -2551,7 +2738,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         name: "FK_penomy_donation_thank_penomy_creator_profile_CreatorId",
                         column: x => x.CreatorId,
                         principalTable: "penomy_creator_profile",
-                        principalColumn: "UserId");
+                        principalColumn: "CreatorId");
                     table.ForeignKey(
                         name: "FK_penomy_donation_thank_penomy_user_donation_transaction_User~",
                         column: x => x.UserDonationTransactionId,
@@ -2583,139 +2770,6 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         principalColumn: "Id");
                 });
 
-            migrationBuilder.CreateTable(
-                name: "penomy_chat_message",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false),
-                    Content = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: true),
-                    MessageType = table.Column<int>(type: "integer", nullable: false),
-                    ChatGroupId = table.Column<long>(type: "bigint", nullable: false),
-                    ReplyToAnotherMessage = table.Column<bool>(type: "boolean", nullable: false),
-                    IsRevoked = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedBy = table.Column<long>(type: "bigint", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: false),
-                    MessageReceivedReplyRootChatMessageId = table.Column<long>(type: "bigint", nullable: true),
-                    MessageReceivedReplyRepliedMessageId = table.Column<long>(type: "bigint", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_penomy_chat_message", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_penomy_chat_message_penomy_chat_group_ChatGroupId",
-                        column: x => x.ChatGroupId,
-                        principalTable: "penomy_chat_group",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_penomy_chat_message_penomy_user_profile_CreatedBy",
-                        column: x => x.CreatedBy,
-                        principalTable: "penomy_user_profile",
-                        principalColumn: "UserId");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "penomy_chat_message_attached_media",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false),
-                    ChatMessageId = table.Column<long>(type: "bigint", nullable: false),
-                    FileName = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
-                    MediaType = table.Column<int>(type: "integer", nullable: false),
-                    UploadOrder = table.Column<int>(type: "integer", nullable: false),
-                    StorageUrl = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_penomy_chat_message_attached_media", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_penomy_chat_message_attached_media_penomy_chat_message_Chat~",
-                        column: x => x.ChatMessageId,
-                        principalTable: "penomy_chat_message",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "penomy_chat_message_like_statistic",
-                columns: table => new
-                {
-                    ChatMessageId = table.Column<long>(type: "bigint", nullable: false),
-                    ValueId = table.Column<long>(type: "bigint", nullable: false),
-                    Total = table.Column<long>(type: "bigint", nullable: false),
-                    LikeValueId = table.Column<long>(type: "bigint", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_penomy_chat_message_like_statistic", x => new { x.ChatMessageId, x.ValueId });
-                    table.ForeignKey(
-                        name: "FK_penomy_chat_message_like_statistic_penomy_chat_message_Chat~",
-                        column: x => x.ChatMessageId,
-                        principalTable: "penomy_chat_message",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_penomy_chat_message_like_statistic_penomy_user_like_value_L~",
-                        column: x => x.LikeValueId,
-                        principalTable: "penomy_user_like_value",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "penomy_chat_message_reply",
-                columns: table => new
-                {
-                    RootChatMessageId = table.Column<long>(type: "bigint", nullable: false),
-                    RepliedMessageId = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_penomy_chat_message_reply", x => new { x.RootChatMessageId, x.RepliedMessageId });
-                    table.ForeignKey(
-                        name: "FK_penomy_chat_message_reply_penomy_chat_message_RootChatMessa~",
-                        column: x => x.RootChatMessageId,
-                        principalTable: "penomy_chat_message",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "penomy_user_like_chat_message",
-                columns: table => new
-                {
-                    ChatMessageId = table.Column<long>(type: "bigint", nullable: false),
-                    UserId = table.Column<long>(type: "bigint", nullable: false),
-                    ValueId = table.Column<long>(type: "bigint", nullable: false),
-                    LikedAt = table.Column<DateTime>(type: "TIMESTAMPTZ", nullable: false),
-                    LikeValueId = table.Column<long>(type: "bigint", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_penomy_user_like_chat_message", x => new { x.ChatMessageId, x.UserId });
-                    table.ForeignKey(
-                        name: "FK_penomy_user_like_chat_message_penomy_chat_message_ChatMessa~",
-                        column: x => x.ChatMessageId,
-                        principalTable: "penomy_chat_message",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_penomy_user_like_chat_message_penomy_user_like_value_LikeVa~",
-                        column: x => x.LikeValueId,
-                        principalTable: "penomy_user_like_value",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_penomy_user_like_chat_message_penomy_user_profile_UserId",
-                        column: x => x.UserId,
-                        principalTable: "penomy_user_profile",
-                        principalColumn: "UserId");
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_penomy_ad_revenue_program_CreatedBy",
-                table: "penomy_ad_revenue_program",
-                column: "CreatedBy");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_penomy_ad_revenue_program_UpdatedBy",
-                table: "penomy_ad_revenue_program",
-                column: "UpdatedBy");
-
             migrationBuilder.CreateIndex(
                 name: "IX_penomy_artwork_ArtworkOriginId",
                 table: "penomy_artwork",
@@ -2737,13 +2791,13 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                 column: "UpdatedBy");
 
             migrationBuilder.CreateIndex(
-                name: "IX_penomy_artwork_applied_ad_revenue_program_ApprovedBy",
-                table: "penomy_artwork_applied_ad_revenue_program",
+                name: "IX_penomy_artwork_applied_revenue_program_ApprovedBy",
+                table: "penomy_artwork_applied_revenue_program",
                 column: "ApprovedBy");
 
             migrationBuilder.CreateIndex(
-                name: "IX_penomy_artwork_applied_ad_revenue_program_ProposedBy",
-                table: "penomy_artwork_applied_ad_revenue_program",
+                name: "IX_penomy_artwork_applied_revenue_program_ProposedBy",
+                table: "penomy_artwork_applied_revenue_program",
                 column: "ProposedBy");
 
             migrationBuilder.CreateIndex(
@@ -2827,6 +2881,11 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                 column: "ReportProblemId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_penomy_artwork_chapter_report_ResolverCreatorId",
+                table: "penomy_artwork_chapter_report",
+                column: "ResolverCreatorId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_penomy_artwork_chapter_report_attached_media_ChapterReporte~",
                 table: "penomy_artwork_chapter_report_attached_media",
                 column: "ChapterReportedId");
@@ -2857,6 +2916,11 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                 column: "UpdatedBy");
 
             migrationBuilder.CreateIndex(
+                name: "IX_penomy_artwork_other_info_OtherInfoId",
+                table: "penomy_artwork_other_info",
+                column: "OtherInfoId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_penomy_artwork_report_ArtworkId",
                 table: "penomy_artwork_report",
                 column: "ArtworkId");
@@ -2870,6 +2934,11 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                 name: "IX_penomy_artwork_report_ReportProblemId",
                 table: "penomy_artwork_report",
                 column: "ReportProblemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_penomy_artwork_report_ResolverCreatorId",
+                table: "penomy_artwork_report",
+                column: "ResolverCreatorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_penomy_artwork_report_attached_media_ArtworkReportedId",
@@ -2992,11 +3061,6 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                 column: "CreatedBy");
 
             migrationBuilder.CreateIndex(
-                name: "IX_penomy_chat_message_MessageReceivedReplyRootChatMessageId_M~",
-                table: "penomy_chat_message",
-                columns: new[] { "MessageReceivedReplyRootChatMessageId", "MessageReceivedReplyRepliedMessageId" });
-
-            migrationBuilder.CreateIndex(
                 name: "IX_penomy_chat_message_attached_media_ChatMessageId",
                 table: "penomy_chat_message_attached_media",
                 column: "ChatMessageId");
@@ -3005,6 +3069,16 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                 name: "IX_penomy_chat_message_like_statistic_LikeValueId",
                 table: "penomy_chat_message_like_statistic",
                 column: "LikeValueId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_penomy_creator_collaborated_artwork_ArtworkId",
+                table: "penomy_creator_collaborated_artwork",
+                column: "ArtworkId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_penomy_creator_collaborated_artwork_GrantedBy",
+                table: "penomy_creator_collaborated_artwork",
+                column: "GrantedBy");
 
             migrationBuilder.CreateIndex(
                 name: "IX_penomy_creator_wallet_BankId",
@@ -3178,6 +3252,11 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_penomy_other_info_CreatedBy",
+                table: "penomy_other_info",
+                column: "CreatedBy");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_penomy_post_report_problem_CreatedBy",
                 table: "penomy_post_report_problem",
                 column: "CreatedBy");
@@ -3187,6 +3266,16 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                 table: "penomy_register_waiting_list",
                 column: "Email",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_penomy_revenue_program_CreatedBy",
+                table: "penomy_revenue_program",
+                column: "CreatedBy");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_penomy_revenue_program_UpdatedBy",
+                table: "penomy_revenue_program",
+                column: "UpdatedBy");
 
             migrationBuilder.CreateIndex(
                 name: "IX_penomy_series_CreatedBy",
@@ -3396,16 +3485,6 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                 column: "CreatedBy");
 
             migrationBuilder.CreateIndex(
-                name: "IX_penomy_user_managed_artwork_ArtworkId",
-                table: "penomy_user_managed_artwork",
-                column: "ArtworkId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_penomy_user_managed_artwork_GrantedBy",
-                table: "penomy_user_managed_artwork",
-                column: "GrantedBy");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_penomy_user_post_CreatedBy",
                 table: "penomy_user_post",
                 column: "CreatedBy");
@@ -3499,39 +3578,13 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                 name: "IX_penomy_user_watching_history_ChapterId",
                 table: "penomy_user_watching_history",
                 column: "ChapterId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_penomy_chat_message_penomy_chat_message_reply_MessageReceiv~",
-                table: "penomy_chat_message",
-                columns: new[] { "MessageReceivedReplyRootChatMessageId", "MessageReceivedReplyRepliedMessageId" },
-                principalTable: "penomy_chat_message_reply",
-                principalColumns: new[] { "RootChatMessageId", "RepliedMessageId" });
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_penomy_chat_group_penomy_user_profile_CreatedBy",
-                table: "penomy_chat_group");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_penomy_chat_message_penomy_user_profile_CreatedBy",
-                table: "penomy_chat_message");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_penomy_chat_message_penomy_chat_group_ChatGroupId",
-                table: "penomy_chat_message");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_penomy_chat_message_penomy_chat_message_reply_MessageReceiv~",
-                table: "penomy_chat_message");
-
             migrationBuilder.DropTable(
-                name: "penomy_ad_revenue_program");
-
-            migrationBuilder.DropTable(
-                name: "penomy_artwork_applied_ad_revenue_program");
+                name: "penomy_artwork_applied_revenue_program");
 
             migrationBuilder.DropTable(
                 name: "penomy_artwork_bug_report_attached_media");
@@ -3558,6 +3611,9 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                 name: "penomy_artwork_metadata");
 
             migrationBuilder.DropTable(
+                name: "penomy_artwork_other_info");
+
+            migrationBuilder.DropTable(
                 name: "penomy_artwork_report_attached_media");
 
             migrationBuilder.DropTable(
@@ -3580,6 +3636,12 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
             migrationBuilder.DropTable(
                 name: "penomy_chat_message_like_statistic");
+
+            migrationBuilder.DropTable(
+                name: "penomy_chat_message_reply");
+
+            migrationBuilder.DropTable(
+                name: "penomy_creator_collaborated_artwork");
 
             migrationBuilder.DropTable(
                 name: "penomy_donation_thank");
@@ -3628,6 +3690,9 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
             migrationBuilder.DropTable(
                 name: "penomy_register_waiting_list");
+
+            migrationBuilder.DropTable(
+                name: "penomy_revenue_program");
 
             migrationBuilder.DropTable(
                 name: "penomy_social_group_join_request");
@@ -3696,9 +3761,6 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                 name: "penomy_user_like_user_post_comment");
 
             migrationBuilder.DropTable(
-                name: "penomy_user_managed_artwork");
-
-            migrationBuilder.DropTable(
                 name: "penomy_user_post_attached_media");
 
             migrationBuilder.DropTable(
@@ -3744,6 +3806,9 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                 name: "penomy_artwork_comment");
 
             migrationBuilder.DropTable(
+                name: "penomy_other_info");
+
+            migrationBuilder.DropTable(
                 name: "penomy_artwork_report");
 
             migrationBuilder.DropTable(
@@ -3777,6 +3842,9 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                 name: "penomy_user_donation_transaction");
 
             migrationBuilder.DropTable(
+                name: "penomy_chat_message");
+
+            migrationBuilder.DropTable(
                 name: "penomy_group_post_comment");
 
             migrationBuilder.DropTable(
@@ -3805,6 +3873,9 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
             migrationBuilder.DropTable(
                 name: "penomy_creator_wallet_transaction");
+
+            migrationBuilder.DropTable(
+                name: "penomy_chat_group");
 
             migrationBuilder.DropTable(
                 name: "penomy_group_post");
@@ -3838,15 +3909,6 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
             migrationBuilder.DropTable(
                 name: "penomy_user_profile");
-
-            migrationBuilder.DropTable(
-                name: "penomy_chat_group");
-
-            migrationBuilder.DropTable(
-                name: "penomy_chat_message_reply");
-
-            migrationBuilder.DropTable(
-                name: "penomy_chat_message");
         }
     }
 }

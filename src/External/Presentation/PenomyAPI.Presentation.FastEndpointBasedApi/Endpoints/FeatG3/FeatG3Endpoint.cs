@@ -5,7 +5,6 @@ using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3.HttpResponse;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3;

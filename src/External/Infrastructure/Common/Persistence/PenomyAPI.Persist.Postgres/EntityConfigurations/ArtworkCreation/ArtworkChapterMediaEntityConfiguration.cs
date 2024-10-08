@@ -25,6 +25,8 @@ public sealed class ArtworkChapterMediaEntityConfiguration
             .HasMaxLength(ArtworkChapterMedia.MetaData.FileNameLength)
             .IsRequired();
 
+        builder.Property(media => media.FileSize).IsRequired();
+
         builder
             .Property(media => media.StorageUrl)
             .HasMaxLength(ArtworkChapterMedia.MetaData.StorageUrlLength)

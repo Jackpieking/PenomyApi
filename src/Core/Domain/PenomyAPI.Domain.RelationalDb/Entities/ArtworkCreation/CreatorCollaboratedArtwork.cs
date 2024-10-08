@@ -1,12 +1,12 @@
-using System;
 using PenomyAPI.Domain.RelationalDb.Entities.Base;
 using PenomyAPI.Domain.RelationalDb.Entities.Generic;
+using System;
 
 namespace PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 
-public sealed class UserManagedArtwork : IEntity
+public sealed class CreatorCollaboratedArtwork : IEntity
 {
-    public long UserId { get; set; }
+    public long CreatorId { get; set; }
 
     public long ArtworkId { get; set; }
 
@@ -18,18 +18,18 @@ public sealed class UserManagedArtwork : IEntity
 
     #region Navigation
     /// <summary>
-    ///     The user that's granted to collaborate
+    ///     The creator that's granted to collaborate
     ///     on this artwork with a specified role.
     /// </summary>
-    public UserProfile GrantedUser { get; set; }
+    public CreatorProfile GrantedCreator { get; set; }
 
     public Artwork ManagedArtwork { get; set; }
 
     /// <summary>
-    ///     The user who mainly manages and decides
-    ///     to invite other user to collaborate on this artwork.
+    ///     The creator who decides to provider permission
+    ///     to other creator to collaborate on this artwork.
     /// </summary>
-    public UserProfile ArtworkManager { get; set; }
+    public CreatorProfile PermissionGrantProvider { get; set; }
     #endregion
 
     #region MetaData

@@ -7,7 +7,7 @@ namespace PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 
 public sealed class ArtworkComment : EntityWithId<long>, ICreatedEntity<long>
 {
-    public const long EmptyChapterId = 1;
+    public const long EmptyChapterId = -1;
 
     public long ArtworkId { get; set; }
 
