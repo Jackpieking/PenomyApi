@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG3;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Common;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatArt4.DTOs;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatArt4.HttpResponse;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3.HttpResponse;
 using System.Linq;
@@ -47,7 +45,21 @@ public class G3Endpoint : Endpoint<EmptyDto, FeatG3HttpResponse>
             .Invoke(featG3Request, featResponse);
 
 
-        httpResponse.Body = new G3ResponseDto { ArtworkList = featResponse.ArtworkList, };
+        httpResponse.Body = new G3ResponseDto
+        {
+            ArtworkList = featResponse.ArtworkList
+            .ConvertAll(x => new FeatG3ResponseDtoObject()
+            {
+                ArtworkId = x.Id,
+                Title = x.Title,
+                Supplier = x.AuthorName,
+                Thumbnail = x.ThumbnailUrl,
+                Favorite = x.ArtworkMetaData.TotalFavorites,
+                Rating = x.ArtworkMetaData.AverageStarRate,
+                LastUpdateAt = x.UpdatedAt,
+                FlagUrl = x.Origin.ImageUrl
+            }).ToList(),
+        };
 
         return httpResponse;
 

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.G25.OtherHandlers.NumberArtViewed;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3.HttpResponse;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G25.HttpResponse;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,7 +25,7 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G25
             {
                 summary.Summary = "Endpoint for get number of artworks viewed";
                 summary.Description = "This endpoint is used for get number of artworks viewed.";
-                summary.Response<Art4HttpResponse>(
+                summary.Response<G25HttpResponse>(
                     description: "Represent successful operation response.",
                     example: new() { AppCode = G25ResponseStatusCode.SUCCESS.ToString() }
                 );

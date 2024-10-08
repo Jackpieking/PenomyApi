@@ -8,7 +8,7 @@ public class FeatG3Response : IFeatureResponse
 {
     public bool IsSuccess { get; set; }
 
-    public IEnumerable<Artwork> ArtworkList { get; set; }
+    public List<Artwork> ArtworkList { get; set; }
 
     public FeatG3ResponseStatusCode StatusCode { get; set; }
 }

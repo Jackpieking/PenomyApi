@@ -41,8 +41,10 @@ public class G10Repository : IG10Repository
                 UpdatedAt = c.UpdatedAt,
                 Creator = new UserProfile
                 {
-                    NickName = c.Creator.NickName
+                    NickName = c.Creator.NickName,
+                    AvatarUrl = c.Creator.AvatarUrl,
                 },
+
 
 
             }).AsNoTracking().ToListAsync();

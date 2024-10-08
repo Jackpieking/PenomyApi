@@ -38,6 +38,10 @@ public class G4Repository : IG4Repository
                      Id = a.Artwork.Id,
                      Title = a.Artwork.Title,
                      ThumbnailUrl = a.Artwork.ThumbnailUrl,
+                     Origin = new ArtworkOrigin
+                     {
+                         ImageUrl = a.Artwork.Origin.ImageUrl
+                     },
                      ArtworkMetaData = new ArtworkMetaData
                      {
                          TotalFavorites = a.Artwork.ArtworkMetaData.TotalFavorites,

@@ -4,6 +4,7 @@ using PenomyAPI.App.FeatG4;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4.HttpResponse;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4;
@@ -47,7 +48,19 @@ public class G54Endpoint : Endpoint<G4RequestDto, G4HttpResponse>
 
         httpResponse.Body = new G4ResponseDto
         {
+            Category = featResponse.Result.First().Category.Name,
             ArtworkList = featResponse.Result
+            .ConvertAll(x => new FeatG4ResponseDtoObject()
+            {
+                CategoryName = x.Category.Name,
+                ArtworkId = x.Artwork.Id,
+                Title = x.Artwork.Title,
+                Supplier = x.Artwork.AuthorName,
+                Thumbnail = x.Artwork.ThumbnailUrl,
+                Favorite = x.Artwork.ArtworkMetaData.TotalFavorites,
+                Rating = x.Artwork.ArtworkMetaData.AverageStarRate,
+                FlagUrl = x.Artwork.Origin.ImageUrl
+            }).ToList(),
         };
 
 
