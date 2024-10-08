@@ -1,6 +1,6 @@
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Concurrent;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace PenomyAPI.BuildingBlock.FeatRegister.Common;
 
@@ -19,7 +19,7 @@ public static class FeatureHandlerResolver
         }
 
         // Set the provider.
-        _provider = value.CreateScope().ServiceProvider;
+        _provider = value;
     }
 
     internal static object CreateInstance(Type type)
@@ -27,8 +27,11 @@ public static class FeatureHandlerResolver
         // Get the factory from the cache.
         var factory = _factoryCache.GetOrAdd(type, FactoryInitializer);
 
+        // Create an scope service provider.
+        var scopeServiceProvider = _provider.CreateScope().ServiceProvider;
+
         // Execute the factory.
-        return factory(_provider, null);
+        return factory(scopeServiceProvider, null);
 
         // Initialize the factory.
         static ObjectFactory FactoryInitializer(Type t)

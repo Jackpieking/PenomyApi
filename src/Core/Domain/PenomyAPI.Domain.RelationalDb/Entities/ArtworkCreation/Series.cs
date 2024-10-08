@@ -50,7 +50,7 @@ public sealed class Series
 
         public const int DescriptionLength = 500;
 
-        public const int ThumbnailUrlLength = 256;
+        public const int ThumbnailUrlLength = 2000;
     }
     #endregion
 }

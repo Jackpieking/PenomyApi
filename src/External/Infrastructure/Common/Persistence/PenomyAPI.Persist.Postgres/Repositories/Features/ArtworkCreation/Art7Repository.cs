@@ -80,9 +80,18 @@ public sealed class Art7Repository : IArt7Repository
             .FirstOrDefaultAsync(cancellationToken);
     }
 
+    public Task<bool> IsComicExistedByIdAsync(long comicId, CancellationToken cancellationToken)
+    {
+        return _artworkDbSet.AnyAsync(
+            predicate: comic => comic.Id == comicId,
+            cancellationToken: cancellationToken);
+    }
+
     public async Task<bool> UpdateComicAsync(
         Artwork comic,
         IEnumerable<ArtworkCategory> artworkCategories,
+        bool isThumbnailUpdated,
+        bool isCategoriesUpdated,
         CancellationToken cancellationToken)
     {
         var result = new Result<bool>(false);
@@ -91,8 +100,10 @@ public sealed class Art7Repository : IArt7Repository
 
         await executionStrategy.ExecuteAsync(
             operation: async () => await InternalUpdateComicAsync(
-                comicToUpdate: comic,
+                updateDetail: comic,
                 artworkCategories: artworkCategories,
+                isThumbnailUpdated: isThumbnailUpdated,
+                isCategoriesUpdated: isCategoriesUpdated,
                 cancellationToken: cancellationToken,
                 result: result)
         );
@@ -101,8 +112,10 @@ public sealed class Art7Repository : IArt7Repository
     }
 
     private async Task InternalUpdateComicAsync(
-        Artwork comicToUpdate,
+        Artwork updateDetail,
         IEnumerable<ArtworkCategory> artworkCategories,
+        bool isThumbnailUpdated,
+        bool isCategoriesUpdated,
         CancellationToken cancellationToken,
         Result<bool> result)
     {
@@ -112,19 +125,51 @@ public sealed class Art7Repository : IArt7Repository
         {
             transaction = await RepositoryHelper.CreateTransactionAsync(_dbContext, cancellationToken);
 
-            await _artworkDbSet
-                .Where(predicate: updatedComic => updatedComic.Id == comicToUpdate.Id)
-                .ExecuteUpdateAsync(
-                    updatedComic => updatedComic
-                        .SetProperty(comic => comic.Title, comicToUpdate.Title)
-                        .SetProperty(comic => comic.Introduction, comicToUpdate.Introduction),
-                    cancellationToken);
+            // If thumbnail is updated, then update the thumbnail url of the comic.
+            if (isThumbnailUpdated)
+            {
+                await _artworkDbSet
+                    .Where(predicate: updatedComic => updatedComic.Id == updateDetail.Id)
+                    .ExecuteUpdateAsync(
+                        setPropertyCalls: updatedComic => updatedComic
+                            .SetProperty(comic => comic.Title, updateDetail.Title)
+                            .SetProperty(comic => comic.ArtworkOriginId, updateDetail.ArtworkOriginId)
+                            .SetProperty(comic => comic.Introduction, updateDetail.Introduction)
+                            .SetProperty(comic => comic.ThumbnailUrl, updateDetail.ThumbnailUrl)
+                            .SetProperty(comic => comic.ArtworkStatus, updateDetail.ArtworkStatus)
+                            .SetProperty(comic => comic.PublicLevel, updateDetail.PublicLevel)
+                            .SetProperty(comic => comic.AllowComment, updateDetail.AllowComment)
+                            .SetProperty(comic => comic.UpdatedAt, updateDetail.UpdatedAt),
+                        cancellationToken: cancellationToken);
+            }
+            // Else, no update for the thumbnail url of the comic.
+            else
+            {
+                await _artworkDbSet
+                    .Where(predicate: updatedComic => updatedComic.Id == updateDetail.Id)
+                    .ExecuteUpdateAsync(
+                        setPropertyCalls: updatedComic => updatedComic
+                            .SetProperty(comic => comic.Title, updateDetail.Title)
+                            .SetProperty(comic => comic.ArtworkOriginId, updateDetail.ArtworkOriginId)
+                            .SetProperty(comic => comic.Introduction, updateDetail.Introduction)
+                            .SetProperty(comic => comic.ArtworkStatus, updateDetail.ArtworkStatus)
+                            .SetProperty(comic => comic.PublicLevel, updateDetail.PublicLevel)
+                            .SetProperty(comic => comic.AllowComment, updateDetail.AllowComment)
+                            .SetProperty(comic => comic.UpdatedAt, updateDetail.UpdatedAt),
+                        cancellationToken: cancellationToken);
+            }
 
-            await _artworkCategoryDbSet
-                .Where(predicate: comicCategory => comicCategory.ArtworkId == comicToUpdate.Id)
-                .ExecuteDeleteAsync(cancellationToken: cancellationToken);
+            // Update the category list if it has any update.
+            if (isCategoriesUpdated)
+            {
+                await _artworkCategoryDbSet
+                    .Where(predicate: comicCategory => comicCategory.ArtworkId == updateDetail.Id)
+                    .ExecuteDeleteAsync(cancellationToken: cancellationToken);
 
-            await _artworkCategoryDbSet.AddRangeAsync(artworkCategories, cancellationToken);
+                await _artworkCategoryDbSet.AddRangeAsync(
+                    entities: artworkCategories,
+                    cancellationToken: cancellationToken);
+            }
 
             await _dbContext.SaveChangesAsync(cancellationToken);
 

@@ -33,7 +33,7 @@ internal sealed class DonationThankEntityConfiguration :
         builder
             .HasOne(donationThank => donationThank.Creator)
             .WithMany(creator => creator.DonationThanks)
-            .HasPrincipalKey(creator => creator.UserId)
+            .HasPrincipalKey(creator => creator.CreatorId)
             .HasForeignKey(donationThank => donationThank.CreatorId)
             .OnDelete(DeleteBehavior.NoAction);
 
