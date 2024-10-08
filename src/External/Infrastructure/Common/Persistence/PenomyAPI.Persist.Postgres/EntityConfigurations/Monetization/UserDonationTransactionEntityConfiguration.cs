@@ -58,7 +58,7 @@ internal sealed class UserDonationTransactionEntityConfiguration
         builder
             .HasOne(userDonation => userDonation.Creator)
             .WithMany(creator => creator.ReceivedUserDonations)
-            .HasPrincipalKey(creator => creator.UserId)
+            .HasPrincipalKey(creator => creator.CreatorId)
             .HasForeignKey(userDonation => userDonation.CreatorId)
             .OnDelete(DeleteBehavior.NoAction);
         #endregion

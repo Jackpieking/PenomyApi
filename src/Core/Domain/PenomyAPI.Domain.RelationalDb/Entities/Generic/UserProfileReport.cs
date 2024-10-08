@@ -1,5 +1,5 @@
-using System;
 using PenomyAPI.Domain.RelationalDb.Entities.Base;
+using System;
 
 namespace PenomyAPI.Domain.RelationalDb.Entities.Generic;
 
@@ -20,6 +20,12 @@ public sealed class UserProfileReport : EntityWithId<long>, ICreatedEntity<long>
     public long CreatedBy { get; set; }
 
     public DateTime CreatedAt { get; set; }
+
+    public string ResolveNote { get; set; }
+
+    public long ResolvedBy { get; set; }
+
+    public DateTime ResolvedAt { get; set; }
 
     #region Navigation
     /// <summary>

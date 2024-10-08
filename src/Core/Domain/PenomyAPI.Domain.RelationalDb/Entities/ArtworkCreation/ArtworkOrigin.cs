@@ -56,7 +56,7 @@ public sealed class ArtworkOrigin :
 
         public const int LabelLength = 64;
 
-        public const int ImageUrlLength = 256;
+        public const int ImageUrlLength = 2000;
     }
     #endregion
 }

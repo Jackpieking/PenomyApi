@@ -31,7 +31,7 @@ internal sealed class ArtworkViolationFlagEntityConfiguration
             .HasColumnType(DatabaseNativeTypes.TIMESTAMPTZ)
             .IsRequired();
 
-        builder.Property(violationFlag => violationFlag.IsResolved).IsRequired();
+        builder.Property(violationFlag => violationFlag.ResolveStatus).IsRequired();
 
         builder
             .Property(violationFlag => violationFlag.ResolveNote)
@@ -69,9 +69,9 @@ internal sealed class ArtworkViolationFlagEntityConfiguration
 
         builder
             .HasOne(violationFlag => violationFlag.Resolver)
-            .WithMany(user => user.ResolvedViolationFlags)
+            .WithMany(creator => creator.ResolvedViolationFlags)
             .HasForeignKey(violationFlag => violationFlag.ResolvedBy)
-            .HasPrincipalKey(user => user.UserId)
+            .HasPrincipalKey(creator => creator.CreatorId)
             .OnDelete(DeleteBehavior.NoAction);
         #endregion
 

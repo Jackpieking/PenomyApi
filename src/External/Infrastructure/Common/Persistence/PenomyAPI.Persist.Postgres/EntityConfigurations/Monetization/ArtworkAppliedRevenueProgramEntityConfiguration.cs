@@ -6,17 +6,17 @@ using PenomyAPI.Persist.Postgres.EntityConfigurations.Base;
 
 namespace PenomyAPI.Persist.Postgres.EntityConfigurations.Monetization;
 
-internal sealed class ArtworkAppliedAdRevenueProgramEntityConfiguration
-    : IEntityConfiguration<ArtworkAppliedAdRevenueProgram>
+internal sealed class ArtworkAppliedRevenueProgramEntityConfiguration
+    : IEntityConfiguration<ArtworkAppliedRevenueProgram>
 {
-    public void Configure(EntityTypeBuilder<ArtworkAppliedAdRevenueProgram> builder)
+    public void Configure(EntityTypeBuilder<ArtworkAppliedRevenueProgram> builder)
     {
-        builder.ToTable("penomy_artwork_applied_ad_revenue_program");
+        builder.ToTable("penomy_artwork_applied_revenue_program");
 
         builder.HasKey(appliedToAdRevenueProgram => new
         {
             appliedToAdRevenueProgram.ArtworkId,
-            appliedToAdRevenueProgram.AdRevenueProgramId
+            appliedToAdRevenueProgram.RevenueProgramId
         });
 
         builder
@@ -43,14 +43,14 @@ internal sealed class ArtworkAppliedAdRevenueProgramEntityConfiguration
 
         builder
             .Property(appliedToAdRevenueProgram => appliedToAdRevenueProgram.RejectedNote)
-            .HasMaxLength(ArtworkAppliedAdRevenueProgram.MetaData.RejectedNoteLength)
+            .HasMaxLength(ArtworkAppliedRevenueProgram.MetaData.RejectedNoteLength)
             .IsRequired();
 
         #region Relationships
         builder
             .HasOne(appliedToAdRevenueProgram => appliedToAdRevenueProgram.Proposer)
             .WithMany(proposer => proposer.AppliedAdRevenuePrograms)
-            .HasPrincipalKey(proposer => proposer.UserId)
+            .HasPrincipalKey(proposer => proposer.CreatorId)
             .HasForeignKey(appliedToAdRevenueProgram => appliedToAdRevenueProgram.ProposedBy)
             .OnDelete(DeleteBehavior.NoAction);
 

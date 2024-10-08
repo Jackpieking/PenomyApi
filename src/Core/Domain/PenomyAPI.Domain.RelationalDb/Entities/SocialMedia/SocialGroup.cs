@@ -51,7 +51,7 @@ public sealed class SocialGroup : EntityWithId<long>, ICreatedEntity<long>
 
         public const int DescriptionLength = 2000;
 
-        public const int CoverPhotoUrlLength = 256;
+        public const int CoverPhotoUrlLength = 2000;
     }
     #endregion
 }

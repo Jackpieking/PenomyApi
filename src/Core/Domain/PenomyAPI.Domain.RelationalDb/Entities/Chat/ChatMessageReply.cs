@@ -14,11 +14,6 @@ public sealed class ChatMessageReply : IEntity
     /// </summary>
     public long RepliedMessageId { get; set; }
 
-    #region Navigation
-    public ChatMessage RootChatMessage { get; set; }
-
-    #endregion
-
     #region MetaData
     public static class MetaData { }
     #endregion

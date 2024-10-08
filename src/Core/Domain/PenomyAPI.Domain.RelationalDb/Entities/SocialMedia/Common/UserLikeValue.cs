@@ -42,7 +42,7 @@ public sealed class UserLikeValue :
 
         public const int ValueLength = 100;
 
-        public const int EmojiUrlLength = 256;
+        public const int EmojiUrlLength = 2000;
     }
     #endregion
 }

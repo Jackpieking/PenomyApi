@@ -126,13 +126,7 @@ public sealed class UserProfile : IEntity
 
     public IEnumerable<ArtworkChapterReport> CreatedChapterReports { get; set; }
 
-    public IEnumerable<UserManagedArtwork> CollaboratedArtworks { get; set; }
-
-    public IEnumerable<UserManagedArtwork> ManagedArtworks { get; set; }
-
     public IEnumerable<ArtworkBugReport> CreatedArtworkBugReports { get; set; }
-
-    public IEnumerable<ArtworkViolationFlag> ResolvedViolationFlags { get; set; }
 
     // Monetization section.
     public IEnumerable<UserDonationTransaction> UserDonationTransactions { get; set; }
@@ -143,7 +137,7 @@ public sealed class UserProfile : IEntity
     {
         public const int NickNameLength = 32;
 
-        public const int AvatarUrlLength = 256;
+        public const int AvatarUrlLength = 2000;
 
         public const int AboutMeLength = 2000;
     }
