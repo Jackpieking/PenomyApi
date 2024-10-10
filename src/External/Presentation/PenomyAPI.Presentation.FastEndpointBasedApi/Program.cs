@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
 using PenomyAPI.BuildingBlock.FeatRegister;
 using PenomyAPI.BuildingBlock.FeatRegister.Common;
+using PenomyAPI.Persist.Postgres.Data.DbContexts;
 using PenomyAPI.Presentation.FastEndpointBasedApi.ServiceConfigurations;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,18 +23,33 @@ var app = builder.Build();
 FeatureHandlerResolver.SetProvider(app.Services);
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment()) { }
+if (app.Environment.IsDevelopment())
+{
+    app.UseCors()
+        .UseFastEndpoints()
+        .UseSwaggerGen()
+        .UseSwaggerUi(configure: options =>
+        {
+            options.Path = string.Empty;
+            options.DefaultModelsExpandDepth = -1;
+        });
+}
 
 if (app.Environment.IsStaging()) { }
 
-if (app.Environment.IsProduction()) { }
+if (app.Environment.IsProduction())
+{
+    app.UseCors().UseFastEndpoints();
+}
 
-app.UseFastEndpoints();
-app.UseCors();
-app.UseSwaggerGen()
-    .UseSwaggerUi(configure: options =>
+app.MapGet(
+    "/test",
+    async (AppDbContext dbContext) =>
     {
-        options.Path = string.Empty;
-    });
+        var a = await dbContext.Database.CanConnectAsync();
+
+        return a;
+    }
+);
 
 await app.RunAsync();
