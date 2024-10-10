@@ -1,12 +1,12 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using PenomyAPI.BuildingBlock.FeatRegister.ServicesRegistration.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using PenomyAPI.BuildingBlock.FeatRegister.InfraRegistration.Common;
 
-namespace PenomyAPI.BuildingBlock.FeatRegister.ServicesRegistration.Handler;
+namespace PenomyAPI.BuildingBlock.FeatRegister.InfraRegistration;
 
 internal static class InfrastructureServicesRegistration
 {
@@ -36,7 +36,7 @@ internal static class InfrastructureServicesRegistration
         // Register the services.
         foreach (var type in servicesRegistrationTypes)
         {
-            var servicesRegistration = Activator.CreateInstance(type) as IServicesRegistration;
+            var servicesRegistration = Activator.CreateInstance(type) as IServiceRegistration;
 
             servicesRegistration.Register(services, configuration);
         }
@@ -59,6 +59,7 @@ internal static class InfrastructureServicesRegistration
         var interfaceType = typeInheritInterfaces.First();
 
         return interfaceType.AssemblyQualifiedName.Equals(
-            value: typeof(IServicesRegistration).AssemblyQualifiedName);
+            value: typeof(IServiceRegistration).AssemblyQualifiedName
+        );
     }
 }

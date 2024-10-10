@@ -1,8 +1,8 @@
-﻿using PenomyAPI.App.Common;
-using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using PenomyAPI.App.Common;
+using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 
 namespace PenomyAPI.App.FeatG3;
 
@@ -22,7 +22,6 @@ public class FeatG3Handler : IFeatureHandler<FeatG3Request, FeatG3Response>
 
         return new FeatG3Response
         {
-            
             ArtworkList = result,
             StatusCode = FeatG3ResponseStatusCode.SUCCESS
         };

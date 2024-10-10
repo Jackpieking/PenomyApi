@@ -1,8 +1,8 @@
-﻿using PenomyAPI.App.Common;
-using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using PenomyAPI.App.Common;
+using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 
 namespace PenomyAPI.App.FeatG53;
 
@@ -18,15 +18,14 @@ public class G53Handler : IFeatureHandler<G53Request, G53Response>
     public async Task<G53Response> ExecuteAsync(G53Request request, CancellationToken ct)
     {
         var unitOfWork = _unitOfWork.Value;
-        var result = await unitOfWork.G53Repository.EditCommentAsync(request.CommentId, request.NewComment);
+        var result = await unitOfWork.G53Repository.EditCommentAsync(
+            request.CommentId,
+            request.NewComment
+        );
 
         if (result == true)
         {
-            return new G53Response
-            {
-                IsSuccess = true,
-                StatusCode = G53ResponseStatusCode.SUCCESS
-            };
+            return new G53Response { IsSuccess = true, StatusCode = G53ResponseStatusCode.SUCCESS };
         }
         else
         {

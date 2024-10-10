@@ -1,10 +1,10 @@
-﻿using FastEndpoints;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using FastEndpoints;
 using PenomyAPI.App.FeatArt7.OtherHandlers.LoadComicDetail;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt7.HttpResponse;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt7.HttpResponseManagers;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt7
 {
@@ -20,12 +20,13 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.
 
         public override async Task<Art7LoadComicDetailHttpResponse> ExecuteAsync(
             Art7LoadComicDetailRequest request,
-            CancellationToken ct)
+            CancellationToken ct
+        )
         {
-            var featResponse = await FeatureExtensions
-                .ExecuteAsync<Art7LoadComicDetailRequest, Art7LoadComicDetailResponse>(
-                    request: request,
-                    ct: ct);
+            var featResponse = await FeatureExtensions.ExecuteAsync<
+                Art7LoadComicDetailRequest,
+                Art7LoadComicDetailResponse
+            >(request: request, ct: ct);
 
             var httpResponse = Art7LoadComicDetailHttpResponseManager
                 .Resolve(featResponse.StatusCode)

@@ -1,14 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
-using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common;
 using PenomyAPI.Persist.Postgres.Common.DatabaseConstants;
 using PenomyAPI.Persist.Postgres.EntityConfigurations.Base;
 
 namespace PenomyAPI.Persist.Postgres.EntityConfigurations.SocialMedia;
 
-internal sealed class SocialGroupReportEntityConfiguration
-    : IEntityConfiguration<SocialGroupReport>
+internal sealed class SocialGroupReportEntityConfiguration : IEntityConfiguration<SocialGroupReport>
 {
     public void Configure(EntityTypeBuilder<SocialGroupReport> builder)
     {
@@ -25,9 +23,7 @@ internal sealed class SocialGroupReportEntityConfiguration
             .HasMaxLength(SocialGroupReport.MetaData.DetailNoteLength)
             .IsRequired();
 
-        builder
-            .Property(report => report.CreatedBy)
-            .IsRequired();
+        builder.Property(report => report.CreatedBy).IsRequired();
 
         builder
             .Property(report => report.CreatedAt)
@@ -41,7 +37,7 @@ internal sealed class SocialGroupReportEntityConfiguration
             .HasPrincipalKey(problem => problem.Id)
             .HasForeignKey(report => report.ReportProblemId)
             .OnDelete(DeleteBehavior.NoAction);
-        
+
         builder
             .HasOne(report => report.Reporter)
             .WithMany(reporter => reporter.CreatedSocialGroupReports)

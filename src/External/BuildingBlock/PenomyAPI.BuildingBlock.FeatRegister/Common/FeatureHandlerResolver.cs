@@ -1,6 +1,6 @@
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Concurrent;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace PenomyAPI.BuildingBlock.FeatRegister.Common;
 

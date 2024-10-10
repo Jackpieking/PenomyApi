@@ -1,4 +1,6 @@
-﻿using FastEndpoints;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatArt4;
 using PenomyAPI.App.FeatArt7;
@@ -7,8 +9,6 @@ using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.Feat
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt7.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt7.HttpResponse;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt7.HttpResponseManagers;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt7;
 
@@ -38,7 +38,10 @@ public sealed class Art7Endpoint : Endpoint<Art7RequestDto, Art7HttpResponse>
         });
     }
 
-    public override async Task<Art7HttpResponse> ExecuteAsync(Art7RequestDto requestDto, CancellationToken ct)
+    public override async Task<Art7HttpResponse> ExecuteAsync(
+        Art7RequestDto requestDto,
+        CancellationToken ct
+    )
     {
         Art7HttpResponse httpResponse;
 

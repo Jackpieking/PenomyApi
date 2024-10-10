@@ -1,11 +1,12 @@
-﻿using PenomyAPI.App.FeatG3.Infrastructures;
+﻿using System.Threading.Tasks;
+using PenomyAPI.App.FeatG3.Infrastructures;
 
 namespace PenomyAPI.Infra.FeatG3;
 
 public class FeatG3MailHandler : IFeatG3MailHandler
 {
-    public async Task<bool> SendMailAsync()
+    public Task<bool> SendMailAsync()
     {
-        return true;
+        return Task.FromResult(true);
     }
 }

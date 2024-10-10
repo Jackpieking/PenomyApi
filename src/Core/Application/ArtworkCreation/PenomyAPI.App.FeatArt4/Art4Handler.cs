@@ -1,3 +1,6 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using PenomyAPI.App.Common;
 using PenomyAPI.App.Common.AppConstants;
 using PenomyAPI.App.Common.FileServices;
@@ -7,9 +10,6 @@ using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 using PenomyAPI.Infra.Configuration.Options;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace PenomyAPI.App.FeatArt4;
 
@@ -22,7 +22,8 @@ public class Art4Handler : IFeatureHandler<Art4Request, Art4Response>
     public Art4Handler(
         Lazy<IUnitOfWork> unitOfWork,
         Lazy<IDefaultDistributedFileService> fileService,
-        CloudinaryOptions options)
+        CloudinaryOptions options
+    )
     {
         _art4Repository = unitOfWork.Value.Art4Repository;
         _fileService = fileService;
@@ -41,7 +42,8 @@ public class Art4Handler : IFeatureHandler<Art4Request, Art4Response>
             RelativePath = DirectoryPathHelper.BuildPath(
                 pathSeparator: DirectoryPathHelper.WebPathSeparator,
                 rootDirectory: _options.ComicRootFolder,
-                childFolders: artworkFolderName)
+                childFolders: artworkFolderName
+            )
         };
 
         var fileService = _fileService.Value;
@@ -49,7 +51,8 @@ public class Art4Handler : IFeatureHandler<Art4Request, Art4Response>
         // Create the folder with provided info.
         var folderCreateResult = await fileService.CreateFolderAsync(
             folderInfo: folderInfo,
-            cancellationToken: ct);
+            cancellationToken: ct
+        );
 
         if (!folderCreateResult)
         {
@@ -68,7 +71,8 @@ public class Art4Handler : IFeatureHandler<Art4Request, Art4Response>
         var uploadFileResult = await fileService.UploadFileAsync(
             fileInfo: thumnailFileInfo,
             overwrite: true,
-            cancellationToken: ct);
+            cancellationToken: ct
+        );
 
         // Get the storage url after upload the success.
         thumnailFileInfo.StorageUrl = uploadFileResult.Value.StorageUrl;

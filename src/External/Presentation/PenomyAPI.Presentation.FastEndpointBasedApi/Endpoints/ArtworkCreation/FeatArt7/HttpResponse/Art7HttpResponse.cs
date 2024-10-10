@@ -8,6 +8,6 @@ public sealed class Art7HttpResponse : AppHttpResponse<Art7ResponseDto>
 {
     public static string GetAppCode(Art7ResponseStatusCode responseStatusCode)
     {
-        return $"Art7.{responseStatusCode}.{(int) responseStatusCode}";
+        return $"Art7.{responseStatusCode}.{(int)responseStatusCode}";
     }
 }
