@@ -1,5 +1,3 @@
 ﻿namespace PenomyAPI.App.FeatArt4.Infrastructures;
 
-public interface IArt4FileService
-{
-}
+public interface IArt4FileService { }

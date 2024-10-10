@@ -5,5 +5,4 @@ namespace PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 public partial interface IUnitOfWork
 {
     IG54Repository G54Repository { get; }
-
 }

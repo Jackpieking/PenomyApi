@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using PenomyAPI.App.FeatG4;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
+using Microsoft.AspNetCore.Http;
+using PenomyAPI.App.FeatG4;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4.HttpResponse
 {
@@ -9,7 +9,8 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4.HttpRespo
     {
         private static ConcurrentDictionary<
             G4ResponseStatusCode,
-            Func<G4Request, G4Response, G4HttpResponse>> _dictionary;
+            Func<G4Request, G4Response, G4HttpResponse>
+        > _dictionary;
 
         private static void Init()
         {
@@ -18,23 +19,28 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4.HttpRespo
             // Add each feature status code with its HttpResponse information.
             _dictionary.TryAdd(
                 key: G4ResponseStatusCode.SUCCESS,
-                value: (_, response) => new()
-                {
-                    AppCode = $"G4.{G4ResponseStatusCode.SUCCESS}",
-                    HttpCode = StatusCodes.Status200OK,
-                });
+                value: (_, response) =>
+                    new()
+                    {
+                        AppCode = $"G4.{G4ResponseStatusCode.SUCCESS}",
+                        HttpCode = StatusCodes.Status200OK,
+                    }
+            );
 
             _dictionary.TryAdd(
                 key: G4ResponseStatusCode.DATABASE_ERROR,
-                value: (_, response) => new()
-                {
-                    AppCode = $"G4.{G4ResponseStatusCode.DATABASE_ERROR}",
-                    HttpCode = StatusCodes.Status400BadRequest,
-                });
+                value: (_, response) =>
+                    new()
+                    {
+                        AppCode = $"G4.{G4ResponseStatusCode.DATABASE_ERROR}",
+                        HttpCode = StatusCodes.Status400BadRequest,
+                    }
+            );
         }
 
         internal static Func<G4Request, G4Response, G4HttpResponse> Resolve(
-            G4ResponseStatusCode statusCode)
+            G4ResponseStatusCode statusCode
+        )
         {
             if (Equals(objA: _dictionary, objB: default))
             {

@@ -1,4 +1,8 @@
-﻿using PenomyAPI.App.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using PenomyAPI.App.Common;
 using PenomyAPI.App.Common.FileServices;
 using PenomyAPI.App.Common.FileServices.Models;
 using PenomyAPI.App.Common.Helpers;
@@ -7,10 +11,6 @@ using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 using PenomyAPI.Infra.Configuration.Options;
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace PenomyAPI.App.FeatArt7;
 
@@ -23,7 +23,8 @@ public sealed class Art7Handler : IFeatureHandler<Art7Request, Art7Response>
     public Art7Handler(
         Lazy<IUnitOfWork> unitOfWork,
         Lazy<IDefaultDistributedFileService> fileService,
-        CloudinaryOptions options)
+        CloudinaryOptions options
+    )
     {
         _art7Repository = unitOfWork.Value.Art7Repository;
         _fileService = fileService;
@@ -34,7 +35,8 @@ public sealed class Art7Handler : IFeatureHandler<Art7Request, Art7Response>
     {
         var isComicExisted = await _art7Repository.IsComicExistedByIdAsync(
             comicId: requestBody.ComicId,
-            cancellationToken: ct);
+            cancellationToken: ct
+        );
 
         if (!isComicExisted)
         {
@@ -61,7 +63,9 @@ public sealed class Art7Handler : IFeatureHandler<Art7Request, Art7Response>
             Id = requestBody.ComicId,
             Title = requestBody.Title,
             Introduction = requestBody.Introduction,
-            ThumbnailUrl = requestBody.IsThumbnailUpdated ? uploadThumbnailResult.Value.StorageUrl : string.Empty,
+            ThumbnailUrl = requestBody.IsThumbnailUpdated
+                ? uploadThumbnailResult.Value.StorageUrl
+                : string.Empty,
             ArtworkOriginId = requestBody.OriginId,
             ArtworkStatus = requestBody.ArtworkStatus,
             PublicLevel = requestBody.PublicLevel,
@@ -69,6 +73,7 @@ public sealed class Art7Handler : IFeatureHandler<Art7Request, Art7Response>
             UpdatedAt = updatedAtUtcNow,
         };
 
+        // Update again the category list if any change is found.
         IEnumerable<ArtworkCategory> comicNewCategories = null;
 
         if (requestBody.IsCategoriesUpdated)
@@ -81,23 +86,21 @@ public sealed class Art7Handler : IFeatureHandler<Art7Request, Art7Response>
             artworkCategories: comicNewCategories,
             isThumbnailUpdated: requestBody.IsThumbnailUpdated,
             isCategoriesUpdated: requestBody.IsCategoriesUpdated,
-            cancellationToken: ct);
+            cancellationToken: ct
+        );
 
         if (!result)
         {
             return Art7Response.DatabaseError;
         }
 
-        return new Art7Response
-        {
-            IsSuccess = true,
-            StatusCode = Art7ResponseStatusCode.SUCCESS
-        };
+        return new Art7Response { IsSuccess = true, StatusCode = Art7ResponseStatusCode.SUCCESS };
     }
 
     private async Task<Result<AppFileInfo>> UploadAgainComicThumbnailAsync(
         Art7Request request,
-        CancellationToken ct)
+        CancellationToken ct
+    )
     {
         // Upload the new thumbnail of the comic.
         var thumnailFileInfo = request.ThumbnailFileInfo;
@@ -108,7 +111,8 @@ public sealed class Art7Handler : IFeatureHandler<Art7Request, Art7Response>
         thumnailFileInfo.FolderPath = DirectoryPathHelper.BuildPath(
             pathSeparator: DirectoryPathHelper.WebPathSeparator,
             rootDirectory: _options.ComicRootFolder,
-            childFolders: artworkFolderName);
+            childFolders: artworkFolderName
+        );
 
         // Get the file service to upload the file.
         var fileService = _fileService.Value;
@@ -116,7 +120,8 @@ public sealed class Art7Handler : IFeatureHandler<Art7Request, Art7Response>
         var uploadFileResult = await fileService.UploadFileAsync(
             fileInfo: thumnailFileInfo,
             overwrite: true,
-            cancellationToken: ct);
+            cancellationToken: ct
+        );
 
         return uploadFileResult;
     }

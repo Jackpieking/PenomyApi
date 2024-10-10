@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 
-namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5.DTOs
+namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5.DTOs;
+
+public class G5ResponseDto
 {
     public class G5ResponseDto
     {

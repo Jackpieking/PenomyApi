@@ -1,10 +1,10 @@
+using System;
+using System.Collections.Generic;
+using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PenomyAPI.BuildingBlock.FeatRegister.Common;
 using PenomyAPI.BuildingBlock.FeatRegister.FeatureRegistration.Common;
-using System;
-using System.Collections.Generic;
-using System.Reflection;
 
 namespace PenomyAPI.BuildingBlock.FeatRegister.Features;
 
@@ -58,12 +58,14 @@ internal static class FeatureHandlerRegistration
     {
         foreach (var type in featureDefinitionRegTypes)
         {
-            var featureDefinitionRegistration = Activator.CreateInstance(type) as IFeatureDefinitionRegistration;
+            var featureDefinitionRegistration =
+                Activator.CreateInstance(type) as IFeatureDefinitionRegistration;
 
             if (!featureDefinitionRegistration.IsRequestAndHanlderMatched())
             {
                 throw new FeatureRegistrationException(
-                    $"The registered requestType is [{featureDefinitionRegistration.FeatRequestType.FullName}] but the provided handlerType is [{featureDefinitionRegistration.FeatHandlerType.FullName}]");
+                    $"The registered requestType is [{featureDefinitionRegistration.FeatRequestType.FullName}] but the provided handlerType is [{featureDefinitionRegistration.FeatHandlerType.FullName}]"
+                );
             }
 
             // Add the feature definition to registry.

@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
-using PenomyAPI.BuildingBlock.FeatRegister.ServicesRegistration.Handler;
+using PenomyAPI.BuildingBlock.FeatRegister.InfraRegistration;
 using PenomyAPI.Infra.Configuration.ServiceExtensions;
 
 namespace PenomyAPI.BuildingBlock.FeatRegister;

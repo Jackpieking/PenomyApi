@@ -8,6 +8,4 @@ public interface IDefaultDistributedFileService
         IFeatureHandler<IFeatureRequest<IFeatureResponse>, IFeatureResponse>,
         IFeatureRequest<IFeatureResponse>,
         IFeatureResponse
-    >
-{
-}
+    > { }

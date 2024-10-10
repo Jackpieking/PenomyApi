@@ -1,6 +1,5 @@
-﻿using PenomyAPI.Domain.RelationalDb.Entities.Base;
-using PenomyAPI.Domain.RelationalDb.Entities.Generic;
-using System;
+﻿using System;
+using PenomyAPI.Domain.RelationalDb.Entities.Base;
 
 namespace PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 
@@ -21,8 +20,6 @@ public sealed class UserWatchingHistory : EntityWithId<long>
     #endregion
 
     #region MetaData
-    public static class MetaData
-    {
-    }
+    public static class MetaData { }
     #endregion
 }
