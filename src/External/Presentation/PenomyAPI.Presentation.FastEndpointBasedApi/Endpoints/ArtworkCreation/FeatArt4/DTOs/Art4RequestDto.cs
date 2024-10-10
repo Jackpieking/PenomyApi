@@ -4,8 +4,9 @@ using PenomyAPI.App.Common.Models.Common;
 using PenomyAPI.App.FeatArt4;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
+using PenomyAPI.Domain.RelationalDb.Entities.Contraints.ArtworkCreation;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.Common.DTOs;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt4.Helpers;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Helpers.IFormFiles;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -77,20 +78,6 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.
             return true;
         }
 
-        public bool IsValidThumbnailImageFileInput()
-        {
-            var isValidFileExtension = IFormFileHelper.IsValidFileExtension(
-                formFile: ThumbnailImageFile,
-                validFileExtensions: _validFileExtensions);
-
-            if (!isValidFileExtension)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
         private Result<IEnumerable<CategoryDto>> DeserializedSelectedCategories()
         {
             try
@@ -127,7 +114,7 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.
         public Art4Request MapToFeatureRequest(long comicId, long createdBy)
         {
             const string thumbnailImageName = "thumbnail";
-            var fileExtension = IFormFileHelper.GetFileExtension(ThumbnailImageFile);
+            var fileExtension = FormFileHelper.Instance.GetFileExtension(ThumbnailImageFile);
 
             return new Art4Request
             {

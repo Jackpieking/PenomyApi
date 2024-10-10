@@ -20,7 +20,7 @@ public static class Art7HttpResponseManager
             value: (response) => new()
             {
                 AppCode = Art7HttpResponse.GetAppCode(Art7ResponseStatusCode.SUCCESS),
-                HttpCode = StatusCodes.Status201Created,
+                HttpCode = StatusCodes.Status200OK,
                 Body = null,
             });
 
@@ -29,8 +29,16 @@ public static class Art7HttpResponseManager
             value: (response) => new()
             {
                 AppCode = Art7HttpResponse.GetAppCode(Art7ResponseStatusCode.DATABASE_ERROR),
-                HttpCode = StatusCodes.Status400BadRequest,
+                HttpCode = StatusCodes.Status500InternalServerError,
             });
+
+        _dictionary.TryAdd(
+             key: Art7ResponseStatusCode.FILE_SERVICE_ERROR,
+             value: (response) => new()
+             {
+                 AppCode = Art7HttpResponse.GetAppCode(Art7ResponseStatusCode.FILE_SERVICE_ERROR),
+                 HttpCode = StatusCodes.Status500InternalServerError,
+             });
 
         _dictionary.TryAdd(
             key: Art7ResponseStatusCode.INVALID_JSON_SCHEMA_FROM_INPUT_CATEGORIES,
@@ -47,6 +55,22 @@ public static class Art7HttpResponseManager
                 AppCode = Art7HttpResponse.GetAppCode(Art7ResponseStatusCode.INVALID_FILE_EXTENSION),
                 HttpCode = StatusCodes.Status400BadRequest,
             });
+
+        _dictionary.TryAdd(
+            key: Art7ResponseStatusCode.INVALID_FILE_FORMAT,
+            value: (response) => new()
+            {
+                AppCode = Art7HttpResponse.GetAppCode(Art7ResponseStatusCode.INVALID_FILE_FORMAT),
+                HttpCode = StatusCodes.Status400BadRequest,
+            });
+
+        _dictionary.TryAdd(
+            key: Art7ResponseStatusCode.FILE_SIZE_IS_EXCEED_THE_LIMIT,
+            value: (response) => new()
+            {
+                AppCode = Art7HttpResponse.GetAppCode(Art7ResponseStatusCode.FILE_SIZE_IS_EXCEED_THE_LIMIT),
+                HttpCode = StatusCodes.Status400BadRequest,
+            });
     }
 
     internal static Func<Art7Response, Art7HttpResponse> Resolve(Art7ResponseStatusCode statusCode)
@@ -56,6 +80,13 @@ public static class Art7HttpResponseManager
             Init();
         }
 
-        return _dictionary[statusCode];
+        var keyExisted = _dictionary.TryGetValue(statusCode, out var value);
+
+        if (keyExisted)
+        {
+            return value;
+        }
+
+        return _dictionary[Art7ResponseStatusCode.FILE_SERVICE_ERROR];
     }
 }

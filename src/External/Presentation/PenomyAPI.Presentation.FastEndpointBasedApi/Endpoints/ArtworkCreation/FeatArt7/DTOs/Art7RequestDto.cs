@@ -4,8 +4,9 @@ using PenomyAPI.App.Common.Models.Common;
 using PenomyAPI.App.FeatArt7;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
+using PenomyAPI.Domain.RelationalDb.Entities.Contraints.ArtworkCreation;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.Common.DTOs;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt4.Helpers;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Helpers.IFormFiles;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -15,8 +16,6 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.
 
 public sealed class Art7RequestDto
 {
-    private static readonly string[] _validFileExtensions = ["jpg", "png", "jpeg"];
-
     /// <summary>
     ///     A singleton instance of json serializer
     ///     options to reuse for next time.
@@ -40,9 +39,13 @@ public sealed class Art7RequestDto
     ///     This property is store the json value with
     ///     schema as an array of <see cref="CategoryDto"/>.
     /// </summary>
+    [Required]
     public string SelectedCategories { get; set; }
 
     public IEnumerable<CategoryDto> ArtworkCategories { get; private set; }
+
+    [Required]
+    public bool IsCategoriesUpdated { get; set; }
 
     public ArtworkPublicLevel PublicLevel { get; set; }
 
@@ -80,20 +83,6 @@ public sealed class Art7RequestDto
         return true;
     }
 
-    public bool IsValidThumbnailImageFileInput()
-    {
-        var isValidFileExtension = IFormFileHelper.IsValidFileExtension(
-            formFile: ThumbnailImageFile,
-            validFileExtensions: _validFileExtensions);
-
-        if (!isValidFileExtension)
-        {
-            return false;
-        }
-
-        return true;
-    }
-
     public bool IsThumbnailUpdated()
     {
         return ThumbnailImageFile != null;
@@ -103,9 +92,15 @@ public sealed class Art7RequestDto
     {
         try
         {
-            var selectedCategories = JsonSerializer.Deserialize<IEnumerable<CategoryDto>>(
+            var selectedCategories = JsonSerializer.Deserialize<CategoryDto[]>(
                 json: SelectedCategories,
                 options: GetJsonSerializerOptions());
+
+            // If the length of selected categories is equal zero then return false.
+            if (selectedCategories.Length == 0)
+            {
+                return Result<IEnumerable<CategoryDto>>.Failed();
+            }
 
             return Result<IEnumerable<CategoryDto>>.Success(selectedCategories);
         }
@@ -142,22 +137,16 @@ public sealed class Art7RequestDto
             OriginId = OriginId,
             PublicLevel = PublicLevel,
             AllowComment = AllowComment,
-            ArtworkCategories = ArtworkCategories.Select(category => new ArtworkCategory
-            {
-                ArtworkId = ComicId,
-                CategoryId = long.Parse(category.Id),
-            }),
             AuthorName = "Default",
             UpdatedBy = updatedBy,
             ArtworkStatus = ArtworkStatus.OnGoing,
-            IsThumbnailUpdated = IsThumbnailUpdated(),
-            IsCategoriesUpdated = true,
         };
 
+        // Set the thumbnail image file info if update is found.
         if (IsThumbnailUpdated())
         {
             const string thumbnailImageName = "thumbnail";
-            var fileExtension = IFormFileHelper.GetFileExtension(ThumbnailImageFile);
+            var fileExtension = FormFileHelper.Instance.GetFileExtension(ThumbnailImageFile);
 
             request.ThumbnailFileInfo = new ImageFileInfo
             {
@@ -165,6 +154,20 @@ public sealed class Art7RequestDto
                 FileName = $"{thumbnailImageName}.{fileExtension}",
                 FileDataStream = ThumbnailImageFile.OpenReadStream(),
             };
+
+            request.IsThumbnailUpdated = true;
+        }
+
+        // Set the artwork categories if the update is found.
+        if (IsCategoriesUpdated)
+        {
+            request.ArtworkCategories = ArtworkCategories.Select(artworkCategory => new ArtworkCategory
+            {
+                ArtworkId = ComicId,
+                CategoryId = long.Parse(artworkCategory.Id),
+            });
+
+            request.IsCategoriesUpdated = true;
         }
 
         return request;

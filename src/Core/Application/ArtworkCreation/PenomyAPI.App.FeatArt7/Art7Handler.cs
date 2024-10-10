@@ -69,6 +69,7 @@ public sealed class Art7Handler : IFeatureHandler<Art7Request, Art7Response>
             UpdatedAt = updatedAtUtcNow,
         };
 
+        // Update again the category list if any change is found.
         IEnumerable<ArtworkCategory> comicNewCategories = null;
 
         if (requestBody.IsCategoriesUpdated)

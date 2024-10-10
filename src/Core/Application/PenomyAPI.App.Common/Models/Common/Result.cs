@@ -27,7 +27,8 @@
         };
 
         /// <summary>
-        ///     A short hand to create a Failed <see cref="Result{T}"/> instance.
+        ///     A short hand to create a Failed <see cref="Result{T}"/> instance
+        ///     with empty return value.
         /// </summary>
         /// <returns>
         ///     A <see cref="Result{T}"/> with (IsSucess = <see langword="false"/>)
@@ -35,6 +36,19 @@
         public static Result<TValue> Failed() => new(default)
         {
             IsSuccess = false
+        };
+
+        /// <summary>
+        ///     A short hand to create a Failed <see cref="Result{T}"/> instance
+        ///     with return value.
+        /// </summary>
+        /// <returns>
+        ///     A <see cref="Result{T}"/> with (IsSucess = <see langword="false"/>)
+        /// </returns>
+        public static Result<TValue> Failed(TValue value) => new(value)
+        {
+            IsSuccess = false,
+            Value = value
         };
     }
 }

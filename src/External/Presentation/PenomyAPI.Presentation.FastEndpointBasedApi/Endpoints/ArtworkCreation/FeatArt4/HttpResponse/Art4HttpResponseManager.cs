@@ -31,7 +31,15 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.
                 value: (response) => new()
                 {
                     AppCode = Art4HttpResponse.GetAppCode(Art4ResponseStatusCode.DATABASE_ERROR),
-                    HttpCode = StatusCodes.Status400BadRequest,
+                    HttpCode = StatusCodes.Status500InternalServerError,
+                });
+
+            _dictionary.TryAdd(
+                key: Art4ResponseStatusCode.FILE_SERVICE_ERROR,
+                value: (response) => new()
+                {
+                    AppCode = Art4HttpResponse.GetAppCode(Art4ResponseStatusCode.FILE_SERVICE_ERROR),
+                    HttpCode = StatusCodes.Status500InternalServerError,
                 });
 
             _dictionary.TryAdd(
@@ -49,6 +57,23 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.
                     AppCode = Art4HttpResponse.GetAppCode(Art4ResponseStatusCode.INVALID_FILE_EXTENSION),
                     HttpCode = StatusCodes.Status400BadRequest,
                 });
+
+            _dictionary.TryAdd(
+                key: Art4ResponseStatusCode.INVALID_FILE_FORMAT,
+                value: (response) => new()
+                {
+                    AppCode = Art4HttpResponse.GetAppCode(Art4ResponseStatusCode.INVALID_FILE_FORMAT),
+                    HttpCode = StatusCodes.Status400BadRequest,
+                });
+
+
+            _dictionary.TryAdd(
+                key: Art4ResponseStatusCode.FILE_SIZE_IS_EXCEED_THE_LIMIT,
+                value: (response) => new()
+                {
+                    AppCode = Art4HttpResponse.GetAppCode(Art4ResponseStatusCode.FILE_SIZE_IS_EXCEED_THE_LIMIT),
+                    HttpCode = StatusCodes.Status400BadRequest,
+                });
         }
 
         internal static Func<Art4Response, Art4HttpResponse> Resolve(Art4ResponseStatusCode statusCode)
@@ -58,7 +83,12 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.
                 Init();
             }
 
-            return _dictionary[statusCode];
+            if (_dictionary.TryGetValue(statusCode, out var response))
+            {
+                return response;
+            }
+
+            return _dictionary[Art4ResponseStatusCode.FILE_SERVICE_ERROR];
         }
     }
 }
