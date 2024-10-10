@@ -13,6 +13,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="FastEndpoints.Swagger" Version="5.25.0" />
+		<PackageReference Include="File.TypeChecker" Version="4.1.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
 	</ItemGroup>
 

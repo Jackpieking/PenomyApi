@@ -1,17 +1,15 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text.Json;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.Common.FileServices.Models;
 using PenomyAPI.App.Common.Models.Common;
 using PenomyAPI.App.FeatArt4;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.Common.DTOs;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt4.Helpers;
-
-namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt4.DTOs;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Helpers.IFormFiles;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text.Json;
 
 public class Art4RequestDto
 {
@@ -77,29 +75,13 @@ public class Art4RequestDto
         return true;
     }
 
-    public bool IsValidThumbnailImageFileInput()
-    {
-        var isValidFileExtension = IFormFileHelper.IsValidFileExtension(
-            formFile: ThumbnailImageFile,
-            validFileExtensions: _validFileExtensions
-        );
-
-        if (!isValidFileExtension)
-        {
-            return false;
-        }
-
-        return true;
-    }
-
     private Result<IEnumerable<CategoryDto>> DeserializedSelectedCategories()
     {
         try
         {
             var selectedCategories = JsonSerializer.Deserialize<IEnumerable<CategoryDto>>(
                 json: SelectedCategories,
-                options: GetJsonSerializerOptions()
-            );
+                options: GetJsonSerializerOptions());
 
             return Result<IEnumerable<CategoryDto>>.Success(selectedCategories);
         }
@@ -129,7 +111,7 @@ public class Art4RequestDto
     public Art4Request MapToFeatureRequest(long comicId, long createdBy)
     {
         const string thumbnailImageName = "thumbnail";
-        var fileExtension = IFormFileHelper.GetFileExtension(ThumbnailImageFile);
+        var fileExtension = FormFileHelper.Instance.GetFileExtension(ThumbnailImageFile);
 
         return new Art4Request
         {

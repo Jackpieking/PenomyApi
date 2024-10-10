@@ -133,54 +133,29 @@ public sealed class Art7Repository : IArt7Repository
                 cancellationToken
             );
 
+            // Update the detail of the artwork first.
+            await _artworkDbSet
+                .Where(predicate: updatedComic => updatedComic.Id == updateDetail.Id)
+                .ExecuteUpdateAsync(
+                    setPropertyCalls: updatedComic => updatedComic
+                        .SetProperty(comic => comic.Title, updateDetail.Title)
+                        .SetProperty(comic => comic.ArtworkOriginId, updateDetail.ArtworkOriginId)
+                        .SetProperty(comic => comic.Introduction, updateDetail.Introduction)
+                        .SetProperty(comic => comic.ArtworkStatus, updateDetail.ArtworkStatus)
+                        .SetProperty(comic => comic.PublicLevel, updateDetail.PublicLevel)
+                        .SetProperty(comic => comic.AllowComment, updateDetail.AllowComment)
+                        .SetProperty(comic => comic.UpdatedAt, updateDetail.UpdatedAt),
+                    cancellationToken: cancellationToken);
+
             // If thumbnail is updated, then update the thumbnail url of the comic.
             if (isThumbnailUpdated)
             {
                 await _artworkDbSet
                     .Where(predicate: updatedComic => updatedComic.Id == updateDetail.Id)
                     .ExecuteUpdateAsync(
-                        setPropertyCalls: updatedComic =>
-                            updatedComic
-                                .SetProperty(comic => comic.Title, updateDetail.Title)
-                                .SetProperty(
-                                    comic => comic.ArtworkOriginId,
-                                    updateDetail.ArtworkOriginId
-                                )
-                                .SetProperty(comic => comic.Introduction, updateDetail.Introduction)
-                                .SetProperty(comic => comic.ThumbnailUrl, updateDetail.ThumbnailUrl)
-                                .SetProperty(
-                                    comic => comic.ArtworkStatus,
-                                    updateDetail.ArtworkStatus
-                                )
-                                .SetProperty(comic => comic.PublicLevel, updateDetail.PublicLevel)
-                                .SetProperty(comic => comic.AllowComment, updateDetail.AllowComment)
-                                .SetProperty(comic => comic.UpdatedAt, updateDetail.UpdatedAt),
-                        cancellationToken: cancellationToken
-                    );
-            }
-            // Else, no update for the thumbnail url of the comic.
-            else
-            {
-                await _artworkDbSet
-                    .Where(predicate: updatedComic => updatedComic.Id == updateDetail.Id)
-                    .ExecuteUpdateAsync(
-                        setPropertyCalls: updatedComic =>
-                            updatedComic
-                                .SetProperty(comic => comic.Title, updateDetail.Title)
-                                .SetProperty(
-                                    comic => comic.ArtworkOriginId,
-                                    updateDetail.ArtworkOriginId
-                                )
-                                .SetProperty(comic => comic.Introduction, updateDetail.Introduction)
-                                .SetProperty(
-                                    comic => comic.ArtworkStatus,
-                                    updateDetail.ArtworkStatus
-                                )
-                                .SetProperty(comic => comic.PublicLevel, updateDetail.PublicLevel)
-                                .SetProperty(comic => comic.AllowComment, updateDetail.AllowComment)
-                                .SetProperty(comic => comic.UpdatedAt, updateDetail.UpdatedAt),
-                        cancellationToken: cancellationToken
-                    );
+                        setPropertyCalls: updatedComic => updatedComic
+                            .SetProperty(comic => comic.ThumbnailUrl, updateDetail.ThumbnailUrl),
+                        cancellationToken: cancellationToken);
             }
 
             // Update the category list if it has any update.
