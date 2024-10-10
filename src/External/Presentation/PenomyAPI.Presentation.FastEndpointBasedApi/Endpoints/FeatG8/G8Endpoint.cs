@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
-using PenomyAPI.App.FeatG5;
 using PenomyAPI.App.FeatG8;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG8.DTOs;
@@ -30,7 +29,7 @@ public class G8Endpoint : Endpoint<G8Request, G8HttpResponse>
             summary.Description = "This endpoint is used for get artwork chapters";
             summary.Response<G8HttpResponse>(
                 description: "Represent successful operation response.",
-                example: new() { AppCode = G5ResponseStatusCode.SUCCESS.ToString() }
+                example: new() { AppCode = G8ResponseStatusCode.SUCCESS.ToString() }
             );
         });
     }

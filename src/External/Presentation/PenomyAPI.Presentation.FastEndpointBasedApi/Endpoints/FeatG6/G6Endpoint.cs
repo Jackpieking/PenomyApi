@@ -4,18 +4,19 @@ using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
-using PenomyAPI.App.FeatG7;
+using PenomyAPI.APP.FeatG6;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG7.DTOs;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG7.HttpResponse;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG6.DTOs;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG6.HttpResponse;
+using ArtworkDto = PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG6.DTOs.ArtworkDto;
 
-namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG7;
+namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG6;
 
-public class G7Endpoint : Endpoint<G7Request, G7HttpResponse>
+public class G6Endpoint : Endpoint<G6Request, G6HttpResponse>
 {
     public override void Configure()
     {
-        Get("/g7/artwork-recommend");
+        Get("/g6/artwork-recommend");
 
         AllowAnonymous();
 
@@ -30,33 +31,28 @@ public class G7Endpoint : Endpoint<G7Request, G7HttpResponse>
                 "Endpoint for get list of artworks have the same series as current artwork";
             summary.Description =
                 "This endpoint is used for get list of artworks have the same series as current artwork";
-            summary.Response<G7HttpResponse>(
+            summary.Response<G6HttpResponse>(
                 description: "Represent successful operation response.",
-                example: new() { AppCode = G7ResponseStatusCode.SUCCESS.ToString() }
+                example: new() { AppCode = G6ResponseStatusCode.SUCCESS.ToString() }
             );
         });
     }
 
-    public override async Task<G7HttpResponse> ExecuteAsync(
-        G7Request requestDto,
+    public override async Task<G6HttpResponse> ExecuteAsync(
+        G6Request requestDto,
         CancellationToken ct
     )
     {
-        var httpResponse = new G7HttpResponse();
+        var httpResponse = new G6HttpResponse();
 
-        var g7Req = new G7Request
-        {
-            Id = requestDto.Id,
-            PageSize = requestDto.PageSize,
-            StartPage = requestDto.StartPage
-        };
+        var g6Req = new G6Request { Top = requestDto.Top, };
 
         // Get FeatureHandler response.
-        var featResponse = await FeatureExtensions.ExecuteAsync<G7Request, G7Response>(g7Req, ct);
+        var featResponse = await FeatureExtensions.ExecuteAsync<G6Request, G6Response>(g6Req, ct);
 
-        httpResponse = G7ResponseManager
+        httpResponse = G6ResponseManager
             .Resolve(featResponse.StatusCode)
-            .Invoke(g7Req, featResponse);
+            .Invoke(g6Req, featResponse);
 
         if (featResponse.IsSuccess && featResponse.Result.Count > 0)
         {
@@ -77,7 +73,7 @@ public class G7Endpoint : Endpoint<G7Request, G7HttpResponse>
                     }
                 );
             }
-            httpResponse.Body = new G7ResponseDto { Result = g7ResponseDtos };
+            httpResponse.Body = new G6ResponseDto { Result = g7ResponseDtos };
             return httpResponse;
         }
         await SendAsync(httpResponse, httpResponse.HttpCode, ct);
