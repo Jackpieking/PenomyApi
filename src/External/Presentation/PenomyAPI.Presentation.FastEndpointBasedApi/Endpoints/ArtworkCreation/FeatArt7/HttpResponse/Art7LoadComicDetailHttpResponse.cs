@@ -8,6 +8,6 @@ public class Art7LoadComicDetailHttpResponse : AppHttpResponse<Art7LoadComicDeta
 {
     public static string GetAppCode(Art7LoadComicDetailResponseStatusCode responseStatusCode)
     {
-        return $"Art7.LoadComicDetail.{responseStatusCode}.{(int) responseStatusCode}";
+        return $"Art7.LoadComicDetail.{responseStatusCode}.{(int)responseStatusCode}";
     }
 }

@@ -1,9 +1,9 @@
-using Microsoft.EntityFrameworkCore;
-using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
-using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
+using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
 
@@ -36,7 +36,10 @@ public class FeatG3Repository : IFeatG3Repository
                     AverageStarRate = a.ArtworkMetaData.AverageStarRate
                 }
             })
-            .OrderByDescending(a => a.UpdatedAt).Take(20).AsNoTracking().ToListAsync();
+            .OrderByDescending(a => a.UpdatedAt)
+            .Take(20)
+            .AsNoTracking()
+            .ToListAsync();
         return result;
     }
 }

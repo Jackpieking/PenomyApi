@@ -54,8 +54,6 @@ public abstract class AppFileInfo
             FileDataStream.Close();
             FileDataStream.Dispose();
         }
-        catch
-        {
-        }
+        catch { }
     }
 }

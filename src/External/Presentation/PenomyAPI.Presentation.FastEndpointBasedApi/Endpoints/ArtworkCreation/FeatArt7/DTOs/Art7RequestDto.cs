@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text.Json;
+using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.Common.FileServices.Models;
 using PenomyAPI.App.Common.Models.Common;
 using PenomyAPI.App.FeatArt7;
@@ -6,10 +10,6 @@ using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.Common.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt4.Helpers;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text.Json;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt7.DTOs;
 
@@ -51,7 +51,7 @@ public sealed class Art7RequestDto
     public bool ConfirmPolicy { get; set; }
 
     /// <summary>
-    ///     Check if the input selected categories have 
+    ///     Check if the input selected categories have
     ///     valid json schema or not to parse.
     /// </summary>
     /// <returns>
@@ -84,7 +84,8 @@ public sealed class Art7RequestDto
     {
         var isValidFileExtension = IFormFileHelper.IsValidFileExtension(
             formFile: ThumbnailImageFile,
-            validFileExtensions: _validFileExtensions);
+            validFileExtensions: _validFileExtensions
+        );
 
         if (!isValidFileExtension)
         {
@@ -105,7 +106,8 @@ public sealed class Art7RequestDto
         {
             var selectedCategories = JsonSerializer.Deserialize<IEnumerable<CategoryDto>>(
                 json: SelectedCategories,
-                options: GetJsonSerializerOptions());
+                options: GetJsonSerializerOptions()
+            );
 
             return Result<IEnumerable<CategoryDto>>.Success(selectedCategories);
         }

@@ -1,11 +1,10 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Entities.Generic;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
 
@@ -39,13 +38,10 @@ public class G10Repository : IG10Repository
                 TotalLikes = c.TotalLikes,
                 CreatedAt = c.CreatedAt,
                 UpdatedAt = c.UpdatedAt,
-                Creator = new UserProfile
-                {
-                    NickName = c.Creator.NickName
-                },
-
-
-            }).AsNoTracking().ToListAsync();
+                Creator = new UserProfile { NickName = c.Creator.NickName },
+            })
+            .AsNoTracking()
+            .ToListAsync();
         return result;
     }
 }

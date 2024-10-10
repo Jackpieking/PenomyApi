@@ -1,9 +1,9 @@
-﻿using PenomyAPI.App.Common;
-using PenomyAPI.Domain.RelationalDb.Repositories.Features.ArtworkCreation;
-using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using PenomyAPI.App.Common;
+using PenomyAPI.Domain.RelationalDb.Repositories.Features.ArtworkCreation;
+using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 
 namespace PenomyAPI.App.FeatArt7.OtherHandlers.LoadComicDetail;
 
@@ -19,14 +19,16 @@ public sealed class Art7LoadComicDetailHandler
 
     public async Task<Art7LoadComicDetailResponse> ExecuteAsync(
         Art7LoadComicDetailRequest request,
-        CancellationToken ct)
+        CancellationToken ct
+    )
     {
         var comicId = request.ComicId;
 
         // Check if the input comic id is existed or not before getting detail.
         var isComicExisted = await _art7Repository.IsComicExistedByIdAsync(
             comicId: request.ComicId,
-            cancellationToken: ct);
+            cancellationToken: ct
+        );
 
         if (!isComicExisted)
         {

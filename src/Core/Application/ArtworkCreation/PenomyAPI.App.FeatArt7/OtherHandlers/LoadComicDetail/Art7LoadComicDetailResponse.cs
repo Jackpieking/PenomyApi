@@ -9,8 +9,6 @@ public sealed class Art7LoadComicDetailResponse : IFeatureResponse
 
     public Art7LoadComicDetailResponseStatusCode StatusCode { get; set; }
 
-    public static readonly Art7LoadComicDetailResponse ComicIdNotFound = new()
-    {
-        StatusCode = Art7LoadComicDetailResponseStatusCode.ID_NOT_FOUND,
-    };
+    public static readonly Art7LoadComicDetailResponse ComicIdNotFound =
+        new() { StatusCode = Art7LoadComicDetailResponseStatusCode.ID_NOT_FOUND, };
 }

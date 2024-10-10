@@ -5,7 +5,7 @@ public enum Art7ResponseStatusCode
     SUCCESS = 0,
 
     COMIC_ID_NOT_FOUND = 1,
-    
+
     DATABASE_ERROR = 2,
 
     FILE_SERVICE_ERROR = 3,
