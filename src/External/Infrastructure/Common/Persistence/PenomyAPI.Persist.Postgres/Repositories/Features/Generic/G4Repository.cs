@@ -1,9 +1,9 @@
-using Microsoft.EntityFrameworkCore;
-using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
-using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
+using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
 
@@ -25,26 +25,24 @@ public class G4Repository : IG4Repository
     public async Task<List<ArtworkCategory>> GetComicsByCategoryAsync(long CategoryId)
     {
         var result = await _artworkCategoryDbSet
-             .Where(c => c.CategoryId == CategoryId)
-             .Select(a => new ArtworkCategory
-             {
-                 Category = new Category
-                 {
-                     Name = a.Category.Name
-                 },
-                 Artwork = new Artwork
-                 {
-
-                     Id = a.Artwork.Id,
-                     Title = a.Artwork.Title,
-                     ThumbnailUrl = a.Artwork.ThumbnailUrl,
-                     ArtworkMetaData = new ArtworkMetaData
-                     {
-                         TotalFavorites = a.Artwork.ArtworkMetaData.TotalFavorites,
-                         AverageStarRate = a.Artwork.ArtworkMetaData.AverageStarRate
-                     }
-                 },
-             }).AsNoTracking().ToListAsync();
+            .Where(c => c.CategoryId == CategoryId)
+            .Select(a => new ArtworkCategory
+            {
+                Category = new Category { Name = a.Category.Name },
+                Artwork = new Artwork
+                {
+                    Id = a.Artwork.Id,
+                    Title = a.Artwork.Title,
+                    ThumbnailUrl = a.Artwork.ThumbnailUrl,
+                    ArtworkMetaData = new ArtworkMetaData
+                    {
+                        TotalFavorites = a.Artwork.ArtworkMetaData.TotalFavorites,
+                        AverageStarRate = a.Artwork.ArtworkMetaData.AverageStarRate
+                    }
+                },
+            })
+            .AsNoTracking()
+            .ToListAsync();
         return result;
     }
 }

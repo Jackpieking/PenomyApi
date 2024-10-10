@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System;
+using Microsoft.Extensions.Configuration;
 using PenomyAPI.Infra.Configuration.Common;
-using System;
 
 namespace PenomyAPI.Infra.Configuration.Options;
 
@@ -22,9 +22,17 @@ public sealed class SnowflakeIdOptions : AppOptions
 
     public override void Bind(IConfiguration configuration)
     {
-        configuration
-            .GetRequiredSection(key: RootSectionName)
-            .Bind(this);
+        configuration.GetRequiredSection(key: RootSectionName).Bind(this);
+
+        Validate();
+    }
+
+    public void Validate()
+    {
+        if (GeneratorId < 0 || EpochYear < 0 || EpochMonth < 0 || EpochDay < 0)
+        {
+            throw new AppOptionBindingException(message: "SnowflakeIdOptions is not valid.");
+        }
     }
 
     public DateTimeOffset GetEpochDateTimeOffset()

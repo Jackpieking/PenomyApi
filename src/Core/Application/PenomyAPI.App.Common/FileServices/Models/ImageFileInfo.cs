@@ -1,6 +1,3 @@
-﻿namespace PenomyAPI.App.Common.FileServices.Models
-{
-    public sealed class ImageFileInfo : AppFileInfo
-    {
-    }
-}
+﻿namespace PenomyAPI.App.Common.FileServices.Models;
+
+public sealed class ImageFileInfo : AppFileInfo { }

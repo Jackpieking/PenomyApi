@@ -4,7 +4,6 @@ using PenomyAPI.App.Common.Models.Common;
 using PenomyAPI.App.FeatArt7;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
-using PenomyAPI.Domain.RelationalDb.Entities.Contraints.ArtworkCreation;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.Common.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Helpers.IFormFiles;
 using System.Collections.Generic;
@@ -54,7 +53,7 @@ public sealed class Art7RequestDto
     public bool ConfirmPolicy { get; set; }
 
     /// <summary>
-    ///     Check if the input selected categories have 
+    ///     Check if the input selected categories have
     ///     valid json schema or not to parse.
     /// </summary>
     /// <returns>
@@ -94,7 +93,8 @@ public sealed class Art7RequestDto
         {
             var selectedCategories = JsonSerializer.Deserialize<CategoryDto[]>(
                 json: SelectedCategories,
-                options: GetJsonSerializerOptions());
+                options: GetJsonSerializerOptions()
+            );
 
             // If the length of selected categories is equal zero then return false.
             if (selectedCategories.Length == 0)

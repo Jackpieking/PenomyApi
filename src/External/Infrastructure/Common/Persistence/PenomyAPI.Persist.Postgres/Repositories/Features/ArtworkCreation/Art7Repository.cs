@@ -1,13 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using PenomyAPI.App.Common.Models.Common;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.ArtworkCreation;
 using PenomyAPI.Persist.Postgres.Repositories.Helpers;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.ArtworkCreation;
 
@@ -28,19 +28,19 @@ public sealed class Art7Repository : IArt7Repository
         _originDbSet = dbContext.Set<ArtworkOrigin>();
     }
 
-    public async Task<IEnumerable<Category>> GetAllCategoriesAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<Category>> GetAllCategoriesAsync(
+        CancellationToken cancellationToken
+    )
     {
         return await _categoryDbSet
             .AsNoTracking()
-            .Select(category => new Category
-            {
-                Id = category.Id,
-                Name = category.Name,
-            })
+            .Select(category => new Category { Id = category.Id, Name = category.Name, })
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<ArtworkOrigin>> GetAllOriginsAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<ArtworkOrigin>> GetAllOriginsAsync(
+        CancellationToken cancellationToken
+    )
     {
         return await _originDbSet
             .AsNoTracking()
@@ -53,9 +53,7 @@ public sealed class Art7Repository : IArt7Repository
             .ToListAsync(cancellationToken);
     }
 
-    public Task<Artwork> GetComicDetailByIdAsync(
-        long comicId,
-        CancellationToken cancellationToken)
+    public Task<Artwork> GetComicDetailByIdAsync(long comicId, CancellationToken cancellationToken)
     {
         return _artworkDbSet
             .AsNoTracking()
@@ -70,11 +68,13 @@ public sealed class Art7Repository : IArt7Repository
                 UpdatedAt = comic.UpdatedAt,
                 PublicLevel = comic.PublicLevel,
                 ArtworkStatus = comic.ArtworkStatus,
-                ArtworkCategories = comic.ArtworkCategories.Select(artworkCategory => new ArtworkCategory
-                {
-                    ArtworkId = artworkCategory.ArtworkId,
-                    CategoryId = artworkCategory.CategoryId,
-                }),
+                ArtworkCategories = comic.ArtworkCategories.Select(
+                    artworkCategory => new ArtworkCategory
+                    {
+                        ArtworkId = artworkCategory.ArtworkId,
+                        CategoryId = artworkCategory.CategoryId,
+                    }
+                ),
                 AllowComment = comic.AllowComment,
             })
             .FirstOrDefaultAsync(cancellationToken);
@@ -84,7 +84,8 @@ public sealed class Art7Repository : IArt7Repository
     {
         return _artworkDbSet.AnyAsync(
             predicate: comic => comic.Id == comicId,
-            cancellationToken: cancellationToken);
+            cancellationToken: cancellationToken
+        );
     }
 
     public async Task<bool> UpdateComicAsync(
@@ -92,20 +93,23 @@ public sealed class Art7Repository : IArt7Repository
         IEnumerable<ArtworkCategory> artworkCategories,
         bool isThumbnailUpdated,
         bool isCategoriesUpdated,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken
+    )
     {
         var result = new Result<bool>(false);
 
         var executionStrategy = RepositoryHelper.CreateExecutionStrategy(_dbContext);
 
         await executionStrategy.ExecuteAsync(
-            operation: async () => await InternalUpdateComicAsync(
-                updateDetail: comic,
-                artworkCategories: artworkCategories,
-                isThumbnailUpdated: isThumbnailUpdated,
-                isCategoriesUpdated: isCategoriesUpdated,
-                cancellationToken: cancellationToken,
-                result: result)
+            operation: async () =>
+                await InternalUpdateComicAsync(
+                    updateDetail: comic,
+                    artworkCategories: artworkCategories,
+                    isThumbnailUpdated: isThumbnailUpdated,
+                    isCategoriesUpdated: isCategoriesUpdated,
+                    cancellationToken: cancellationToken,
+                    result: result
+                )
         );
 
         return result.Value;
@@ -117,13 +121,17 @@ public sealed class Art7Repository : IArt7Repository
         bool isThumbnailUpdated,
         bool isCategoriesUpdated,
         CancellationToken cancellationToken,
-        Result<bool> result)
+        Result<bool> result
+    )
     {
         IDbContextTransaction transaction = null;
 
         try
         {
-            transaction = await RepositoryHelper.CreateTransactionAsync(_dbContext, cancellationToken);
+            transaction = await RepositoryHelper.CreateTransactionAsync(
+                _dbContext,
+                cancellationToken
+            );
 
             // Update the detail of the artwork first.
             await _artworkDbSet
@@ -159,7 +167,8 @@ public sealed class Art7Repository : IArt7Repository
 
                 await _artworkCategoryDbSet.AddRangeAsync(
                     entities: artworkCategories,
-                    cancellationToken: cancellationToken);
+                    cancellationToken: cancellationToken
+                );
             }
 
             await _dbContext.SaveChangesAsync(cancellationToken);

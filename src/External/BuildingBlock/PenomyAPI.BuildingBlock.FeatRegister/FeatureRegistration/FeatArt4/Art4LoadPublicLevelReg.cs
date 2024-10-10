@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PenomyAPI.App.FeatArt4.OtherHandlers.LoadPublicLevels;
 using PenomyAPI.BuildingBlock.FeatRegister.FeatureRegistration.Common;
-using System;
 
 namespace PenomyAPI.BuildingBlock.FeatRegister.FeatureRegistration.FeatArt4;
 
@@ -14,7 +14,6 @@ internal sealed class Art4LoadPublicLevelReg : FeatureDefinitionRegistration
 
     public override void AddFeatureDependency(
         IServiceCollection services,
-        IConfiguration configuration)
-    {
-    }
+        IConfiguration configuration
+    ) { }
 }

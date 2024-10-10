@@ -1,5 +1,4 @@
 using PenomyAPI.App.Common;
-using System.Reflection;
 
 namespace PenomyAPI.App.FeatG52;
 

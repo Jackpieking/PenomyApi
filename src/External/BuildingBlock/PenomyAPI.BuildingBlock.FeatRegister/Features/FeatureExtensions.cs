@@ -1,17 +1,20 @@
-using PenomyAPI.App.Common;
-using PenomyAPI.BuildingBlock.FeatRegister.Common;
-using PenomyAPI.BuildingBlock.FeatRegister.FeatureRegistration.Common;
 using System;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
+using PenomyAPI.App.Common;
+using PenomyAPI.BuildingBlock.FeatRegister.Common;
+using PenomyAPI.BuildingBlock.FeatRegister.FeatureRegistration.Common;
 
 namespace PenomyAPI.BuildingBlock.FeatRegister.Features;
 
 public static class FeatureExtensions
 {
     // Container is concurrent because of thread safe in multi-thread case.
-    internal static readonly ConcurrentDictionary<Type, FeatureHandlerDefinition> FeatureHandlerRegistry = new();
+    internal static readonly ConcurrentDictionary<
+        Type,
+        FeatureHandlerDefinition
+    > FeatureHandlerRegistry = new();
 
     public static Task<TResponse> ExecuteAsync<TRequest, TResponse>(
         TRequest request,

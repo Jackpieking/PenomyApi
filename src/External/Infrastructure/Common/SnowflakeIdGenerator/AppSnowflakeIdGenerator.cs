@@ -15,9 +15,10 @@ public sealed class AppSnowflakeIdGenerator : ISnowflakeIdGenerator
 
         var idGeneratorOptions = new IdGeneratorOptions(
             idStructure: IdStructure.Default,
-            timeSource: timeSource);
+            timeSource: timeSource
+        );
 
-        _idGenerator = new IdGenerator(options.GeneratorId, idGeneratorOptions);
+        _idGenerator = new(options.GeneratorId, idGeneratorOptions);
     }
 
     public long Get()

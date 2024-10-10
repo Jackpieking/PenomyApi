@@ -4,7 +4,6 @@ using PenomyAPI.App.Common.Models.Common;
 using PenomyAPI.App.FeatArt4;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
-using PenomyAPI.Domain.RelationalDb.Entities.Contraints.ArtworkCreation;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.Common.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Helpers.IFormFiles;
 using System.Collections.Generic;
@@ -12,132 +11,129 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.Json;
 
-namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt4.DTOs
+public class Art4RequestDto
 {
-    public class Art4RequestDto
+    private static readonly string[] _validFileExtensions = ["jpg", "png", "jpeg"];
+
+    /// <summary>
+    ///     A singleton instance of json serializer
+    ///     options to reuse for next time.
+    /// </summary>
+    private static JsonSerializerOptions _jsonSerializerOptions;
+    private static object _lock = new();
+
+    public string Title { get; set; }
+
+    [Required]
+    public IFormFile ThumbnailImageFile { get; set; }
+
+    public long OriginId { get; set; }
+
+    public string Introduction { get; set; }
+
+    /// <summary>
+    ///     This property is store the json value with
+    ///     schema as an array of <see cref="CategoryDto"/>.
+    /// </summary>
+    public string SelectedCategories { get; set; }
+
+    public IEnumerable<CategoryDto> ArtworkCategories { get; private set; }
+
+    public ArtworkPublicLevel PublicLevel { get; set; }
+
+    public bool AllowComment { get; set; }
+
+    public bool ConfirmPolicy { get; set; }
+
+    /// <summary>
+    ///     Check if the input selected categories have
+    ///     valid json schema or not to parse.
+    /// </summary>
+    /// <returns>
+    ///     (bool) result indicate the valid of the input.
+    /// </returns>
+    public bool IsValidSelectedCategoriesInput()
     {
-        private static readonly string[] _validFileExtensions = ["jpg", "png", "jpeg"];
+        var deserializedResult = DeserializedSelectedCategories();
 
-        /// <summary>
-        ///     A singleton instance of json serializer
-        ///     options to reuse for next time.
-        /// </summary>
-        private static JsonSerializerOptions _jsonSerializerOptions;
-        private static object _lock = new();
-
-        public string Title { get; set; }
-
-        [Required]
-        public IFormFile ThumbnailImageFile { get; set; }
-
-        public long OriginId { get; set; }
-
-        public string Introduction { get; set; }
-
-        /// <summary>
-        ///     This property is store the json value with
-        ///     schema as an array of <see cref="CategoryDto"/>.
-        /// </summary>
-        public string SelectedCategories { get; set; }
-
-        public IEnumerable<CategoryDto> ArtworkCategories { get; private set; }
-
-        public ArtworkPublicLevel PublicLevel { get; set; }
-
-        public bool AllowComment { get; set; }
-
-        public bool ConfirmPolicy { get; set; }
-
-        /// <summary>
-        ///     Check if the input selected categories have 
-        ///     valid json schema or not to parse.
-        /// </summary>
-        /// <returns>
-        ///     (bool) result indicate the valid of the input.
-        /// </returns>
-        public bool IsValidSelectedCategoriesInput()
+        if (!deserializedResult.IsSuccess)
         {
-            var deserializedResult = DeserializedSelectedCategories();
+            return false;
+        }
 
-            if (!deserializedResult.IsSuccess)
+        ArtworkCategories = deserializedResult.Value;
+
+        // Check if any input category id is invalid format or not.
+        foreach (var item in ArtworkCategories)
+        {
+            if (!long.TryParse(item.Id, out _))
             {
                 return false;
             }
-
-            ArtworkCategories = deserializedResult.Value;
-
-            // Check if any input category id is invalid format or not.
-            foreach (var item in ArtworkCategories)
-            {
-                if (!long.TryParse(item.Id, out _))
-                {
-                    return false;
-                }
-            }
-
-            return true;
         }
 
-        private Result<IEnumerable<CategoryDto>> DeserializedSelectedCategories()
+        return true;
+    }
+
+    private Result<IEnumerable<CategoryDto>> DeserializedSelectedCategories()
+    {
+        try
         {
-            try
-            {
-                var selectedCategories = JsonSerializer.Deserialize<IEnumerable<CategoryDto>>(
-                    json: SelectedCategories,
-                    options: GetJsonSerializerOptions());
+            var selectedCategories = JsonSerializer.Deserialize<IEnumerable<CategoryDto>>(
+                json: SelectedCategories,
+                options: GetJsonSerializerOptions());
 
-                return Result<IEnumerable<CategoryDto>>.Success(selectedCategories);
-            }
-            catch
-            {
-                return Result<IEnumerable<CategoryDto>>.Failed();
-            }
+            return Result<IEnumerable<CategoryDto>>.Success(selectedCategories);
         }
-
-        public static JsonSerializerOptions GetJsonSerializerOptions()
+        catch
         {
-            lock (_lock)
-            {
-                if (Equals(_jsonSerializerOptions, null))
-                {
-                    _jsonSerializerOptions = new JsonSerializerOptions
-                    {
-                        AllowTrailingCommas = true,
-                        PropertyNameCaseInsensitive = true
-                    };
-                }
-            }
-
-            return _jsonSerializerOptions;
+            return Result<IEnumerable<CategoryDto>>.Failed();
         }
+    }
 
-        public Art4Request MapToFeatureRequest(long comicId, long createdBy)
+    public static JsonSerializerOptions GetJsonSerializerOptions()
+    {
+        lock (_lock)
         {
-            const string thumbnailImageName = "thumbnail";
-            var fileExtension = FormFileHelper.Instance.GetFileExtension(ThumbnailImageFile);
-
-            return new Art4Request
+            if (Equals(_jsonSerializerOptions, null))
             {
-                ComicId = comicId,
-                Title = Title,
-                Introduction = Introduction,
-                OriginId = OriginId,
-                PublicLevel = PublicLevel,
-                AllowComment = AllowComment,
-                ArtworkCategories = ArtworkCategories.Select(category => new ArtworkCategory
+                _jsonSerializerOptions = new JsonSerializerOptions
                 {
-                    ArtworkId = comicId,
-                    CategoryId = long.Parse(category.Id),
-                }),
-                AuthorName = "Default",
-                CreatedBy = createdBy,
-                ThumbnailFileInfo = new ImageFileInfo
-                {
-                    FileId = comicId.ToString(),
-                    FileName = $"{thumbnailImageName}.{fileExtension}",
-                    FileDataStream = ThumbnailImageFile.OpenReadStream(),
-                }
-            };
+                    AllowTrailingCommas = true,
+                    PropertyNameCaseInsensitive = true
+                };
+            }
         }
+
+        return _jsonSerializerOptions;
+    }
+
+    public Art4Request MapToFeatureRequest(long comicId, long createdBy)
+    {
+        const string thumbnailImageName = "thumbnail";
+        var fileExtension = FormFileHelper.Instance.GetFileExtension(ThumbnailImageFile);
+
+        return new Art4Request
+        {
+            ComicId = comicId,
+            Title = Title,
+            Introduction = Introduction,
+            OriginId = OriginId,
+            PublicLevel = PublicLevel,
+            AllowComment = AllowComment,
+            ArtworkCategories = ArtworkCategories.Select(category => new ArtworkCategory
+            {
+                ArtworkId = comicId,
+                CategoryId = long.Parse(category.Id),
+            }),
+            AuthorName = "Default",
+            CreatedBy = createdBy,
+            ThumbnailFileInfo = new ImageFileInfo
+            {
+                FileId = comicId.ToString(),
+                FileName = $"{thumbnailImageName}.{fileExtension}",
+                FileDataStream = ThumbnailImageFile.OpenReadStream(),
+            }
+        };
     }
 }

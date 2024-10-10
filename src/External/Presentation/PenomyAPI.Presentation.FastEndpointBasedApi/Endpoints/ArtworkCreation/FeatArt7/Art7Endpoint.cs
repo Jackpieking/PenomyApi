@@ -48,7 +48,10 @@ public sealed class Art7Endpoint : Endpoint<Art7RequestDto, Art7HttpResponse>
         });
     }
 
-    public override async Task<Art7HttpResponse> ExecuteAsync(Art7RequestDto requestDto, CancellationToken ct)
+    public override async Task<Art7HttpResponse> ExecuteAsync(
+        Art7RequestDto requestDto,
+        CancellationToken ct
+    )
     {
         Art7HttpResponse httpResponse;
 

@@ -1,14 +1,17 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using System.Collections.Concurrent;
+using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatArt7;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt7.HttpResponse;
-using System;
-using System.Collections.Concurrent;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt7.HttpResponseManagers;
 
 public static class Art7HttpResponseManager
 {
-    private static ConcurrentDictionary<Art7ResponseStatusCode, Func<Art7Response, Art7HttpResponse>> _dictionary;
+    private static ConcurrentDictionary<
+        Art7ResponseStatusCode,
+        Func<Art7Response, Art7HttpResponse>
+    > _dictionary;
 
     private static void Init()
     {
@@ -42,11 +45,15 @@ public static class Art7HttpResponseManager
 
         _dictionary.TryAdd(
             key: Art7ResponseStatusCode.INVALID_JSON_SCHEMA_FROM_INPUT_CATEGORIES,
-            value: (response) => new()
-            {
-                AppCode = Art7HttpResponse.GetAppCode(Art7ResponseStatusCode.INVALID_JSON_SCHEMA_FROM_INPUT_CATEGORIES),
-                HttpCode = StatusCodes.Status400BadRequest,
-            });
+            value: (response) =>
+                new()
+                {
+                    AppCode = Art7HttpResponse.GetAppCode(
+                        Art7ResponseStatusCode.INVALID_JSON_SCHEMA_FROM_INPUT_CATEGORIES
+                    ),
+                    HttpCode = StatusCodes.Status400BadRequest,
+                }
+        );
 
         _dictionary.TryAdd(
             key: Art7ResponseStatusCode.INVALID_FILE_EXTENSION,

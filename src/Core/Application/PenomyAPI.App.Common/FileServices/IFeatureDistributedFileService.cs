@@ -1,18 +1,18 @@
-﻿using PenomyAPI.App.Common.FileServices.Models;
-using PenomyAPI.App.Common.Models.Common;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using PenomyAPI.App.Common.FileServices.Models;
+using PenomyAPI.App.Common.Models.Common;
 
 namespace PenomyAPI.App.Common.FileServices;
 
 /// <summary>
-///     The base generic interface to implement the 
+///     The base generic interface to implement the
 ///     basic features of any distributed file service.
 /// </summary>
 /// <typeparam name="TFeatureHandler">
 ///     The feature handler that will implement this interface logic.
-///     <br/> Implementation version with type <see cref="IFeatureHandler{TRequest, TResponse}"/> 
+///     <br/> Implementation version with type <see cref="IFeatureHandler{TRequest, TResponse}"/>
 ///     will be used as a default file distributed service.
 /// </typeparam>
 /// <typeparam name="TRequest">
@@ -35,9 +35,7 @@ public interface IFeatureDistributedFileService<TFeatureHandler, TRequest, TResp
     /// <returns>
     ///     The result (<see langword="bool"/>) of folder creation.
     /// </returns>
-    Task<bool> CreateFolderAsync(
-        AppFolderInfo folderInfo,
-        CancellationToken cancellationToken);
+    Task<bool> CreateFolderAsync(AppFolderInfo folderInfo, CancellationToken cancellationToken);
 
     /// <summary>
     ///     Upload a file on the storage with input <paramref name="fileInfo"/>.
@@ -57,12 +55,14 @@ public interface IFeatureDistributedFileService<TFeatureHandler, TRequest, TResp
     Task<Result<AppFileInfo>> UploadFileAsync(
         AppFileInfo fileInfo,
         bool overwrite,
-        CancellationToken cancellationToken);
+        CancellationToken cancellationToken
+    );
 
     Task<Result<IEnumerable<AppFileInfo>>> UploadMultipleFilesAsync(
         IEnumerable<AppFileInfo> fileInfos,
         bool overwrite,
-        CancellationToken cancellationToken);
+        CancellationToken cancellationToken
+    );
 
     /// <summary>
     ///     Delete the specified file with input <paramref name="fileInfo"/>
@@ -74,9 +74,7 @@ public interface IFeatureDistributedFileService<TFeatureHandler, TRequest, TResp
     /// <returns>
     ///     The result (bool) of the deletion.
     /// </returns>
-    Task<bool> DeleteFileAsync(
-        AppFileInfo fileInfo,
-        CancellationToken cancellationToken);
+    Task<bool> DeleteFileAsync(AppFileInfo fileInfo, CancellationToken cancellationToken);
 
     /// <summary>
     ///     Delete the specified file with input <paramref name="fileId"/>

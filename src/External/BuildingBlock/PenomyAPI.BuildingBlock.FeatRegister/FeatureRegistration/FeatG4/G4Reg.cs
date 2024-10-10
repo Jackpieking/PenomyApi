@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PenomyAPI.App.FeatG4;
 using PenomyAPI.BuildingBlock.FeatRegister.FeatureRegistration.Common;
-using System;
 
 namespace PenomyAPI.BuildingBlock.FeatRegister.FeatureRegistration.FeatG4
 {
@@ -12,8 +12,9 @@ namespace PenomyAPI.BuildingBlock.FeatRegister.FeatureRegistration.FeatG4
 
         public override Type FeatHandlerType => typeof(G4Handler);
 
-        public override void AddFeatureDependency(IServiceCollection services, IConfiguration configuration)
-        {
-        }
+        public override void AddFeatureDependency(
+            IServiceCollection services,
+            IConfiguration configuration
+        ) { }
     }
 }

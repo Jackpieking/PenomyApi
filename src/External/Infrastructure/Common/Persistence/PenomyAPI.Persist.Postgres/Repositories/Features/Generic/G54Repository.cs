@@ -1,8 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
-using System;
-using System.Threading.Tasks;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
 
@@ -30,6 +29,9 @@ public class G54Repository : IG54Repository
             _dbContext.SaveChanges();
             return Task.FromResult(true);
         }
-        catch { return Task.FromResult(false); }
+        catch
+        {
+            return Task.FromResult(false);
+        }
     }
 }
