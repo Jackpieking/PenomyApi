@@ -42,14 +42,4 @@ if (app.Environment.IsProduction())
     app.UseCors().UseFastEndpoints();
 }
 
-app.MapGet(
-    "/test",
-    async (AppDbContext dbContext) =>
-    {
-        var a = await dbContext.Database.CanConnectAsync();
-
-        return a;
-    }
-);
-
 await app.RunAsync();
