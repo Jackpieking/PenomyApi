@@ -5,8 +5,6 @@ namespace PenomyAPI.Infra.Configuration.Options;
 
 public sealed class CloudinaryOptions : AppOptions
 {
-    private const string RootSectionName = "Cloudinary";
-
     public string ComicRootFolder { get; init; }
 
     public string AnimationRootFolder { get; init; }
@@ -15,6 +13,6 @@ public sealed class CloudinaryOptions : AppOptions
 
     public override void Bind(IConfiguration configuration)
     {
-        configuration.GetRequiredSection(RootSectionName).Bind(this);
+        configuration.GetRequiredSection("Cloudinary").Bind(this);
     }
 }
