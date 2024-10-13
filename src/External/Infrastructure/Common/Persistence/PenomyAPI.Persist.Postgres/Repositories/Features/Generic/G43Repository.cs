@@ -63,13 +63,13 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic
                         ArtworkId = artworkId,
                         ArtworkType = artworkType,
                         StartedAt = DateTime.UtcNow
-                    });
+                    }, ct);
 
                 await _artworkMetaData
                     .Where(o => o.ArtworkId == artworkId)
-                    .ExecuteUpdateAsync(o => o.SetProperty(o => o.TotalFollowers, e => (e.TotalFollowers + 1)));
+                    .ExecuteUpdateAsync(o => o.SetProperty(o => o.TotalFollowers, e => (e.TotalFollowers + 1)), ct);
 
-                await _dbContext.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync(ct);
             }
             catch
             {
