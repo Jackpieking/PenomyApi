@@ -2,6 +2,7 @@
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,12 +13,38 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic
         private readonly DbContext _dbContext;
         private readonly DbSet<UserFollowedArtwork> _userFollowedArtwork;
         private readonly DbSet<ArtworkMetaData> _artworkMetaData;
+        private readonly DbSet<Artwork> _artwork;
 
         public G43Repository(DbContext dbContext)
         {
             _dbContext = dbContext;
             _userFollowedArtwork = dbContext.Set<UserFollowedArtwork>();
             _artworkMetaData = dbContext.Set<ArtworkMetaData>();
+            _artwork = dbContext.Set<Artwork>();
+        }
+
+        public async Task<bool> CheckArtworkExist(long artworkId, ArtworkType artworkType, CancellationToken ct)
+        {
+            if (await _artwork.AsNoTracking().AnyAsync(o => o.Id == artworkId))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> CheckFollowedArtwork(long userId, long artworkId, ArtworkType artworkType, CancellationToken ct)
+        {
+            if (await _userFollowedArtwork.AnyAsync(o => o.ArtworkId == artworkId))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public async Task<bool> FollowArtwork(
@@ -38,23 +65,11 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic
                         StartedAt = DateTime.UtcNow
                     });
 
-                var artWorkMetaData = await _artworkMetaData
-                    .FirstOrDefaultAsync(o => o.ArtworkId == artworkId);
+                await _artworkMetaData
+                    .Where(o => o.ArtworkId == artworkId)
+                    .ExecuteUpdateAsync(o => o.SetProperty(o => o.TotalFollowers, e => (e.TotalFollowers + 1)));
 
-                if (artWorkMetaData == null)
-                {
-                    await _artworkMetaData.AddAsync(new ArtworkMetaData
-                    {
-                        ArtworkId = artworkId,
-                        TotalFollowers = 1
-                    });
-                }
-                else
-                {
-                    artWorkMetaData.TotalFollowers++;
-                }
-
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
             }
             catch
             {
@@ -63,5 +78,6 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic
 
             return true;
         }
+
     }
 }

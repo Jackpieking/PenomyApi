@@ -20,16 +20,22 @@ public class G43Handler : IFeatureHandler<G43Request, G43Response>
     {
         try
         {
+            if (await _g43Repository.CheckArtworkExist(request.ArtworkId, request.ArtworkType, ct)
+                && await _g43Repository.CheckFollowedArtwork(request.UserId, request.ArtworkId, request.ArtworkType, ct))
+            {
+                throw new Exception("Request invalid");
+            }
+
             await _g43Repository.FollowArtwork(
-            request.userId,
-            request.artworkId,
-            request.ArtworkType,
-            ct
+                request.UserId,
+                request.ArtworkId,
+                request.ArtworkType,
+                ct
             );
         }
         catch
         {
-            return new G43Response { IsSuccess = false, StatusCode = G43ResponseStatusCode.FAILED };
+            return new G43Response { IsSuccess = false, StatusCode = G43ResponseStatusCode.INVALID_REQUEST };
         }
 
         return new G43Response { IsSuccess = true, StatusCode = G43ResponseStatusCode.SUCCESS };

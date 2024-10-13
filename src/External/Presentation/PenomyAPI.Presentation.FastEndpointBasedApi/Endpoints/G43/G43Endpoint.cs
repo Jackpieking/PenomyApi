@@ -40,8 +40,8 @@ public class G43Endpoint : Endpoint<G43Request, G43HttpResponse>
     {
         var featRequest = new G43Request
         {
-            userId = requestDto.userId,
-            artworkId = requestDto.artworkId,
+            UserId = requestDto.UserId,
+            ArtworkId = requestDto.ArtworkId,
             ArtworkType = requestDto.ArtworkType,
         };
 
@@ -58,8 +58,9 @@ public class G43Endpoint : Endpoint<G43Request, G43HttpResponse>
         if (featResponse.IsSuccess)
         {
             httpResponse.Body = new G43ResponseDto { Isuccess = true };
-            return httpResponse;
         }
+
+        await SendAsync(httpResponse, httpResponse.HttpCode, ct);
 
         return httpResponse;
     }
