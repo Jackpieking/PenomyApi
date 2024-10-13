@@ -6,10 +6,10 @@ using PenomyAPI.Persist.Postgres.EntityConfigurations.Base;
 
 namespace PenomyAPI.Persist.Postgres.EntityConfigurations.ArtworkCreation;
 
-internal sealed class UserWatchingHistoryEntityConfiguration
-    : IEntityConfiguration<UserWatchingHistory>
+internal sealed class UserRealtimeWatchingHistoryEntityConfiguration
+    : IEntityConfiguration<UserRealtimeWatchingHistory>
 {
-    public void Configure(EntityTypeBuilder<UserWatchingHistory> builder)
+    public void Configure(EntityTypeBuilder<UserRealtimeWatchingHistory> builder)
     {
         builder.ToTable("penomy_user_watching_history");
 

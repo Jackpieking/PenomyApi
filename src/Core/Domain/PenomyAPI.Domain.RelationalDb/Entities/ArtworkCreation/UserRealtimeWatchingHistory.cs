@@ -1,9 +1,9 @@
-﻿using System;
-using PenomyAPI.Domain.RelationalDb.Entities.Base;
+﻿using PenomyAPI.Domain.RelationalDb.Entities.Base;
+using System;
 
 namespace PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 
-public sealed class UserWatchingHistory : EntityWithId<long>
+public sealed class UserRealtimeWatchingHistory : EntityWithId<long>
 {
     public long UserId { get; set; }
 
