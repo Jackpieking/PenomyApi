@@ -29,15 +29,11 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic
                     .Where(o => o.UserId == userId && o.ArtworkId == artworkId)
                     .ExecuteDeleteAsync(ct);
 
-                var artworkMetaData = await _artworkMetaData
-                    .FirstOrDefaultAsync(o => o.ArtworkId == artworkId);
+                await _artworkMetaData
+                    .Where(o => o.ArtworkId == artworkId)
+                    .ExecuteUpdateAsync(o => o.SetProperty(o => o.TotalFollowers, e => e.TotalFollowers - 1), ct);
 
-                if (artworkMetaData != null)
-                {
-                    artworkMetaData.TotalFollowers--;
-                }
-
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync(ct);
             }
             catch
             {

@@ -21,15 +21,15 @@ public class G44Handler : IFeatureHandler<G44Request, G44Response>
         try
         {
             await _g44Repository.UnFollowArtwork(
-            request.userId,
-            request.artworkId,
-            request.ArtworkType,
-            ct
+                request.userId,
+                request.artworkId,
+                request.ArtworkType,
+                ct
             );
         }
         catch
         {
-            return new G44Response { IsSuccess = false, StatusCode = G44ResponseStatusCode.FAILED };
+            return new G44Response { IsSuccess = false, StatusCode = G44ResponseStatusCode.INVALID_REQUEST };
         }
 
         return new G44Response { IsSuccess = true, StatusCode = G44ResponseStatusCode.SUCCESS };

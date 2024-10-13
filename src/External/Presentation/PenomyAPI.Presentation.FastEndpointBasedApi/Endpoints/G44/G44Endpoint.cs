@@ -24,8 +24,8 @@ public class G44Endpoint : Endpoint<G44Request, G44HttpResponse>
 
         Summary(endpointSummary: summary =>
         {
-            summary.Summary = "Endpoint for user follow artwork";
-            summary.Description = "This endpoint is used for user follow artwork";
+            summary.Summary = "Endpoint for user unfollow artwork";
+            summary.Description = "This endpoint is used for user unfollow artwork";
             summary.Response<G44HttpResponse>(
                 description: "Represent successful operation response.",
                 example: new() { AppCode = G44ResponseStatusCode.SUCCESS.ToString() }
@@ -58,8 +58,9 @@ public class G44Endpoint : Endpoint<G44Request, G44HttpResponse>
         if (featResponse.IsSuccess)
         {
             httpResponse.Body = new G44ResponseDto { Isuccess = true };
-            return httpResponse;
         }
+
+        await SendAsync(httpResponse, httpResponse.HttpCode, ct);
 
         return httpResponse;
     }
