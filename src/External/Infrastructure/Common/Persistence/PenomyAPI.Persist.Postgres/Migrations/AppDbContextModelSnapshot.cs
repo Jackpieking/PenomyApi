@@ -17,7 +17,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.8")
+                .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -920,6 +920,31 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.ToTable("penomy_artwork_series", (string)null);
                 });
 
+            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.ArtworkViewStatistic", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ArtworkId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("From")
+                        .HasColumnType("TIMESTAMPTZ");
+
+                    b.Property<DateTime>("To")
+                        .HasColumnType("TIMESTAMPTZ");
+
+                    b.Property<long>("TotalViews")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArtworkId")
+                        .HasAnnotation("Npgsql:CreatedConcurrently", true);
+
+                    b.ToTable("penomy_artwork_view_statistic", (string)null);
+                });
+
             modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.ArtworkViolationFlag", b =>
                 {
                     b.Property<long>("Id")
@@ -1065,6 +1090,34 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.HasIndex("GrantedBy");
 
                     b.ToTable("penomy_creator_collaborated_artwork", (string)null);
+                });
+
+            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.GuestArtworkViewHistory", b =>
+                {
+                    b.Property<long>("GuestId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ArtworkId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("ArtworkType")
+                        .HasColumnType("integer");
+
+                    b.Property<long>("ChapterId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("ViewedAt")
+                        .HasColumnType("TIMESTAMPTZ");
+
+                    b.HasKey("GuestId", "ArtworkId");
+
+                    b.HasIndex("ArtworkId");
+
+                    b.HasIndex("ArtworkType");
+
+                    b.HasIndex("ChapterId");
+
+                    b.ToTable("penomy_guest_artwork_view_history", (string)null);
                 });
 
             modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.OtherInfo", b =>
@@ -1258,7 +1311,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.ToTable("penomy_user_rating_artwork", (string)null);
                 });
 
-            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.UserWatchingHistory", b =>
+            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.UserRealtimeWatchingHistory", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("bigint");
@@ -1693,6 +1746,22 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.HasKey("CreatorId");
 
                     b.ToTable("penomy_creator_profile", (string)null);
+                });
+
+            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.Generic.GuestTracking", b =>
+                {
+                    b.Property<long>("GuestId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("GuestId"));
+
+                    b.Property<DateTime>("LastActiveAt")
+                        .HasColumnType("TIMESTAMPTZ");
+
+                    b.HasKey("GuestId");
+
+                    b.ToTable("penomy_guest_tracking", (string)null);
                 });
 
             modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.Generic.UserBan", b =>
@@ -4031,6 +4100,25 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Navigation("PermissionGrantProvider");
                 });
 
+            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.GuestArtworkViewHistory", b =>
+                {
+                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Artwork", "Artwork")
+                        .WithMany()
+                        .HasForeignKey("ArtworkId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.ArtworkChapter", "Chapter")
+                        .WithMany()
+                        .HasForeignKey("ChapterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Artwork");
+
+                    b.Navigation("Chapter");
+                });
+
             modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.OtherInfo", b =>
                 {
                     b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.SystemManagement.SystemAccount", "Creator")
@@ -4121,10 +4209,10 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Navigation("RatedArtwork");
                 });
 
-            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.UserWatchingHistory", b =>
+            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.UserRealtimeWatchingHistory", b =>
                 {
                     b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Artwork", "Artwork")
-                        .WithMany("UserWatchingHistories")
+                        .WithMany("UserRealtimeWatchingHistories")
                         .HasForeignKey("ArtworkId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -5335,7 +5423,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Navigation("UserRatingArtworks");
 
-                    b.Navigation("UserWatchingHistories");
+                    b.Navigation("UserRealtimeWatchingHistories");
 
                     b.Navigation("ViolationFlags");
                 });

@@ -1,7 +1,7 @@
-using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 
 namespace PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 
@@ -46,7 +46,13 @@ public interface IG25Repository
     ///     Return artworks view history if the user has login.
     ///     Otherwise, false.
     /// </returns>
-    Task<IEnumerable<IEnumerable<UserArtworkViewHistory>>> GetArtworkViewHistories(long userId, ArtworkType artType, CancellationToken ct, int pageNum = 1, int artNum = 20);
+    Task<IEnumerable<IEnumerable<UserArtworkViewHistory>>> GetArtworkViewHistories(
+        long userId,
+        ArtworkType artType,
+        CancellationToken ct,
+        int pageNum = 1,
+        int artNum = 20
+    );
 
     /// <summary>
     ///     Get user artworks view history.
@@ -73,5 +79,12 @@ public interface IG25Repository
     ///     Return artworks view history if the user has login.
     ///     Otherwise, false.
     /// </returns>
-    Task<bool> AddArtworkViewHist(long userId, long artworkId, long chapterId, ArtworkType type, CancellationToken ct, int limitChapter = 5);
+    Task<bool> AddArtworkViewHist(
+        long userId,
+        long artworkId,
+        long chapterId,
+        ArtworkType type,
+        CancellationToken ct,
+        int limitChapter = 5
+    );
 }

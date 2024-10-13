@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG4;
@@ -34,13 +36,13 @@ public class G54Endpoint : Endpoint<G4RequestDto, G4HttpResponse>
 
     public override async Task<G4HttpResponse> ExecuteAsync(G4RequestDto req, CancellationToken ct)
     {
-        var G4Request = new G4Request
-        {
-            Category = req.CategoryId
-        };
+        var G4Request = new G4Request { Category = req.CategoryId };
 
         // Get FeatureHandler response.
-        var featResponse = await FeatureExtensions.ExecuteAsync<G4Request, G4Response>(G4Request, ct);
+        var featResponse = await FeatureExtensions.ExecuteAsync<G4Request, G4Response>(
+            G4Request,
+            ct
+        );
 
         var httpResponse = G4HttpResponseManager
             .Resolve(featResponse.StatusCode)

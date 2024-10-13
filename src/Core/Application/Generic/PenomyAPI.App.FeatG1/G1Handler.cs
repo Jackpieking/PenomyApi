@@ -6,22 +6,23 @@ using PenomyAPI.App.Common;
 using PenomyAPI.App.Common.IdGenerator.Snowflake;
 using PenomyAPI.App.FeatG1.Infrastructures;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
+using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 
 namespace PenomyAPI.App.FeatG1;
 
 public sealed class G1Handler : IFeatureHandler<G1Request, G1Response>
 {
-    private readonly Lazy<IG1Repository> _repository;
+    private readonly IG1Repository _repository;
     private readonly Lazy<IG1PreRegistrationTokenHandler> _preRegistrationTokenHandler;
     private readonly Lazy<ISnowflakeIdGenerator> _snowflakeIdGenerator;
 
     public G1Handler(
-        Lazy<IG1Repository> repository,
+        Lazy<IUnitOfWork> unitOfWork,
         Lazy<IG1PreRegistrationTokenHandler> preRegistrationTokenHandler,
         Lazy<ISnowflakeIdGenerator> snowflakeIdGenerator
     )
     {
-        _repository = repository;
+        _repository = unitOfWork.Value.G1Repository;
         _preRegistrationTokenHandler = preRegistrationTokenHandler;
         _snowflakeIdGenerator = snowflakeIdGenerator;
     }
@@ -29,7 +30,7 @@ public sealed class G1Handler : IFeatureHandler<G1Request, G1Response>
     public async Task<G1Response> ExecuteAsync(G1Request request, CancellationToken ct)
     {
         // Does user exist by email.
-        var isUserFound = await _repository.Value.IsUserFoundByEmailQueryAsync(
+        var isUserFound = await _repository.IsUserFoundByEmailQueryAsync(
             email: request.Email,
             ct: ct
         );
@@ -45,18 +46,10 @@ public sealed class G1Handler : IFeatureHandler<G1Request, G1Response>
             ct
         );
 
-        // Pre generate nick name for new user.
-        // If by somehow id is duplicated (maybe checking db manually).
-        // Please contact project manager.
-        var preGenNickName = GenerateRandomNickNamebaseOnEmail(request.Email);
+        return new() { };
 
-        return new()
-        {
-            PreRegistrationToken = preRegistrationToken,
-            ConfirmedEmail = request.Email,
-            PreGenNickName = preGenNickName,
-            StatusCode = G1ResponseStatusCode.SUCCESS
-        };
+        // TODO: add sending mail.
+        // TODO: complete response
     }
 
     // Why creating interpolated string like this?

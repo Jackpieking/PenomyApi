@@ -4,6 +4,11 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FastEndpoints" Version="5.29.0" />
+    <PackageReference Include="FastEndpoints.Security" Version="5.29.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -13,7 +18,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="FastEndpoints.Swagger" Version="5.25.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
+		<PackageReference Include="File.TypeChecker" Version="4.1.1" />
 	</ItemGroup>
 
 	<ItemGroup>

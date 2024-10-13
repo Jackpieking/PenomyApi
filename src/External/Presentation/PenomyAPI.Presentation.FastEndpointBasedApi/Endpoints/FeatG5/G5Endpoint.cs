@@ -70,6 +70,7 @@ public class G5Endpoint : Endpoint<G5Request, G5HttpResponse>
                 FavoriteCount = featResponse.Result.ArtworkMetaData.TotalFavorites,
                 ThumbnailUrl = featResponse.Result.ThumbnailUrl,
                 Introduction = featResponse.Result.Introduction,
+                CommentCount = featResponse.Result.ArtworkMetaData.TotalComments,
             };
         }
         await SendAsync(httpResponse, httpResponse.HttpCode, ct);

@@ -2,6 +2,4 @@
 
 namespace PenomyAPI.Infra.FeatArt4;
 
-public class Art4FileService : IArt4FileService
-{
-}
+public class Art4FileService : IArt4FileService { }

@@ -20,26 +20,31 @@ public class G5Handler : IFeatureHandler<G5Request, G5Response>
     public async Task<G5Response> ExecuteAsync(G5Request request, CancellationToken ct)
     {
         Artwork result;
-
-        var rq = request.Id;
-        if (rq == 0)
+        try
         {
-            return new G5Response
+            var rq = request.Id;
+            if (rq == 0)
             {
-                StatusCode = G5ResponseStatusCode.INVALID_REQUEST,
-                IsSuccess = false
-            };
+                return new G5Response
+                {
+                    StatusCode = G5ResponseStatusCode.INVALID_REQUEST,
+                    IsSuccess = false
+                };
+            }
+            if (!await _IG5Repository.IsArtworkExistAsync(rq, ct))
+            {
+                return new G5Response
+                {
+                    StatusCode = G5ResponseStatusCode.NOT_FOUND,
+                    IsSuccess = false
+                };
+            }
+            result = await _IG5Repository.GetArtWorkDetailByIdAsync(rq, ct);
         }
-        if (!await _IG5Repository.IsArtworkExistAsync(rq, ct))
+        catch
         {
-            return new G5Response
-            {
-                StatusCode = G5ResponseStatusCode.NOT_FOUND,
-                IsSuccess = false
-            };
+            return new G5Response { StatusCode = G5ResponseStatusCode.FAILED, IsSuccess = false };
         }
-        result = await _IG5Repository.GetArtWorkDetailByIdAsync(rq, ct);
-
         return new()
         {
             Result = result,

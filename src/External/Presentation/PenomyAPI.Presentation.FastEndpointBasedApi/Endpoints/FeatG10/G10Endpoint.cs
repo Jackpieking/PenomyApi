@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using Microsoft.VisualBasic;
@@ -36,10 +38,7 @@ public class G10Endpoint : Endpoint<G10Request, G10HttpResponse>
 
     public override async Task<G10HttpResponse> ExecuteAsync(G10Request req, CancellationToken ct)
     {
-        var featG10Request = new G10Request
-        {
-            ArtworkId = req.ArtworkId
-        };
+        var featG10Request = new G10Request { ArtworkId = req.ArtworkId };
 
         // Get FeatureHandler response.
         var featResponse = await FeatureExtensions.ExecuteAsync<G10Request, G10Response>(req, ct);

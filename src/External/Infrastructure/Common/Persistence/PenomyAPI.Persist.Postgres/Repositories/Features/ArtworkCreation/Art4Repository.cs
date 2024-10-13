@@ -1,13 +1,13 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using PenomyAPI.App.Common.Models.Common;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.ArtworkCreation;
 using PenomyAPI.Persist.Postgres.Repositories.Helpers;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.ArtworkCreation;
 
@@ -30,20 +30,19 @@ public sealed class Art4Repository : IArt4Repository
         _originDbSet = dbContext.Set<ArtworkOrigin>();
     }
 
-    public async Task<IEnumerable<Category>> GetAllCategoriesAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<Category>> GetAllCategoriesAsync(
+        CancellationToken cancellationToken
+    )
     {
         return await _categoryDbSet
             .AsNoTracking()
-            .Select(category => new Category
-            {
-                Id = category.Id,
-                Name = category.Name,
-            })
+            .Select(category => new Category { Id = category.Id, Name = category.Name, })
             .ToListAsync(cancellationToken);
     }
 
     public async Task<IEnumerable<ArtworkOrigin>> GetAllOriginsAsync(
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken
+    )
     {
         return await _originDbSet
             .AsNoTracking()
@@ -68,12 +67,14 @@ public sealed class Art4Repository : IArt4Repository
         var executionStrategy = RepositoryHelper.CreateExecutionStrategy(_dbContext);
 
         await executionStrategy.ExecuteAsync(
-            operation: async () => await InternalCreateComicAsync(
-                comic: comic,
-                comicMetaData: comicMetaData,
-                artworkCategories: artworkCategories,
-                cancellationToken: cancellationToken,
-                result: result)
+            operation: async () =>
+                await InternalCreateComicAsync(
+                    comic: comic,
+                    comicMetaData: comicMetaData,
+                    artworkCategories: artworkCategories,
+                    cancellationToken: cancellationToken,
+                    result: result
+                )
         );
 
         return result.Value;
@@ -91,7 +92,10 @@ public sealed class Art4Repository : IArt4Repository
 
         try
         {
-            transaction = await RepositoryHelper.CreateTransactionAsync(_dbContext, cancellationToken);
+            transaction = await RepositoryHelper.CreateTransactionAsync(
+                _dbContext,
+                cancellationToken
+            );
 
             await _artworkDbSet.AddAsync(comic, cancellationToken);
 

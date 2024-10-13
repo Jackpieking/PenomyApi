@@ -90,6 +90,6 @@ public class G8Repository : IG8Repository
 
     public Task<bool> IsArtworkExistAsync(long id, CancellationToken token = default)
     {
-        return _dbContext.Set<ArtworkChapter>().AnyAsync(x => x.ArtworkId == id, token);
+        return _dbContext.Set<Artwork>().AnyAsync(x => x.Id == id, token);
     }
 }

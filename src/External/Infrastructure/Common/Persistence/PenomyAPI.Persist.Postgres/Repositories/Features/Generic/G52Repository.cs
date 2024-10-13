@@ -1,8 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
-using PenomyAPI.Infra.Configuration.Options;
-using System.Threading.Tasks;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
 
