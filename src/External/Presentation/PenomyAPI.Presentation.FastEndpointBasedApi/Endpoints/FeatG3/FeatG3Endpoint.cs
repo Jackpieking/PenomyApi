@@ -57,7 +57,7 @@ public class G3Endpoint : Endpoint<EmptyDto, FeatG3HttpResponse>
                 Rating = x.ArtworkMetaData.AverageStarRate,
                 LastUpdateAt = x.UpdatedAt,
                 FlagUrl = x.Origin.ImageUrl
-            }).ToList(),
+            }),
         };
 
         return httpResponse;

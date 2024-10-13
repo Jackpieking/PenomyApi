@@ -1,14 +1,9 @@
-using System.Threading;
-using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
-using Microsoft.VisualBasic;
 using PenomyAPI.App.FeatG10;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG10.HttpResponse;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G10.DTOs;
-using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3;
