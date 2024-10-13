@@ -11,6 +11,7 @@
 *.sln.docstates
 
 # Setting files
+appsetting.json
 appsettings.json
 appsettings.Development.json
 
