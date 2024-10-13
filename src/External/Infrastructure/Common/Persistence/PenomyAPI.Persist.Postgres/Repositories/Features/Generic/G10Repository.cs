@@ -38,10 +38,15 @@ public class G10Repository : IG10Repository
                 TotalLikes = c.TotalLikes,
                 CreatedAt = c.CreatedAt,
                 UpdatedAt = c.UpdatedAt,
-                Creator = new UserProfile { NickName = c.Creator.NickName },
-            })
-            .AsNoTracking()
-            .ToListAsync();
+                Creator = new UserProfile
+                {
+                    NickName = c.Creator.NickName,
+                    AvatarUrl = c.Creator.AvatarUrl,
+                },
+
+
+
+            }).AsNoTracking().ToListAsync();
         return result;
     }
 }

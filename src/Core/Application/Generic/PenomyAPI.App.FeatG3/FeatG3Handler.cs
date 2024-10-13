@@ -1,4 +1,7 @@
-﻿using System;
+﻿using PenomyAPI.App.Common;
+using PenomyAPI.App.Common.IdGenerator.Snowflake;
+using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using PenomyAPI.App.Common;
@@ -19,7 +22,6 @@ public class FeatG3Handler : IFeatureHandler<FeatG3Request, FeatG3Response>
     {
         var unitOfWork = _unitOfWork.Value;
         var result = await unitOfWork.FeatG3Repository.GetRecentlyUpdatedComicsAsync();
-
         return new FeatG3Response
         {
             ArtworkList = result,

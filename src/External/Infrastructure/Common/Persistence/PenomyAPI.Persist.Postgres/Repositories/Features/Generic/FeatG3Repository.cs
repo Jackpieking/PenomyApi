@@ -23,13 +23,18 @@ public class FeatG3Repository : IFeatG3Repository
     public async Task<List<Artwork>> GetRecentlyUpdatedComicsAsync()
     {
         var result = await _artworkDbSet
-            //.Where(a => a.ArtworkType == 1)
+            .Where(a => a.ArtworkType == ArtworkType.Comic && a.IsTemporarilyRemoved == false)
             .Select(a => new Artwork()
             {
                 Id = a.Id,
                 Title = a.Title,
                 ThumbnailUrl = a.ThumbnailUrl,
                 UpdatedAt = a.UpdatedAt,
+                AuthorName = a.AuthorName,
+                Origin = new ArtworkOrigin
+                {
+                    ImageUrl = a.Origin.ImageUrl
+                },
                 ArtworkMetaData = new ArtworkMetaData
                 {
                     TotalFavorites = a.ArtworkMetaData.TotalFavorites,

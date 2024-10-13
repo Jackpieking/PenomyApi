@@ -2,14 +2,14 @@
 using System;
 using System.Collections.Generic;
 
-namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4.DTOs
+namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG12.DTOs
 {
-    public class G4ResponseDto
+    public class G12ResponseDto
     {
         public string Category { get; set; }
-        public IEnumerable<FeatG4ResponseDtoObject> ArtworkList { get; set; }
+        public IEnumerable<FeatG12ResponseDtoObject> ArtworkList { get; set; }
     }
-    public class FeatG4ResponseDtoObject
+    public class FeatG12ResponseDtoObject
     {
         public string CategoryName { get; set; }
         public long ArtworkId { get; set; }

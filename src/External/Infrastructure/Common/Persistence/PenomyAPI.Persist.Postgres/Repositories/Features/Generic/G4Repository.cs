@@ -25,24 +25,30 @@ public class G4Repository : IG4Repository
     public async Task<List<ArtworkCategory>> GetComicsByCategoryAsync(long CategoryId)
     {
         var result = await _artworkCategoryDbSet
-            .Where(c => c.CategoryId == CategoryId)
-            .Select(a => new ArtworkCategory
-            {
-                Category = new Category { Name = a.Category.Name },
-                Artwork = new Artwork
-                {
-                    Id = a.Artwork.Id,
-                    Title = a.Artwork.Title,
-                    ThumbnailUrl = a.Artwork.ThumbnailUrl,
-                    ArtworkMetaData = new ArtworkMetaData
-                    {
-                        TotalFavorites = a.Artwork.ArtworkMetaData.TotalFavorites,
-                        AverageStarRate = a.Artwork.ArtworkMetaData.AverageStarRate
-                    }
-                },
-            })
-            .AsNoTracking()
-            .ToListAsync();
+             .Where(c => c.CategoryId == CategoryId)
+             .Select(a => new ArtworkCategory
+             {
+                 Category = new Category
+                 {
+                     Name = a.Category.Name
+                 },
+                 Artwork = new Artwork
+                 {
+
+                     Id = a.Artwork.Id,
+                     Title = a.Artwork.Title,
+                     ThumbnailUrl = a.Artwork.ThumbnailUrl,
+                     Origin = new ArtworkOrigin
+                     {
+                         ImageUrl = a.Artwork.Origin.ImageUrl
+                     },
+                     ArtworkMetaData = new ArtworkMetaData
+                     {
+                         TotalFavorites = a.Artwork.ArtworkMetaData.TotalFavorites,
+                         AverageStarRate = a.Artwork.ArtworkMetaData.AverageStarRate
+                     }
+                 },
+             }).AsNoTracking().ToListAsync();
         return result;
     }
 }
