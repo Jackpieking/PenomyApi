@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using PenomyAPI.BuildingBlock.FeatRegister.InfraRegistration.Common;
 using PenomyAPI.BuildingBlock.FeatRegister.ServiceExtensions;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
+using PenomyAPI.Infra.Configuration.Options;
 using PenomyAPI.Persist.Postgres.Data.DbContexts;
 using PenomyAPI.Persist.Postgres.Data.UserIdentity;
 using PenomyAPI.Persist.Postgres.UnitOfWorks;
@@ -18,67 +20,87 @@ internal sealed class PersistenceServicesRegistration : IServiceRegistration
     {
         AddAppDbContextPool(services, configuration);
 
-        AddAspNetCoreIdentity(services);
+        AddAspNetCoreIdentity(services, configuration);
 
         AddAppDefinedServices(services);
     }
 
-    private void AddAppDefinedServices(IServiceCollection services)
+    private static void AddAppDefinedServices(IServiceCollection services)
     {
         services.AddScoped<IUnitOfWork, UnitOfWork>().MakeScopedLazy<IUnitOfWork>();
         services.AddScoped<UserManager<PgUser>>().MakeScopedLazy<UserManager<PgUser>>();
         services.AddScoped<RoleManager<PgRole>>().MakeScopedLazy<RoleManager<PgRole>>();
     }
 
-    private void AddAppDbContextPool(IServiceCollection services, IConfiguration configuration)
+    private static void AddAppDbContextPool(
+        IServiceCollection services,
+        IConfiguration configuration
+    )
     {
-        services.AddDbContextPool<AppDbContext>(options =>
+        services.AddDbContextPool<AppDbContext>(config =>
         {
-            options
+            var configOption = configuration
+                .GetRequiredSection("Database")
+                .GetRequiredSection("PenomyDev")
+                .Get<AppDbContextOptions>();
+
+            config
                 .UseNpgsql(
-                    configuration.GetConnectionString(name: ""),
+                    configOption.ConnectionString,
                     dbOption =>
                     {
                         dbOption
-                            .MigrationsAssembly(assemblyName: "PenomyAPI.Persist.Postgres")
-                            .EnableRetryOnFailure(3)
-                            .CommandTimeout(30);
+                            .MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)
+                            .EnableRetryOnFailure(configOption.EnableRetryOnFailure)
+                            .CommandTimeout(configOption.CommandTimeOutInSecond);
                     }
                 )
-                .EnableSensitiveDataLogging(false)
-                .EnableDetailedErrors(false)
-                .EnableThreadSafetyChecks(false)
-                .EnableServiceProviderCaching(true);
+                .EnableSensitiveDataLogging(configOption.EnableSensitiveDataLogging)
+                .EnableDetailedErrors(configOption.EnableDetailedErrors)
+                .EnableThreadSafetyChecks(configOption.EnableThreadSafetyChecks)
+                .EnableServiceProviderCaching(configOption.EnableServiceProviderCaching);
         });
     }
 
-    private void AddAspNetCoreIdentity(IServiceCollection services)
+    private static void AddAspNetCoreIdentity(
+        IServiceCollection services,
+        IConfiguration configuration
+    )
     {
-        const string LowerLetters = "abcdefghijklmnopqrstuvwxyz";
-        var allowedCharacters = $"{LowerLetters}{LowerLetters.ToUpper()}0123456789-_@+";
-
         services
-            .AddIdentity<PgUser, PgRole>(setupAction: options =>
+            .AddIdentity<PgUser, PgRole>(setupAction: config =>
             {
+                var configOption = configuration
+                    .GetRequiredSection("AspNetCoreIdentity")
+                    .Get<AspNetCoreIdentityOptions>();
+
                 // Password configuration.
-                options.Password.RequireDigit = true;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireNonAlphanumeric = true;
-                options.Password.RequireUppercase = true;
-                options.Password.RequiredLength = 4;
-                options.Password.RequiredUniqueChars = 0;
+                config.Password.RequireDigit = configOption.Password.RequireDigit;
+                config.Password.RequireLowercase = configOption.Password.RequireLowercase;
+                config.Password.RequireNonAlphanumeric = configOption
+                    .Password
+                    .RequireNonAlphanumeric;
+                config.Password.RequireUppercase = configOption.Password.RequireUppercase;
+                config.Password.RequiredLength = configOption.Password.RequiredLength;
+                config.Password.RequiredUniqueChars = configOption.Password.RequiredUniqueChars;
 
                 // Lockout configuration.
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(value: 1);
-                options.Lockout.MaxFailedAccessAttempts = 3;
-                options.Lockout.AllowedForNewUsers = true;
+                config.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(
+                    value: configOption.Lockout.DefaultLockoutTimeSpanInSecond
+                );
+                config.Lockout.MaxFailedAccessAttempts = configOption
+                    .Lockout
+                    .MaxFailedAccessAttempts;
+                config.Lockout.AllowedForNewUsers = configOption.Lockout.AllowedForNewUsers;
 
                 // User's credentials configuration.
-                options.User.AllowedUserNameCharacters = $"{allowedCharacters}";
-                options.User.RequireUniqueEmail = true;
+                config.User.AllowedUserNameCharacters = config.User.AllowedUserNameCharacters;
+                config.User.RequireUniqueEmail = config.User.RequireUniqueEmail;
 
-                options.SignIn.RequireConfirmedEmail = false;
-                options.SignIn.RequireConfirmedPhoneNumber = false;
+                config.SignIn.RequireConfirmedEmail = configOption.SignIn.RequireConfirmedEmail;
+                config.SignIn.RequireConfirmedPhoneNumber = configOption
+                    .SignIn
+                    .RequireConfirmedPhoneNumber;
             })
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();

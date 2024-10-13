@@ -104,7 +104,7 @@ public sealed class Artwork
 
     public IEnumerable<UserArtworkViewHistory> UserArtworkViewHistories { get; set; }
 
-    public IEnumerable<UserWatchingHistory> UserWatchingHistories { get; set; }
+    public IEnumerable<UserRealtimeWatchingHistory> UserRealtimeWatchingHistories { get; set; }
 
     public IEnumerable<CreatorCollaboratedArtwork> UserManagedArtworks { get; set; }
 

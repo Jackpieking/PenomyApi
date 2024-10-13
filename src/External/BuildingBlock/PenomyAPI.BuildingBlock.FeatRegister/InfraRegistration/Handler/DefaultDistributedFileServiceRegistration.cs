@@ -5,7 +5,7 @@ using PenomyAPI.BuildingBlock.FeatRegister.InfraRegistration.Common;
 using PenomyAPI.BuildingBlock.FeatRegister.ServiceExtensions;
 using PenomyAPI.FileService.CloudinaryService;
 
-namespace PenomyAPI.BuildingBlock.FeatRegister.ServicesRegistration;
+namespace PenomyAPI.BuildingBlock.FeatRegister.InfraRegistration.Handler;
 
 internal sealed class DefaultDistributedFileServiceRegistration : IServiceRegistration
 {
