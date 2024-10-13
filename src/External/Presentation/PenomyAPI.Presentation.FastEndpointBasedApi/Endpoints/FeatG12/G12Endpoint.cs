@@ -1,19 +1,20 @@
-using FastEndpoints;
-using Microsoft.AspNetCore.Http;
-using PenomyAPI.App.FeatG4;
-using PenomyAPI.BuildingBlock.FeatRegister.Features;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4.DTOs;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4.HttpResponse;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4;
+using FastEndpoints;
+using Microsoft.AspNetCore.Http;
+using PenomyAPI.App.FeatG12;
+using PenomyAPI.BuildingBlock.FeatRegister.Features;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG12.DTOs;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG12.HttpResponse;
 
-public class G54Endpoint : Endpoint<G4RequestDto, G4HttpResponse>
+namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG12;
+
+public class G512Endpoint : Endpoint<G12RequestDto, G12HttpResponse>
 {
     public override void Configure()
     {
-        Get("g4/ComicsByCategory/get");
+        Get("g12/AnimesByCategory/get");
         AllowAnonymous();
 
         Description(builder: builder =>
@@ -25,32 +26,34 @@ public class G54Endpoint : Endpoint<G4RequestDto, G4HttpResponse>
         {
             summary.Summary = "Endpoint for getting comics by category.";
             summary.Description = "This endpoint is used for getting comics by category.";
-            summary.Response<G4HttpResponse>(
+            summary.Response<G12HttpResponse>(
                 description: "Represent successful operation response.",
-                example: new() { AppCode = G4ResponseStatusCode.SUCCESS.ToString() }
+                example: new() { AppCode = G12ResponseStatusCode.SUCCESS.ToString() }
             );
         });
     }
 
-    public override async Task<G4HttpResponse> ExecuteAsync(G4RequestDto req, CancellationToken ct)
+    public override async Task<G12HttpResponse> ExecuteAsync(
+        G12RequestDto req,
+        CancellationToken ct
+    )
     {
-        var G4Request = new G4Request { Category = req.CategoryId };
+        var G12Request = new G12Request { CategoryId = req.CategoryId };
 
         // Get FeatureHandler response.
-        var featResponse = await FeatureExtensions.ExecuteAsync<G4Request, G4Response>(
-            G4Request,
+        var featResponse = await FeatureExtensions.ExecuteAsync<G12Request, G12Response>(
+            G12Request,
             ct
         );
 
-        var httpResponse = G4HttpResponseManager
+        var httpResponse = G12HttpResponseManager
             .Resolve(featResponse.StatusCode)
-            .Invoke(G4Request, featResponse);
+            .Invoke(G12Request, featResponse);
 
-        httpResponse.Body = new G4ResponseDto
+        httpResponse.Body = new G12ResponseDto
         {
             Category = featResponse.Result.First().Category.Name,
-            ArtworkList = featResponse.Result
-            .ConvertAll(x => new FeatG4ResponseDtoObject()
+            ArtworkList = featResponse.Result.ConvertAll(x => new FeatG12ResponseDtoObject()
             {
                 CategoryName = x.Category.Name,
                 ArtworkId = x.Artwork.Id,
@@ -59,10 +62,9 @@ public class G54Endpoint : Endpoint<G4RequestDto, G4HttpResponse>
                 Thumbnail = x.Artwork.ThumbnailUrl,
                 Favorite = x.Artwork.ArtworkMetaData.TotalFavorites,
                 Rating = x.Artwork.ArtworkMetaData.AverageStarRate,
-                FlagUrl = x.Artwork.Origin.ImageUrl
-            }).ToList(),
+                FlagUrl = x.Artwork.Origin.ImageUrl,
+            }),
         };
-
 
         return httpResponse;
     }

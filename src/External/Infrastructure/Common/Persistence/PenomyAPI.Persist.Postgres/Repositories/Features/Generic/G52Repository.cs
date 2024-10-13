@@ -22,9 +22,6 @@ public class G52Repository : IG52Repository
 
     public async Task<long> CreateCommentAsync(ArtworkComment Comment)
     {
-        //var option = new SnowflakeIdOptions();
-        //var Generator = new AppSnowflakeIdGenerator(option);
-        Comment.Id = 123123123;
         try
         {
             _artworkCommentDbSet.Add(Comment);

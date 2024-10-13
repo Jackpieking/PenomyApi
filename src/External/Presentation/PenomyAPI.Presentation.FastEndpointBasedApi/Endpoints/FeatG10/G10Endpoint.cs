@@ -1,12 +1,11 @@
-using System.Threading;
-using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG10;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG10.HttpResponse;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G10.DTOs;
-
+using System.Threading;
+using System.Threading.Tasks;
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3;
 
 public class G10Endpoint : Endpoint<G10Request, G10HttpResponse>
@@ -43,7 +42,21 @@ public class G10Endpoint : Endpoint<G10Request, G10HttpResponse>
             .Resolve(featResponse.StatusCode)
             .Invoke(featG10Request, featResponse);
 
-        httpResponse.Body = new G10ResponseDto { ArtworkList = featResponse.Result };
+        httpResponse.Body = new G10ResponseDto
+        {
+            CommentList = featResponse.Result.ConvertAll(x => new G10ResponseDtoObject
+            {
+                Id = x.Id,
+                Content = x.Content,
+                PostDate = x.CreatedAt.ToString("MMMM dd, yyyy"),
+                Username = x.Creator.NickName,
+                Avatar = x.Creator.AvatarUrl,
+                TotalReplies = x.TotalChildComments,
+                LikeCount = x.TotalLikes,
+                IsAuthor = true
+            })
+        };
+
 
         return httpResponse;
     }

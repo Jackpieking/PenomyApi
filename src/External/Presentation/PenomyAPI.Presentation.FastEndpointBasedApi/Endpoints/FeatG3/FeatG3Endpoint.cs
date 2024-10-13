@@ -44,7 +44,21 @@ public class G3Endpoint : Endpoint<EmptyDto, FeatG3HttpResponse>
             .Invoke(featG3Request, featResponse);
 
 
-        httpResponse.Body = new G3ResponseDto { ArtworkList = featResponse.ArtworkList, };
+        httpResponse.Body = new G3ResponseDto
+        {
+            ArtworkList = featResponse.ArtworkList
+            .ConvertAll(x => new FeatG3ResponseDtoObject()
+            {
+                ArtworkId = x.Id,
+                Title = x.Title,
+                Supplier = x.AuthorName,
+                Thumbnail = x.ThumbnailUrl,
+                Favorite = x.ArtworkMetaData.TotalFavorites,
+                Rating = x.ArtworkMetaData.AverageStarRate,
+                LastUpdateAt = x.UpdatedAt,
+                FlagUrl = x.Origin.ImageUrl
+            }),
+        };
 
         return httpResponse;
 
