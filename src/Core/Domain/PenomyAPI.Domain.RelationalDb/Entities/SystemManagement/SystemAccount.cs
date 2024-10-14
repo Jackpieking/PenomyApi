@@ -79,6 +79,8 @@ public sealed class SystemAccount : EntityWithId<long>
 
     public IEnumerable<ArtworkBugType> CreatedArtworkBugTypes { get; set; }
 
+    public IEnumerable<OtherInfo> CreatedOtherInfos { get; set; }
+
     // Monetization section.
     public IEnumerable<Bank> CreatedBanks { get; set; }
 
@@ -86,11 +88,11 @@ public sealed class SystemAccount : EntityWithId<long>
 
     public IEnumerable<CreatorWalletTransactionType> CreatedTransactionTypes { get; set; }
 
-    public IEnumerable<AdRevenueProgram> CreatedAdRevenuePrograms { get; set; }
+    public IEnumerable<RevenueProgram> CreatedAdRevenuePrograms { get; set; }
 
-    public IEnumerable<AdRevenueProgram> UpdatedAdRevenuePrograms { get; set; }
+    public IEnumerable<RevenueProgram> UpdatedAdRevenuePrograms { get; set; }
 
-    public IEnumerable<ArtworkAppliedAdRevenueProgram> ApprovedArtworkAppliedAdRevenuePrograms { get; set; }
+    public IEnumerable<ArtworkAppliedRevenueProgram> ApprovedArtworkAppliedAdRevenuePrograms { get; set; }
 
     public IEnumerable<DonationItem> CreatedDonationItems { get; set; }
 

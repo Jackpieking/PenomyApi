@@ -23,7 +23,7 @@ public sealed class UserPostAttachedMedia : EntityWithId<long>
     {
         public const int FileNameLength = 32;
 
-        public const int StorageUrlLength = 256;
+        public const int StorageUrlLength = 2000;
     }
     #endregion
 }

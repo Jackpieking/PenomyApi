@@ -1,7 +1,7 @@
-using System;
-using System.Collections.Generic;
 using PenomyAPI.Domain.RelationalDb.Entities.Base;
 using PenomyAPI.Domain.RelationalDb.Entities.SystemManagement;
+using System;
+using System.Collections.Generic;
 
 namespace PenomyAPI.Domain.RelationalDb.Entities.Generic;
 
@@ -31,7 +31,7 @@ public sealed class BugReport : EntityWithId<long>, ICreatedEntity<long>
 
     public DateTime CreatedAt { get; set; }
 
-    public bool IsResolved { get; set; }
+    public BugReportResolveStatus ResolveStatus { get; set; }
 
     public string ResolveNote { get; set; }
 

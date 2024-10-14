@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -55,6 +53,7 @@ public class G5Endpoint : Endpoint<G5Request, G5HttpResponse>
         {
             httpResponse.Body = new DTOs.G5ResponseDto
             {
+                Id = featResponse.Result.Id,
                 Name = featResponse.Result.Title,
                 AuthorName = featResponse.Result.AuthorName,
                 CountryName = featResponse.Result.Origin.CountryName,
@@ -69,10 +68,12 @@ public class G5Endpoint : Endpoint<G5Request, G5HttpResponse>
                 StarRates = featResponse.Result.ArtworkMetaData.AverageStarRate,
                 ViewCount = featResponse.Result.ArtworkMetaData.TotalViews,
                 FavoriteCount = featResponse.Result.ArtworkMetaData.TotalFavorites,
-                ThumbnailUrl = featResponse.Result.ThumbnailUrl
+                ThumbnailUrl = featResponse.Result.ThumbnailUrl,
+                Introduction = featResponse.Result.Introduction,
+                CommentCount = featResponse.Result.ArtworkMetaData.TotalComments,
             };
         }
-
+        await SendAsync(httpResponse, httpResponse.HttpCode, ct);
         return httpResponse;
     }
 }

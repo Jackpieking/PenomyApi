@@ -17,7 +17,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.8")
+                .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -208,6 +208,9 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
+                    b.Property<int>("FixedTotalChapters")
+                        .HasColumnType("integer");
+
                     b.Property<bool>("HasSeries")
                         .HasColumnType("boolean");
 
@@ -228,11 +231,6 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Property<int>("LastChapterUploadOrder")
                         .HasColumnType("integer");
 
-                    b.Property<string>("OtherName")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
                     b.Property<int>("PublicLevel")
                         .HasColumnType("integer");
 
@@ -244,8 +242,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Property<string>("ThumbnailUrl")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -288,9 +286,6 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
-                    b.Property<bool>("IsResolved")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("Overview")
                         .IsRequired()
                         .HasMaxLength(1000)
@@ -300,6 +295,9 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         .IsRequired()
                         .HasMaxLength(2000)
                         .HasColumnType("character varying(2000)");
+
+                    b.Property<int>("ResolveStatus")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("ResolvedAt")
                         .HasColumnType("TIMESTAMPTZ");
@@ -345,8 +343,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Property<string>("StorageUrl")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<int>("UploadOrder")
                         .HasColumnType("integer");
@@ -421,6 +419,11 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
+
                     b.Property<bool>("IsTemporarilyRemoved")
                         .HasColumnType("boolean");
 
@@ -441,8 +444,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Property<string>("ThumbnailUrl")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -484,13 +487,16 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         .HasMaxLength(32)
                         .HasColumnType("character varying(32)");
 
+                    b.Property<long>("FileSize")
+                        .HasColumnType("bigint");
+
                     b.Property<int>("MediaType")
                         .HasColumnType("integer");
 
                     b.Property<string>("StorageUrl")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<int>("UploadOrder")
                         .HasColumnType("integer");
@@ -549,6 +555,23 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Property<long>("ReportProblemId")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("ResolveNote")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
+
+                    b.Property<int>("ResolveStatus")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("ResolvedAt")
+                        .HasColumnType("TIMESTAMPTZ");
+
+                    b.Property<long>("ResolvedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("ResolverCreatorId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ArtworkId");
@@ -558,6 +581,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.HasIndex("CreatedBy");
 
                     b.HasIndex("ReportProblemId");
+
+                    b.HasIndex("ResolverCreatorId");
 
                     b.ToTable("penomy_artwork_chapter_report", (string)null);
                 });
@@ -580,8 +605,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Property<string>("StorageUrl")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<int>("UploadOrder")
                         .HasColumnType("integer");
@@ -719,8 +744,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<string>("Label")
                         .IsRequired()
@@ -740,6 +765,29 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.HasIndex("UpdatedBy");
 
                     b.ToTable("penomy_artwork_origin", (string)null);
+                });
+
+            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.ArtworkOtherInfo", b =>
+                {
+                    b.Property<long>("ArtworkId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("OtherInfoId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("InfoName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.HasKey("ArtworkId", "OtherInfoId");
+
+                    b.HasIndex("OtherInfoId");
+
+                    b.ToTable("penomy_artwork_other_info", (string)null);
                 });
 
             modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.ArtworkReport", b =>
@@ -764,6 +812,21 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Property<long>("ReportProblemId")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("ResolveNote")
+                        .HasColumnType("text");
+
+                    b.Property<int>("ResolveStatus")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("ResolvedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long>("ResolvedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("ResolverCreatorId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ArtworkId");
@@ -771,6 +834,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.HasIndex("CreatedBy");
 
                     b.HasIndex("ReportProblemId");
+
+                    b.HasIndex("ResolverCreatorId");
 
                     b.ToTable("penomy_artwork_report", (string)null);
                 });
@@ -793,8 +858,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Property<string>("StorageUrl")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<int>("UploadOrder")
                         .HasColumnType("integer");
@@ -855,6 +920,31 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.ToTable("penomy_artwork_series", (string)null);
                 });
 
+            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.ArtworkViewStatistic", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ArtworkId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("From")
+                        .HasColumnType("TIMESTAMPTZ");
+
+                    b.Property<DateTime>("To")
+                        .HasColumnType("TIMESTAMPTZ");
+
+                    b.Property<long>("TotalViews")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArtworkId")
+                        .HasAnnotation("Npgsql:CreatedConcurrently", true);
+
+                    b.ToTable("penomy_artwork_view_statistic", (string)null);
+                });
+
             modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.ArtworkViolationFlag", b =>
                 {
                     b.Property<long>("Id")
@@ -874,13 +964,13 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("character varying(2000)");
 
-                    b.Property<bool>("IsResolved")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("ResolveNote")
                         .IsRequired()
                         .HasMaxLength(2000)
                         .HasColumnType("character varying(2000)");
+
+                    b.Property<int>("ResolveStatus")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("ResolvedAt")
                         .HasColumnType("TIMESTAMPTZ");
@@ -976,6 +1066,91 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.ToTable("penomy_category", (string)null);
                 });
 
+            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.CreatorCollaboratedArtwork", b =>
+                {
+                    b.Property<long>("CreatorId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ArtworkId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("RoleId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("GrantedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("GrantedAt")
+                        .HasColumnType("TIMESTAMPTZ");
+
+                    b.HasKey("CreatorId", "ArtworkId", "RoleId", "GrantedBy");
+
+                    b.HasIndex("ArtworkId");
+
+                    b.HasIndex("GrantedBy");
+
+                    b.ToTable("penomy_creator_collaborated_artwork", (string)null);
+                });
+
+            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.GuestArtworkViewHistory", b =>
+                {
+                    b.Property<long>("GuestId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ArtworkId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("ArtworkType")
+                        .HasColumnType("integer");
+
+                    b.Property<long>("ChapterId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("ViewedAt")
+                        .HasColumnType("TIMESTAMPTZ");
+
+                    b.HasKey("GuestId", "ArtworkId");
+
+                    b.HasIndex("ArtworkId");
+
+                    b.HasIndex("ArtworkType");
+
+                    b.HasIndex("ChapterId");
+
+                    b.ToTable("penomy_guest_artwork_view_history", (string)null);
+                });
+
+            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.OtherInfo", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TIMESTAMPTZ");
+
+                    b.Property<long>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("DataType")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(640)
+                        .HasColumnType("character varying(640)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedBy");
+
+                    b.ToTable("penomy_other_info", (string)null);
+                });
+
             modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Series", b =>
                 {
                     b.Property<long>("Id")
@@ -1006,8 +1181,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Property<string>("ThumbnailUrl")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -1115,32 +1290,6 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.ToTable("penomy_user_like_artwork_comment", (string)null);
                 });
 
-            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.UserManagedArtwork", b =>
-                {
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ArtworkId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("RoleId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("GrantedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("GrantedAt")
-                        .HasColumnType("TIMESTAMPTZ");
-
-                    b.HasKey("UserId", "ArtworkId", "RoleId", "GrantedBy");
-
-                    b.HasIndex("ArtworkId");
-
-                    b.HasIndex("GrantedBy");
-
-                    b.ToTable("penomy_user_managed_artwork", (string)null);
-                });
-
             modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.UserRatingArtwork", b =>
                 {
                     b.Property<long>("UserId")
@@ -1162,7 +1311,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.ToTable("penomy_user_rating_artwork", (string)null);
                 });
 
-            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.UserWatchingHistory", b =>
+            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.UserRealtimeWatchingHistory", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("bigint");
@@ -1198,8 +1347,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Property<string>("CoverPhotoUrl")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TIMESTAMPTZ");
@@ -1286,12 +1435,6 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Property<bool>("IsRevoked")
                         .HasColumnType("boolean");
 
-                    b.Property<long?>("MessageReceivedReplyRepliedMessageId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("MessageReceivedReplyRootChatMessageId")
-                        .HasColumnType("bigint");
-
                     b.Property<int>("MessageType")
                         .HasColumnType("integer");
 
@@ -1306,8 +1449,6 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.HasIndex("ChatGroupId");
 
                     b.HasIndex("CreatedBy");
-
-                    b.HasIndex("MessageReceivedReplyRootChatMessageId", "MessageReceivedReplyRepliedMessageId");
 
                     b.ToTable("penomy_chat_message", (string)null);
                 });
@@ -1329,8 +1470,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("StorageUrl")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<int>("UploadOrder")
                         .HasColumnType("integer");
@@ -1486,9 +1627,6 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
-                    b.Property<bool>("IsResolved")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("Overview")
                         .IsRequired()
                         .HasMaxLength(1000)
@@ -1498,6 +1636,9 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         .IsRequired()
                         .HasMaxLength(2000)
                         .HasColumnType("character varying(2000)");
+
+                    b.Property<int>("ResolveStatus")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("ResolvedAt")
                         .HasColumnType("TIMESTAMPTZ");
@@ -1541,8 +1682,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Property<string>("StorageUrl")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<int>("UploadOrder")
                         .HasColumnType("integer");
@@ -1587,7 +1728,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
             modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.Generic.CreatorProfile", b =>
                 {
-                    b.Property<long>("UserId")
+                    b.Property<long>("CreatorId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("RegisteredAt")
@@ -1602,9 +1743,25 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Property<int>("TotalFollowers")
                         .HasColumnType("integer");
 
-                    b.HasKey("UserId");
+                    b.HasKey("CreatorId");
 
                     b.ToTable("penomy_creator_profile", (string)null);
+                });
+
+            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.Generic.GuestTracking", b =>
+                {
+                    b.Property<long>("GuestId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("GuestId"));
+
+                    b.Property<DateTime>("LastActiveAt")
+                        .HasColumnType("TIMESTAMPTZ");
+
+                    b.HasKey("GuestId");
+
+                    b.ToTable("penomy_guest_tracking", (string)null);
                 });
 
             modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.Generic.UserBan", b =>
@@ -1674,8 +1831,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Property<string>("AvatarUrl")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<int>("Gender")
                         .HasColumnType("integer");
@@ -1727,6 +1884,15 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Property<long>("ReportedProfileId")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("ResolveNote")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("ResolvedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long>("ResolvedBy")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedBy");
@@ -1769,57 +1935,12 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.ToTable("penomy_user_profile_report_problem", (string)null);
                 });
 
-            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.Monetization.AdRevenueProgram", b =>
-                {
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TIMESTAMPTZ");
-
-                    b.Property<long>("CreatedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
-
-                    b.Property<long>("LastUpdateCode")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("MinTotalFollowersToApply")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("MinTotalViewsToApply")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("TIMESTAMPTZ");
-
-                    b.Property<long>("UpdatedBy")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedBy");
-
-                    b.HasIndex("UpdatedBy");
-
-                    b.ToTable("penomy_ad_revenue_program", (string)null);
-                });
-
-            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.Monetization.ArtworkAppliedAdRevenueProgram", b =>
+            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.Monetization.ArtworkAppliedRevenueProgram", b =>
                 {
                     b.Property<long>("ArtworkId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("AdRevenueProgramId")
+                    b.Property<long>("RevenueProgramId")
                         .HasColumnType("bigint");
 
                     b.Property<int>("AppliedStatus")
@@ -1842,13 +1963,13 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
-                    b.HasKey("ArtworkId", "AdRevenueProgramId");
+                    b.HasKey("ArtworkId", "RevenueProgramId");
 
                     b.HasIndex("ApprovedBy");
 
                     b.HasIndex("ProposedBy");
 
-                    b.ToTable("penomy_artwork_applied_ad_revenue_program", (string)null);
+                    b.ToTable("penomy_artwork_applied_revenue_program", (string)null);
                 });
 
             modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.Monetization.Bank", b =>
@@ -1877,8 +1998,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Property<string>("LogoUrl")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -2089,6 +2210,51 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.ToTable("penomy_donation_thank", (string)null);
                 });
 
+            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.Monetization.RevenueProgram", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TIMESTAMPTZ");
+
+                    b.Property<long>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<int>("MinTotalFavoritesToApply")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MinTotalFollowersToApply")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MinTotalViewsToApply")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("TIMESTAMPTZ");
+
+                    b.Property<long>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedBy");
+
+                    b.HasIndex("UpdatedBy");
+
+                    b.ToTable("penomy_revenue_program", (string)null);
+                });
+
             modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.Monetization.UserDonationTransaction", b =>
                 {
                     b.Property<long>("Id")
@@ -2174,8 +2340,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Property<string>("EmojiUrl")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<bool>("ForDefaultDisplay")
                         .HasColumnType("boolean");
@@ -2287,8 +2453,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Property<string>("StorageUrl")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<int>("UploadOrder")
                         .HasColumnType("integer");
@@ -2355,8 +2521,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Property<string>("StorageUrl")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<int>("UploadOrder")
                         .HasColumnType("integer");
@@ -2494,8 +2660,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Property<string>("CoverPhotoUrl")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TIMESTAMPTZ");
@@ -2888,8 +3054,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Property<string>("StorageUrl")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<int>("UploadOrder")
                         .HasColumnType("integer");
@@ -2959,8 +3125,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Property<string>("StorageUrl")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<int>("UploadOrder")
                         .HasColumnType("integer");
@@ -3634,6 +3800,10 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.Generic.CreatorProfile", "Resolver")
+                        .WithMany("ResolvedArtworkChapterReports")
+                        .HasForeignKey("ResolverCreatorId");
+
                     b.Navigation("Creator");
 
                     b.Navigation("ReportedArtwork");
@@ -3641,6 +3811,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Navigation("ReportedChapter");
 
                     b.Navigation("ReportedProblem");
+
+                    b.Navigation("Resolver");
                 });
 
             modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.ArtworkChapterReportAttachedMedia", b =>
@@ -3734,6 +3906,25 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Navigation("Updater");
                 });
 
+            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.ArtworkOtherInfo", b =>
+                {
+                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Artwork", "Artwork")
+                        .WithMany("ArtworkOtherInfos")
+                        .HasForeignKey("ArtworkId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.OtherInfo", "OtherInfo")
+                        .WithMany("ArtworkOtherInfos")
+                        .HasForeignKey("OtherInfoId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Artwork");
+
+                    b.Navigation("OtherInfo");
+                });
+
             modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.ArtworkReport", b =>
                 {
                     b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Artwork", "ReportedArtwork")
@@ -3754,11 +3945,17 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.Generic.CreatorProfile", "Resolver")
+                        .WithMany("ResolvedArtworkReports")
+                        .HasForeignKey("ResolverCreatorId");
+
                     b.Navigation("Creator");
 
                     b.Navigation("ReportedArtwork");
 
                     b.Navigation("ReportedProblem");
+
+                    b.Navigation("Resolver");
                 });
 
             modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.ArtworkReportAttachedMedia", b =>
@@ -3816,7 +4013,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.Generic.UserProfile", "Resolver")
+                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.Generic.CreatorProfile", "Resolver")
                         .WithMany("ResolvedViolationFlags")
                         .HasForeignKey("ResolvedBy")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -3873,6 +4070,64 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Navigation("Creator");
 
                     b.Navigation("Updater");
+                });
+
+            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.CreatorCollaboratedArtwork", b =>
+                {
+                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Artwork", "ManagedArtwork")
+                        .WithMany("UserManagedArtworks")
+                        .HasForeignKey("ArtworkId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.Generic.CreatorProfile", "GrantedCreator")
+                        .WithMany("CollaboratedArtworks")
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.Generic.CreatorProfile", "PermissionGrantProvider")
+                        .WithMany("ManagedArtworks")
+                        .HasForeignKey("GrantedBy")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_penomy_creator_collaborated_artwork_penomy_creator_profile~1");
+
+                    b.Navigation("GrantedCreator");
+
+                    b.Navigation("ManagedArtwork");
+
+                    b.Navigation("PermissionGrantProvider");
+                });
+
+            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.GuestArtworkViewHistory", b =>
+                {
+                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Artwork", "Artwork")
+                        .WithMany()
+                        .HasForeignKey("ArtworkId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.ArtworkChapter", "Chapter")
+                        .WithMany()
+                        .HasForeignKey("ChapterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Artwork");
+
+                    b.Navigation("Chapter");
+                });
+
+            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.OtherInfo", b =>
+                {
+                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.SystemManagement.SystemAccount", "Creator")
+                        .WithMany("CreatedOtherInfos")
+                        .HasForeignKey("CreatedBy")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Creator");
                 });
 
             modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Series", b =>
@@ -3943,33 +4198,6 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Navigation("FollowedArtwork");
                 });
 
-            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.UserManagedArtwork", b =>
-                {
-                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Artwork", "ManagedArtwork")
-                        .WithMany("UserManagedArtworks")
-                        .HasForeignKey("ArtworkId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.Generic.UserProfile", "ArtworkManager")
-                        .WithMany("ManagedArtworks")
-                        .HasForeignKey("GrantedBy")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.Generic.UserProfile", "GrantedUser")
-                        .WithMany("CollaboratedArtworks")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("ArtworkManager");
-
-                    b.Navigation("GrantedUser");
-
-                    b.Navigation("ManagedArtwork");
-                });
-
             modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.UserRatingArtwork", b =>
                 {
                     b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Artwork", "RatedArtwork")
@@ -3981,10 +4209,10 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Navigation("RatedArtwork");
                 });
 
-            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.UserWatchingHistory", b =>
+            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.UserRealtimeWatchingHistory", b =>
                 {
                     b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Artwork", "Artwork")
-                        .WithMany("UserWatchingHistories")
+                        .WithMany("UserRealtimeWatchingHistories")
                         .HasForeignKey("ArtworkId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -4054,7 +4282,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.Chat.ChatGroup", "ChatGroup")
                         .WithMany("ChatMessages")
                         .HasForeignKey("ChatGroupId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.Generic.UserProfile", "Sender")
@@ -4063,13 +4291,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.Chat.ChatMessageReply", "MessageReceivedReply")
-                        .WithMany()
-                        .HasForeignKey("MessageReceivedReplyRootChatMessageId", "MessageReceivedReplyRepliedMessageId");
-
                     b.Navigation("ChatGroup");
-
-                    b.Navigation("MessageReceivedReply");
 
                     b.Navigation("Sender");
                 });
@@ -4100,17 +4322,6 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Navigation("ChatMessage");
 
                     b.Navigation("LikeValue");
-                });
-
-            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.Chat.ChatMessageReply", b =>
-                {
-                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.Chat.ChatMessage", "RootChatMessage")
-                        .WithMany("RepliedMessages")
-                        .HasForeignKey("RootChatMessageId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("RootChatMessage");
                 });
 
             modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.Chat.SocialGroupLinkedChatGroup", b =>
@@ -4240,7 +4451,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                 {
                     b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.Generic.UserProfile", "ProfileOwner")
                         .WithOne("CreatorProfile")
-                        .HasForeignKey("PenomyAPI.Domain.RelationalDb.Entities.Generic.CreatorProfile", "UserId")
+                        .HasForeignKey("PenomyAPI.Domain.RelationalDb.Entities.Generic.CreatorProfile", "CreatorId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
@@ -4331,26 +4542,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Navigation("Creator");
                 });
 
-            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.Monetization.AdRevenueProgram", b =>
-                {
-                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.SystemManagement.SystemAccount", "Creator")
-                        .WithMany("CreatedAdRevenuePrograms")
-                        .HasForeignKey("CreatedBy")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.SystemManagement.SystemAccount", "Updater")
-                        .WithMany("UpdatedAdRevenuePrograms")
-                        .HasForeignKey("UpdatedBy")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Creator");
-
-                    b.Navigation("Updater");
-                });
-
-            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.Monetization.ArtworkAppliedAdRevenueProgram", b =>
+            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.Monetization.ArtworkAppliedRevenueProgram", b =>
                 {
                     b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.SystemManagement.SystemAccount", "Approver")
                         .WithMany("ApprovedArtworkAppliedAdRevenuePrograms")
@@ -4479,6 +4671,25 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Navigation("Creator");
 
                     b.Navigation("UserDonationTransaction");
+                });
+
+            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.Monetization.RevenueProgram", b =>
+                {
+                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.SystemManagement.SystemAccount", "Creator")
+                        .WithMany("CreatedAdRevenuePrograms")
+                        .HasForeignKey("CreatedBy")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.SystemManagement.SystemAccount", "Updater")
+                        .WithMany("UpdatedAdRevenuePrograms")
+                        .HasForeignKey("UpdatedBy")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Creator");
+
+                    b.Navigation("Updater");
                 });
 
             modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.Monetization.UserDonationTransaction", b =>
@@ -5190,6 +5401,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Navigation("ArtworkMetaData");
 
+                    b.Navigation("ArtworkOtherInfos");
+
                     b.Navigation("ArtworkReports");
 
                     b.Navigation("ArtworkSeries");
@@ -5210,7 +5423,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Navigation("UserRatingArtworks");
 
-                    b.Navigation("UserWatchingHistories");
+                    b.Navigation("UserRealtimeWatchingHistories");
 
                     b.Navigation("ViolationFlags");
                 });
@@ -5275,6 +5488,11 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Navigation("ArtworkCategories");
                 });
 
+            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.OtherInfo", b =>
+                {
+                    b.Navigation("ArtworkOtherInfos");
+                });
+
             modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Series", b =>
                 {
                     b.Navigation("ArtworkSeries");
@@ -5299,8 +5517,6 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Navigation("LikeStatistics");
 
-                    b.Navigation("RepliedMessages");
-
                     b.Navigation("UserLikes");
                 });
 
@@ -5323,11 +5539,21 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                 {
                     b.Navigation("AppliedAdRevenuePrograms");
 
+                    b.Navigation("CollaboratedArtworks");
+
                     b.Navigation("CreatorWallet");
 
                     b.Navigation("DonationThanks");
 
+                    b.Navigation("ManagedArtworks");
+
                     b.Navigation("ReceivedUserDonations");
+
+                    b.Navigation("ResolvedArtworkChapterReports");
+
+                    b.Navigation("ResolvedArtworkReports");
+
+                    b.Navigation("ResolvedViolationFlags");
                 });
 
             modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.Generic.UserProfile", b =>
@@ -5339,8 +5565,6 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Navigation("ChatGroupJoinRequests");
 
                     b.Navigation("ChatMessages");
-
-                    b.Navigation("CollaboratedArtworks");
 
                     b.Navigation("CreatedArtworkBugReports");
 
@@ -5392,13 +5616,9 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Navigation("JoinedSocialGroupMembers");
 
-                    b.Navigation("ManagedArtworks");
-
                     b.Navigation("ReceivedUserReports");
 
                     b.Navigation("ResolvedSocialGroupViolationFlags");
-
-                    b.Navigation("ResolvedViolationFlags");
 
                     b.Navigation("SavedGroupPosts");
 
@@ -5584,6 +5804,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Navigation("CreatedDonationItems");
 
                     b.Navigation("CreatedOrigins");
+
+                    b.Navigation("CreatedOtherInfos");
 
                     b.Navigation("CreatedPostReportProblems");
 

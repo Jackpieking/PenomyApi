@@ -12,7 +12,7 @@ internal sealed class CreatorProfileEntityConfiguration : IEntityConfiguration<C
     {
         builder.ToTable("penomy_creator_profile");
 
-        builder.HasKey(profile => profile.UserId);
+        builder.HasKey(profile => profile.CreatorId);
 
         builder.Property(profile => profile.TotalFollowers).IsRequired();
 
@@ -27,10 +27,10 @@ internal sealed class CreatorProfileEntityConfiguration : IEntityConfiguration<C
 
         #region Relationships
         builder
-            .HasOne(profile => profile.ProfileOwner)
-            .WithOne(user => user.CreatorProfile)
-            .HasForeignKey<CreatorProfile>(profile => profile.UserId)
-            .HasPrincipalKey<UserProfile>(user => user.UserId)
+            .HasOne(creatorProfile => creatorProfile.ProfileOwner)
+            .WithOne(profileOwner => profileOwner.CreatorProfile)
+            .HasPrincipalKey<UserProfile>(profileOwner => profileOwner.UserId)
+            .HasForeignKey<CreatorProfile>(creatorProfile => creatorProfile.CreatorId)
             .OnDelete(DeleteBehavior.NoAction);
         #endregion
     }

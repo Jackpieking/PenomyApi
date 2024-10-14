@@ -40,12 +40,12 @@ internal sealed class ChatMessageEntityConfiguration : IEntityConfiguration<Chat
             .IsRequired();
 
         #region Relationships
-        builder
-            .HasOne(chatMessage => chatMessage.ChatGroup)
-            .WithMany(chatGroup => chatGroup.ChatMessages)
-            .HasForeignKey(chatMessage => chatMessage.ChatGroupId)
-            .HasPrincipalKey(chatGroup => chatGroup.Id)
-            .OnDelete(DeleteBehavior.NoAction);
+        //builder
+        //    .HasOne(chatMessage => chatMessage.ChatGroup)
+        //    .WithMany(chatGroup => chatGroup.ChatMessages)
+        //    .HasForeignKey(chatMessage => chatMessage.ChatGroupId)
+        //    .HasPrincipalKey(chatGroup => chatGroup.Id)
+        //    .OnDelete(DeleteBehavior.NoAction);
 
         builder
             .HasOne(chatMessage => chatMessage.Sender)

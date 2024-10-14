@@ -1,7 +1,8 @@
-using System;
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
 using PenomyAPI.Domain.RelationalDb.Entities.Base;
 using PenomyAPI.Domain.RelationalDb.Entities.Generic;
 using PenomyAPI.Domain.RelationalDb.Entities.SystemManagement;
+using System;
 
 namespace PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 
@@ -17,7 +18,7 @@ public sealed class ArtworkViolationFlag : EntityWithId<long>, ICreatedEntity<lo
 
     public DateTime CreatedAt { get; set; }
 
-    public bool IsResolved { get; set; }
+    public ResolveStatus ResolveStatus { get; set; }
 
     public string ResolveNote { get; set; }
 
@@ -32,7 +33,7 @@ public sealed class ArtworkViolationFlag : EntityWithId<long>, ICreatedEntity<lo
 
     public SystemAccount Creator { get; set; }
 
-    public UserProfile Resolver { get; set; }
+    public CreatorProfile Resolver { get; set; }
     #endregion
 
     #region MetaData

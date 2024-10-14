@@ -17,5 +17,6 @@ namespace PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic
             long artworkId,
             CancellationToken token = default
         );
+        Task<bool> IsArtworkExistAsync(long artworkId, CancellationToken token = default);
     }
 }

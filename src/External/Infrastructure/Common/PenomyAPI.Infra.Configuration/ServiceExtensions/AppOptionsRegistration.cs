@@ -1,17 +1,17 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using PenomyAPI.Infra.Configuration.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using PenomyAPI.Infra.Configuration.Common;
 
 namespace PenomyAPI.Infra.Configuration.ServiceExtensions;
 
 public static class AppOptionsRegistration
 {
     /// <summary>
-    ///     Register all the <see cref="AppOptions"/> that defined
+    ///     Register all the <see cref="AppOption"/> that defined
     ///     in the application using reflection.
     /// </summary>
     /// <param name="services"></param>

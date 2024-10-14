@@ -26,6 +26,8 @@ public sealed class G1CompleteRegistrationHandler
     {
         _preRegistrationTokenHandler = preRegistrationTokenHandler;
         _snowflakeIdGenerator = snowflakeIdGenerator;
+
+        // TODO
         _repository = unitOfWork.Value.G1Repository;
     }
 

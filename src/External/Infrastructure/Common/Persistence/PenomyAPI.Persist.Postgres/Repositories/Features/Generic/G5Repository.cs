@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +26,9 @@ public class G5Repository : IG5Repository
             .Where(x => x.Id == artworkId)
             .Select(x => new Artwork
             {
+                Title = x.Title,
+                AuthorName = x.AuthorName,
+                Introduction = x.Introduction,
                 Id = x.Id,
                 Origin = new ArtworkOrigin
                 {
@@ -37,6 +37,7 @@ public class G5Repository : IG5Repository
                 },
                 ArtworkCategories = x.ArtworkCategories.Select(y => new ArtworkCategory
                 {
+                    Category = new Category { Name = y.Category.Name, },
                     ArtworkId = y.ArtworkId,
                     CategoryId = y.CategoryId,
                 }),
@@ -61,7 +62,13 @@ public class G5Repository : IG5Repository
                 },
                 ThumbnailUrl = x.ThumbnailUrl,
             })
+            .AsNoTracking()
             .FirstOrDefaultAsync(token);
         return artwork;
+    }
+
+    public Task<bool> IsArtworkExistAsync(long artworkId, CancellationToken ct = default)
+    {
+        return _dbContext.Set<Artwork>().AnyAsync(x => x.Id == artworkId, ct);
     }
 }

@@ -10,7 +10,7 @@ public sealed class AppFolderInfo
     public string RelativePath { get; set; }
 
     /// <summary>
-    ///     The real physical path of this folder on the storage. 
+    ///     The real physical path of this folder on the storage.
     /// </summary>
     public string AbsolutePath { get; set; }
 }
