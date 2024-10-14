@@ -1,11 +1,11 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using PenomyAPI.Persist.Postgres.Data.DbContexts;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
 
@@ -62,10 +62,12 @@ public class G8Repository : IG8Repository
             .AsNoTracking()
             .Skip((startPage - 1) * pageSize)
             .Take(pageSize)
+            .OrderBy(x => x.Id)
             .ToListAsync(cancellationToken);
-        res.ForEach(async x =>
-            x.ChapterMetaData = await GetArtworkChapterMetaDataAsync(x.Id, cancellationToken)
-        );
+        foreach (var chapter in res)
+        {
+            chapter.ChapterMetaData = await GetArtworkChapterMetaDataAsync(chapter.Id, cancellationToken);
+        }
         return res;
     }
 

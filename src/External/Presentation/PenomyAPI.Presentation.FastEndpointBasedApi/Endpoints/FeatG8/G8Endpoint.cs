@@ -1,12 +1,12 @@
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG8;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG8.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG8.HttpResponse;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG8;
 
@@ -66,7 +66,7 @@ public class G8Endpoint : Endpoint<G8Request, G8HttpResponse>
                         Id = chapter.Id,
                         ChapterName = chapter.Title,
                         UploadOrder = chapter.UploadOrder,
-                        CreatedTime = chapter.CreatedAt,
+                        CreatedTime = chapter.CreatedAt.Date,
                         CommentCount = chapter.ChapterMetaData.TotalComments,
                         FavoriteCount = chapter.ChapterMetaData.TotalFavorites,
                         ViewCount = chapter.ChapterMetaData.TotalViews,
