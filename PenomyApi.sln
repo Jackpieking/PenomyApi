@@ -127,6 +127,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.G43", "src\Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.Infra.G43", "src\External\Infrastructure\Generic\PenomyAPI.Infra.G43\PenomyAPI.Infra.G43.csproj", "{33A1569B-BB1E-4BB6-8DEE-24C628550588}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.G44", "PenomyAPI.App.G44\PenomyAPI.App.G44.csproj", "{A1C17D98-55BB-45B4-A34B-C74E1839CBD4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.Infra.G44", "PenomyAPI.Infra.FeatG44\PenomyAPI.Infra.G44.csproj", "{33317BE6-C289-479F-A0FB-87EC0FB9103D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
