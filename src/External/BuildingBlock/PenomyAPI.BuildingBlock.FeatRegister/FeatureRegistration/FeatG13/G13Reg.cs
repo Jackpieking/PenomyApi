@@ -6,7 +6,7 @@ using PenomyAPI.BuildingBlock.FeatRegister.FeatureRegistration.Common;
 
 namespace PenomyAPI.BuildingBlock.FeatRegister.FeatureRegistration.G13;
 
-internal sealed class G3Reg : FeatureDefinitionRegistration
+internal sealed class G13Reg : FeatureDefinitionRegistration
 {
     public override Type FeatRequestType => typeof(G13Request);
 
