@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG10;
 
-namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG10.HttpResponse;
+namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G10.HttpResponse;
 
 public static class G10HttpResponseManager
 {

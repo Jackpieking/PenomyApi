@@ -2,7 +2,7 @@ using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG10;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG10.HttpResponse;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G10.HttpResponse;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G10.DTOs;
 using System.Threading;
 using System.Threading.Tasks;

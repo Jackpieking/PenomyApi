@@ -2,9 +2,9 @@
 
 public class G52RequestDto
 {
-    public long ArtworkId { get; init; }
+    public string ArtworkId { get; init; }
 
-    public long ChapterId { get; init; } = 0;
+    public string ChapterId { get; init; }
 
     public string CommentContent { get; init; }
 
