@@ -6,6 +6,8 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG8.DTOs;
 public class G8ResponseDto
 {
     public List<ArtworkChapterDto> Result { get; set; }
+    public int ChapterCount { get; set; }
+    public bool IsPagination { get; set; }
 }
 
 public class ArtworkChapterDto

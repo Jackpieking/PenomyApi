@@ -18,13 +18,14 @@ public class G8Repository : IG8Repository
         _dbContext = dbContext;
     }
 
-    public async Task<List<ArtworkChapter>> GetArtWorkChapterByIdAsync(
+    public async Task<(List<ArtworkChapter>, int)> GetArtWorkChapterByIdAsync(
         long id,
         int startPage = 1,
         int pageSize = 10,
         CancellationToken cancellationToken = default
     )
     {
+        int count = _dbContext.Set<ArtworkChapter>().Count(x => x.ArtworkId == id);
         List<ArtworkChapter> res = await _dbContext
             .Set<ArtworkChapter>()
             .Where(x => x.ArtworkId == id)
@@ -68,7 +69,7 @@ public class G8Repository : IG8Repository
         {
             chapter.ChapterMetaData = await GetArtworkChapterMetaDataAsync(chapter.Id, cancellationToken);
         }
-        return res;
+        return (res, count);
     }
 
     public async Task<ArtworkChapterMetaData> GetArtworkChapterMetaDataAsync(

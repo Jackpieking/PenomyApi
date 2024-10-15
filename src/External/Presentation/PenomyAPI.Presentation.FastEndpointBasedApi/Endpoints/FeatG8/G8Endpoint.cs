@@ -55,10 +55,10 @@ public class G8Endpoint : Endpoint<G8Request, G8HttpResponse>
             .Resolve(featResponse.StatusCode)
             .Invoke(g8Req, featResponse);
 
-        if (featResponse.IsSuccess && featResponse.Result.Count > 0)
+        if (featResponse.IsSuccess && featResponse.Chapters.Count > 0)
         {
             List<ArtworkChapterDto> g8ResponseDtos = [];
-            foreach (var chapter in featResponse.Result)
+            foreach (var chapter in featResponse.Chapters)
             {
                 g8ResponseDtos.Add(
                     new ArtworkChapterDto
@@ -66,7 +66,7 @@ public class G8Endpoint : Endpoint<G8Request, G8HttpResponse>
                         Id = chapter.Id,
                         ChapterName = chapter.Title,
                         UploadOrder = chapter.UploadOrder,
-                        CreatedTime = chapter.CreatedAt.Date,
+                        CreatedTime = chapter.CreatedAt,
                         CommentCount = chapter.ChapterMetaData.TotalComments,
                         FavoriteCount = chapter.ChapterMetaData.TotalFavorites,
                         ViewCount = chapter.ChapterMetaData.TotalViews,
@@ -74,7 +74,8 @@ public class G8Endpoint : Endpoint<G8Request, G8HttpResponse>
                     }
                 );
             }
-            httpResponse.Body = new G8ResponseDto { Result = g8ResponseDtos };
+
+            httpResponse.Body = new G8ResponseDto { Result = g8ResponseDtos, ChapterCount = featResponse.ChapterCount, IsPagination = featResponse.ChapterCount > g8Req.PageSize };
             return httpResponse;
         }
         await SendAsync(httpResponse, httpResponse.HttpCode, ct);
