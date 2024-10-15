@@ -143,11 +143,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.APP.FeatG6", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatArt1", "src\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt1\PenomyAPI.App.FeatArt1.csproj", "{B694FAD8-B622-462F-A920-57CE5DAC3B11}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D9C8A999-145B-4150-8F9A-93436E0979E0}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatG12", "src\Core\Application\Generic\PenomyAPI.App.FeatG12\PenomyAPI.App.FeatG12.csproj", "{4EC5A8E4-1B55-4ADD-B41F-AE8C79959004}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.FeatG13", "src\Core\Application\Generic\PenomyAPI.App.FeatG13\PenomyAPI.App.FeatG13.csproj", "{F47BD64E-8AE4-4979-B707-C898FF46037D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatG13", "src\Core\Application\Generic\PenomyAPI.App.FeatG13\PenomyAPI.App.FeatG13.csproj", "{F47BD64E-8AE4-4979-B707-C898FF46037D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

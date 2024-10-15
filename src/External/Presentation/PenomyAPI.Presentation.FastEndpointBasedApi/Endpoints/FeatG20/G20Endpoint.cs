@@ -1,18 +1,18 @@
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
-using PenomyAPI.App.FeatG10;
+using PenomyAPI.App.FeatG20;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G10.HttpResponse;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G10.DTOs;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G20.HttpResponse;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G20.DTOs;
 using System.Threading;
 using System.Threading.Tasks;
-namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG10;
+namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3;
 
-public class G10Endpoint : Endpoint<G10Request, G10HttpResponse>
+public class G20Endpoint : Endpoint<G20Request, G20HttpResponse>
 {
     public override void Configure()
     {
-        Get("/g10/ArtworkComment/get");
+        Get("/g20/ArtworkComment/get");
         AllowAnonymous();
 
         Description(builder: builder =>
@@ -24,27 +24,27 @@ public class G10Endpoint : Endpoint<G10Request, G10HttpResponse>
         {
             summary.Summary = "Endpoint for getting artwork comment.";
             summary.Description = "This endpoint is used for getting artwork comment.";
-            summary.Response<G10HttpResponse>(
+            summary.Response<G20HttpResponse>(
                 description: "Represent successful operation response.",
-                example: new() { AppCode = G10ResponseStatusCode.SUCCESS.ToString() }
+                example: new() { AppCode = G20ResponseStatusCode.SUCCESS.ToString() }
             );
         });
     }
 
-    public override async Task<G10HttpResponse> ExecuteAsync(G10Request req, CancellationToken ct)
+    public override async Task<G20HttpResponse> ExecuteAsync(G20Request req, CancellationToken ct)
     {
-        var featG10Request = new G10Request { ArtworkId = req.ArtworkId };
+        var featG20Request = new G20Request { ArtworkId = req.ArtworkId };
 
         // Get FeatureHandler response.
-        var featResponse = await FeatureExtensions.ExecuteAsync<G10Request, G10Response>(req, ct);
+        var featResponse = await FeatureExtensions.ExecuteAsync<G20Request, G20Response>(req, ct);
 
-        var httpResponse = G10HttpResponseManager
+        var httpResponse = G20HttpResponseManager
             .Resolve(featResponse.StatusCode)
-            .Invoke(featG10Request, featResponse);
+            .Invoke(featG20Request, featResponse);
 
-        httpResponse.Body = new G10ResponseDto
+        httpResponse.Body = new G20ResponseDto
         {
-            CommentList = featResponse.Result.ConvertAll(x => new G10ResponseDtoObject
+            CommentList = featResponse.Result.ConvertAll(x => new G20ResponseDtoObject
             {
                 Id = x.Id,
                 Content = x.Content,
