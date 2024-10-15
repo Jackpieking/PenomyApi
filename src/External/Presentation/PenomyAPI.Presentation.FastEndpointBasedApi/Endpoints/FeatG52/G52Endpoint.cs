@@ -43,11 +43,11 @@ public class G52Endpoint : Endpoint<G52RequestDto, G52HttpResponse>
         var _artworkComment = new ArtworkComment
         {
             Content = req.CommentContent,
-            ArtworkId = req.ArtworkId,
-            ChapterId = req.ChapterId,
+            ArtworkId = Int64.Parse(req.ArtworkId),
+            ChapterId = Int64.Parse(req.ChapterId),
             IsDirectlyCommented = req.IsDirectComment,
             CreatedAt = DateTime.UtcNow,
-            CreatedBy = 13123123123,
+            CreatedBy = 123456789012345678,
         };
         var G52Request = new G52Request { ArtworkComment = _artworkComment, };
 
