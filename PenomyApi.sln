@@ -145,9 +145,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatArt1", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatG12", "src\Core\Application\Generic\PenomyAPI.App.FeatG12\PenomyAPI.App.FeatG12.csproj", "{4EC5A8E4-1B55-4ADD-B41F-AE8C79959004}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Penomy.API.FeatG14", "src\Core\Application\Generic\Penomy.API.FeatG14\Penomy.API.FeatG14.csproj", "{E80F3061-15DE-4DCB-8FC7-BDC1291BC0BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Penomy.API.FeatG14", "src\Core\Application\Generic\Penomy.API.FeatG14\Penomy.API.FeatG14.csproj", "{E80F3061-15DE-4DCB-8FC7-BDC1291BC0BB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatG13", "src\Core\Application\Generic\PenomyAPI.App.FeatG13\PenomyAPI.App.FeatG13.csproj", "{F47BD64E-8AE4-4979-B707-C898FF46037D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.G43", "src\Core\Application\Generic\PenomyAPI.App.G43\PenomyAPI.App.G43.csproj", "{982B6D29-3CA5-4F66-B591-5E01438ACB10}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatG20", "src\Core\Application\Generic\PenomyAPI.App.FeatG20\PenomyAPI.App.FeatG20.csproj", "{726554CA-EE47-4C6E-85CF-2B42C7EC8600}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -351,6 +355,14 @@ Global
 		{F47BD64E-8AE4-4979-B707-C898FF46037D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F47BD64E-8AE4-4979-B707-C898FF46037D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F47BD64E-8AE4-4979-B707-C898FF46037D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{982B6D29-3CA5-4F66-B591-5E01438ACB10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{982B6D29-3CA5-4F66-B591-5E01438ACB10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{982B6D29-3CA5-4F66-B591-5E01438ACB10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{982B6D29-3CA5-4F66-B591-5E01438ACB10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{726554CA-EE47-4C6E-85CF-2B42C7EC8600}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{726554CA-EE47-4C6E-85CF-2B42C7EC8600}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{726554CA-EE47-4C6E-85CF-2B42C7EC8600}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{726554CA-EE47-4C6E-85CF-2B42C7EC8600}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -428,6 +440,8 @@ Global
 		{4EC5A8E4-1B55-4ADD-B41F-AE8C79959004} = {93238DD1-0977-422A-A564-56BD09E1EC18}
 		{E80F3061-15DE-4DCB-8FC7-BDC1291BC0BB} = {93238DD1-0977-422A-A564-56BD09E1EC18}
 		{F47BD64E-8AE4-4979-B707-C898FF46037D} = {93238DD1-0977-422A-A564-56BD09E1EC18}
+		{982B6D29-3CA5-4F66-B591-5E01438ACB10} = {93238DD1-0977-422A-A564-56BD09E1EC18}
+		{726554CA-EE47-4C6E-85CF-2B42C7EC8600} = {93238DD1-0977-422A-A564-56BD09E1EC18}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D57C122E-3458-4428-82FB-FF6E7A97A032}
