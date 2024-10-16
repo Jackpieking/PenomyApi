@@ -147,6 +147,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatG12", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatG13", "src\Core\Application\Generic\PenomyAPI.App.FeatG13\PenomyAPI.App.FeatG13.csproj", "{F47BD64E-8AE4-4979-B707-C898FF46037D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.FeatG21", "src\Core\Application\Generic\PenomyAPI.App.FeatG21\PenomyAPI.App.FeatG21.csproj", "{D2956C88-1C5C-4DF7-ADBF-0C560859B410}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -345,6 +347,10 @@ Global
 		{F47BD64E-8AE4-4979-B707-C898FF46037D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F47BD64E-8AE4-4979-B707-C898FF46037D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F47BD64E-8AE4-4979-B707-C898FF46037D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2956C88-1C5C-4DF7-ADBF-0C560859B410}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2956C88-1C5C-4DF7-ADBF-0C560859B410}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2956C88-1C5C-4DF7-ADBF-0C560859B410}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2956C88-1C5C-4DF7-ADBF-0C560859B410}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -421,6 +427,7 @@ Global
 		{B694FAD8-B622-462F-A920-57CE5DAC3B11} = {315DDDD8-6E85-4C09-9F74-B81ECD9CD65A}
 		{4EC5A8E4-1B55-4ADD-B41F-AE8C79959004} = {93238DD1-0977-422A-A564-56BD09E1EC18}
 		{F47BD64E-8AE4-4979-B707-C898FF46037D} = {93238DD1-0977-422A-A564-56BD09E1EC18}
+		{D2956C88-1C5C-4DF7-ADBF-0C560859B410} = {93238DD1-0977-422A-A564-56BD09E1EC18}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D57C122E-3458-4428-82FB-FF6E7A97A032}
