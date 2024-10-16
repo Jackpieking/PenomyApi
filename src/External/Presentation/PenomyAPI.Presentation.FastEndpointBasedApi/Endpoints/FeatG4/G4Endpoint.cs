@@ -9,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4;
 
-public class G54Endpoint : Endpoint<G4RequestDto, G4HttpResponse>
+public class G4Endpoint : Endpoint<G4RequestDto, G4HttpResponse>
 {
     public override void Configure()
     {
