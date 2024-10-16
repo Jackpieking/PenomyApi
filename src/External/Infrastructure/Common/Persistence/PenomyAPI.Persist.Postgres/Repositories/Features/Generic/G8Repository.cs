@@ -1,11 +1,11 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using PenomyAPI.Persist.Postgres.Data.DbContexts;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
 
@@ -18,13 +18,14 @@ public class G8Repository : IG8Repository
         _dbContext = dbContext;
     }
 
-    public async Task<List<ArtworkChapter>> GetArtWorkChapterByIdAsync(
+    public async Task<(List<ArtworkChapter>, int)> GetArtWorkChapterByIdAsync(
         long id,
         int startPage = 1,
         int pageSize = 10,
         CancellationToken cancellationToken = default
     )
     {
+        int count = _dbContext.Set<ArtworkChapter>().Count(x => x.ArtworkId == id);
         List<ArtworkChapter> res = await _dbContext
             .Set<ArtworkChapter>()
             .Where(x => x.ArtworkId == id)
@@ -62,11 +63,13 @@ public class G8Repository : IG8Repository
             .AsNoTracking()
             .Skip((startPage - 1) * pageSize)
             .Take(pageSize)
+            .OrderBy(x => x.Id)
             .ToListAsync(cancellationToken);
-        res.ForEach(async x =>
-            x.ChapterMetaData = await GetArtworkChapterMetaDataAsync(x.Id, cancellationToken)
-        );
-        return res;
+        foreach (var chapter in res)
+        {
+            chapter.ChapterMetaData = await GetArtworkChapterMetaDataAsync(chapter.Id, cancellationToken);
+        }
+        return (res, count);
     }
 
     public async Task<ArtworkChapterMetaData> GetArtworkChapterMetaDataAsync(
