@@ -143,9 +143,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.APP.FeatG6", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatArt1", "src\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt1\PenomyAPI.App.FeatArt1.csproj", "{B694FAD8-B622-462F-A920-57CE5DAC3B11}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D9C8A999-145B-4150-8F9A-93436E0979E0}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatG12", "src\Core\Application\Generic\PenomyAPI.App.FeatG12\PenomyAPI.App.FeatG12.csproj", "{4EC5A8E4-1B55-4ADD-B41F-AE8C79959004}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Penomy.API.FeatG14", "src\Core\Application\Generic\Penomy.API.FeatG14\Penomy.API.FeatG14.csproj", "{E80F3061-15DE-4DCB-8FC7-BDC1291BC0BB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatG13", "src\Core\Application\Generic\PenomyAPI.App.FeatG13\PenomyAPI.App.FeatG13.csproj", "{F47BD64E-8AE4-4979-B707-C898FF46037D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -341,6 +343,14 @@ Global
 		{4EC5A8E4-1B55-4ADD-B41F-AE8C79959004}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4EC5A8E4-1B55-4ADD-B41F-AE8C79959004}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4EC5A8E4-1B55-4ADD-B41F-AE8C79959004}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E80F3061-15DE-4DCB-8FC7-BDC1291BC0BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E80F3061-15DE-4DCB-8FC7-BDC1291BC0BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E80F3061-15DE-4DCB-8FC7-BDC1291BC0BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E80F3061-15DE-4DCB-8FC7-BDC1291BC0BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F47BD64E-8AE4-4979-B707-C898FF46037D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F47BD64E-8AE4-4979-B707-C898FF46037D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F47BD64E-8AE4-4979-B707-C898FF46037D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F47BD64E-8AE4-4979-B707-C898FF46037D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -416,6 +426,8 @@ Global
 		{15EC659F-8A97-405A-811F-7151DB4796A5} = {93238DD1-0977-422A-A564-56BD09E1EC18}
 		{B694FAD8-B622-462F-A920-57CE5DAC3B11} = {315DDDD8-6E85-4C09-9F74-B81ECD9CD65A}
 		{4EC5A8E4-1B55-4ADD-B41F-AE8C79959004} = {93238DD1-0977-422A-A564-56BD09E1EC18}
+		{E80F3061-15DE-4DCB-8FC7-BDC1291BC0BB} = {93238DD1-0977-422A-A564-56BD09E1EC18}
+		{F47BD64E-8AE4-4979-B707-C898FF46037D} = {93238DD1-0977-422A-A564-56BD09E1EC18}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D57C122E-3458-4428-82FB-FF6E7A97A032}

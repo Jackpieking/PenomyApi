@@ -19,7 +19,7 @@ public class G4Handler : IFeatureHandler<G4Request, G4Response>
     {
         var unitOfWork = _unitOfWork.Value;
         var result = await unitOfWork.G4Repository.GetComicsByCategoryAsync(request.Category);
-
+        if(result == null) return new G4Response { Result = result, StatusCode = G4ResponseStatusCode.DATABASE_ERROR };
         return new G4Response { Result = result, StatusCode = G4ResponseStatusCode.SUCCESS };
     }
 }

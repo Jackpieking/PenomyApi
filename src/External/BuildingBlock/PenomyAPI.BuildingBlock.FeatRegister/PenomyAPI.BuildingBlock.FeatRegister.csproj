@@ -33,6 +33,8 @@
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG3\PenomyAPI.App.FeatG3.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Generic\PenomyAPI.Infra.G44\PenomyAPI.Infra.G44.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Generic\PenomyAPI.Infra.G25\PenomyAPI.Infra.G25.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG13\PenomyAPI.App.FeatG13.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG20\PenomyAPI.App.FeatG20.csproj" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
