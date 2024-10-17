@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text.Json;
+using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.Common.FileServices.Models;
 using PenomyAPI.App.Common.Models.Common;
 using PenomyAPI.App.FeatArt7;
@@ -6,10 +10,6 @@ using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.Common.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Helpers.IFormFiles;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text.Json;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt7.DTOs;
 
@@ -161,11 +161,13 @@ public sealed class Art7RequestDto
         // Set the artwork categories if the update is found.
         if (IsCategoriesUpdated)
         {
-            request.ArtworkCategories = ArtworkCategories.Select(artworkCategory => new ArtworkCategory
-            {
-                ArtworkId = ComicId,
-                CategoryId = long.Parse(artworkCategory.Id),
-            });
+            request.ArtworkCategories = ArtworkCategories.Select(
+                artworkCategory => new ArtworkCategory
+                {
+                    ArtworkId = ComicId,
+                    CategoryId = long.Parse(artworkCategory.Id),
+                }
+            );
 
             request.IsCategoriesUpdated = true;
         }

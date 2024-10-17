@@ -137,15 +137,20 @@ public sealed class Art7Repository : IArt7Repository
             await _artworkDbSet
                 .Where(predicate: updatedComic => updatedComic.Id == updateDetail.Id)
                 .ExecuteUpdateAsync(
-                    setPropertyCalls: updatedComic => updatedComic
-                        .SetProperty(comic => comic.Title, updateDetail.Title)
-                        .SetProperty(comic => comic.ArtworkOriginId, updateDetail.ArtworkOriginId)
-                        .SetProperty(comic => comic.Introduction, updateDetail.Introduction)
-                        .SetProperty(comic => comic.ArtworkStatus, updateDetail.ArtworkStatus)
-                        .SetProperty(comic => comic.PublicLevel, updateDetail.PublicLevel)
-                        .SetProperty(comic => comic.AllowComment, updateDetail.AllowComment)
-                        .SetProperty(comic => comic.UpdatedAt, updateDetail.UpdatedAt),
-                    cancellationToken: cancellationToken);
+                    setPropertyCalls: updatedComic =>
+                        updatedComic
+                            .SetProperty(comic => comic.Title, updateDetail.Title)
+                            .SetProperty(
+                                comic => comic.ArtworkOriginId,
+                                updateDetail.ArtworkOriginId
+                            )
+                            .SetProperty(comic => comic.Introduction, updateDetail.Introduction)
+                            .SetProperty(comic => comic.ArtworkStatus, updateDetail.ArtworkStatus)
+                            .SetProperty(comic => comic.PublicLevel, updateDetail.PublicLevel)
+                            .SetProperty(comic => comic.AllowComment, updateDetail.AllowComment)
+                            .SetProperty(comic => comic.UpdatedAt, updateDetail.UpdatedAt),
+                    cancellationToken: cancellationToken
+                );
 
             // If thumbnail is updated, then update the thumbnail url of the comic.
             if (isThumbnailUpdated)
@@ -153,9 +158,13 @@ public sealed class Art7Repository : IArt7Repository
                 await _artworkDbSet
                     .Where(predicate: updatedComic => updatedComic.Id == updateDetail.Id)
                     .ExecuteUpdateAsync(
-                        setPropertyCalls: updatedComic => updatedComic
-                            .SetProperty(comic => comic.ThumbnailUrl, updateDetail.ThumbnailUrl),
-                        cancellationToken: cancellationToken);
+                        setPropertyCalls: updatedComic =>
+                            updatedComic.SetProperty(
+                                comic => comic.ThumbnailUrl,
+                                updateDetail.ThumbnailUrl
+                            ),
+                        cancellationToken: cancellationToken
+                    );
             }
 
             // Update the category list if it has any update.

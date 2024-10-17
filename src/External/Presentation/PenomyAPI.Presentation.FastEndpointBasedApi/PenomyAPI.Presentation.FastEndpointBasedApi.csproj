@@ -19,7 +19,4 @@
     <PackageReference Include="FastEndpoints.Swagger" Version="5.25.0" />
     <PackageReference Include="File.TypeChecker" Version="4.1.1" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Endpoints\FeatG53\DTOs\" />
-  </ItemGroup>
 </Project>
