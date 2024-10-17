@@ -2,9 +2,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\PenomyAPI.Domain.RelationalDb\PenomyAPI.Domain.RelationalDb.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\ArtworkCreation\" />
-  </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>disable</ImplicitUsings>

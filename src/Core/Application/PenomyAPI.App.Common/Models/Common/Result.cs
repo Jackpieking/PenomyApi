@@ -1,4 +1,4 @@
-﻿namespace PenomyAPI.App.Common.Models.Common;
+namespace PenomyAPI.App.Common.Models.Common;
 
 public sealed class Result<TValue>
 {
@@ -33,10 +33,7 @@ public sealed class Result<TValue>
     /// <returns>
     ///     A <see cref="Result{T}"/> with (IsSucess = <see langword="false"/>)
     /// </returns>
-    public static Result<TValue> Failed() => new(default)
-    {
-        IsSuccess = false
-    };
+    public static Result<TValue> Failed() => new(default) { IsSuccess = false };
 
     /// <summary>
     ///     A short hand to create a Failed <see cref="Result{T}"/> instance
@@ -45,9 +42,6 @@ public sealed class Result<TValue>
     /// <returns>
     ///     A <see cref="Result{T}"/> with (IsSucess = <see langword="false"/>)
     /// </returns>
-    public static Result<TValue> Failed(TValue value) => new(value)
-    {
-        IsSuccess = false,
-        Value = value
-    };
+    public static Result<TValue> Failed(TValue value) =>
+        new(value) { IsSuccess = false, Value = value };
 }

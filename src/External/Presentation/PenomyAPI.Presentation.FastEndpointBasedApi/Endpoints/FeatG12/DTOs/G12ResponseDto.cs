@@ -1,6 +1,4 @@
-﻿using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG12.DTOs
 {
@@ -9,6 +7,7 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG12.DTOs
         public string Category { get; set; }
         public IEnumerable<FeatG12ResponseDtoObject> ArtworkList { get; set; }
     }
+
     public class FeatG12ResponseDtoObject
     {
         public string CategoryName { get; set; }
