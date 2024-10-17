@@ -1,10 +1,10 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using PenomyAPI.Persist.Postgres.Data.DbContexts;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
 
@@ -37,7 +37,7 @@ public class G6Repository : IG6Repository
                     },
                     ArtworkCategories = x.ArtworkCategories.Select(y => new ArtworkCategory
                     {
-                        Category = new Category { Name = y.Category.Name, },
+                        Category = new Category { Name = y.Category.Name },
                         ArtworkId = y.ArtworkId,
                         CategoryId = y.CategoryId,
                     }),
@@ -62,14 +62,23 @@ public class G6Repository : IG6Repository
                     },
                     ThumbnailUrl = x.ThumbnailUrl,
                 },
-                PopularityScore = CalculatePopularityScore(x)
+            })
+            .AsNoTracking()
+            .AsSplitQuery()
+            .ToListAsync();
+
+        return list
+            .Select(x => new
+            {
+                x.Artwork,
+                PopularityScore = CalculatePopularityScore(x.Artwork)
             })
             .OrderByDescending(x => x.PopularityScore)
             .Take(top)
-            .AsNoTracking()
-            .ToListAsync();
-        return list.Select(x => x.Artwork).ToList();
+            .Select(x => x.Artwork)
+            .ToList();
     }
+
 
     private double CalculatePopularityScore(Artwork artwork)
     {

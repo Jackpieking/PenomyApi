@@ -1,9 +1,9 @@
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
 
@@ -15,7 +15,10 @@ public class G5Repository : IG5Repository
     {
         _dbContext = dbContext;
     }
-
+    private static bool IsValidArtworkAsync(Artwork artwork)
+    {
+        return artwork.ArtworkType == ArtworkType.Comic && artwork.IsTemporarilyRemoved == false && artwork.IsTakenDown == false && artwork.PublicLevel != Domain.RelationalDb.Entities.ArtworkCreation.Common.ArtworkPublicLevel.Private;
+    }
     public async Task<Artwork> GetArtWorkDetailByIdAsync(
         long artworkId,
         CancellationToken token = default
@@ -23,11 +26,12 @@ public class G5Repository : IG5Repository
     {
         var artwork = await _dbContext
             .Set<Artwork>()
-            .Where(x => x.Id == artworkId)
+            .Where(x => x.Id == artworkId && IsValidArtworkAsync(x))
             .Select(x => new Artwork
             {
                 Title = x.Title,
                 AuthorName = x.AuthorName,
+                HasSeries = x.HasSeries,
                 Introduction = x.Introduction,
                 Id = x.Id,
                 Origin = new ArtworkOrigin
@@ -63,6 +67,7 @@ public class G5Repository : IG5Repository
                 ThumbnailUrl = x.ThumbnailUrl,
             })
             .AsNoTracking()
+            .AsSplitQuery()
             .FirstOrDefaultAsync(token);
         return artwork;
     }

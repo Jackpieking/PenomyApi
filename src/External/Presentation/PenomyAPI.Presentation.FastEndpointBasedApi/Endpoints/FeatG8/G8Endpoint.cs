@@ -51,7 +51,7 @@ public class G8Endpoint : Endpoint<G8Request, G8HttpResponse>
         // Get FeatureHandler response.
         var featResponse = await FeatureExtensions.ExecuteAsync<G8Request, G8Response>(g8Req, ct);
 
-        httpResponse = G8ResponseManager
+        httpResponse = G8HttpResponseManager
             .Resolve(featResponse.StatusCode)
             .Invoke(g8Req, featResponse);
 
