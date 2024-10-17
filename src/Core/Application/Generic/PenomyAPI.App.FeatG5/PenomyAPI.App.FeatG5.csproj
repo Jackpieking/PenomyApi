@@ -7,11 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\PenomyAPI.App.Common\PenomyAPI.App.Common.csproj" />
+    <Compile Remove="OtherHandlers\**" />
+    <EmbeddedResource Remove="OtherHandlers\**" />
+    <None Remove="OtherHandlers\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="OtherHandlers\GetArtworkStats\" />
+    <ProjectReference Include="..\..\PenomyAPI.App.Common\PenomyAPI.App.Common.csproj" />
   </ItemGroup>
 
 </Project>

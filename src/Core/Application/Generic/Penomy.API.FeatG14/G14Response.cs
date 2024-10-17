@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using PenomyAPI.App.Common;
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 
-namespace Penomy.API.FeatG14
+namespace PenomyAPI.App.FeatG14;
+
+public class G14Response : IFeatureResponse
 {
-    internal class G14Response
-    {
-    }
+    public bool IsSuccess { get; set; }
+
+    public List<Artwork> Artworks { get; set; }
+
+    public G14ResponseStatusCode StatusCode { get; set; }
 }

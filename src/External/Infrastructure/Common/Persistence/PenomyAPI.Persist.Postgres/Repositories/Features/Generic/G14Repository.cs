@@ -1,37 +1,33 @@
 using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
+using PenomyAPI.Persist.Postgres.Data.DbContexts;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
 
-public class G5Repository : IG5Repository
+public class G14Repository : IG14Repository
 {
-    private readonly DbContext _dbContext;
-
-    public G5Repository(DbContext dbContext)
+    private readonly AppDbContext _dbContext;
+    private readonly DbSet<Artwork> _artworkSet;
+    public G14Repository(AppDbContext dbContext)
     {
         _dbContext = dbContext;
+        _artworkSet = _dbContext.Set<Artwork>();
     }
-    private static bool IsValidArtworkAsync(Artwork artwork)
+
+    public async Task<List<Artwork>> GetRecommendedAnimeAsync(long cateId, int limit = 5, CancellationToken cancellationToken = default)
     {
-        return artwork.ArtworkType == ArtworkType.Comic && artwork.IsTemporarilyRemoved == false && artwork.IsTakenDown == false && artwork.PublicLevel != Domain.RelationalDb.Entities.ArtworkCreation.Common.ArtworkPublicLevel.Private;
-    }
-    public async Task<Artwork> GetArtWorkDetailByIdAsync(
-        long artworkId,
-        CancellationToken token = default
-    )
-    {
-        var artwork = await _dbContext
-            .Set<Artwork>()
-            .Where(x => x.Id == artworkId && IsValidArtworkAsync(x))
+        var result = await _artworkSet
+            .Where(x => x.ArtworkType == ArtworkType.Animation && x.ArtworkCategories.Any(y => y.CategoryId == cateId))
+            .Take(limit)
             .Select(x => new Artwork
             {
                 Title = x.Title,
                 AuthorName = x.AuthorName,
-                HasSeries = x.HasSeries,
                 Introduction = x.Introduction,
                 Id = x.Id,
                 Origin = new ArtworkOrigin
@@ -41,20 +37,20 @@ public class G5Repository : IG5Repository
                 },
                 ArtworkCategories = x.ArtworkCategories.Select(y => new ArtworkCategory
                 {
-                    Category = new Category { Name = y.Category.Name, },
+                    Category = new Category { Name = y.Category.Name },
                     ArtworkId = y.ArtworkId,
                     CategoryId = y.CategoryId,
-                }),
+                }).ToList(),
                 ArtworkSeries = x.ArtworkSeries.Select(y => new ArtworkSeries
                 {
                     ArtworkId = y.ArtworkId,
                     Series = y.Series,
-                }),
+                }).ToList(),
                 ArtworkStatus = x.ArtworkStatus,
                 UserRatingArtworks = x.UserRatingArtworks.Select(y => new UserRatingArtwork
                 {
                     StarRates = y.StarRates,
-                }),
+                }).ToList(),
                 ArtworkMetaData = new ArtworkMetaData
                 {
                     TotalComments = x.ArtworkMetaData.TotalComments,
@@ -66,14 +62,16 @@ public class G5Repository : IG5Repository
                 },
                 ThumbnailUrl = x.ThumbnailUrl,
             })
+            .OrderByDescending(x => x.ArtworkMetaData.TotalStarRates)
             .AsNoTracking()
             .AsSplitQuery()
-            .FirstOrDefaultAsync(token);
-        return artwork;
+            .ToListAsync(cancellationToken);
+
+        return result;
     }
 
-    public Task<bool> IsArtworkExistAsync(long artworkId, CancellationToken ct = default)
+    public async Task<bool> IsExistCategoryAsync(long cateId, CancellationToken token = default)
     {
-        return _dbContext.Set<Artwork>().AnyAsync(x => x.Id == artworkId, ct);
+        return await _dbContext.Set<Category>().AnyAsync(x => x.Id == cateId, token);
     }
 }
