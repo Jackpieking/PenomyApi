@@ -10,7 +10,7 @@ using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG12.HttpResponse
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG12;
 
-public class G512Endpoint : Endpoint<G12RequestDto, G12HttpResponse>
+public class G12Endpoint : Endpoint<G12RequestDto, G12HttpResponse>
 {
     public override void Configure()
     {
@@ -38,7 +38,7 @@ public class G512Endpoint : Endpoint<G12RequestDto, G12HttpResponse>
         CancellationToken ct
     )
     {
-        var G12Request = new G12Request { CategoryId = req.CategoryId };
+        var G12Request = new G12Request {};
 
         // Get FeatureHandler response.
         var featResponse = await FeatureExtensions.ExecuteAsync<G12Request, G12Response>(

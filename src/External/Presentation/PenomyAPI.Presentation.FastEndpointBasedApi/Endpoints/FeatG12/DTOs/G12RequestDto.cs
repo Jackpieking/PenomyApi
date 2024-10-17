@@ -1,7 +1,9 @@
-﻿namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG12.DTOs
+﻿using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Common;
+
+namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG12.DTOs
 {
     public class G12RequestDto
     {
-        public long CategoryId { get; set; } = 123456789012345690;
+        public EmptyDto emptyDto { get; set; }
     }
 }
