@@ -7,14 +7,14 @@ using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
 
-public class G12Repository : IG12Repository
+public class G14Repository : IG14Repository
 {
     private readonly DbContext _dbContext;
     private readonly DbSet<Artwork> _artworkDbSet;
     private readonly DbSet<ArtworkCategory> _artworkCategoryDbSet;
     private readonly DbSet<Category> _categoryDbSet;
 
-    public G12Repository(DbContext dbContext)
+    public G14Repository(DbContext dbContext)
     {
         _dbContext = dbContext;
         _artworkDbSet = dbContext.Set<Artwork>();
@@ -22,10 +22,10 @@ public class G12Repository : IG12Repository
         _categoryDbSet = dbContext.Set<Category>();
     }
 
-    public async Task<List<ArtworkCategory>> GetAnimesByCategoryAsync()
+    public async Task<List<ArtworkCategory>> GetComicsByCategoryAsync(long CategoryId)
     {
         var result = await _artworkCategoryDbSet
-            .Where(c => c.Artwork.ArtworkType == ArtworkType.Animation)
+            .Where(c => c.CategoryId == CategoryId && c.Artwork.ArtworkType == ArtworkType.Animation)
             .Select(a => new ArtworkCategory
             {
                 Category = new Category { Name = a.Category.Name },
@@ -39,14 +39,10 @@ public class G12Repository : IG12Repository
                     {
                         TotalFavorites = a.Artwork.ArtworkMetaData.TotalFavorites,
                         AverageStarRate = a.Artwork.ArtworkMetaData.AverageStarRate,
-                        TotalViews = a.Artwork.ArtworkMetaData.TotalViews,
                     },
                 },
             })
             .AsNoTracking()
-            .OrderByDescending(ac => ac.Artwork.ArtworkMetaData.TotalViews)
-            .ThenByDescending(ac => ac.Artwork.ArtworkMetaData.AverageStarRate)
-            .Take(23)
             .ToListAsync();
         return result;
     }

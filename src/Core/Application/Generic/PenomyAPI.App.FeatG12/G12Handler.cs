@@ -18,7 +18,7 @@ public class G12Handler : IFeatureHandler<G12Request, G12Response>
     public async Task<G12Response> ExecuteAsync(G12Request request, CancellationToken ct)
     {
         var unitOfWork = _unitOfWork.Value;
-        var result = await unitOfWork.G12Repository.GetAnimesByCategoryAsync(request.CategoryId);
+        var result = await unitOfWork.G12Repository.GetAnimesByCategoryAsync();
 
         return new G12Response { Result = result, StatusCode = G12ResponseStatusCode.SUCCESS };
     }
