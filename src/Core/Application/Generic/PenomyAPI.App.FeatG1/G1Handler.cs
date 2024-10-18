@@ -1,9 +1,11 @@
 using System;
 using System.Runtime.CompilerServices;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using PenomyAPI.App.Common;
 using PenomyAPI.App.Common.IdGenerator.Snowflake;
+using PenomyAPI.App.Common.Tokens;
 using PenomyAPI.App.FeatG1.Infrastructures;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
@@ -13,17 +15,17 @@ namespace PenomyAPI.App.FeatG1;
 public sealed class G1Handler : IFeatureHandler<G1Request, G1Response>
 {
     private readonly IG1Repository _repository;
-    private readonly Lazy<IG1PreRegistrationTokenHandler> _preRegistrationTokenHandler;
+    private readonly Lazy<IAccessTokenHandler> _accessToken;
     private readonly Lazy<ISnowflakeIdGenerator> _snowflakeIdGenerator;
 
     public G1Handler(
         Lazy<IUnitOfWork> unitOfWork,
-        Lazy<IG1PreRegistrationTokenHandler> preRegistrationTokenHandler,
+        Lazy<IAccessTokenHandler> accessToken,
         Lazy<ISnowflakeIdGenerator> snowflakeIdGenerator
     )
     {
         _repository = unitOfWork.Value.G1Repository;
-        _preRegistrationTokenHandler = preRegistrationTokenHandler;
+        _accessToken = accessToken;
         _snowflakeIdGenerator = snowflakeIdGenerator;
     }
 
@@ -42,9 +44,9 @@ public sealed class G1Handler : IFeatureHandler<G1Request, G1Response>
 
         // TODO: JWT generator
         // Generate pre-registration token.
-        var preRegistrationToken = await _preRegistrationTokenHandler.Value.GetAsync(
-            request.Email,
-            ct
+        var preRegistrationToken = _accessToken.Value.Generate(
+            [new(ClaimTypes.Email, request.Email)],
+            30
         );
 
         return new() { };
