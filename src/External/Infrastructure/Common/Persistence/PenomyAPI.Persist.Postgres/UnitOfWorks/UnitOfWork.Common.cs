@@ -1,15 +1,14 @@
-using System;
 using Microsoft.AspNetCore.Identity;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 using PenomyAPI.Persist.Postgres.Data.DbContexts;
 using PenomyAPI.Persist.Postgres.Data.UserIdentity;
+using System;
 
-// Lưu ý namespace phải giống nhau.
 namespace PenomyAPI.Persist.Postgres.UnitOfWorks;
 
 /// <summary>
-///     This UnitOfWork file is only contain the Common Repositories.
-///     Please do not add any Feature Repositories in this UnitOfWork file.
+///     This UnitOfWork file is only contain the dependencies for other Repository to work with.
+///     Please do not add any Feature or Common Repositories to this UnitOfWork file.
 /// </summary>
 public sealed partial class UnitOfWork : IUnitOfWork
 {

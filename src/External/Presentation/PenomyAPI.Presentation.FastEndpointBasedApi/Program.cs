@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
 using PenomyAPI.BuildingBlock.FeatRegister;
 using PenomyAPI.BuildingBlock.FeatRegister.Common;
-using PenomyAPI.Persist.Postgres.Data.DbContexts;
 using PenomyAPI.Presentation.FastEndpointBasedApi.ServiceConfigurations;
 
 var builder = WebApplication.CreateBuilder(args);
+
 var services = builder.Services;
 var configuration = builder.Configuration;
 
@@ -28,7 +28,7 @@ if (app.Environment.IsDevelopment())
     app.UseCors()
         .UseFastEndpoints()
         .UseSwaggerGen()
-        .UseSwaggerUi(configure: options =>
+        .UseSwaggerUi(options =>
         {
             options.Path = string.Empty;
             options.DefaultModelsExpandDepth = -1;

@@ -4,7 +4,7 @@
     "Penomy.Development": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": true,
+      "launchBrowser": false,
       "launchUrl": "",
       "applicationUrl": "https://localhost:7056",
       "environmentVariables": {
