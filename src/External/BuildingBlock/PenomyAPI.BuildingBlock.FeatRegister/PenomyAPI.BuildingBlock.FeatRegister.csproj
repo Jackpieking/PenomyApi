@@ -13,6 +13,7 @@
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG7\PenomyAPI.App.FeatG7.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG8\PenomyAPI.App.FeatG8.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.G43\PenomyAPI.App.G43.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.G45\PenomyAPI.App.G45.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Common\BackgroundJob\PenomyAPI.BackgroundJob.Quartz\PenomyAPI.BackgroundJob.Quartz.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Common\FileService\PenomyAPI.FileService.CloudinaryService\PenomyAPI.FileService.CloudinaryService.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Common\Notification\Mail\PenomyAPI.Noti.Mail.GoogleGmail\PenomyAPI.Noti.Mail.GoogleGmail.csproj" />
