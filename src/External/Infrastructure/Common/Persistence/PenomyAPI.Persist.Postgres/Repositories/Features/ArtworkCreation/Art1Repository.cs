@@ -30,10 +30,12 @@ internal sealed class Art1Repository : IArt1Repository
         return _artworkDbSet
             .AsNoTracking()
             .Where(artwork =>
-                artwork.ArtworkType == artworkType
+                !artwork.IsTemporarilyRemoved
+                && artwork.ArtworkType == artworkType
                 && artwork.CreatedBy == creatorId)
-            .Skip(count: (pageNumber - 1) * pageSize)
-            .Take(count: pageSize)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .OrderBy(artwork => artwork.CreatedAt)
             .Select(artwork => new Artwork
             {
                 Id = artwork.Id,
