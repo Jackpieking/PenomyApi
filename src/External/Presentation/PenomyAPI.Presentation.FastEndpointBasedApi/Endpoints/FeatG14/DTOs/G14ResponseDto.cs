@@ -1,22 +1,26 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
-namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG14.DTOs
+namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG14.DTOs;
+
+public class G14ResponseDto
 {
-    public class G14ResponseDto
-    {
-        public string Category { get; set; }
-        public IEnumerable<FeatG14ResponseDtoObject> ArtworkList { get; set; }
-    }
+    public List<ArtworkDto> Result { get; set; }
+}
 
-    public class FeatG14ResponseDtoObject
-    {
-        public string CategoryName { get; set; }
-        public long ArtworkId { get; set; }
-        public string Title { get; set; }
-        public string Supplier { get; set; }
-        public double Rating { get; set; }
-        public long Favorite { get; set; }
-        public string FlagUrl { get; set; }
-        public string Thumbnail { get; set; }
-    }
+public class ArtworkDto
+{
+    public long Id { get; set; }
+    public string Name { get; set; }
+    public bool HasSeries { get; set; }
+    public string AuthorName { get; set; }
+    public string CountryName { get; set; }
+    public List<string> Categories { get; set; }
+    public string ArtworkStatus { get; set; }
+    public string SeriesName { get; set; }
+    public long ViewCount { get; set; }
+    public long FavoriteCount { get; set; }
+    public double StarRates { get; set; }
+    public string ThumbnailUrl { get; set; }
+    public string Introduction { get; set; }
+    public long CommentCount { get; set; }
 }

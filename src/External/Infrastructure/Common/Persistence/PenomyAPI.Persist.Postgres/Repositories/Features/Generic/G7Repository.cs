@@ -1,11 +1,11 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using PenomyAPI.Persist.Postgres.Data.DbContexts;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
 
@@ -40,7 +40,7 @@ public class G7Repository : IG7Repository
         {
             artworks = await _context
                 .Set<Artwork>()
-                .Where(x => x.ArtworkSeries.Any(x => x.SeriesId == seriesId))
+                .Where(x => x.ArtworkSeries.Any(x => x.SeriesId == seriesId) && x.ArtworkType == ArtworkType.Comic)
                 .Select(x => new Artwork()
                 {
                     Id = x.Id,

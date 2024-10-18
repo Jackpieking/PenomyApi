@@ -1,11 +1,11 @@
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG5;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5.HttpResponse;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5;
 
@@ -45,7 +45,7 @@ public class G5Endpoint : Endpoint<G5Request, G5HttpResponse>
         // Get FeatureHandler response.
         var featResponse = await FeatureExtensions.ExecuteAsync<G5Request, G5Response>(g5req, ct);
 
-        httpResponse = G5ResponseManager
+        httpResponse = G5HttpResponseManager
             .Resolve(featResponse.StatusCode)
             .Invoke(g5req, featResponse);
 
