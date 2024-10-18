@@ -40,6 +40,7 @@ public sealed class G1Handler : IFeatureHandler<G1Request, G1Response>
             return new() { StatusCode = G1ResponseStatusCode.USER_EXIST };
         }
 
+        // TODO: JWT generator
         // Generate pre-registration token.
         var preRegistrationToken = await _preRegistrationTokenHandler.Value.GetAsync(
             request.Email,

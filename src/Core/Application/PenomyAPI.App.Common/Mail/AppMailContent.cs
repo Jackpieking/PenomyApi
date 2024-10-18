@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace PenomyAPI.App.Common.Mail;
 
 /// <summary>

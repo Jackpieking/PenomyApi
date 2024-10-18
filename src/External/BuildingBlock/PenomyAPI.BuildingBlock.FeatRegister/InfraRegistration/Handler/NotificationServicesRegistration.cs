@@ -10,11 +10,6 @@ internal sealed class NotificationServicesRegistration : IServiceRegistration
 {
     public void Register(IServiceCollection services, IConfiguration configuration)
     {
-        AddMailServices(services, configuration);
-    }
-
-    private static void AddMailServices(IServiceCollection services, IConfiguration configuration)
-    {
         services.AddSingleton<ISendingMailHandler, SendingMailHandler>();
     }
 }
