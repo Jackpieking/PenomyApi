@@ -1,8 +1,7 @@
-﻿using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 
 namespace PenomyAPI.Domain.RelationalDb.Repositories.Features.ArtworkCreation;
 
@@ -24,5 +23,6 @@ public interface IArt10Repository
     Task<bool> CreateComicChapterAsync(
         ArtworkChapter comicChapter,
         IEnumerable<ArtworkChapterMedia> chapterMedias,
-        CancellationToken cancellationToken);
+        CancellationToken cancellationToken
+    );
 }

@@ -1,9 +1,8 @@
-﻿using FastEndpoints;
-using Microsoft.AspNetCore.Http.HttpResults;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using FastEndpoints;
 using PenomyAPI.App.Common.Models.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt10.DTOs;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt10;
 
@@ -18,9 +17,10 @@ public class Art10Endpoint : Endpoint<CreateComicChapterRequestDto>
         AllowFileUploads();
     }
 
-    public async override Task<object> ExecuteAsync(
+    public override async Task<object> ExecuteAsync(
         CreateComicChapterRequestDto requestDto,
-        CancellationToken ct)
+        CancellationToken ct
+    )
     {
         return Result<object>.Success(null);
     }

@@ -1,4 +1,4 @@
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
@@ -149,6 +149,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.G43", "src\Core\Application\Generic\PenomyAPI.App.G43\PenomyAPI.App.G43.csproj", "{982B6D29-3CA5-4F66-B591-5E01438ACB10}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatG20", "src\Core\Application\Generic\PenomyAPI.App.FeatG20\PenomyAPI.App.FeatG20.csproj", "{726554CA-EE47-4C6E-85CF-2B42C7EC8600}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityService", "IdentityService", "{6C791628-E81A-478B-8BAC-A653B0C30B24}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.Identity.AppAuthenticator", "src\External\Infrastructure\Common\IdentityService\PenomyAPI.Identity.AppAuthenticator\PenomyAPI.Identity.AppAuthenticator.csproj", "{B63430A8-E833-4D44-BEAA-0B697BE28213}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -356,6 +360,10 @@ Global
 		{726554CA-EE47-4C6E-85CF-2B42C7EC8600}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{726554CA-EE47-4C6E-85CF-2B42C7EC8600}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{726554CA-EE47-4C6E-85CF-2B42C7EC8600}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B63430A8-E833-4D44-BEAA-0B697BE28213}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B63430A8-E833-4D44-BEAA-0B697BE28213}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B63430A8-E833-4D44-BEAA-0B697BE28213}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B63430A8-E833-4D44-BEAA-0B697BE28213}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -434,6 +442,8 @@ Global
 		{F47BD64E-8AE4-4979-B707-C898FF46037D} = {93238DD1-0977-422A-A564-56BD09E1EC18}
 		{982B6D29-3CA5-4F66-B591-5E01438ACB10} = {93238DD1-0977-422A-A564-56BD09E1EC18}
 		{726554CA-EE47-4C6E-85CF-2B42C7EC8600} = {93238DD1-0977-422A-A564-56BD09E1EC18}
+		{6C791628-E81A-478B-8BAC-A653B0C30B24} = {D992902E-3588-4E21-A1D5-488D283107B1}
+		{B63430A8-E833-4D44-BEAA-0B697BE28213} = {6C791628-E81A-478B-8BAC-A653B0C30B24}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D57C122E-3458-4428-82FB-FF6E7A97A032}
