@@ -3,7 +3,7 @@ using PenomyAPI.Infra.Configuration.Common;
 
 namespace PenomyAPI.Infra.Configuration.Options;
 
-public sealed class MailCowSendingOptions : AppOptions
+public sealed class MailCowNoReplyMailOptions : AppOptions
 {
     public string DisplayName { get; init; }
 
@@ -17,6 +17,10 @@ public sealed class MailCowSendingOptions : AppOptions
 
     public override void Bind(IConfiguration configuration)
     {
-        configuration.GetRequiredSection("SmtpServer").GetRequiredSection("MailCow").Bind(this);
+        configuration
+            .GetRequiredSection("SmtpServer")
+            .GetRequiredSection("MailCow")
+            .GetRequiredSection("NoReply")
+            .Bind(this);
     }
 }
