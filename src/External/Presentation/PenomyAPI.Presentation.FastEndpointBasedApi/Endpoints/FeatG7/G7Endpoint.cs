@@ -54,7 +54,7 @@ public class G7Endpoint : Endpoint<G7Request, G7HttpResponse>
         // Get FeatureHandler response.
         var featResponse = await FeatureExtensions.ExecuteAsync<G7Request, G7Response>(g7Req, ct);
 
-        httpResponse = G7ResponseManager
+        httpResponse = G7HttpResponseManager
             .Resolve(featResponse.StatusCode)
             .Invoke(g7Req, featResponse);
 

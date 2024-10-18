@@ -28,13 +28,14 @@ public class G8Repository : IG8Repository
         int count = _dbContext.Set<ArtworkChapter>().Count(x => x.ArtworkId == id);
         List<ArtworkChapter> res = await _dbContext
             .Set<ArtworkChapter>()
-            .Where(x => x.ArtworkId == id)
+            .Where(x => x.ArtworkId == id && x.BelongedArtwork.ArtworkType == ArtworkType.Comic)
             .Select(x => new ArtworkChapter
             {
                 Id = x.Id,
                 BelongedArtwork = new Artwork
                 {
                     Id = x.BelongedArtwork.Id,
+                    ArtworkType = x.BelongedArtwork.ArtworkType,
                     Origin = new ArtworkOrigin
                     {
                         Id = x.BelongedArtwork.Origin.Id,

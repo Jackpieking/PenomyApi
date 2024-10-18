@@ -15,7 +15,10 @@ public class G5Repository : IG5Repository
     {
         _dbContext = dbContext;
     }
-
+    private static bool IsValidArtworkAsync(Artwork artwork)
+    {
+        return artwork.ArtworkType == ArtworkType.Comic && artwork.IsTemporarilyRemoved == false && artwork.IsTakenDown == false && artwork.PublicLevel != Domain.RelationalDb.Entities.ArtworkCreation.Common.ArtworkPublicLevel.Private;
+    }
     public async Task<Artwork> GetArtWorkDetailByIdAsync(
         long artworkId,
         CancellationToken token = default
@@ -23,11 +26,12 @@ public class G5Repository : IG5Repository
     {
         var artwork = await _dbContext
             .Set<Artwork>()
-            .Where(x => x.Id == artworkId)
+            .Where(x => x.Id == artworkId && IsValidArtworkAsync(x))
             .Select(x => new Artwork
             {
                 Title = x.Title,
                 AuthorName = x.AuthorName,
+                HasSeries = x.HasSeries,
                 Introduction = x.Introduction,
                 Id = x.Id,
                 Origin = new ArtworkOrigin

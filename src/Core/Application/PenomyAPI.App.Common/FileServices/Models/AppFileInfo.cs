@@ -25,6 +25,9 @@ public abstract class AppFileInfo
     /// </summary>
     public string FolderPath { get; set; }
 
+    /// <summary>
+    ///     Upload order of the image file to the storage with base zero.
+    /// </summary>
     public int UploadOrder { get; set; }
 
     /// <summary>
