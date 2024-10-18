@@ -35,7 +35,7 @@ internal sealed class PersistenceServicesRegistration : IServiceRegistration
         services.AddScoped<IUnitOfWork, UnitOfWork>().MakeScopedLazy<IUnitOfWork>();
         services.AddScoped<UserManager<PgUser>>().MakeScopedLazy<UserManager<PgUser>>();
         services.AddScoped<RoleManager<PgRole>>().MakeScopedLazy<RoleManager<PgRole>>();
-        services.AddScoped<ICacheHandler, CacheHandler>().MakeScopedLazy<ICacheHandler>();
+        services.AddSingleton<ICacheHandler, CacheHandler>().MakeSingletonLazy<ICacheHandler>();
         services.MakeSingletonLazy<IFusionCache>();
         services.MakeSingletonLazy<IFusionCacheSerializer>();
     }
