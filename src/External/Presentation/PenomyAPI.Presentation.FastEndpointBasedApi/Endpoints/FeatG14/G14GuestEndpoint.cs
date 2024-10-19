@@ -1,6 +1,7 @@
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG14;
+using PenomyAPI.App.FeatG14.OtherHandler;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG14.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG14.HttpResponse;
@@ -11,11 +12,11 @@ using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG14;
 
-public class G14Endpoint : Endpoint<G14Request, G14HttpResponse>
+public class G14GuestEndpoint : Endpoint<G14Request, G14HttpResponse>
 {
     public override void Configure()
     {
-        Get("/g14/recommended-category");
+        Get("/g14-guest/recommended-category");
 
         AllowAnonymous();
 
@@ -26,8 +27,8 @@ public class G14Endpoint : Endpoint<G14Request, G14HttpResponse>
 
         Summary(endpointSummary: summary =>
         {
-            summary.Summary = "Endpoint for get recommended artworks based on category for users";
-            summary.Description = "This endpoint is used for get recommended artworks based on category for users";
+            summary.Summary = "Endpoint for get recommended artworks based on category for guest";
+            summary.Description = "This endpoint is used for get recommended artworks based on category for guests";
             summary.Response<G14HttpResponse>(
                 description: "Represent successful operation response.",
                 example: new() { AppCode = G14ResponseStatusCode.SUCCESS.ToString() }
@@ -42,12 +43,12 @@ public class G14Endpoint : Endpoint<G14Request, G14HttpResponse>
     {
         var httpResponse = new G14HttpResponse();
 
-        var g14req = new G14Request { UserId = requestDto.UserId, Limit = requestDto.Limit };
+        var g14req = new G14GuestRequest { GuestId = requestDto.UserId, Limit = requestDto.Limit };
 
         // Get FeatureHandler response.
-        var featResponse = await FeatureExtensions.ExecuteAsync<G14Request, G14Response>(g14req, ct);
+        var featResponse = await FeatureExtensions.ExecuteAsync<G14GuestRequest, G14GuestResponse>(g14req, ct);
 
-        httpResponse = G14HttpResponseManager
+        httpResponse = G14GuestHttpResponseManager
             .Resolve(featResponse.StatusCode)
             .Invoke(g14req, featResponse);
 

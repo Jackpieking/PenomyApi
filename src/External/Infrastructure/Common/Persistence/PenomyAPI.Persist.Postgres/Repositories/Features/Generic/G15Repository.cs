@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
 
-public class G5Repository : IG5Repository
+public class G15Repository : IG15Repository
 {
     private readonly DbContext _dbContext;
 
-    public G5Repository(DbContext dbContext)
+    public G15Repository(DbContext dbContext)
     {
         _dbContext = dbContext;
     }
     private static bool IsValidArtworkAsync(Artwork artwork)
     {
-        return artwork.ArtworkType == ArtworkType.Comic && artwork.IsTemporarilyRemoved == false && artwork.IsTakenDown == false && artwork.PublicLevel != Domain.RelationalDb.Entities.ArtworkCreation.Common.ArtworkPublicLevel.Private;
+        return artwork.ArtworkType == ArtworkType.Animation && artwork.IsTemporarilyRemoved == false && artwork.IsTakenDown == false && artwork.PublicLevel != Domain.RelationalDb.Entities.ArtworkCreation.Common.ArtworkPublicLevel.Private;
     }
     public async Task<Artwork> GetArtWorkDetailByIdAsync(
         long artworkId,
@@ -74,6 +74,6 @@ public class G5Repository : IG5Repository
 
     public Task<bool> IsArtworkExistAsync(long artworkId, CancellationToken ct = default)
     {
-        return _dbContext.Set<Artwork>().AnyAsync(x => x.Id == artworkId && x.ArtworkType == ArtworkType.Comic, ct);
+        return _dbContext.Set<Artwork>().AnyAsync(x => x.Id == artworkId && x.ArtworkType == ArtworkType.Animation, ct);
     }
 }

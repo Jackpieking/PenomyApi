@@ -1,16 +1,16 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PenomyAPI.App.FeatG14;
+using PenomyAPI.App.FeatG15;
 using PenomyAPI.BuildingBlock.FeatRegister.FeatureRegistration.Common;
 using System;
 
-namespace PenomyAPI.BuildingBlock.FeatRegister.FeatureRegistration.G14;
+namespace PenomyAPI.BuildingBlock.FeatRegister.FeatureRegistration.G15;
 
-internal sealed class G14Reg : FeatureDefinitionRegistration
+internal sealed class G15Reg : FeatureDefinitionRegistration
 {
-    public override Type FeatRequestType => typeof(G14Request);
+    public override Type FeatRequestType => typeof(G15Request);
 
-    public override Type FeatHandlerType => typeof(G14Handler);
+    public override Type FeatHandlerType => typeof(G15Handler);
 
     public override void AddFeatureDependency(
         IServiceCollection services,
@@ -18,3 +18,4 @@ internal sealed class G14Reg : FeatureDefinitionRegistration
     )
     { }
 }
+

@@ -1,4 +1,5 @@
 using PenomyAPI.App.Common;
+using PenomyAPI.App.FeatG14.OtherHandler;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
@@ -9,39 +10,39 @@ using System.Threading.Tasks;
 
 namespace PenomyAPI.App.FeatG14;
 
-public class G14Handler : IFeatureHandler<G14Request, G14Response>
+public class G14GuestHandler : IFeatureHandler<G14GuestRequest, G14GuestResponse>
 {
     private readonly IG14Repository _IG14Repository;
 
-    public G14Handler(Lazy<IUnitOfWork> unitOfWork)
+    public G14GuestHandler(Lazy<IUnitOfWork> unitOfWork)
     {
         _IG14Repository = unitOfWork.Value.G14Repository;
     }
-    public async Task<G14Response> ExecuteAsync(G14Request request, CancellationToken ct)
+    public async Task<G14GuestResponse> ExecuteAsync(G14GuestRequest request, CancellationToken ct)
     {
         List<Artwork> result = [];
         try
         {
-            if (request.UserId == 0 || request.Limit <= 0)
+            if (request.GuestId == 0 || request.Limit <= 0)
             {
-                return new G14Response
+                return new G14GuestResponse
                 {
                     StatusCode = G14ResponseStatusCode.INVALID_REQUEST,
                     IsSuccess = false
                 };
             }
-            List<Category> categories = await _IG14Repository.GetUserFavoritesCategoryIdsAsync(request.UserId, request.Limit, ct);
+            List<long> categories = await _IG14Repository.GetCategoryIdsFromGuestViewHistoryAsync(request.GuestId, request.Limit, ct);
             foreach (var category in categories)
             {
-                if (await _IG14Repository.IsExistCategoryAsync(category.Id, ct))
+                if (await _IG14Repository.IsExistCategoryAsync(category, ct))
                 {
-                    result.AddRange(await _IG14Repository.GetRecommendedAnimeAsync(category.Id, ct));
+                    result.AddRange(await _IG14Repository.GetRecommendedAnimeAsync(category, ct));
                 }
             }
         }
         catch
         {
-            return new G14Response { StatusCode = G14ResponseStatusCode.FAILED, IsSuccess = false };
+            return new G14GuestResponse { StatusCode = G14ResponseStatusCode.FAILED, IsSuccess = false };
         }
         return new()
         {
