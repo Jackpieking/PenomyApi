@@ -26,7 +26,7 @@ public class G5Repository : IG5Repository
     {
         var artwork = await _dbContext
             .Set<Artwork>()
-            .Where(x => x.Id == artworkId && IsValidArtworkAsync(x))
+            .Where(x => x.Id == artworkId)
             .Select(x => new Artwork
             {
                 Title = x.Title,
