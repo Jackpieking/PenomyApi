@@ -2,13 +2,14 @@
 using PenomyAPI.App.Common.FileServices.Models;
 using PenomyAPI.App.FeatArt10;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Helpers.IFormFiles;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt10.DTOs;
 
-public class CreateComicChapterRequestDto
+public class Art10CreateChapterRequestDto
 {
     [Required]
     public long ComicId { get; set; }
@@ -56,18 +57,24 @@ public class CreateComicChapterRequestDto
             PublicLevel = PublicLevel,
             PublishStatus = publishStatus,
             CreatedBy = creatorId,
-            PublishedAt = ScheduledAt,
+            PublishedAt = DateTime.SpecifyKind(ScheduledAt, DateTimeKind.Utc),
             AllowComment = AllowComment,
-            ThumbnailFileInfo = new ImageFileInfo
+        };
+
+        // Set the thumbnail image for the chapter (if have).
+        if (!Equals(ThumbnailImageFile, null))
+        {
+            request.ThumbnailFileInfo = new ImageFileInfo
             {
                 FileName = ThumbnailImageFile.FileName,
                 FileSize = ThumbnailImageFile.Length,
                 FileDataStream = ThumbnailImageFile.OpenReadStream(),
-            }
-        };
+                FileExtension = FormFileHelper.Instance.GetFileExtension(ThumbnailImageFile)
+            };
+        }
 
         // Set the list of chapter image file infos.
-        var chapterImageFileInfos = new List<ImageFileInfo>();
+        var chapterImageFileInfos = new List<AppFileInfo>();
 
         for (var index = 0; index < ChapterImageFiles.Count; index++)
         {
@@ -78,6 +85,7 @@ public class CreateComicChapterRequestDto
                 UploadOrder = index,
                 FileDataStream = chatperImageFile.OpenReadStream(),
                 FileSize = chatperImageFile.Length,
+                FileName = chatperImageFile.FileName,
             };
 
             chapterImageFileInfos.Add(chapterImageFileInfo);
