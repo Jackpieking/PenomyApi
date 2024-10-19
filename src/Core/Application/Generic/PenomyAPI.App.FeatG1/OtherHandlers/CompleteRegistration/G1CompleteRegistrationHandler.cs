@@ -1,6 +1,3 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using PenomyAPI.App.Common;
 using PenomyAPI.App.Common.IdGenerator.Snowflake;
 using PenomyAPI.App.FeatG1.Infrastructures;
@@ -8,6 +5,9 @@ using PenomyAPI.Domain.RelationalDb.Entities.Generic;
 using PenomyAPI.Domain.RelationalDb.Entities.UserIdentity;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.App.FeatG1.OtherHandlers.CompleteRegistration;
 
@@ -37,7 +37,7 @@ public sealed class G1CompleteRegistrationHandler
     )
     {
         // Extract email from token.
-        var newUserEmail = await _preRegistrationTokenHandler.Value.ExtractEmailFromTokenAsync(
+        var result = await _preRegistrationTokenHandler.Value.GetEmailFromTokenAsync(
             request.PreRegistrationToken,
             ct
         );
@@ -46,7 +46,7 @@ public sealed class G1CompleteRegistrationHandler
         // - maybe users insert them,
         // - not from penomy website but by
         //      calling api directly with their token =)).
-        if (Equals(newUserEmail, default))
+        if (!result.IsSuccess)
         {
             return new()
             {
@@ -55,7 +55,9 @@ public sealed class G1CompleteRegistrationHandler
         }
 
         // Generate bundle for new user.
-        var (newUser, newuserProfile) = CreateNewUser(newUserEmail);
+        var newUserEmail = result.Value;
+
+        var (newUser, newuserProfile) = CreateNewUser(newUserEmail, request.ConfirmedNickName);
 
         // Add bundle to database.
         var isAdded = await _repository.AddNewUserToDatabaseAsync(
@@ -79,7 +81,7 @@ public sealed class G1CompleteRegistrationHandler
         };
     }
 
-    private (User, UserProfile) CreateNewUser(string email)
+    private (User, UserProfile) CreateNewUser(string email, string nickname)
     {
         var newUser = new User
         {
@@ -89,7 +91,11 @@ public sealed class G1CompleteRegistrationHandler
         };
 
         // TODO: Add avatar url
-        var newUserProfile = new UserProfile { UserId = newUser.Id, AvatarUrl = "" };
+        var datetimeUtcNow = DateTime.UtcNow;
+        var newUserProfile = UserProfile.NewProfile(newUser.Id, nickname, "None");
+        newUserProfile.RegisteredAt = datetimeUtcNow;
+        newUserProfile.LastActiveAt = datetimeUtcNow;
+        newUserProfile.UpdatedAt = datetimeUtcNow;
 
         return (newUser, newUserProfile);
     }
