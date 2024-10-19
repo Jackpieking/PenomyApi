@@ -1,14 +1,14 @@
+using PenomyAPI.App.Common;
+using PenomyAPI.App.Common.IdGenerator.Snowflake;
+using PenomyAPI.App.Common.Mail;
+using PenomyAPI.App.Common.Tokens;
+using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
+using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 using System;
 using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
-using PenomyAPI.App.Common;
-using PenomyAPI.App.Common.IdGenerator.Snowflake;
-using PenomyAPI.App.Common.Tokens;
-using PenomyAPI.App.FeatG1.Infrastructures;
-using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
-using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 
 namespace PenomyAPI.App.FeatG1;
 
@@ -17,16 +17,18 @@ public sealed class G1Handler : IFeatureHandler<G1Request, G1Response>
     private readonly IG1Repository _repository;
     private readonly Lazy<IAccessTokenHandler> _accessToken;
     private readonly Lazy<ISnowflakeIdGenerator> _snowflakeIdGenerator;
+    private readonly Lazy<ISendingMailHandler> _mailHandler;
 
     public G1Handler(
         Lazy<IUnitOfWork> unitOfWork,
         Lazy<IAccessTokenHandler> accessToken,
-        Lazy<ISnowflakeIdGenerator> snowflakeIdGenerator
-    )
+        Lazy<ISnowflakeIdGenerator> snowflakeIdGenerator,
+        Lazy<ISendingMailHandler> mailHandler)
     {
         _repository = unitOfWork.Value.G1Repository;
         _accessToken = accessToken;
         _snowflakeIdGenerator = snowflakeIdGenerator;
+        _mailHandler = mailHandler;
     }
 
     public async Task<G1Response> ExecuteAsync(G1Request request, CancellationToken ct)
@@ -46,13 +48,22 @@ public sealed class G1Handler : IFeatureHandler<G1Request, G1Response>
         // Generate pre-registration token.
         var preRegistrationToken = _accessToken.Value.Generate(
             [new(ClaimTypes.Email, request.Email)],
-            30
+            30 * 60
         );
 
-        return new() { };
-
         // TODO: add sending mail.
+        var mailHandler = _mailHandler.Value;
+
+        var body = request.MailTemplate.Replace("{registration_link}", $"{request.RegisterPageLink}?token={preRegistrationToken}");
+        await mailHandler.SendAsync(new AppMailContent
+        {
+            To = request.Email,
+            Subject = "DANG KY PENOMY",
+            Body = body,
+        }, ct);
+
         // TODO: complete response
+        return new() { };
     }
 
     // Why creating interpolated string like this?
