@@ -22,12 +22,10 @@ public class G12Repository : IG12Repository
         _categoryDbSet = dbContext.Set<Category>();
     }
 
-    public async Task<List<ArtworkCategory>> GetAnimesByCategoryAsync(long CategoryId)
+    public async Task<List<ArtworkCategory>> GetAnimesByCategoryAsync()
     {
         var result = await _artworkCategoryDbSet
-            .Where(c =>
-                c.CategoryId == CategoryId && c.Artwork.ArtworkType == ArtworkType.Animation
-            )
+            .Where(c => c.Artwork.ArtworkType == ArtworkType.Animation)
             .Select(a => new ArtworkCategory
             {
                 Category = new Category { Name = a.Category.Name },
@@ -46,8 +44,8 @@ public class G12Repository : IG12Repository
                 },
             })
             .AsNoTracking()
-             .OrderByDescending(ac => ac.Artwork.ArtworkMetaData.TotalViews)
-             .ThenByDescending(ac => ac.Artwork.ArtworkMetaData.AverageStarRate)
+            .OrderByDescending(ac => ac.Artwork.ArtworkMetaData.TotalViews)
+            .ThenByDescending(ac => ac.Artwork.ArtworkMetaData.AverageStarRate)
             .Take(23)
             .ToListAsync();
         return result;

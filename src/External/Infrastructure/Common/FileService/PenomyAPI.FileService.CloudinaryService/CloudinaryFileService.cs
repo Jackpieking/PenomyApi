@@ -21,7 +21,8 @@ public sealed class CloudinaryFileService : IDefaultDistributedFileService
 
     public async Task<bool> CreateFolderAsync(
         AppFolderInfo folderInfo,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken
+    )
     {
         var cloudinary = CreateCloudinary();
 
@@ -40,7 +41,8 @@ public sealed class CloudinaryFileService : IDefaultDistributedFileService
     public async Task<Result<AppFileInfo>> UploadFileAsync(
         AppFileInfo fileInfo,
         bool overwrite,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken
+    )
     {
         var cloudinary = CreateCloudinary();
 
@@ -54,7 +56,10 @@ public sealed class CloudinaryFileService : IDefaultDistributedFileService
                 Folder = fileInfo.FolderPath,
                 AssetFolder = fileInfo.FolderPath,
                 PublicId = fileInfo.FileId,
-                File = new FileDescription(name: fileInfo.FileName, stream: fileInfo.FileDataStream),
+                File = new FileDescription(
+                    name: fileInfo.FileName,
+                    stream: fileInfo.FileDataStream
+                ),
                 DisplayName = fileInfo.FileName,
                 Overwrite = overwrite,
                 Invalidate = overwrite,
@@ -63,7 +68,8 @@ public sealed class CloudinaryFileService : IDefaultDistributedFileService
             // Get the uploading result.
             var result = await cloudinary.UploadAsync(
                 parameters: imageUploadParams,
-                cancellationToken: cancellationToken);
+                cancellationToken: cancellationToken
+            );
 
             fileInfo.CleanFileDataStream();
 
@@ -77,23 +83,23 @@ public sealed class CloudinaryFileService : IDefaultDistributedFileService
         }
     }
 
-    public Task<bool> DeleteFileAsync(
-        AppFileInfo fileInfo,
-        CancellationToken cancellationToken)
+    public Task<bool> DeleteFileAsync(AppFileInfo fileInfo, CancellationToken cancellationToken)
     {
-        throw new System.NotImplementedException();
+        return Task.FromResult(false);
     }
 
-    public Task<bool> DeleteFileByIdAsync(
-        string fileId,
-        CancellationToken cancellationToken)
+    public Task<bool> DeleteFileByIdAsync(string fileId, CancellationToken cancellationToken)
     {
-        throw new System.NotImplementedException();
+        return Task.FromResult(false);
     }
 
-    public Task<Result<IEnumerable<AppFileInfo>>> UploadMultipleFilesAsync(IEnumerable<AppFileInfo> fileInfos, bool overwrite, CancellationToken cancellationToken)
+    public Task<Result<IEnumerable<AppFileInfo>>> UploadMultipleFilesAsync(
+        IEnumerable<AppFileInfo> fileInfos,
+        bool overwrite,
+        CancellationToken cancellationToken
+    )
     {
-        throw new System.NotImplementedException();
+        return Task.FromResult(Result<IEnumerable<AppFileInfo>>.Failed());
     }
 
     /// <summary>

@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Reflection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PenomyAPI.App.Common.Caching;
 using PenomyAPI.BuildingBlock.FeatRegister.InfraRegistration.Common;
 using PenomyAPI.BuildingBlock.FeatRegister.ServiceExtensions;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
@@ -11,6 +11,9 @@ using PenomyAPI.Infra.Configuration.Options;
 using PenomyAPI.Persist.Postgres.Data.DbContexts;
 using PenomyAPI.Persist.Postgres.Data.UserIdentity;
 using PenomyAPI.Persist.Postgres.UnitOfWorks;
+using PenomyAPI.Persist.Redis;
+using ZiggyCreatures.Caching.Fusion;
+using ZiggyCreatures.Caching.Fusion.Serialization;
 
 namespace PenomyAPI.BuildingBlock.FeatRegister.InfraRegistration.Handler;
 
@@ -22,6 +25,8 @@ internal sealed class PersistenceServicesRegistration : IServiceRegistration
 
         AddAspNetCoreIdentity(services, configuration);
 
+        AddCaching(services, configuration);
+
         AddAppDefinedServices(services);
     }
 
@@ -30,6 +35,9 @@ internal sealed class PersistenceServicesRegistration : IServiceRegistration
         services.AddScoped<IUnitOfWork, UnitOfWork>().MakeScopedLazy<IUnitOfWork>();
         services.AddScoped<UserManager<PgUser>>().MakeScopedLazy<UserManager<PgUser>>();
         services.AddScoped<RoleManager<PgRole>>().MakeScopedLazy<RoleManager<PgRole>>();
+        services.AddSingleton<ICacheHandler, CacheHandler>().MakeSingletonLazy<ICacheHandler>();
+        services.MakeSingletonLazy<IFusionCache>();
+        services.MakeSingletonLazy<IFusionCacheSerializer>();
     }
 
     private static void AddAppDbContextPool(
@@ -104,5 +112,23 @@ internal sealed class PersistenceServicesRegistration : IServiceRegistration
             })
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
+    }
+
+    private static void AddCaching(IServiceCollection services, IConfiguration configuration)
+    {
+        services
+            .AddStackExchangeRedisCache(options =>
+            {
+                var configOption = configuration
+                    .GetRequiredSection("Cache")
+                    .GetRequiredSection("Redis")
+                    .Get<RedisOptions>();
+
+                options.Configuration = configOption.ConnectionString;
+            })
+            .AddMemoryCache()
+            .AddFusionCacheProtoBufNetSerializer()
+            .AddFusionCache()
+            .TryWithAutoSetup();
     }
 }

@@ -20,11 +20,16 @@ public abstract class AppFileInfo
 
     public string FileName { get; set; }
 
+    public string FileExtension { get; set; }
+
     /// <summary>
     ///     The path of the folder that will store this file.
     /// </summary>
     public string FolderPath { get; set; }
 
+    /// <summary>
+    ///     Upload order of the image file to the storage with base zero.
+    /// </summary>
     public int UploadOrder { get; set; }
 
     /// <summary>

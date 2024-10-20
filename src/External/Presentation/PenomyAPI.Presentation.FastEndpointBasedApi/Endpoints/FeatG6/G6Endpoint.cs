@@ -50,7 +50,7 @@ public class G6Endpoint : Endpoint<G6Request, G6HttpResponse>
         // Get FeatureHandler response.
         var featResponse = await FeatureExtensions.ExecuteAsync<G6Request, G6Response>(g6Req, ct);
 
-        httpResponse = G6ResponseManager
+        httpResponse = G6HttpResponseManager
             .Resolve(featResponse.StatusCode)
             .Invoke(g6Req, featResponse);
 
