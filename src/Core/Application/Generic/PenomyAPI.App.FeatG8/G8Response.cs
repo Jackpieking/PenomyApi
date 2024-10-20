@@ -10,6 +10,5 @@ public class G8Response : IFeatureResponse
 
     public List<ArtworkChapter> Chapters { get; set; }
     public int ChapterCount { get; set; }
-
     public G8ResponseStatusCode StatusCode { get; set; }
 }

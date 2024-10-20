@@ -9,17 +9,17 @@ using System.Threading.Tasks;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
 
-public class G8Repository : IG8Repository
+public class G19Repository : IG19Repository
 {
     private readonly AppDbContext _dbContext;
 
-    public G8Repository(AppDbContext dbContext)
+    public G19Repository(AppDbContext dbContext)
     {
         _dbContext = dbContext;
     }
     private static bool IsValidArtworkAsync(Artwork artwork)
     {
-        return artwork.ArtworkType == ArtworkType.Comic && artwork.IsTemporarilyRemoved == false && artwork.IsTakenDown == false && artwork.PublicLevel != Domain.RelationalDb.Entities.ArtworkCreation.Common.ArtworkPublicLevel.Private;
+        return artwork.ArtworkType == ArtworkType.Animation && artwork.IsTemporarilyRemoved == false && artwork.IsTakenDown == false && artwork.PublicLevel != Domain.RelationalDb.Entities.ArtworkCreation.Common.ArtworkPublicLevel.Private;
     }
     public async Task<(List<ArtworkChapter>, int)> GetArtWorkChapterByIdAsync(
         long id,
@@ -31,28 +31,48 @@ public class G8Repository : IG8Repository
         int count = _dbContext.Set<ArtworkChapter>().Count(x => x.ArtworkId == id);
         List<ArtworkChapter> res = await _dbContext
             .Set<ArtworkChapter>()
-            .Where(x => x.ArtworkId == id && x.BelongedArtwork.ArtworkType == ArtworkType.Comic)
+            .Where(x => x.ArtworkId == id && IsValidArtworkAsync(x.BelongedArtwork))
             .Select(x => new ArtworkChapter
             {
                 Id = x.Id,
+                BelongedArtwork = new Artwork
+                {
+                    Id = x.BelongedArtwork.Id,
+                    ArtworkType = x.BelongedArtwork.ArtworkType,
+                    Origin = new ArtworkOrigin
+                    {
+                        Id = x.BelongedArtwork.Origin.Id,
+                        CountryName = x.BelongedArtwork.Origin.CountryName,
+                    },
+                    ArtworkCategories = x.BelongedArtwork.ArtworkCategories.Select(
+                        y => new ArtworkCategory
+                        {
+                            ArtworkId = y.ArtworkId,
+                            CategoryId = y.CategoryId,
+                        }
+                    ),
+                    ArtworkSeries = x.BelongedArtwork.ArtworkSeries.Select(y => new ArtworkSeries
+                    {
+                        ArtworkId = y.ArtworkId,
+                        Series = y.Series,
+                    }),
+                },
                 ArtworkId = x.ArtworkId,
                 Title = x.Title,
                 PublishedAt = x.PublishedAt,
                 CreatedAt = x.CreatedAt,
                 UploadOrder = x.UploadOrder,
                 ThumbnailUrl = x.ThumbnailUrl,
-                ChapterMetaData = new ArtworkChapterMetaData
-                {
-                    TotalComments = x.ChapterMetaData.TotalComments,
-                    TotalFavorites = x.ChapterMetaData.TotalFavorites,
-                    TotalViews = x.ChapterMetaData.TotalViews,
-                }
             })
             .AsNoTracking()
             .Skip((startPage - 1) * pageSize)
             .Take(pageSize)
             .OrderBy(x => x.Id)
             .ToListAsync(cancellationToken);
+        foreach (var chapter in res)
+        {
+            chapter.ChapterMetaData = await GetArtworkChapterMetaDataAsync(chapter.Id, cancellationToken);
+        }
         return (res, count);
     }
 
@@ -77,6 +97,6 @@ public class G8Repository : IG8Repository
 
     public Task<bool> IsArtworkExistAsync(long id, CancellationToken token = default)
     {
-        return _dbContext.Set<Artwork>().AnyAsync(x => x.Id == id && x.ArtworkType == ArtworkType.Comic, token);
+        return _dbContext.Set<Artwork>().AnyAsync(x => x.Id == id && x.ArtworkType == ArtworkType.Animation, token);
     }
 }
