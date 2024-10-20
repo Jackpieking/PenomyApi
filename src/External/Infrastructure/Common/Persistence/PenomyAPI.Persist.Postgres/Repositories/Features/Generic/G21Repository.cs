@@ -8,27 +8,19 @@ using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
 
-public class G10Repository : IG10Repository
+public class G21Repository : IG21Repository
 {
-    private readonly DbContext _dbContext;
-    private readonly DbSet<Artwork> _artworkDbSet;
     private readonly DbSet<ArtworkComment> _artworkCommentDbSet;
-    private readonly DbSet<ArtworkCommentReference> _artworkCommentReferenceDbSet;
-    private readonly DbSet<ArtworkCommentParentChild> _artworkCommentParentChildDbSet;
 
-    public G10Repository(DbContext dbContext)
+    public G21Repository(DbContext dbContext)
     {
-        _dbContext = dbContext;
-        _artworkDbSet = dbContext.Set<Artwork>();
         _artworkCommentDbSet = dbContext.Set<ArtworkComment>();
-        _artworkCommentReferenceDbSet = dbContext.Set<ArtworkCommentReference>();
-        _artworkCommentParentChildDbSet = dbContext.Set<ArtworkCommentParentChild>();
     }
 
-    public async Task<List<ArtworkComment>> GetCommentsAsync(long ArtworkId)
+    public async Task<List<ArtworkComment>> GetCommentsAsync(long chapterId)
     {
         var result = await _artworkCommentDbSet
-            .Where(acr => acr.ArtworkId == ArtworkId)
+            .Where(acr => acr.ChapterId == chapterId)
             .Select(c => new ArtworkComment
             {
                 Id = c.Id,
@@ -44,7 +36,6 @@ public class G10Repository : IG10Repository
                     AvatarUrl = c.Creator.AvatarUrl,
                 },
             })
-            .OrderBy(x => x.CreatedAt)
             .AsNoTracking()
             .ToListAsync();
         return result;
