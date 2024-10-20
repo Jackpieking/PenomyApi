@@ -15,7 +15,7 @@ public class G14Endpoint : Endpoint<G14Request, G14HttpResponse>
 {
     public override void Configure()
     {
-        Get("/g14/artwork-detail");
+        Get("/g14/recommended-category");
 
         AllowAnonymous();
 
@@ -26,8 +26,8 @@ public class G14Endpoint : Endpoint<G14Request, G14HttpResponse>
 
         Summary(endpointSummary: summary =>
         {
-            summary.Summary = "Endpoint for get recommended artworks based on category";
-            summary.Description = "This endpoint is used for get recommended artworks based on category";
+            summary.Summary = "Endpoint for get recommended artworks based on category for users";
+            summary.Description = "This endpoint is used for get recommended artworks based on category for users";
             summary.Response<G14HttpResponse>(
                 description: "Represent successful operation response.",
                 example: new() { AppCode = G14ResponseStatusCode.SUCCESS.ToString() }
@@ -42,7 +42,7 @@ public class G14Endpoint : Endpoint<G14Request, G14HttpResponse>
     {
         var httpResponse = new G14HttpResponse();
 
-        var g14req = new G14Request { CategoryId = requestDto.CategoryId, Limit = requestDto.Limit };
+        var g14req = new G14Request { UserId = requestDto.UserId, Limit = requestDto.Limit };
 
         // Get FeatureHandler response.
         var featResponse = await FeatureExtensions.ExecuteAsync<G14Request, G14Response>(g14req, ct);

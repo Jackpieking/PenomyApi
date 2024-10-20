@@ -17,7 +17,10 @@ public class G8Repository : IG8Repository
     {
         _dbContext = dbContext;
     }
-
+    private static bool IsValidArtworkAsync(Artwork artwork)
+    {
+        return artwork.ArtworkType == ArtworkType.Comic && artwork.IsTemporarilyRemoved == false && artwork.IsTakenDown == false && artwork.PublicLevel != Domain.RelationalDb.Entities.ArtworkCreation.Common.ArtworkPublicLevel.Private;
+    }
     public async Task<(List<ArtworkChapter>, int)> GetArtWorkChapterByIdAsync(
         long id,
         int startPage = 1,
@@ -32,44 +35,24 @@ public class G8Repository : IG8Repository
             .Select(x => new ArtworkChapter
             {
                 Id = x.Id,
-                BelongedArtwork = new Artwork
-                {
-                    Id = x.BelongedArtwork.Id,
-                    ArtworkType = x.BelongedArtwork.ArtworkType,
-                    Origin = new ArtworkOrigin
-                    {
-                        Id = x.BelongedArtwork.Origin.Id,
-                        CountryName = x.BelongedArtwork.Origin.CountryName,
-                    },
-                    ArtworkCategories = x.BelongedArtwork.ArtworkCategories.Select(
-                        y => new ArtworkCategory
-                        {
-                            ArtworkId = y.ArtworkId,
-                            CategoryId = y.CategoryId,
-                        }
-                    ),
-                    ArtworkSeries = x.BelongedArtwork.ArtworkSeries.Select(y => new ArtworkSeries
-                    {
-                        ArtworkId = y.ArtworkId,
-                        Series = y.Series,
-                    }),
-                },
                 ArtworkId = x.ArtworkId,
                 Title = x.Title,
                 PublishedAt = x.PublishedAt,
                 CreatedAt = x.CreatedAt,
                 UploadOrder = x.UploadOrder,
                 ThumbnailUrl = x.ThumbnailUrl,
+                ChapterMetaData = new ArtworkChapterMetaData
+                {
+                    TotalComments = x.ChapterMetaData.TotalComments,
+                    TotalFavorites = x.ChapterMetaData.TotalFavorites,
+                    TotalViews = x.ChapterMetaData.TotalViews,
+                }
             })
             .AsNoTracking()
             .Skip((startPage - 1) * pageSize)
             .Take(pageSize)
             .OrderBy(x => x.Id)
             .ToListAsync(cancellationToken);
-        foreach (var chapter in res)
-        {
-            chapter.ChapterMetaData = await GetArtworkChapterMetaDataAsync(chapter.Id, cancellationToken);
-        }
         return (res, count);
     }
 
@@ -94,6 +77,6 @@ public class G8Repository : IG8Repository
 
     public Task<bool> IsArtworkExistAsync(long id, CancellationToken token = default)
     {
-        return _dbContext.Set<Artwork>().AnyAsync(x => x.Id == id, token);
+        return _dbContext.Set<Artwork>().AnyAsync(x => x.Id == id && x.ArtworkType == ArtworkType.Comic, token);
     }
 }

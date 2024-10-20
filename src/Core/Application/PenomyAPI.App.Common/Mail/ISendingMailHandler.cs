@@ -19,6 +19,9 @@ public interface ISendingMailHandler
     ///     to cancel the current operation when user stop
     ///     the request.
     /// </param>
+    /// <param name="profile">
+    ///     Profile for sending mail.
+    /// </param>
     /// <returns>
     ///     Task containing boolean result.
     /// </returns>

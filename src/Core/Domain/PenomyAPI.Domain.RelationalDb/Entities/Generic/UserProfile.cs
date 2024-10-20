@@ -142,4 +142,18 @@ public sealed class UserProfile : IEntity
         public const int AboutMeLength = 2000;
     }
     #endregion
+
+    #region Static Methods
+    public static UserProfile NewProfile(long userId, string nickname, string avatarUrl)
+    {
+        return new UserProfile
+        {
+            UserId = userId,
+            Gender = UserGender.NotSelected,
+            NickName = nickname,
+            AboutMe = "None",
+            AvatarUrl = avatarUrl,
+        };
+    }
+    #endregion
 }

@@ -54,4 +54,21 @@ public interface IArtworkRepository : IEntityRepository<Artwork>
         long artworkId,
         long userId,
         CancellationToken cancellationToken);
+
+    /// <summary>
+    ///     Get the chapter thumbnail default image url
+    ///     based on the input <paramref name="artworkId"/>.
+    /// </summary>
+    /// <remarks>
+    ///     This method is supported when create a new chapter
+    ///     of an artwork without uploading the thumbnail image file for that chapter.
+    /// </remarks>
+    /// <param name="artworkId">
+    ///     The artworkId to get the thumbnail url.
+    /// </param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<string> GetChapterThumbnailDefaultUrlByArtworkIdAsync(
+        long artworkId,
+        CancellationToken cancellationToken);
 }

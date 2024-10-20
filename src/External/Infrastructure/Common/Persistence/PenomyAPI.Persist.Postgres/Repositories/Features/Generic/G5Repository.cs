@@ -26,7 +26,7 @@ public class G5Repository : IG5Repository
     {
         var artwork = await _dbContext
             .Set<Artwork>()
-            .Where(x => x.Id == artworkId && IsValidArtworkAsync(x))
+            .Where(x => x.Id == artworkId)
             .Select(x => new Artwork
             {
                 Title = x.Title,
@@ -74,6 +74,6 @@ public class G5Repository : IG5Repository
 
     public Task<bool> IsArtworkExistAsync(long artworkId, CancellationToken ct = default)
     {
-        return _dbContext.Set<Artwork>().AnyAsync(x => x.Id == artworkId, ct);
+        return _dbContext.Set<Artwork>().AnyAsync(x => x.Id == artworkId && x.ArtworkType == ArtworkType.Comic, ct);
     }
 }

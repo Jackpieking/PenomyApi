@@ -33,7 +33,8 @@ internal sealed class ArtworkRepository : IArtworkRepository
                     ) || (artwork.Id == artworkId && artwork.CreatedBy == userId)
                 );
 
-        IsArtworkAvailableToDisplayByIdCompileQuery = EF.CompileAsyncQuery(IsArtworkIsArtworkAvailableToDisplayById);
+        IsArtworkAvailableToDisplayByIdCompileQuery = EF.CompileAsyncQuery(
+            IsArtworkIsArtworkAvailableToDisplayById);
     }
 
     public ArtworkRepository(DbContext context)
@@ -55,5 +56,16 @@ internal sealed class ArtworkRepository : IArtworkRepository
         return _artworkDbSet.AnyAsync(
             artwork => artwork.Id == artworkId,
             cancellationToken);
+    }
+
+    public Task<string> GetChapterThumbnailDefaultUrlByArtworkIdAsync(
+        long artworkId,
+        CancellationToken cancellationToken)
+    {
+        return _artworkDbSet
+            .AsNoTracking()
+            .Where(artwork => artwork.Id == artworkId)
+            .Select(artwork => artwork.ThumbnailUrl)
+            .FirstOrDefaultAsync(cancellationToken);
     }
 }

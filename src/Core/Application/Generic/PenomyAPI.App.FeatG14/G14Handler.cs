@@ -19,10 +19,10 @@ public class G14Handler : IFeatureHandler<G14Request, G14Response>
     }
     public async Task<G14Response> ExecuteAsync(G14Request request, CancellationToken ct)
     {
-        List<Artwork> result;
+        List<Artwork> result = [];
         try
         {
-            if (request.CategoryId == 0)
+            if (request.UserId == 0 || request.Limit <= 0)
             {
                 return new G14Response
                 {
@@ -30,15 +30,14 @@ public class G14Handler : IFeatureHandler<G14Request, G14Response>
                     IsSuccess = false
                 };
             }
-            if (!await _IG14Repository.IsExistCategoryAsync(request.CategoryId, ct))
+            List<Category> categories = await _IG14Repository.GetUserFavoritesCategoryIdsAsync(request.UserId, request.Limit, ct);
+            foreach (var category in categories)
             {
-                return new G14Response
+                if (await _IG14Repository.IsExistCategoryAsync(category.Id, ct))
                 {
-                    StatusCode = G14ResponseStatusCode.NOT_FOUND,
-                    IsSuccess = false
-                };
+                    result.AddRange(await _IG14Repository.GetRecommendedAnimeAsync(category.Id, ct));
+                }
             }
-            result = await _IG14Repository.GetRecommendedAnimeAsync(request.CategoryId, request.Limit, ct);
         }
         catch
         {
