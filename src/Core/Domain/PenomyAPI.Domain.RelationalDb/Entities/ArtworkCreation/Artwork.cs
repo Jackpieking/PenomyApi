@@ -13,6 +13,8 @@ public sealed class Artwork
         IUpdatedEntity<long>,
         ITemporarilyRemovedEntity<long>
 {
+    public const string THUMBNAIL_IMAGE_FILE_PREFIX = "thumbnail";
+
     public string Title { get; set; }
 
     public ArtworkPublicLevel PublicLevel { get; set; }

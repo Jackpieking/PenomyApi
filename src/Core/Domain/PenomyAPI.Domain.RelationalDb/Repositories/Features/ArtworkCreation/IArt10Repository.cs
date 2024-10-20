@@ -1,12 +1,45 @@
-﻿using System.Collections.Generic;
+﻿using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 
 namespace PenomyAPI.Domain.RelationalDb.Repositories.Features.ArtworkCreation;
 
 public interface IArt10Repository
 {
+    /// <summary>
+    ///     Get the detail of the comic with specified <paramref name="comicId"/>
+    ///     to create the new chapter for the comic.
+    /// </summary>
+    /// <remarks>
+    ///     The return detail will include comicId, comic title and last chapter's upload order.
+    /// </remarks>
+    /// <param name="comicId">
+    ///     The id of the comic to get detail support for creating a new chapter.
+    /// </param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>
+    ///     The <see cref="Artwork"/> instance contains the comic detail.
+    /// </returns>
+    Task<Artwork> GetDetailToCreateChapterByComicIdAsync(
+        long comicId,
+        CancellationToken cancellationToken);
+
+    /// <summary>
+    ///     Get last chapter upload order of the comic with specified <paramref name="comicId"/>
+    ///     to create the new chapter for the comic.
+    /// </summary>
+    /// <param name="comicId">
+    ///     The id of the comic to get detail support for creating a new chapter.
+    /// </param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>
+    ///     The last upload order of the specified comic.
+    /// </returns>
+    Task<int> GetLastChapterUploadOrderByComicIdAsync(
+        long comicId,
+        CancellationToken cancellationToken);
+
     /// <summary>
     ///     Create a new comic chapter with specified detail.
     /// </summary>

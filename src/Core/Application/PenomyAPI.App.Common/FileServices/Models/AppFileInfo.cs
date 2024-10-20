@@ -20,6 +20,8 @@ public abstract class AppFileInfo
 
     public string FileName { get; set; }
 
+    public string FileExtension { get; set; }
+
     /// <summary>
     ///     The path of the folder that will store this file.
     /// </summary>

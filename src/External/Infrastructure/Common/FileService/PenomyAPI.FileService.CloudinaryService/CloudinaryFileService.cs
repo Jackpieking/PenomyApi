@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using CloudinaryDotNet;
+﻿using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using PenomyAPI.App.Common.FileServices;
 using PenomyAPI.App.Common.FileServices.Models;
 using PenomyAPI.App.Common.Models.Common;
 using PenomyAPI.Infra.Configuration.Options;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.FileService.CloudinaryService;
 
@@ -85,12 +85,12 @@ public sealed class CloudinaryFileService : IDefaultDistributedFileService
 
     public Task<bool> DeleteFileAsync(AppFileInfo fileInfo, CancellationToken cancellationToken)
     {
-        throw new System.NotImplementedException();
+        return Task.FromResult(false);
     }
 
     public Task<bool> DeleteFileByIdAsync(string fileId, CancellationToken cancellationToken)
     {
-        throw new System.NotImplementedException();
+        return Task.FromResult(false);
     }
 
     public Task<Result<IEnumerable<AppFileInfo>>> UploadMultipleFilesAsync(
@@ -99,7 +99,7 @@ public sealed class CloudinaryFileService : IDefaultDistributedFileService
         CancellationToken cancellationToken
     )
     {
-        throw new System.NotImplementedException();
+        return Task.FromResult(Result<IEnumerable<AppFileInfo>>.Failed());
     }
 
     /// <summary>

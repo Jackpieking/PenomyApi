@@ -1,8 +1,8 @@
-using System;
-using System.Collections.Generic;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
 using PenomyAPI.Domain.RelationalDb.Entities.Base;
 using PenomyAPI.Domain.RelationalDb.Entities.Generic;
+using System;
+using System.Collections.Generic;
 
 namespace PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 
@@ -12,7 +12,9 @@ public sealed class ArtworkChapter
         IUpdatedEntity<long>,
         ITemporarilyRemovedEntity<long>
 {
-    public const int DraftedUploadOrder = -1;
+    public const int DRAFTED_UPLOAD_ORDER = -1;
+
+    public const string THUMBNAIL_IMAGE_FILE_PREFIX = "thumbnail";
 
     public long ArtworkId { get; set; }
 

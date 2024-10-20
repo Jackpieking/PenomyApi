@@ -1,6 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt10\PenomyAPI.App.FeatArt10.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt1\PenomyAPI.App.FeatArt1.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt7\PenomyAPI.App.FeatArt7.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG10\PenomyAPI.App.FeatG10.csproj" />
@@ -16,6 +15,7 @@
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG7\PenomyAPI.App.FeatG7.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG8\PenomyAPI.App.FeatG8.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.G43\PenomyAPI.App.G43.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\ArtworkCreation\PenomyAPI.Infra.FeatArt10\PenomyAPI.Infra.FeatArt10.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.G45\PenomyAPI.App.G45.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Common\BackgroundJob\PenomyAPI.BackgroundJob.Quartz\PenomyAPI.BackgroundJob.Quartz.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Common\FileService\PenomyAPI.FileService.CloudinaryService\PenomyAPI.FileService.CloudinaryService.csproj" />

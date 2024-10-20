@@ -22,7 +22,7 @@ public sealed class Art10Request : IFeatureRequest<Art10Response>
 
     public PublishStatus PublishStatus { get; set; }
 
-    public IEnumerable<AppFileInfo> ChapterImageFileInfos { get; set; }
+    public IList<AppFileInfo> ChapterImageFileInfos { get; set; }
 
     public long CreatedBy { get; set; }
 
