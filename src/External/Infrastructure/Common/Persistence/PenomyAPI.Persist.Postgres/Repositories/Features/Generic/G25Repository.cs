@@ -30,7 +30,7 @@ internal sealed class G25Repository : IG25Repository
     {
         return await _viewHistDbSet
             .AsNoTracking()
-            .Where(viewHist => viewHist.UserId == userId && viewHist.ArtworkType == artType)
+            .Where(viewHist => viewHist.UserId == userId && viewHist.ArtworkType == artType && !viewHist.Artwork.IsTakenDown && !viewHist.Artwork.IsTemporarilyRemoved)
             .GroupBy(viewHist => viewHist.ArtworkId)
             .CountAsync(ct);
     }
@@ -45,7 +45,7 @@ internal sealed class G25Repository : IG25Repository
     {
         var viewHist = await _viewHistDbSet
            .AsNoTracking()
-           .Where(viewHist => viewHist.UserId == userId && viewHist.ArtworkType == artType)
+           .Where(viewHist => viewHist.UserId == userId && viewHist.ArtworkType == artType && !viewHist.Artwork.IsTakenDown && !viewHist.Artwork.IsTemporarilyRemoved)
            .OrderByDescending(viewHist => viewHist.ViewedAt) // Order by last view chapter
            .GroupBy(viewHist => viewHist.ArtworkId)
            .Skip((pageNum - 1) * artNum)

@@ -23,17 +23,15 @@ public class G25Handler : IFeatureHandler<G25Request, G25Response>
             return new G25Response { StatusCode = G25ResponseStatusCode.EMPTY };
         }
 
-        var result = await _g25Repository.GetArtworkViewHistories(
+        return new G25Response
+        {
+            Result = await _g25Repository.GetArtworkViewHistories(
                 request.UserId,
                 request.ArtworkType,
                 ct,
                 request.PageNum,
                 request.ArtNum
-            );
-
-        return new G25Response
-        {
-            Result = result,
+            ),
             IsSuccess = true,
             StatusCode = G25ResponseStatusCode.SUCCESS
         };
