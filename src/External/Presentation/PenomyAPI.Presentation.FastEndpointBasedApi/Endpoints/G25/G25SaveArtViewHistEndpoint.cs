@@ -1,10 +1,10 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using FastEndpoints;
+﻿using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.G25.OtherHandlers.SaveArtViewHist;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G25.HttpResponse;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G25;
 
@@ -58,9 +58,9 @@ public class G25SaveArtViewHistEndpoint
         if (featResponse.IsSuccess)
         {
             httpResponse.Body = featResponse.IsSuccess;
-
-            return httpResponse;
         }
+
+        await SendAsync(httpResponse, httpResponse.HttpCode, ct);
 
         return httpResponse;
     }

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using PenomyAPI.App.Common;
+﻿using PenomyAPI.App.Common;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.App.G25;
 
@@ -23,15 +23,18 @@ public class G25Handler : IFeatureHandler<G25Request, G25Response>
             return new G25Response { StatusCode = G25ResponseStatusCode.EMPTY };
         }
 
-        return new G25Response
-        {
-            Result = await _g25Repository.GetArtworkViewHistories(
+        var result = await _g25Repository.GetArtworkViewHistories(
                 request.UserId,
                 request.ArtworkType,
                 ct,
                 request.PageNum,
                 request.ArtNum
-            ),
+            );
+
+        return new G25Response
+        {
+            Result = result,
+            IsSuccess = true,
             StatusCode = G25ResponseStatusCode.SUCCESS
         };
     }

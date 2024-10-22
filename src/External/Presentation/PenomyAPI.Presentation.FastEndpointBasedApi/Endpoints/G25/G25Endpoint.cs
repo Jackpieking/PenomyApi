@@ -1,14 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using FastEndpoints;
+﻿using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.G25;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G25.DTOs;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G25.HttpResponse;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G25;
 
@@ -60,46 +58,30 @@ public class G25Endpoint : Endpoint<G25Request, G25HttpResponse>
 
         if (featResponse.IsSuccess)
         {
-            List<G25ResponseDto> g25ResponseDtos = new();
-            Collection<G25ChapterDto> g25Chapters = new();
-
-            foreach (var g25Response in featResponse.Result)
+            httpResponse.Body = new ArtworkCardDto
             {
-                // Get all chapters viewed of artwork
-                foreach (var g25Chapter in g25Response)
+                Artworks = featResponse.Result.Select(grp => new ArtworkDto
                 {
-                    g25Chapters.Add(
-                        new G25ChapterDto
-                        {
-                            Id = g25Chapter.ChapterId,
-                            ChapterTitle = g25Chapter.Chapter.Title,
-                            ChapterUploadOrder = g25Chapter.Chapter.UploadOrder,
-                            ThumbnailUrl = g25Chapter.Chapter.ThumbnailUrl,
-                            ViewedAt = g25Chapter.ViewedAt
-                        }
-                    );
-                }
-
-                g25ResponseDtos.Add(
-                    new G25ResponseDto
+                    Id = grp.First().ArtworkId.ToString(),
+                    Title = grp.First().Artwork.Title,
+                    CreatedBy = grp.First().Artwork.CreatedBy.ToString(),
+                    AuthorName = grp.First().Artwork.AuthorName,
+                    ThumbnailUrl = grp.First().Artwork.ThumbnailUrl,
+                    TotalFavorites = grp.First().Artwork.ArtworkMetaData.TotalFavorites,
+                    AverageStarRate = grp.First().Artwork.ArtworkMetaData.GetAverageStarRate(),
+                    OriginUrl = grp.First().Artwork.Origin.ImageUrl,
+                    Chapters = grp.Select(o => new ChapterDto
                     {
-                        ArtworkId = g25Response.First().ArtworkId,
-                        artworkType = g25Response.First().ArtworkType,
-                        ArtworkTitle = g25Response.First().Artwork.Title,
-                        AuthorId = g25Response.First().Artwork.CreatedBy,
-                        AuthorName = g25Response.First().Artwork.AuthorName,
-                        ThumbnailUrl = g25Response.First().Artwork.ThumbnailUrl,
-                        TotalFavorites = g25Response.First().Artwork.ArtworkMetaData.TotalFavorites,
-                        TotalStarRates = g25Response.First().Artwork.ArtworkMetaData.TotalStarRates,
-                        G25Chapters = g25Chapters
-                    }
-                );
-            }
-
-            httpResponse.Body = g25ResponseDtos;
-
-            return httpResponse;
+                        Id = o.Chapter.Id.ToString(),
+                        Title = o.Chapter.Title,
+                        UploadOrder = o.Chapter.UploadOrder,
+                        Time = o.ViewedAt
+                    })
+                }),
+            };
         }
+
+        await SendAsync(httpResponse, httpResponse.HttpCode, ct);
 
         return httpResponse;
     }

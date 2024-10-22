@@ -2,7 +2,7 @@ using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.G45;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G45.DTOs;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G45.HttpResponse;
 using System.Linq;
 using System.Threading;
@@ -59,24 +59,25 @@ public class G45Endpoint : Endpoint<G45Request, G45HttpResponse>
 
         if (featResponse.IsSuccess)
         {
-            httpResponse.Body = new G45ResponseDto
+            httpResponse.Body = new ArtworkCardDto
             {
                 Artworks = featResponse.Result.Select(o => new ArtworkDto
                 {
+                    Id = o.Id.ToString(),
                     Title = o.Title,
                     CreatedBy = o.CreatedBy.ToString(),
                     AuthorName = o.AuthorName,
                     ThumbnailUrl = o.ThumbnailUrl,
                     TotalFavorites = o.ArtworkMetaData.TotalFavorites,
-                    TotalStarRates = o.ArtworkMetaData.TotalStarRates,
+                    AverageStarRate = o.ArtworkMetaData.AverageStarRate,
                     OriginUrl = o.Origin.ImageUrl,
                     Chapters = o.Chapters
                         .Select(c => new ChapterDto
                         {
-                            Id = c.Id,
+                            Id = c.Id.ToString(),
                             Title = c.Title,
                             UploadOrder = c.UploadOrder,
-                            UpdatedAt = c.UpdatedAt
+                            Time = c.UpdatedAt
                         }).ToList()
                 })
             };
