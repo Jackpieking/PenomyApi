@@ -5,7 +5,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PenomyAPI.App.FeatArt1.OtherHandlers;
+namespace PenomyAPI.App.FeatArt1.OtherHandlers.CountArtwork;
 
 public class Art1CountArtworkHandler
     : IFeatureHandler<Art1CountArtworkRequest, Art1CountArtworkResponse>
