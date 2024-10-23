@@ -18,7 +18,10 @@ public class G10Handler : IFeatureHandler<G10Request, G10Response>
     public async Task<G10Response> ExecuteAsync(G10Request request, CancellationToken ct)
     {
         var unitOfWork = _unitOfWork.Value;
-        var result = await unitOfWork.G10Repository.GetCommentsAsync(request.ArtworkId);
+        var result = await unitOfWork.G10Repository.GetCommentsAsync(
+            request.ArtworkId,
+            request.UserId
+        );
 
         return new G10Response { Result = result, StatusCode = G10ResponseStatusCode.SUCCESS };
     }

@@ -3,4 +3,6 @@
 public class G21RequestDto
 {
     public string ChapterId { get; set; }
+
+    public string UserId { get; set; }
 }

@@ -18,7 +18,10 @@ public class G21Handler : IFeatureHandler<G21Request, G21Response>
     public async Task<G21Response> ExecuteAsync(G21Request request, CancellationToken ct)
     {
         var unitOfWork = _unitOfWork.Value;
-        var result = await unitOfWork.G21Repository.GetCommentsAsync(request.ChapterId);
+        var result = await unitOfWork.G21Repository.GetCommentsAsync(
+            request.ChapterId,
+            request.UserId
+        );
 
         return new G21Response { Result = result, StatusCode = G21ResponseStatusCode.SUCCESS };
     }

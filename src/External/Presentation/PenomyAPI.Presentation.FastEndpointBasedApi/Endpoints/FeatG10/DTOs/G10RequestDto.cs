@@ -2,5 +2,7 @@
 
 public class G10RequestDto
 {
-    public long ArtworkId { get; set; }
+    public string ArtworkId { get; set; }
+
+    public string UserId { get; set; }
 }
