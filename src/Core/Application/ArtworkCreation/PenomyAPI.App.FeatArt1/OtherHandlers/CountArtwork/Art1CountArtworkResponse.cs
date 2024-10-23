@@ -1,6 +1,6 @@
 ﻿using PenomyAPI.App.Common;
 
-namespace PenomyAPI.App.FeatArt1.OtherHandlers;
+namespace PenomyAPI.App.FeatArt1.OtherHandlers.CountArtwork;
 
 public sealed class Art1CountArtworkResponse : IFeatureResponse
 {
