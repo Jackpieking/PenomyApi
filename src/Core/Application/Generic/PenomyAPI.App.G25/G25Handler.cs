@@ -1,9 +1,9 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using PenomyAPI.App.Common;
+﻿using PenomyAPI.App.Common;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.App.G25;
 
@@ -32,6 +32,7 @@ public class G25Handler : IFeatureHandler<G25Request, G25Response>
                 request.PageNum,
                 request.ArtNum
             ),
+            IsSuccess = true,
             StatusCode = G25ResponseStatusCode.SUCCESS
         };
     }

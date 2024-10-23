@@ -57,9 +57,9 @@ public class G25CountArtViewedEndpoint
         if (featResponse.IsSuccess)
         {
             httpResponse.Body = featResponse.ArtCount;
-
-            return httpResponse;
         }
+
+        await SendAsync(httpResponse, httpResponse.HttpCode, ct);
 
         return httpResponse;
     }
