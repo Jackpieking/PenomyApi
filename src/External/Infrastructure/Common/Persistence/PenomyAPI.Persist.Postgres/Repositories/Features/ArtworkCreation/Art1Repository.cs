@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
+using PenomyAPI.Domain.RelationalDb.Models.ArtworkCreation.FeatArt1;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.ArtworkCreation;
 using System.Collections.Generic;
 using System.Linq;
@@ -69,5 +70,34 @@ internal sealed class Art1Repository : IArt1Repository
                 artwork.ArtworkType == artworkType
                 && artwork.CreatedBy == creatorId,
             cancellationToken: cancellationToken);
+    }
+
+    public async Task<OverviewStatisticReadModel> GetOverviewStatisticByCreatorIdAsync(
+        long creatorId,
+        CancellationToken cancellationToken)
+    {
+        var totalComics = await _artworkDbSet
+            .CountAsync(artwork =>
+                artwork.CreatedBy == creatorId
+                && artwork.ArtworkType == ArtworkType.Comic
+                && !artwork.IsTemporarilyRemoved);
+
+        var totalAnimations = await _artworkDbSet
+            .CountAsync(artwork =>
+                artwork.CreatedBy == creatorId
+                && artwork.ArtworkType == ArtworkType.Animation
+                && !artwork.IsTemporarilyRemoved);
+
+        var totalSeries = await _dbContext.Set<Series>()
+            .CountAsync(series =>
+                series.CreatedBy == creatorId
+                && !series.IsTemporarilyRemoved);
+
+        return new OverviewStatisticReadModel
+        {
+            TotalComics = totalComics,
+            TotalAnimations = totalAnimations,
+            TotalSeries = totalSeries
+        };
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PenomyAPI.App.FeatArt1.OtherHandlers;
+using PenomyAPI.App.FeatArt1.OtherHandlers.CountArtwork;
 using PenomyAPI.BuildingBlock.FeatRegister.FeatureRegistration.Common;
 using System;
 

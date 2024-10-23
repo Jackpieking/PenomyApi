@@ -1,7 +1,7 @@
 ﻿using PenomyAPI.App.Common;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 
-namespace PenomyAPI.App.FeatArt1.OtherHandlers;
+namespace PenomyAPI.App.FeatArt1.OtherHandlers.CountArtwork;
 
 public sealed class Art1CountArtworkRequest
     : IFeatureRequest<Art1CountArtworkResponse>

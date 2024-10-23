@@ -1,9 +1,9 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using PenomyAPI.App.Common;
+﻿using PenomyAPI.App.Common;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.App.G25.OtherHandlers.NumberArtViewed;
 
@@ -37,6 +37,7 @@ public class G25CountArtViewedHandler
                 request.ArtworkType,
                 ct
             ),
+            IsSuccess = true,
             StatusCode = G25CountArtViewedResponseStatusCode.SUCCESS,
         };
     }

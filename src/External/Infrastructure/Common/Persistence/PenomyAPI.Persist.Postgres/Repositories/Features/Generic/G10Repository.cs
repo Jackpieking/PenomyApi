@@ -43,10 +43,10 @@ public class G10Repository : IG10Repository
                     NickName = c.Creator.NickName,
                     AvatarUrl = c.Creator.AvatarUrl,
                 },
-
-
-
-            }).AsNoTracking().ToListAsync();
+            })
+            .OrderBy(x => x.CreatedAt)
+            .AsNoTracking()
+            .ToListAsync();
         return result;
     }
 }
