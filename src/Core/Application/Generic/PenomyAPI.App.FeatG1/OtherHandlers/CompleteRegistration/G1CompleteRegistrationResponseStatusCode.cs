@@ -4,9 +4,13 @@ public enum G1CompleteRegistrationResponseStatusCode
 {
     SUCCESS = 1,
 
-    DATABASE_ERROR = 2,
+    DATABASE_ERROR,
 
-    PASSWORD_INVALID = 3,
+    PASSWORD_INVALID,
 
-    INVALID_PRE_REGISTRATION_TOKEN = 4
+    INVALID_TOKEN,
+
+    USER_EXIST,
+
+    INPUT_VALIDATION_FAIL
 }

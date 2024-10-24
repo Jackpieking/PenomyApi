@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Cryptography;
 using System.Text;
 using FastEndpoints.Security;
@@ -27,7 +28,9 @@ internal sealed class IdentityServicesRegistration : IServiceRegistration
             .AddSingleton<IAccessTokenHandler, AccessTokenHandler>()
             .MakeSingletonLazy<IAccessTokenHandler>()
             .AddSingleton<IRefreshTokenHandler, RefreshTokenHandler>()
-            .MakeSingletonLazy<IRefreshTokenHandler>();
+            .MakeSingletonLazy<IRefreshTokenHandler>()
+            .AddSingleton<SecurityTokenHandler, JwtSecurityTokenHandler>()
+            .MakeSingletonLazy<SecurityTokenHandler>();
     }
 
     private static void AddAuthenticatingServices(
@@ -40,7 +43,23 @@ internal sealed class IdentityServicesRegistration : IServiceRegistration
             .GetRequiredSection("Jwt")
             .Get<JwtAuthenticationOptions>();
 
+        var tokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = authOption.ValidateIssuer,
+            ValidateAudience = authOption.ValidateAudience,
+            ValidateLifetime = authOption.ValidateLifetime,
+            ValidateIssuerSigningKey = authOption.ValidateIssuerSigningKey,
+            RequireExpirationTime = authOption.RequireExpirationTime,
+            ValidTypes = authOption.ValidTypes,
+            ValidIssuer = authOption.ValidIssuer,
+            ValidAudience = authOption.ValidAudience,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                key: new HMACSHA256(key: Encoding.UTF8.GetBytes(s: authOption.IssuerSigningKey)).Key
+            )
+        };
+
         services
+            .AddSingleton(tokenValidationParameters)
             .AddAuthenticationJwtBearer(
                 jwtSigningOption =>
                 {
@@ -48,22 +67,7 @@ internal sealed class IdentityServicesRegistration : IServiceRegistration
                 },
                 jwtBearerOption =>
                 {
-                    jwtBearerOption.TokenValidationParameters = new()
-                    {
-                        ValidateIssuer = authOption.ValidateIssuer,
-                        ValidateAudience = authOption.ValidateAudience,
-                        ValidateLifetime = authOption.ValidateLifetime,
-                        ValidateIssuerSigningKey = authOption.ValidateIssuerSigningKey,
-                        RequireExpirationTime = authOption.RequireExpirationTime,
-                        ValidTypes = authOption.ValidTypes,
-                        ValidIssuer = authOption.ValidIssuer,
-                        ValidAudience = authOption.ValidAudience,
-                        IssuerSigningKey = new SymmetricSecurityKey(
-                            key: new HMACSHA256(
-                                key: Encoding.UTF8.GetBytes(s: authOption.IssuerSigningKey)
-                            ).Key
-                        )
-                    };
+                    jwtBearerOption.TokenValidationParameters = tokenValidationParameters;
 
                     jwtBearerOption.Validate();
                 }

@@ -1,42 +1,48 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using PenomyAPI.App.Common.Models.Common;
-using PenomyAPI.App.FeatG1.Infrastructures;
-using PenomyAPI.Infra.Configuration.Options;
+﻿using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.IdentityModel.Tokens;
+using PenomyAPI.App.Common.AppConstants;
+using PenomyAPI.App.FeatG1.Infrastructures;
 
 namespace PenomyAPI.Infra.FeatG1;
 
-public sealed class G1PreRegistrationTokenHandler
-    : IG1PreRegistrationTokenHandler
+public sealed class G1PreRegistrationTokenHandler : IG1PreRegistrationTokenHandler
 {
-    private readonly JwtAuthenticationOptions _options;
-    private readonly SecurityTokenHandler _securityTokenHandler;
+    private readonly TokenValidationParameters _tokenValidationParameters;
+    private readonly Lazy<SecurityTokenHandler> _securityTokenHandler;
 
     public G1PreRegistrationTokenHandler(
-        JwtAuthenticationOptions options,
-        SecurityTokenHandler securityTokenHandler)
+        TokenValidationParameters tokenValidationParameters,
+        Lazy<SecurityTokenHandler> securityTokenHandler
+    )
     {
-        _options = options;
+        _tokenValidationParameters = tokenValidationParameters;
         _securityTokenHandler = securityTokenHandler;
     }
 
-    public async Task<Result<string>> GetEmailFromTokenAsync(
+    public async Task<bool> ValidateEmailConfirmationTokenAsync(
         string token,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken
+    )
     {
         var validationResult = await ValidateTokenParametersAsync(token);
 
+        // Valdate the token fail.
         if (!validationResult.IsValid)
         {
-            return Result<string>.Failed();
+            return false;
         }
 
-        var emailClaim = validationResult.ClaimsIdentity.FindFirst(ClaimTypes.Email);
+        // Is token expired?
+        if (ExtractUtcTimeFromToken(validationResult) < DateTime.UtcNow)
+        {
+            return false;
+        }
 
-        return Result<string>.Success(emailClaim.Value);
+        return true;
     }
 
     /// <summary>
@@ -45,30 +51,65 @@ public sealed class G1PreRegistrationTokenHandler
     /// </summary>
     /// <param name="token"></param>
     /// <returns></returns>
-    private async Task<TokenValidationResult> ValidateTokenParametersAsync(string token)
+    private Task<TokenValidationResult> ValidateTokenParametersAsync(string token)
     {
         // Validate the token credentials.
-        var validationResult = await _securityTokenHandler.ValidateTokenAsync(
-            token: token,
-            validationParameters: new TokenValidationParameters
-            {
-                ValidateAudience = true,
-                ValidateIssuer = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = _options.ValidIssuer,
-                ValidAudience = _options.ValidAudience,
-                IssuerSigningKey = GetSecurityKey(_options.IssuerSigningKey)
-            }
-        );
-
-        return validationResult;
+        return _securityTokenHandler.Value.ValidateTokenAsync(token, _tokenValidationParameters);
     }
 
-    private static SymmetricSecurityKey GetSecurityKey(string PrivateKey)
+    /// <summary>
+    ///     Extract utc time from token.
+    /// </summary>
+    /// <param name="tokenResult">
+    ///     The token validation result.
+    /// </param>
+    /// <returns>
+    ///     The utc time from token.
+    /// </returns>
+    private static DateTime ExtractUtcTimeFromToken(TokenValidationResult tokenResult)
     {
-        var key = Encoding.UTF8.GetBytes(PrivateKey);
+        return DateTimeOffset
+            .FromUnixTimeSeconds(
+                seconds: long.Parse(
+                    tokenResult.ClaimsIdentity.FindFirst(JwtRegisteredClaimNames.Exp).Value
+                )
+            )
+            .UtcDateTime;
+    }
 
-        return new SymmetricSecurityKey(key: key);
+    /// <summary>
+    ///     Get email from token.
+    /// </summary>
+    /// <param name="token">
+    ///     The token to be validated.
+    /// </param>
+    /// <param name="cancellationToken">
+    ///     The cancellation token.
+    /// </param>
+    /// <returns>
+    ///     The email from token.
+    /// </returns>
+    public async Task<string> GetEmailFromTokenAsync(
+        string token,
+        CancellationToken cancellationToken
+    )
+    {
+        var validationResult = await ValidateTokenParametersAsync(token);
+
+        // Valdate the token fail.
+        if (!validationResult.IsValid)
+        {
+            return string.Empty;
+        }
+
+        // Is token expired?
+        if (ExtractUtcTimeFromToken(validationResult) < DateTime.UtcNow)
+        {
+            return string.Empty;
+        }
+
+        return validationResult
+            .ClaimsIdentity.FindFirst(CommonValues.Claims.AppUserEmailClaim)
+            .Value;
     }
 }
