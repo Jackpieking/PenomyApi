@@ -23,8 +23,8 @@ public class G56Endpoint : Endpoint<G56RequestDto, G56HttpResponse>
 
         Summary(endpointSummary: summary =>
         {
-            summary.Summary = "Endpoint for deleting artwork comment.";
-            summary.Description = "This endpoint is used for deleting artwork comment.";
+            summary.Summary = "Endpoint for like artwork comment.";
+            summary.Description = "This endpoint is used for like artwork comment.";
             summary.Response<G56HttpResponse>(
                 description: "Represent successful operation response.",
                 example: new() { AppCode = G56ResponseStatusCode.SUCCESS.ToString() }
