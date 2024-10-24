@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
@@ -66,7 +67,7 @@ public class G10Endpoint : Endpoint<G10RequestDto, G10HttpResponse>
                 LikeCount = x.TotalLikes,
                 IsAuthor = true,
                 CreatedBy = x.Creator?.UserId.ToString(),
-                IsLiked = x.UserLikeArtworkComment != null,
+                IsLiked = x.UserLikeArtworkComment.Count() > 0,
             }),
         };
 
