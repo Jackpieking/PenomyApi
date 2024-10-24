@@ -29,6 +29,7 @@ public class G45Repository : IG45Repository
             .Take(artNum)
             .Select(o => new Artwork
             {
+                Id = o.ArtworkId,
                 Title = o.FollowedArtwork.Title,
                 CreatedBy = o.FollowedArtwork.CreatedBy,
                 AuthorName = o.FollowedArtwork.AuthorName,
@@ -37,7 +38,7 @@ public class G45Repository : IG45Repository
                 ArtworkMetaData = new ArtworkMetaData
                 {
                     TotalFavorites = o.FollowedArtwork.ArtworkMetaData.TotalFavorites,
-                    TotalStarRates = o.FollowedArtwork.ArtworkMetaData.TotalStarRates
+                    AverageStarRate = o.FollowedArtwork.ArtworkMetaData.GetAverageStarRate()
                 },
                 Origin = new ArtworkOrigin
                 {

@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Common;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G25.DTOs;
+﻿using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Common;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G25.HttpResponse;
 
-public class G25HttpResponse : AppHttpResponse<List<G25ResponseDto>>
+public class G25HttpResponse : AppHttpResponse<ArtworkCardDto>
 {
-    public List<G25ResponseDto> g25ResponseDtos { get; set; }
+    public ArtworkCardDto g25ResponseDtos { get; set; }
 }

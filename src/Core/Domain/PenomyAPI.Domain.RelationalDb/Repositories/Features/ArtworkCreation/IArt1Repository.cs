@@ -1,4 +1,5 @@
 ﻿using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
+using PenomyAPI.Domain.RelationalDb.Models.ArtworkCreation.FeatArt1;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -54,5 +55,9 @@ public interface IArt1Repository
         long creatorId,
         int pageNumber,
         int pageSize,
+        CancellationToken cancellationToken);
+
+    Task<OverviewStatisticReadModel> GetOverviewStatisticByCreatorIdAsync(
+        long creatorId,
         CancellationToken cancellationToken);
 }

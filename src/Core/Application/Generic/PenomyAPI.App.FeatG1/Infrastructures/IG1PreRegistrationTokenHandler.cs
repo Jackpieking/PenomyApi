@@ -1,12 +1,14 @@
-﻿using PenomyAPI.App.Common.Models.Common;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 
 namespace PenomyAPI.App.FeatG1.Infrastructures;
 
 public interface IG1PreRegistrationTokenHandler
 {
-    Task<Result<string>> GetEmailFromTokenAsync(
+    Task<bool> ValidateEmailConfirmationTokenAsync(
         string token,
-        CancellationToken cancellationToken);
+        CancellationToken cancellationToken
+    );
+
+    Task<string> GetEmailFromTokenAsync(string token, CancellationToken cancellationToken);
 }
