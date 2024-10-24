@@ -35,7 +35,7 @@ public interface IG1Repository
     ///     True if the user is found.
     ///     Otherwise, false.
     /// </returns>
-    Task<bool> IsUserFoundByEmailQueryAsync(string email, CancellationToken ct);
+    Task<bool> IsUserFoundByEmailAsync(string email, CancellationToken ct);
 
     /// <summary>
     ///     Add new user to database.

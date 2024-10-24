@@ -33,8 +33,9 @@ internal sealed class PersistenceServicesRegistration : IServiceRegistration
     private static void AddAppDefinedServices(IServiceCollection services)
     {
         services.AddScoped<IUnitOfWork, UnitOfWork>().MakeScopedLazy<IUnitOfWork>();
-        services.AddScoped<UserManager<PgUser>>().MakeScopedLazy<UserManager<PgUser>>();
-        services.AddScoped<RoleManager<PgRole>>().MakeScopedLazy<RoleManager<PgRole>>();
+        services.MakeScopedLazy<UserManager<PgUser>>();
+        services.MakeScopedLazy<RoleManager<PgRole>>();
+        services.MakeScopedLazy<SignInManager<PgUser>>();
         services.AddSingleton<ICacheHandler, CacheHandler>().MakeSingletonLazy<ICacheHandler>();
         services.MakeSingletonLazy<IFusionCache>();
         services.MakeSingletonLazy<IFusionCacheSerializer>();

@@ -1,6 +1,5 @@
 using System;
 using System.Runtime.CompilerServices;
-using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using PenomyAPI.App.Common;
@@ -32,10 +31,7 @@ public sealed class G1Handler : IFeatureHandler<G1Request, G1Response>
     public async Task<G1Response> ExecuteAsync(G1Request request, CancellationToken ct)
     {
         // Does user exist by email.
-        var isUserFound = await _repository.IsUserFoundByEmailQueryAsync(
-            email: request.Email,
-            ct: ct
-        );
+        var isUserFound = await _repository.IsUserFoundByEmailAsync(email: request.Email, ct: ct);
         // User with email already exists.
         if (isUserFound)
         {
@@ -45,7 +41,7 @@ public sealed class G1Handler : IFeatureHandler<G1Request, G1Response>
         // Generate pre-registration token.
         var preRegistrationToken = _accessToken.Value.Generate(
             [new(CommonValues.Claims.AppUserEmailClaim, request.Email)],
-            35
+            15 * 60 // 15 minutes
         );
 
         // Replace the registration link with one that includes the token.

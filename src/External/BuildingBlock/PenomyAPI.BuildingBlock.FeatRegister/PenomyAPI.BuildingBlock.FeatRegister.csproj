@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt1\PenomyAPI.App.FeatArt1.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt7\PenomyAPI.App.FeatArt7.csproj" />
@@ -45,6 +45,7 @@
     <ProjectReference Include="..\..\Infrastructure\Common\IdentityService\PenomyAPI.Identity.AppAuthenticator\PenomyAPI.Identity.AppAuthenticator.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG21\PenomyAPI.App.FeatG21.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG56\PenomyAPI.App.FeatG56.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG31\PenomyAPI.App.FeatG31.csproj" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
