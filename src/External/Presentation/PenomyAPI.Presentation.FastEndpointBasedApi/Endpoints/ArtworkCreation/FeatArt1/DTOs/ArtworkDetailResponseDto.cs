@@ -12,6 +12,8 @@ public sealed class ArtworkDetailResponseDto
 
     public string ThumbnailUrl { get; set; }
 
+    public string OriginImageUrl { get; set; }
+
     public ArtworkStatus ArtworkStatus { get; set; }
 
     public ArtworkPublicLevel PublicLevel { get; set; }
@@ -21,14 +23,6 @@ public sealed class ArtworkDetailResponseDto
     public double AverageStarRate { get; set; }
 
     public int TotalChapters { get; set; }
-
-    public long TotalViews { get; set; }
-
-    public long TotalFavorites { get; set; }
-
-    public long TotalFollowers { get; set; }
-
-    public long TotalComments { get; set; }
 
     public DateTime CreatedAt { get; set; }
 
