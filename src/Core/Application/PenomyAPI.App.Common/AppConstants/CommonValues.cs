@@ -15,4 +15,9 @@ public static class CommonValues
         /// </remarks>
         public static readonly DateTime MinUtc = new(1946, 2, 14, 0, 0, 0, DateTimeKind.Utc);
     }
+
+    public static class Claims
+    {
+        public const string AppUserEmailClaim = "app-user-email";
+    }
 }

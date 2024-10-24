@@ -1,10 +1,17 @@
+using System;
+using System.Text;
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.JsonWebTokens;
 using PenomyAPI.BuildingBlock.FeatRegister;
 using PenomyAPI.BuildingBlock.FeatRegister.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.ServiceConfigurations;
+
+// Global Configuration.
+Console.OutputEncoding = Encoding.UTF8;
+JsonWebTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
 var builder = WebApplication.CreateBuilder(args);
 

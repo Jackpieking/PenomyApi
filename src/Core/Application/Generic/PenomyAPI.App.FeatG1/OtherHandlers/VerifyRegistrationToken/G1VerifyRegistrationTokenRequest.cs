@@ -2,8 +2,8 @@
 
 namespace PenomyAPI.App.FeatG1.OtherHandlers.VerifyRegistrationToken;
 
-public sealed class G1VerifyRegistrationTokenRequest :
-    IFeatureRequest<G1VerifyRegistrationTokenResponse>
+public sealed class G1VerifyRegistrationTokenRequest
+    : IFeatureRequest<G1VerifyRegistrationTokenResponse>
 {
-    public string RegistrationToken { get; set; }
+    public string RegistrationToken { get; init; }
 }

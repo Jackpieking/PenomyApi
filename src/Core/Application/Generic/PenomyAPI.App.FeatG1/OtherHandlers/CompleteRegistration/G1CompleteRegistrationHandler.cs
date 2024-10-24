@@ -1,3 +1,6 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using PenomyAPI.App.Common;
 using PenomyAPI.App.Common.IdGenerator.Snowflake;
 using PenomyAPI.App.FeatG1.Infrastructures;
@@ -5,9 +8,6 @@ using PenomyAPI.Domain.RelationalDb.Entities.Generic;
 using PenomyAPI.Domain.RelationalDb.Entities.UserIdentity;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace PenomyAPI.App.FeatG1.OtherHandlers.CompleteRegistration;
 
@@ -26,8 +26,6 @@ public sealed class G1CompleteRegistrationHandler
     {
         _preRegistrationTokenHandler = preRegistrationTokenHandler;
         _snowflakeIdGenerator = snowflakeIdGenerator;
-
-        // TODO
         _repository = unitOfWork.Value.G1Repository;
     }
 
@@ -37,7 +35,7 @@ public sealed class G1CompleteRegistrationHandler
     )
     {
         // Extract email from token.
-        var result = await _preRegistrationTokenHandler.Value.GetEmailFromTokenAsync(
+        var email = await _preRegistrationTokenHandler.Value.GetEmailFromTokenAsync(
             request.PreRegistrationToken,
             ct
         );
@@ -46,18 +44,35 @@ public sealed class G1CompleteRegistrationHandler
         // - maybe users insert them,
         // - not from penomy website but by
         //      calling api directly with their token =)).
-        if (!result.IsSuccess)
+        if (string.IsNullOrWhiteSpace(email))
         {
-            return new()
-            {
-                StatusCode = G1CompleteRegistrationResponseStatusCode.INVALID_PRE_REGISTRATION_TOKEN
-            };
+            return new() { StatusCode = G1CompleteRegistrationResponseStatusCode.INVALID_TOKEN };
         }
 
-        // Generate bundle for new user.
-        var newUserEmail = result.Value;
+        // Is user found by email.
+        var isUserFound = await _repository.IsUserFoundByEmailQueryAsync(email, ct);
 
-        var (newUser, newuserProfile) = CreateNewUser(newUserEmail, request.ConfirmedNickName);
+        // Email already registered
+        if (isUserFound)
+        {
+            return new() { StatusCode = G1CompleteRegistrationResponseStatusCode.USER_EXIST };
+        }
+
+        // TODO: Validate password
+        // Pre init new user profile.
+        var newUser = PreInitUserProfile(email);
+
+        // Validate user password
+        var isPasswordValid = await _repository.ValidatePasswordAsync(newUser, request.Password);
+
+        // User password is invalid
+        if (!isPasswordValid)
+        {
+            return new() { StatusCode = G1CompleteRegistrationResponseStatusCode.PASSWORD_INVALID };
+        }
+
+        // Complete init user profile process.
+        var newuserProfile = CreateNewUser(newUser, request.ConfirmedNickName);
 
         // Add bundle to database.
         var isAdded = await _repository.AddNewUserToDatabaseAsync(
@@ -69,34 +84,43 @@ public sealed class G1CompleteRegistrationHandler
 
         // Adding user fail, please check the error logging in database.
         // Or debug through above step.
-        if (isAdded)
+        if (!isAdded)
         {
             return new() { StatusCode = G1CompleteRegistrationResponseStatusCode.DATABASE_ERROR };
         }
 
         return new()
         {
-            NewUserEmail = newUserEmail,
+            NewUserEmail = email,
             StatusCode = G1CompleteRegistrationResponseStatusCode.SUCCESS
         };
     }
 
-    private (User, UserProfile) CreateNewUser(string email, string nickname)
+    private User PreInitUserProfile(string email)
     {
-        var newUser = new User
+        return new()
         {
             Id = _snowflakeIdGenerator.Value.Get(),
             Email = email,
             UserName = email
         };
+    }
 
+    private UserProfile CreateNewUser(User newUser, string nickname)
+    {
         // TODO: Add avatar url
-        var datetimeUtcNow = DateTime.UtcNow;
-        var newUserProfile = UserProfile.NewProfile(newUser.Id, nickname, "None");
-        newUserProfile.RegisteredAt = datetimeUtcNow;
-        newUserProfile.LastActiveAt = datetimeUtcNow;
-        newUserProfile.UpdatedAt = datetimeUtcNow;
+        var newUserProfile = new UserProfile
+        {
+            UserId = newUser.Id,
+            Gender = UserGender.NotSelected,
+            NickName = nickname,
+            AboutMe = string.Empty,
+            AvatarUrl = string.Empty,
+            RegisteredAt = DateTime.UtcNow,
+            LastActiveAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
+        };
 
-        return (newUser, newUserProfile);
+        return newUserProfile;
     }
 }

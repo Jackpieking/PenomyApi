@@ -1,8 +1,8 @@
-﻿using PenomyAPI.App.Common;
-using PenomyAPI.App.FeatG1.Infrastructures;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using PenomyAPI.App.Common;
+using PenomyAPI.App.FeatG1.Infrastructures;
 
 namespace PenomyAPI.App.FeatG1.OtherHandlers.VerifyRegistrationToken;
 
@@ -16,26 +16,30 @@ public sealed class G1VerifyRegistrationTokenHandler
         _tokenHandler = tokenHandler;
     }
 
-    public async Task<G1VerifyRegistrationTokenResponse> ExecuteAsync(G1VerifyRegistrationTokenRequest request, CancellationToken ct)
+    public async Task<G1VerifyRegistrationTokenResponse> ExecuteAsync(
+        G1VerifyRegistrationTokenRequest request,
+        CancellationToken ct
+    )
     {
         // Extract email from token.
-        var result = await _tokenHandler.Value.GetEmailFromTokenAsync(
+        var result = await _tokenHandler.Value.ValidateEmailConfirmationTokenAsync(
             request.RegistrationToken,
             ct
         );
 
-        if (!result.IsSuccess)
+        // Invalid token
+        // Return false.
+        if (!result)
         {
             return new G1VerifyRegistrationTokenResponse
             {
-                IsValid = false,
+                StatusCode = G1VerifyRegistrationTokenResponseStatusCode.INVALID_TOKEN,
             };
         }
 
         return new G1VerifyRegistrationTokenResponse
         {
-            IsValid = true,
-            Email = result.Value
+            StatusCode = G1VerifyRegistrationTokenResponseStatusCode.SUCCESS
         };
     }
 }
