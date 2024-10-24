@@ -40,6 +40,8 @@ public sealed class ArtworkComment : EntityWithId<long>, ICreatedEntity<long>
     public IEnumerable<ArtworkCommentParentChild> ArtworkCommentParentChilds { get; set; }
 
     public IEnumerable<ArtworkCommentReference> ArtworkCommentReferences { get; set; }
+
+    public UserLikeArtworkComment UserLikeArtworkComment { get; set; }
     #endregion
 
     #region MetaData

@@ -6,5 +6,5 @@ namespace PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 
 public interface IG10Repository
 {
-    Task<List<ArtworkComment>> GetCommentsAsync(long artworkId);
+    Task<List<ArtworkComment>> GetCommentsAsync(long artworkId, long userId);
 }

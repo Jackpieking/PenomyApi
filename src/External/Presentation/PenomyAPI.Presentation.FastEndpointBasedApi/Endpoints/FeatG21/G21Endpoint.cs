@@ -54,7 +54,7 @@ public class G21Endpoint : Endpoint<G21RequestDto, G21HttpResponse>
         {
             CommentList = featResponse.Result.ConvertAll(x => new G21ResponseDtoObject
             {
-                Id = x.Id,
+                Id = x.Id.ToString(),
                 Content = x.Content,
                 PostDate = x.CreatedAt.ToString("MMMM dd, yyyy"),
                 Username = x.Creator.NickName,
@@ -62,6 +62,8 @@ public class G21Endpoint : Endpoint<G21RequestDto, G21HttpResponse>
                 TotalReplies = x.TotalChildComments,
                 LikeCount = x.TotalLikes,
                 IsAuthor = true,
+                CreatedBy = x.Creator.UserId.ToString(),
+                IsLiked = x.UserLikeArtworkComment != null,
             }),
         };
 

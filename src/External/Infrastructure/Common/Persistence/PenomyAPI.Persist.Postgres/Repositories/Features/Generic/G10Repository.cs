@@ -1,48 +1,57 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Entities.Generic;
+using PenomyAPI.Domain.RelationalDb.Entities.UserIdentity;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
 
 public class G10Repository : IG10Repository
 {
-    private readonly DbContext _dbContext;
-    private readonly DbSet<Artwork> _artworkDbSet;
     private readonly DbSet<ArtworkComment> _artworkCommentDbSet;
-    private readonly DbSet<ArtworkCommentReference> _artworkCommentReferenceDbSet;
-    private readonly DbSet<ArtworkCommentParentChild> _artworkCommentParentChildDbSet;
+    private readonly DbSet<UserLikeArtworkComment> _userLikeArtworkCommentDbSet;
 
     public G10Repository(DbContext dbContext)
     {
-        _dbContext = dbContext;
-        _artworkDbSet = dbContext.Set<Artwork>();
         _artworkCommentDbSet = dbContext.Set<ArtworkComment>();
-        _artworkCommentReferenceDbSet = dbContext.Set<ArtworkCommentReference>();
-        _artworkCommentParentChildDbSet = dbContext.Set<ArtworkCommentParentChild>();
+        _userLikeArtworkCommentDbSet = dbContext.Set<UserLikeArtworkComment>();
     }
 
-    public async Task<List<ArtworkComment>> GetCommentsAsync(long ArtworkId)
+    public async Task<List<ArtworkComment>> GetCommentsAsync(long ArtworkId, long UserId)
     {
         var result = await _artworkCommentDbSet
             .Where(acr => acr.ArtworkId == ArtworkId)
-            .Select(c => new ArtworkComment
+            .GroupJoin(
+                _userLikeArtworkCommentDbSet,
+                c => c.Id,
+                u => u.CommentId,
+                (c, u) => new { c, u }
+            )
+            // c: ArtworkComment, u: UserLikeArtworkComment
+            .Select(x => new ArtworkComment
             {
-                Id = c.Id,
-                Content = c.Content,
-                IsDirectlyCommented = c.IsDirectlyCommented,
-                TotalChildComments = c.TotalChildComments,
-                TotalLikes = c.TotalLikes,
-                CreatedAt = c.CreatedAt,
-                UpdatedAt = c.UpdatedAt,
+                Id = x.c.Id,
+                Content = x.c.Content,
+                IsDirectlyCommented = x.c.IsDirectlyCommented,
+                TotalChildComments = x.c.TotalChildComments,
+                TotalLikes = x.c.TotalLikes,
+                CreatedAt = x.c.CreatedAt,
+                UpdatedAt = x.c.UpdatedAt,
                 Creator = new UserProfile
                 {
-                    NickName = c.Creator.NickName,
-                    AvatarUrl = c.Creator.AvatarUrl,
+                    UserId = x.c.Creator.UserId,
+                    NickName = x.c.Creator.NickName,
+                    AvatarUrl = x.c.Creator.AvatarUrl,
                 },
+                UserLikeArtworkComment = x
+                    .u.Select(u => new UserLikeArtworkComment { UserId = u.UserId })
+                    .Where(u => u.UserId == UserId)
+                    .FirstOrDefault(),
             })
             .OrderBy(x => x.CreatedAt)
             .AsNoTracking()
