@@ -22,28 +22,6 @@ public sealed class G1PreRegistrationTokenHandler : IG1PreRegistrationTokenHandl
         _securityTokenHandler = securityTokenHandler;
     }
 
-    public async Task<bool> ValidateEmailConfirmationTokenAsync(
-        string token,
-        CancellationToken cancellationToken
-    )
-    {
-        var validationResult = await ValidateTokenParametersAsync(token);
-
-        // Valdate the token fail.
-        if (!validationResult.IsValid)
-        {
-            return false;
-        }
-
-        // Is token expired?
-        if (ExtractUtcTimeFromToken(validationResult) < DateTime.UtcNow)
-        {
-            return false;
-        }
-
-        return true;
-    }
-
     /// <summary>
     ///     Validate the parameters of the input token is valid
     ///     to this application's requirements or not.
@@ -103,6 +81,15 @@ public sealed class G1PreRegistrationTokenHandler : IG1PreRegistrationTokenHandl
 
         // Is token expired?
         if (ExtractUtcTimeFromToken(validationResult) < DateTime.UtcNow)
+        {
+            return string.Empty;
+        }
+
+        var isClaimFound = validationResult.ClaimsIdentity.HasClaim(claim =>
+            claim.Type.Equals(CommonValues.Claims.AppUserEmailClaim)
+        );
+
+        if (!isClaimFound)
         {
             return string.Empty;
         }
