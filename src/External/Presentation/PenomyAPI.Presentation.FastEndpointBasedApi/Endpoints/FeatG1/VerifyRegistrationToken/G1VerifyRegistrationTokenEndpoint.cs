@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG1.OtherHandlers.VerifyRegistrationToken;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG1.VerifyRegistrationToken.HttpResponseManager;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG1.VerifyRegistrationToken.Middlewares.Caching;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG1.VerifyRegistrationToken.Middlewares.Validation;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG1.VerifyRegistrationToken;
@@ -19,8 +18,6 @@ public class G1VerifyRegistrationTokenEndpoint
         AllowAnonymous();
         DontThrowIfValidationFails();
         PreProcessor<G1VerifyRegistrationTokenValidationPreProcessor>();
-        PreProcessor<G1VerifyRegistrationTokenCachingPreProcessor>();
-        PostProcessor<G1VerifyRegistrationTokenCachingPostProcessor>();
         Description(builder =>
         {
             builder.ClearDefaultProduces(StatusCodes.Status400BadRequest);

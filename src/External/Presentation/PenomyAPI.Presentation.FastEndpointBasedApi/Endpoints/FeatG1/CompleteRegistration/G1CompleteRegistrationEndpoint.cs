@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG1.OtherHandlers.CompleteRegistration;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG1.CompleteRegistration.HttpResponseManager;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG1.CompleteRegistration.Middlewares.Caching;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG1.CompleteRegistration.Middlewares.Validation;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG1.CompleteRegistration;
@@ -19,8 +18,6 @@ public sealed class G1CompleteRegistrationEndpoint
         AllowAnonymous();
         DontThrowIfValidationFails();
         PreProcessor<G1CompleteRegistrationValidationPreProcessor>();
-        PreProcessor<G1CompleteRegistrationCachingPreProcessor>();
-        PostProcessor<G1CompleteRegistrationCachingPostProcessor>();
         Description(builder =>
         {
             builder.ClearDefaultProduces(StatusCodes.Status400BadRequest);
