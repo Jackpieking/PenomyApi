@@ -10,7 +10,5 @@ public class G52RequestDto
 
     public long ParentCommentId { get; init; }
 
-    public bool IsDirectComment { get; init; }
-
     public long UserId { get; init; }
 }
