@@ -50,7 +50,7 @@ public sealed class G1CompleteRegistrationHandler
         }
 
         // Is user found by email.
-        var isUserFound = await _repository.IsUserFoundByEmailQueryAsync(email, ct);
+        var isUserFound = await _repository.IsUserFoundByEmailAsync(email, ct);
 
         // Email already registered
         if (isUserFound)
@@ -58,7 +58,6 @@ public sealed class G1CompleteRegistrationHandler
             return new() { StatusCode = G1CompleteRegistrationResponseStatusCode.USER_EXIST };
         }
 
-        // TODO: Validate password
         // Pre init new user profile.
         var newUser = PreInitUserProfile(email);
 
@@ -102,20 +101,20 @@ public sealed class G1CompleteRegistrationHandler
         {
             Id = _snowflakeIdGenerator.Value.Get(),
             Email = email,
-            UserName = email
+            UserName = email,
+            EmailConfirmed = true,
         };
     }
 
-    private UserProfile CreateNewUser(User newUser, string nickname)
+    private static UserProfile CreateNewUser(User newUser, string nickname)
     {
-        // TODO: Add avatar url
         var newUserProfile = new UserProfile
         {
             UserId = newUser.Id,
             Gender = UserGender.NotSelected,
             NickName = nickname,
             AboutMe = string.Empty,
-            AvatarUrl = string.Empty,
+            AvatarUrl = "https://i.sstatic.net/l60Hf.png",
             RegisteredAt = DateTime.UtcNow,
             LastActiveAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow

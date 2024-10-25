@@ -27,8 +27,9 @@ public sealed class G1CompleteRegistrationEndpoint
         });
         Summary(summary =>
         {
-            summary.Summary = "Endpoint for verify registration token feature";
-            summary.Description = "This endpoint is used for verify registration token purpose.";
+            summary.Summary = "Endpoint for completing registration token feature";
+            summary.Description =
+                "This endpoint is used for completing registration token purpose.";
             summary.ExampleRequest = new()
             {
                 PreRegistrationToken = "string",

@@ -27,8 +27,8 @@ public class G1VerifyRegistrationTokenEndpoint
         });
         Summary(summary =>
         {
-            summary.Summary = "Endpoint for verify registration token feature";
-            summary.Description = "This endpoint is used for verify registration token purpose.";
+            summary.Summary = "Endpoint for verifying registration token feature";
+            summary.Description = "This endpoint is used for verifying registration token purpose.";
             summary.ExampleRequest = new() { RegistrationToken = "string", };
             summary.Response<G1VerifyRegistrationTokenHttpResponse>(
                 description: "Represent successful operation response.",
