@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using FastEndpoints.Swagger;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NSwag;
+using PenomyAPI.BuildingBlock.FeatRegister.ServiceExtensions;
 using PenomyAPI.Infra.Configuration.Options;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.ServiceConfigurations;
@@ -18,6 +20,16 @@ public static class WebApiServiceConfig
         services.ConfigureCors(configuration);
 
         services.ConfigureLogging(configuration);
+
+        services.AddAppDefinedServices(configuration);
+    }
+
+    private static void AddAppDefinedServices(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
+    {
+        services.MakeSingletonLazy<IServiceScopeFactory>();
     }
 
     private static void ConfigureNSwag(
