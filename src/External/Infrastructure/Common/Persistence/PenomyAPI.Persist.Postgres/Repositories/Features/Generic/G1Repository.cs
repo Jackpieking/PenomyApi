@@ -40,13 +40,16 @@ internal sealed class G1Repository : IG1Repository
 
                 try
                 {
+                    var newPgUser = new PgUser
+                    {
+                        Id = newUser.Id,
+                        UserName = newUser.UserName,
+                        Email = newUser.Email,
+                        EmailConfirmed = newUser.EmailConfirmed,
+                    };
+
                     var result = await _userManager.Value.CreateAsync(
-                        user: new()
-                        {
-                            Id = newUser.Id,
-                            UserName = newUser.UserName,
-                            Email = newUser.Email,
-                        },
+                        user: newPgUser,
                         password: password
                     );
 
@@ -72,7 +75,7 @@ internal sealed class G1Repository : IG1Repository
         return dbResult;
     }
 
-    public Task<bool> IsUserFoundByEmailQueryAsync(string email, CancellationToken ct)
+    public Task<bool> IsUserFoundByEmailAsync(string email, CancellationToken ct)
     {
         var upperEmail = email.ToUpper();
 

@@ -4,5 +4,5 @@ internal sealed class G1StateBag
 {
     internal string CacheKey { get; set; }
 
-    internal int CacheDurationInSeconds { get; } = 180;
+    internal int CacheDurationInSeconds { get; } = 3 * 60;
 }

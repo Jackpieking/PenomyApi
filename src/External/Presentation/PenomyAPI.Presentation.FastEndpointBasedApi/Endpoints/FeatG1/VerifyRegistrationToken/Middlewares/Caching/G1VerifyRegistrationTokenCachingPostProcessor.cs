@@ -40,11 +40,7 @@ internal sealed class G1VerifyRegistrationTokenCachingPostProcessor
         }
 
         // Set new cache if current app code is suitable.
-        if (
-            context.Response.AppCode.Equals(
-                $"G1VerifyRegistrationToken.{G1VerifyRegistrationTokenResponseStatusCode.INVALID_TOKEN}"
-            )
-        )
+        if (false)
         {
             var responseCaching = new G1VerifyRegistrationTokenHttpResponseCaching
             {

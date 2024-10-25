@@ -20,8 +20,4 @@
     <PackageReference Include="FastEndpoints.Swagger" Version="5.25.0" />
     <PackageReference Include="File.TypeChecker" Version="4.1.1" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Endpoints\G19\DTOs\" />
-    <Folder Include="Endpoints\G19\HttpResponse\" />
-  </ItemGroup>
 </Project>

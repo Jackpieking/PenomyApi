@@ -44,12 +44,6 @@ internal sealed class G1CompleteRegistrationCachingPostProcessor
             context.Response.AppCode.Equals(
                 $"G1CompleteRegistration.{G1CompleteRegistrationResponseStatusCode.USER_EXIST}"
             )
-            || context.Response.AppCode.Equals(
-                $"G1CompleteRegistration.{G1CompleteRegistrationResponseStatusCode.INVALID_TOKEN}"
-            )
-            || context.Response.AppCode.Equals(
-                $"G1CompleteRegistration.{G1CompleteRegistrationResponseStatusCode.PASSWORD_INVALID}"
-            )
         )
         {
             var responseCaching = new G1CompleteRegistrationHttpResponseCaching

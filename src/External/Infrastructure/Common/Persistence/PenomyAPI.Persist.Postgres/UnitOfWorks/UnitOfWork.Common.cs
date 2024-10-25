@@ -1,8 +1,8 @@
+using System;
 using Microsoft.AspNetCore.Identity;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 using PenomyAPI.Persist.Postgres.Data.DbContexts;
 using PenomyAPI.Persist.Postgres.Data.UserIdentity;
-using System;
 
 namespace PenomyAPI.Persist.Postgres.UnitOfWorks;
 
@@ -15,15 +15,18 @@ public sealed partial class UnitOfWork : IUnitOfWork
     private readonly AppDbContext _dbContext;
     private readonly Lazy<UserManager<PgUser>> _userManager;
     private readonly Lazy<RoleManager<PgRole>> _roleManager;
+    private readonly Lazy<SignInManager<PgUser>> _signInManager;
 
     public UnitOfWork(
         AppDbContext dbContext,
         Lazy<UserManager<PgUser>> userManager,
-        Lazy<RoleManager<PgRole>> roleManager
+        Lazy<RoleManager<PgRole>> roleManager,
+        Lazy<SignInManager<PgUser>> signInManager
     )
     {
         _dbContext = dbContext;
         _userManager = userManager;
         _roleManager = roleManager;
+        _signInManager = signInManager;
     }
 }

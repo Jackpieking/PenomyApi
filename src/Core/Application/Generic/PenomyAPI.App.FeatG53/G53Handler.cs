@@ -19,7 +19,7 @@ public class G53Handler : IFeatureHandler<G53Request, G53Response>
     {
         var unitOfWork = _unitOfWork.Value;
         var result = await unitOfWork.G53Repository.EditCommentAsync(
-            request.CommentId,
+            long.Parse(request.CommentId),
             request.NewComment
         );
 

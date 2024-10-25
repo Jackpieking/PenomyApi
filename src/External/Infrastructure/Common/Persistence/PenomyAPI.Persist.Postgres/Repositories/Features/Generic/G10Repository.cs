@@ -1,12 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Entities.Generic;
-using PenomyAPI.Domain.RelationalDb.Entities.UserIdentity;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
@@ -51,7 +48,7 @@ public class G10Repository : IG10Repository
                 UserLikeArtworkComment = x
                     .u.Select(u => new UserLikeArtworkComment { UserId = u.UserId })
                     .Where(u => u.UserId == UserId)
-                    .FirstOrDefault(),
+                    .ToList(),
             })
             .OrderBy(x => x.CreatedAt)
             .AsNoTracking()
