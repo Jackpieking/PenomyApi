@@ -2,6 +2,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt1\PenomyAPI.App.FeatArt1.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt7\PenomyAPI.App.FeatArt7.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt8\PenomyAPI.App.FeatArt8.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG10\PenomyAPI.App.FeatG10.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG12\PenomyAPI.App.FeatG12.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG15\PenomyAPI.App.FeatG15.csproj" />
@@ -46,6 +47,7 @@
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG21\PenomyAPI.App.FeatG21.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG56\PenomyAPI.App.FeatG56.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG31\PenomyAPI.App.FeatG31.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG57\PenomyAPI.App.FeatG57.csproj" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>

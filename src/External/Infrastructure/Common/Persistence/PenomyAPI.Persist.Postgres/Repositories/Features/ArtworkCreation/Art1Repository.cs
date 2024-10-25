@@ -44,15 +44,15 @@ internal sealed class Art1Repository : IArt1Repository
                 ArtworkStatus = artwork.ArtworkStatus,
                 PublicLevel = artwork.PublicLevel,
                 ThumbnailUrl = artwork.ThumbnailUrl,
+                Origin = new ArtworkOrigin
+                {
+                    ImageUrl = artwork.Origin.ImageUrl,
+                },
                 LastChapterUploadOrder = artwork.LastChapterUploadOrder,
                 ArtworkMetaData = new ArtworkMetaData
                 {
                     AverageStarRate = artwork.ArtworkMetaData.AverageStarRate,
-                    TotalComments = artwork.ArtworkMetaData.TotalComments,
-                    TotalFavorites = artwork.ArtworkMetaData.TotalFavorites,
-                    TotalFollowers = artwork.ArtworkMetaData.TotalFollowers,
                     TotalUsersRated = artwork.ArtworkMetaData.TotalUsersRated,
-                    TotalViews = artwork.ArtworkMetaData.TotalViews,
                 },
                 CreatedAt = artwork.CreatedAt,
                 UpdatedAt = artwork.UpdatedAt,
@@ -67,8 +67,9 @@ internal sealed class Art1Repository : IArt1Repository
     {
         return _artworkDbSet.CountAsync(
             predicate: artwork =>
-                artwork.ArtworkType == artworkType
-                && artwork.CreatedBy == creatorId,
+                artwork.CreatedBy == creatorId
+                && artwork.ArtworkType == artworkType
+                && !artwork.IsTemporarilyRemoved,
             cancellationToken: cancellationToken);
     }
 

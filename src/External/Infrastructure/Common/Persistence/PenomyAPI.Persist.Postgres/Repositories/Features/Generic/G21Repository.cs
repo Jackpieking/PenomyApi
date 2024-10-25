@@ -56,7 +56,7 @@ public class G21Repository : IG21Repository
                 UserLikeArtworkComment = x
                     .u.Select(u => new UserLikeArtworkComment { UserId = u.UserId })
                     .Where(u => u.UserId == UserId)
-                    .FirstOrDefault(),
+                    .ToList(),
             })
             .OrderBy(x => x.CreatedAt)
             .AsNoTracking()
