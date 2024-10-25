@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace PenomyAPI.BuildingBlock.FeatRegister.ServiceExtensions;
 
-internal static class MakeLazyExtensions
+public static class MakeLazyExtensions
 {
     public static IServiceCollection MakeSingletonLazy<T>(this IServiceCollection services)
         where T : class
