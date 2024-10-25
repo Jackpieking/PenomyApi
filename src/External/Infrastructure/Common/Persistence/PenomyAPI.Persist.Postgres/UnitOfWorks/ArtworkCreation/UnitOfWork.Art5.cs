@@ -4,22 +4,22 @@ using PenomyAPI.Persist.Postgres.Repositories.Features.ArtworkCreation;
 namespace PenomyAPI.Persist.Postgres.UnitOfWorks;
 
 /// <summary>
-///     The partial of UnitOfWork.Art4
+///     The partial of UnitOfWork.Art5
 /// </summary>
 public sealed partial class UnitOfWork
 {
-    private IArt4Repository _art4Repository;
+    private IArt5Repository _art5Repository;
 
-    public IArt4Repository Art4Repository
+    public IArt5Repository Art5Repository
     {
         get
         {
-            if (Equals(_art4Repository, null))
+            if (Equals(_art5Repository, null))
             {
-                _art4Repository = new Art4Repository(_dbContext);
+                _art5Repository = new Art5Repository(_dbContext);
             }
 
-            return _art4Repository;
+            return _art5Repository;
         }
     }
 }

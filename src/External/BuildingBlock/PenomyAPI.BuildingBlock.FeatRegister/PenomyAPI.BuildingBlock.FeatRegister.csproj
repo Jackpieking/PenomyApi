@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt1\PenomyAPI.App.FeatArt1.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt5\PenomyAPI.App.FeatArt5.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt7\PenomyAPI.App.FeatArt7.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt8\PenomyAPI.App.FeatArt8.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG10\PenomyAPI.App.FeatG10.csproj" />
