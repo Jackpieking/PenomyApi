@@ -22,17 +22,6 @@ internal sealed class Art8Repository : IArt8Repository
         _artworkDbSet = context.Set<Artwork>();
     }
 
-    public Task<bool> IsArtworkTemporarilyRemovedByIdAsync(
-        long artworkId,
-        CancellationToken cancellationToken)
-    {
-        return _artworkDbSet.AnyAsync(
-            predicate: artwork
-                => artwork.Id == artworkId
-                && artwork.IsTemporarilyRemoved,
-            cancellationToken: cancellationToken);
-    }
-
     public async Task<bool> TemporarilyRemoveArtworkByIdAsync(
         long artworkId,
         long removedBy,

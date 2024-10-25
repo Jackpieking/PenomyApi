@@ -1,14 +1,12 @@
-﻿using System;
+﻿using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace PenomyAPI.Domain.RelationalDb.Repositories.Features.ArtworkCreation;
 
-public interface IArt8Repository
+public interface IArt5Repository
 {
-    Task<bool> TemporarilyRemoveArtworkByIdAsync(
-        long artworkId,
-        long removedBy,
-        DateTime removedAt,
+    Task<Artwork> GetComicDetailByIdAsync(
+        long comicId,
         CancellationToken cancellationToken);
 }
