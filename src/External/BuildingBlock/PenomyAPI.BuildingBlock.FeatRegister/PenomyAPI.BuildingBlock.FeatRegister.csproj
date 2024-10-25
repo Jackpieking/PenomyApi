@@ -46,6 +46,7 @@
     <ProjectReference Include="..\..\Infrastructure\Common\IdentityService\PenomyAPI.Identity.AppAuthenticator\PenomyAPI.Identity.AppAuthenticator.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG21\PenomyAPI.App.FeatG21.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG56\PenomyAPI.App.FeatG56.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG57\PenomyAPI.App.FeatG57.csproj" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
