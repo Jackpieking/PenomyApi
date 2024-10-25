@@ -6,5 +6,7 @@ public enum G1VerifyRegistrationTokenResponseStatusCode
 
     INVALID_TOKEN,
 
-    INPUT_VALIDATION_FAIL
+    INPUT_VALIDATION_FAIL,
+
+    USER_EXIST
 }
