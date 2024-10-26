@@ -45,11 +45,10 @@ public class G52Endpoint : Endpoint<G52RequestDto, G52HttpResponse>
             Content = req.CommentContent,
             ArtworkId = Int64.Parse(req.ArtworkId),
             ChapterId = Int64.Parse(req.ChapterId),
-            IsDirectlyCommented = req.IsDirectComment,
             CreatedAt = DateTime.UtcNow,
             CreatedBy = 123456789012345678,
         };
-        var G52Request = new G52Request { ArtworkComment = _artworkComment, };
+        var G52Request = new G52Request { ArtworkComment = _artworkComment };
 
         // Get FeatureHandler response.
         var featResponse = await FeatureExtensions.ExecuteAsync<G52Request, G52Response>(
