@@ -71,4 +71,37 @@ public interface IArtworkRepository : IEntityRepository<Artwork>
     Task<string> GetChapterThumbnailDefaultUrlByArtworkIdAsync(
         long artworkId,
         CancellationToken cancellationToken);
+
+    /// <summary>
+    ///     Check if the artwork with specified id is created
+    ///     or managed by the creator with specified id.
+    /// </summary>
+    /// <param name="artworkId">
+    ///     The id of the artwork to check.
+    /// </param>
+    /// <param name="creatorId">
+    ///     The id of the creator to check.
+    /// </param>
+    /// <returns>
+    ///     The result after checking.
+    /// </returns>
+    Task<bool> IsArtworkBelongedToCreatorAsync(
+        long artworkId,
+        long creatorId,
+        CancellationToken cancellationToken);
+
+    /// <summary>
+    ///     Check if the artwork with specified input
+    ///     <paramref name="artworkId"/> is temporarily removed or not.
+    /// </summary>
+    /// <param name="artworkId">
+    ///     The id of the artwork to check.
+    /// </param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>
+    ///     The checking result (<see langword="bool"/>).
+    /// </returns>
+    Task<bool> IsArtworkTemporarilyRemovedByIdAsync(
+        long artworkId,
+        CancellationToken cancellationToken);
 }

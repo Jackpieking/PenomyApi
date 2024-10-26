@@ -72,7 +72,7 @@ internal static class G1CompleteRegistrationHttpResponseMapper
                 {
                     AppCode =
                         $"G1CompleteRegistration.{G1CompleteRegistrationResponseStatusCode.USER_EXIST}",
-                    HttpCode = StatusCodes.Status400BadRequest,
+                    HttpCode = StatusCodes.Status409Conflict,
                 }
         );
     }

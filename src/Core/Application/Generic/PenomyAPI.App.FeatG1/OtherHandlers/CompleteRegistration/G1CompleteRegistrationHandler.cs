@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using PenomyAPI.App.Common;
+using PenomyAPI.App.Common.AppConstants;
 using PenomyAPI.App.Common.IdGenerator.Snowflake;
 using PenomyAPI.App.FeatG1.Infrastructures;
 using PenomyAPI.Domain.RelationalDb.Entities.Generic;
@@ -114,7 +115,7 @@ public sealed class G1CompleteRegistrationHandler
             Gender = UserGender.NotSelected,
             NickName = nickname,
             AboutMe = string.Empty,
-            AvatarUrl = "https://i.sstatic.net/l60Hf.png",
+            AvatarUrl = CommonValues.Others.DefaultUserAvaterUrl,
             RegisteredAt = DateTime.UtcNow,
             LastActiveAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow

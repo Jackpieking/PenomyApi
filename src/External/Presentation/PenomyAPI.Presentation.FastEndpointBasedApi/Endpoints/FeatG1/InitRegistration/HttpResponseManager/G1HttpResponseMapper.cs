@@ -44,11 +44,7 @@ internal static class G1HttpResponseMapper
                 new()
                 {
                     AppCode = $"G1.{G1ResponseStatusCode.USER_EXIST}",
-                    HttpCode = StatusCodes.Status400BadRequest,
-                    Errors = new List<string>
-                    {
-                        $"This is email is already registered: {request.Email}"
-                    }
+                    HttpCode = StatusCodes.Status409Conflict
                 }
         );
     }

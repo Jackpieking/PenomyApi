@@ -42,6 +42,17 @@ internal static class G1VerifyRegistrationTokenHttpResponseMapper
                     HttpCode = StatusCodes.Status400BadRequest,
                 }
         );
+
+        _dictionary.TryAdd(
+            key: G1VerifyRegistrationTokenResponseStatusCode.USER_EXIST,
+            value: (_, response) =>
+                new()
+                {
+                    AppCode =
+                        $"G1VerifyRegistrationToken.{G1VerifyRegistrationTokenResponseStatusCode.USER_EXIST}",
+                    HttpCode = StatusCodes.Status409Conflict,
+                }
+        );
     }
 
     internal static Func<

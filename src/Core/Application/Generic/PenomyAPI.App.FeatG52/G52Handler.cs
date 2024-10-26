@@ -26,6 +26,7 @@ public class G52Handler : IFeatureHandler<G52Request, G52Response>
         request.ArtworkComment.UpdatedAt = DateTime.UtcNow;
         request.ArtworkComment.TotalChildComments = 0;
         request.ArtworkComment.TotalLikes = 0;
+        request.ArtworkComment.IsDirectlyCommented = true;
         var result = await unitOfWork.G52Repository.CreateCommentAsync(request.ArtworkComment);
 
         if (!result.Equals(string.Empty))

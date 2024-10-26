@@ -20,4 +20,10 @@ public static class CommonValues
     {
         public const string AppUserEmailClaim = "app-user-email";
     }
+
+    public static class Others
+    {
+        public const string DefaultUserAvaterUrl =
+            "https://res.cloudinary.com/dsjsmbdpw/image/upload/v1729831342/penomy_assets/default_avatar_url.webp";
+    }
 }

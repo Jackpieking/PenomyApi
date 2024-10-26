@@ -9,15 +9,11 @@ public class G52Repository : IG52Repository
 {
     private readonly DbContext _dbContext;
     private readonly DbSet<ArtworkComment> _artworkCommentDbSet;
-    private readonly DbSet<ArtworkCommentParentChild> _commentParentChildDbSet;
-    private readonly DbSet<ArtworkCommentReference> _commentReferenceDbSet;
 
     public G52Repository(DbContext dbContext)
     {
         _dbContext = dbContext;
-        _commentParentChildDbSet = dbContext.Set<ArtworkCommentParentChild>();
         _artworkCommentDbSet = dbContext.Set<ArtworkComment>();
-        _commentReferenceDbSet = dbContext.Set<ArtworkCommentReference>();
     }
 
     public async Task<long> CreateCommentAsync(ArtworkComment Comment)

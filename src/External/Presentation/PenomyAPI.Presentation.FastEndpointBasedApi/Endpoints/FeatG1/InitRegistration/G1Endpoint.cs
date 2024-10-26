@@ -10,7 +10,6 @@ using PenomyAPI.App.FeatG1;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG1.InitRegistration.HttpRequest;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG1.InitRegistration.HttpResponseManager;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG1.InitRegistration.Middlewares.Caching;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG1.InitRegistration.Middlewares.Validation;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG1.InitRegistration;
@@ -35,8 +34,6 @@ internal sealed class G1Endpoint : Endpoint<G1HttpRequest, G1HttpResponse>
         AllowAnonymous();
         DontThrowIfValidationFails();
         PreProcessor<G1ValidationPreProcessor>();
-        PreProcessor<G1CachingPreProcessor>();
-        PostProcessor<G1CachingPostProcessor>();
         Description(builder =>
         {
             builder.ClearDefaultProduces(StatusCodes.Status400BadRequest);

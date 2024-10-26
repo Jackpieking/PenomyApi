@@ -2,23 +2,28 @@
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks.Common.Common;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.App.FeatArt8;
 
 public sealed class Art8Handler : IFeatureHandler<Art8Request, Art8Response>
 {
-    private readonly IArt8Repository _featRepository;
-    private readonly IArtworkRepository _artworkRepository;
+    private IArt8Repository _featRepository;
+    private IArtworkRepository _artworkRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
     public Art8Handler(Lazy<IUnitOfWork> unitOfWork)
     {
-        _featRepository = unitOfWork.Value.Art8Repository;
-        _artworkRepository = unitOfWork.Value.ArtworkRepository;
+        _unitOfWork = unitOfWork.Value;
     }
 
     public async Task<Art8Response> ExecuteAsync(Art8Request request, CancellationToken cancellationToken)
     {
         // Check if the artwork is existed or not before processing.
+        _artworkRepository = _unitOfWork.ArtworkRepository;
+
         var isArtworkExisted = await _artworkRepository.IsArtworkExistedByIdAsync(
             request.ArtworkId,
             cancellationToken);
@@ -28,7 +33,8 @@ public sealed class Art8Handler : IFeatureHandler<Art8Request, Art8Response>
             return Art8Response.NOT_FOUND;
         }
 
-        var isAlreadyRemoved = await _featRepository.IsArtworkTemporarilyRemovedByIdAsync(
+        // Check if the artwork is already temporarily removed or not before processing.
+        var isAlreadyRemoved = await _artworkRepository.IsArtworkTemporarilyRemovedByIdAsync(
             request.ArtworkId,
             cancellationToken);
 
@@ -38,6 +44,8 @@ public sealed class Art8Handler : IFeatureHandler<Art8Request, Art8Response>
         }
 
         // Remove the artwork.
+        _featRepository = _unitOfWork.Art8Repository;
+
         var removedAt = DateTime.UtcNow;
 
         var result = await _featRepository.TemporarilyRemoveArtworkByIdAsync(

@@ -68,4 +68,25 @@ internal sealed class ArtworkRepository : IArtworkRepository
             .Select(artwork => artwork.ThumbnailUrl)
             .FirstOrDefaultAsync(cancellationToken);
     }
+
+    public Task<bool> IsArtworkBelongedToCreatorAsync(
+        long artworkId,
+        long creatorId,
+        CancellationToken cancellationToken)
+    {
+        return _artworkDbSet.AnyAsync(artwork
+            => artwork.Id == artworkId
+            && artwork.CreatedBy == creatorId);
+    }
+
+    public Task<bool> IsArtworkTemporarilyRemovedByIdAsync(
+        long artworkId,
+        CancellationToken cancellationToken)
+    {
+        return _artworkDbSet.AnyAsync(
+            predicate: artwork
+                => artwork.Id == artworkId
+                && artwork.IsTemporarilyRemoved,
+            cancellationToken: cancellationToken);
+    }
 }

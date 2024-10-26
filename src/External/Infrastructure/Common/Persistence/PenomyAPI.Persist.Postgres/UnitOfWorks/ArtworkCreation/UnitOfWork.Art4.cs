@@ -1,7 +1,6 @@
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.ArtworkCreation;
 using PenomyAPI.Persist.Postgres.Repositories.Features.ArtworkCreation;
 
-// Lưu ý namespace phải giống nhau.
 namespace PenomyAPI.Persist.Postgres.UnitOfWorks;
 
 /// <summary>
