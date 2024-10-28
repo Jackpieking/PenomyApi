@@ -9,4 +9,6 @@ public enum G34ResponseStatusCode
     SENDING_MAIL_FAILED,
 
     INPUT_VALIDATION_FAIL,
+
+    DATABASE_ERROR
 }

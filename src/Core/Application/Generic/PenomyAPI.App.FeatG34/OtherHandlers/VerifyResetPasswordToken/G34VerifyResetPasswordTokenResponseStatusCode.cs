@@ -8,5 +8,5 @@ public enum G34VerifyResetPasswordTokenResponseStatusCode
 
     INPUT_VALIDATION_FAIL,
 
-    USER_NOT_EXIST
+    DATABASE_ERROR
 }

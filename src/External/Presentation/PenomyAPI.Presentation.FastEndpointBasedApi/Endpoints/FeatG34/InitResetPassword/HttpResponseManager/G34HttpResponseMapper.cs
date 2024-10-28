@@ -39,11 +39,21 @@ internal static class G34HttpResponseMapper
 
         _dictionary.TryAdd(
             key: G34ResponseStatusCode.USER_NOT_EXIST,
-            value: (request, response) =>
+            value: (_, response) =>
                 new()
                 {
                     AppCode = $"G34.{G34ResponseStatusCode.USER_NOT_EXIST}",
                     HttpCode = StatusCodes.Status404NotFound
+                }
+        );
+
+        _dictionary.TryAdd(
+            key: G34ResponseStatusCode.DATABASE_ERROR,
+            value: (_, response) =>
+                new()
+                {
+                    AppCode = $"G34.{G34ResponseStatusCode.DATABASE_ERROR}",
+                    HttpCode = StatusCodes.Status500InternalServerError
                 }
         );
     }

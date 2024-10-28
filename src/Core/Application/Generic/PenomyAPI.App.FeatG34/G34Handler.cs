@@ -1,11 +1,14 @@
 using System;
 using System.Runtime.CompilerServices;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using PenomyAPI.App.Common;
 using PenomyAPI.App.Common.AppConstants;
+using PenomyAPI.App.Common.IdGenerator.Snowflake;
 using PenomyAPI.App.Common.Mail;
 using PenomyAPI.App.Common.Tokens;
+using PenomyAPI.Domain.RelationalDb.Entities.UserIdentity;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 
@@ -16,37 +19,59 @@ public sealed class G34Handler : IFeatureHandler<G34Request, G34Response>
     private readonly IG34Repository _repository;
     private readonly Lazy<ISendingMailHandler> _mailHandler;
     private readonly Lazy<IAccessTokenHandler> _accessToken;
+    private readonly Lazy<ISnowflakeIdGenerator> _idGenerator;
 
     public G34Handler(
         Lazy<IUnitOfWork> unitOfWork,
         Lazy<IAccessTokenHandler> accessToken,
-        Lazy<ISendingMailHandler> mailHandler
+        Lazy<ISendingMailHandler> mailHandler,
+        Lazy<ISnowflakeIdGenerator> idGenerator
     )
     {
         _repository = unitOfWork.Value.G34Repository;
         _accessToken = accessToken;
         _mailHandler = mailHandler;
+        _idGenerator = idGenerator;
     }
 
     public async Task<G34Response> ExecuteAsync(G34Request request, CancellationToken ct)
     {
-        // Does user exist by email.
-        var isUserFound = await _repository.IsUserFoundByEmailAsync(email: request.Email, ct: ct);
+        // Get user id by email.
+        var foundUserId = await _repository.GetUserIdByEmailAsync(request.Email, ct);
 
         // User with email does not exist.
-        if (!isUserFound)
+        if (foundUserId == default)
         {
             return new() { StatusCode = G34ResponseStatusCode.USER_NOT_EXIST };
         }
 
-        // Generate pre-registration token.
+        // Generate pre reset password token,
+        var preResetPasswordTokenMetadata = InitNewPreResetPasswordMetadataToken(
+            foundUserId,
+            _idGenerator.Value.Get().ToString()
+        );
+
+        // Persist token metadata to database
+        var dbResult = await _repository.SavePreResetPasswordTokenMetadataAsync(
+            preResetPasswordTokenMetadata,
+            ct
+        );
+
+        // If database error.
+        if (!dbResult)
+        {
+            return new() { StatusCode = G34ResponseStatusCode.DATABASE_ERROR };
+        }
+
+        // Generate pre reset password token.
         var preResetPasswordToken = _accessToken.Value.Generate(
             [
+                new(CommonValues.Claims.TokenIdClaim, preResetPasswordTokenMetadata.LoginProvider),
                 new(
                     CommonValues.Claims.TokenPurposeClaim.ClaimType,
                     CommonValues.Claims.TokenPurposeClaim.ClaimValues.ResetPassword
                 ),
-                new(CommonValues.Claims.AppUserEmailClaim, request.Email)
+                new(CommonValues.Claims.UserIdClaim, foundUserId.ToString())
             ],
             15 * 60 // 15 minutes
         );
@@ -79,14 +104,14 @@ public sealed class G34Handler : IFeatureHandler<G34Request, G34Response>
     // - SOURCE: https://btburnett.com/csharp/2021/12/17/string-interpolation-trickery-and-magic-with-csharp-10-and-net-6
     private static string GenerateResetPasswordLink(
         string resetPasswordLink,
-        string resetPasswordToken
+        string preResetPasswordToken
     )
     {
         var handler = new DefaultInterpolatedStringHandler();
 
         handler.AppendLiteral(resetPasswordLink);
         handler.AppendLiteral("?token=");
-        handler.AppendFormatted(resetPasswordToken);
+        handler.AppendFormatted(preResetPasswordToken);
 
         return handler.ToStringAndClear();
     }
@@ -121,5 +146,17 @@ public sealed class G34Handler : IFeatureHandler<G34Request, G34Response>
         }
 
         return false;
+    }
+
+    private static UserToken InitNewPreResetPasswordMetadataToken(long userId, string tokenId)
+    {
+        return new()
+        {
+            LoginProvider = tokenId,
+            ExpiredAt = DateTime.UtcNow.AddMinutes(15),
+            UserId = userId,
+            Value = string.Empty,
+            Name = "AppUserPreResetPasswordToken"
+        };
     }
 }

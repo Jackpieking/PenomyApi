@@ -31,6 +31,10 @@ public static class CommonValues
                 public const string VerifyEmail = "verify-email";
             }
         }
+
+        public const string TokenIdClaim = "jti";
+
+        public const string UserIdClaim = "sub";
     }
 
     public static class Others

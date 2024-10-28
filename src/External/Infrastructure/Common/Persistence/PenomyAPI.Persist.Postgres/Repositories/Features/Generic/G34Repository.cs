@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -21,20 +22,107 @@ internal sealed class G34Repository : IG34Repository
         _userManager = userManager;
     }
 
-    public async Task<string> GenerateResetPasswordTokenAsync(string email, CancellationToken ct)
+    public async Task<string> GenerateResetPasswordTokenAsync(
+        string tokenId,
+        string userId,
+        CancellationToken ct
+    )
     {
-        var foundUser = await _userManager.Value.FindByEmailAsync(email);
+        var dbResult = string.Empty;
 
-        return await _userManager.Value.GeneratePasswordResetTokenAsync(foundUser);
+        await _dbContext
+            .Database.CreateExecutionStrategy()
+            .ExecuteAsync(operation: async () =>
+            {
+                await using var dbTransaction = await _dbContext.Database.BeginTransactionAsync(
+                    cancellationToken: ct
+                );
+
+                try
+                {
+                    await _dbContext
+                        .Set<PgUserToken>()
+                        .Where(token => token.LoginProvider.Equals(tokenId))
+                        .ExecuteDeleteAsync(ct);
+
+                    var foundUser = await _userManager.Value.FindByIdAsync(tokenId);
+
+                    var resetPasswordToken =
+                        await _userManager.Value.GeneratePasswordResetTokenAsync(foundUser);
+
+                    var pgUserToken = new PgUserToken
+                    {
+                        LoginProvider = tokenId,
+                        ExpiredAt = DateTime.UtcNow.AddMinutes(10),
+                        UserId = long.Parse(userId),
+                        Value = resetPasswordToken,
+                        Name = "AppUserResetPasswordToken"
+                    };
+
+                    await _dbContext.Set<PgUserToken>().AddAsync(pgUserToken, ct);
+
+                    await _dbContext.SaveChangesAsync(cancellationToken: ct);
+
+                    await dbTransaction.CommitAsync(cancellationToken: ct);
+
+                    dbResult = resetPasswordToken;
+                }
+                catch
+                {
+                    await dbTransaction.RollbackAsync(cancellationToken: ct);
+                }
+            });
+
+        return dbResult;
     }
 
-    public Task<bool> IsUserFoundByEmailAsync(string email, CancellationToken ct)
+    public Task<long> GetUserIdByEmailAsync(string email, CancellationToken ct)
     {
         var upperEmail = email.ToUpper();
 
         return _dbContext
             .Set<PgUser>()
-            .AnyAsync(user => user.NormalizedEmail.Equals(upperEmail), ct);
+            .Where(user => user.NormalizedEmail.Equals(upperEmail))
+            .Select(user => user.Id)
+            .FirstOrDefaultAsync(ct);
+    }
+
+    public Task<bool> IsTokenFoundByTokenIdAsync(string tokenId, CancellationToken ct)
+    {
+        return _dbContext
+            .Set<PgUserToken>()
+            .AnyAsync(token => token.LoginProvider.Equals(tokenId), ct);
+    }
+
+    public async Task<bool> SavePreResetPasswordTokenMetadataAsync(
+        UserToken preResetPasswordToken,
+        CancellationToken ct
+    )
+    {
+        try
+        {
+            await _dbContext
+                .Set<PgUserToken>()
+                .AddAsync(
+                    new()
+                    {
+                        LoginProvider = preResetPasswordToken.LoginProvider,
+                        ExpiredAt = preResetPasswordToken.ExpiredAt,
+                        UserId = preResetPasswordToken.UserId,
+                        Value = preResetPasswordToken.Value,
+                        Name = preResetPasswordToken.Name
+                    },
+                    ct
+                );
+
+            await _dbContext.SaveChangesAsync(ct);
+        }
+        catch
+        {
+            return false;
+        }
+
+        return true;
     }
 
     public async Task<bool> ValidatePasswordAsync(User newUser, string newPassword)

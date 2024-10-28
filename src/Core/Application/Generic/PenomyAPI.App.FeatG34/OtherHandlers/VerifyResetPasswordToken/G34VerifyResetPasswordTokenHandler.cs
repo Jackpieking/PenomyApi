@@ -28,13 +28,11 @@ public sealed class G34VerifyResetPasswordTokenHandler
         CancellationToken ct
     )
     {
-        // Extract email from token.
-        var email = await _tokenHandler.Value.GetEmailFromTokenAsync(
-            request.ResetPasswordToken,
-            ct
-        );
+        // Extract token id from token.
+        var (preResetPasswordTokenId, userId) =
+            await _tokenHandler.Value.GetTokenInfoFromTokenAsync(request.ResetPasswordToken, ct);
 
-        if (string.IsNullOrWhiteSpace(email))
+        if (string.IsNullOrWhiteSpace(preResetPasswordTokenId))
         {
             return new G34VerifyResetPasswordTokenResponse
             {
@@ -42,21 +40,40 @@ public sealed class G34VerifyResetPasswordTokenHandler
             };
         }
 
-        // Is user email found
-        var isUserFound = await _repository.IsUserFoundByEmailAsync(email, ct);
+        // Is token found
+        var isTokenFound = await _repository.IsTokenFoundByTokenIdAsync(
+            preResetPasswordTokenId,
+            ct
+        );
 
-        // User with email does not registered
-        if (!isUserFound)
+        // Token is not found
+        if (!isTokenFound)
         {
             return new G34VerifyResetPasswordTokenResponse
             {
-                StatusCode = G34VerifyResetPasswordTokenResponseStatusCode.USER_NOT_EXIST,
+                StatusCode = G34VerifyResetPasswordTokenResponseStatusCode.INVALID_TOKEN,
+            };
+        }
+
+        // TODO: Delete pre-token and create reset password token using the same token id.
+        var passwordResetToken = await _repository.GenerateResetPasswordTokenAsync(
+            preResetPasswordTokenId,
+            userId,
+            ct
+        );
+
+        if (string.IsNullOrWhiteSpace(passwordResetToken))
+        {
+            return new G34VerifyResetPasswordTokenResponse
+            {
+                StatusCode = G34VerifyResetPasswordTokenResponseStatusCode.DATABASE_ERROR
             };
         }
 
         return new G34VerifyResetPasswordTokenResponse
         {
-            StatusCode = G34VerifyResetPasswordTokenResponseStatusCode.SUCCESS
+            StatusCode = G34VerifyResetPasswordTokenResponseStatusCode.SUCCESS,
+            ResetPasswordToken = passwordResetToken
         };
     }
 }

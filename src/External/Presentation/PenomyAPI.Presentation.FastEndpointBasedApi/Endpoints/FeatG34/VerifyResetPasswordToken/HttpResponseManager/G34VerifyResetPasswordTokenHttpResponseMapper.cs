@@ -29,6 +29,7 @@ public static class G34VerifyResetPasswordTokenHttpResponseMapper
                     AppCode =
                         $"G34VerifyResetPasswordToken.{G34VerifyResetPasswordTokenResponseStatusCode.SUCCESS}",
                     HttpCode = StatusCodes.Status200OK,
+                    Body = response.ResetPasswordToken
                 }
         );
 
@@ -44,13 +45,13 @@ public static class G34VerifyResetPasswordTokenHttpResponseMapper
         );
 
         _dictionary.TryAdd(
-            key: G34VerifyResetPasswordTokenResponseStatusCode.USER_NOT_EXIST,
+            key: G34VerifyResetPasswordTokenResponseStatusCode.DATABASE_ERROR,
             value: (_, response) =>
                 new()
                 {
                     AppCode =
-                        $"G34VerifyResetPasswordToken.{G34VerifyResetPasswordTokenResponseStatusCode.USER_NOT_EXIST}",
-                    HttpCode = StatusCodes.Status404NotFound,
+                        $"G34VerifyResetPasswordToken.{G34VerifyResetPasswordTokenResponseStatusCode.DATABASE_ERROR}",
+                    HttpCode = StatusCodes.Status500InternalServerError,
                 }
         );
     }

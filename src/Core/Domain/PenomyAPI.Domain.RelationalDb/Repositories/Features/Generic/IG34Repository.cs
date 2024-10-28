@@ -21,20 +21,18 @@ public interface IG34Repository
     /// </returns>
     Task<bool> ValidatePasswordAsync(User newUser, string newPassword);
 
-    /// <summary>
-    ///     Check if the user is found by email.
-    /// </summary>
-    /// <param name="email">
-    ///     The email.
-    /// </param>
-    /// <param name="ct">
-    ///     The token to notify the server to cancel the operation.
-    /// </param>
-    /// <returns>
-    ///     True if the user is found.
-    ///     Otherwise, false.
-    /// </returns>
-    Task<bool> IsUserFoundByEmailAsync(string email, CancellationToken ct);
+    Task<bool> IsTokenFoundByTokenIdAsync(string tokenId, CancellationToken ct);
 
-    Task<string> GenerateResetPasswordTokenAsync(string email, CancellationToken ct);
+    Task<string> GenerateResetPasswordTokenAsync(
+        string tokenId,
+        string userId,
+        CancellationToken ct
+    );
+
+    Task<bool> SavePreResetPasswordTokenMetadataAsync(
+        UserToken preResetPasswordToken,
+        CancellationToken ct
+    );
+
+    Task<long> GetUserIdByEmailAsync(string email, CancellationToken ct);
 }

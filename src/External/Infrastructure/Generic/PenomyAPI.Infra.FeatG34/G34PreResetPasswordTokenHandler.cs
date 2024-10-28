@@ -55,7 +55,7 @@ public sealed class G34PreResetPasswordTokenHandler : IG34PreResetPasswordTokenH
     }
 
     /// <summary>
-    ///     Get email from token.
+    ///     Get token id from token.
     /// </summary>
     /// <param name="token">
     ///     The token to be validated.
@@ -64,9 +64,9 @@ public sealed class G34PreResetPasswordTokenHandler : IG34PreResetPasswordTokenH
     ///     The cancellation token.
     /// </param>
     /// <returns>
-    ///     The email from token.
+    ///     The token id from token.
     /// </returns>
-    public async Task<string> GetEmailFromTokenAsync(
+    public async Task<(string, string)> GetTokenInfoFromTokenAsync(
         string token,
         CancellationToken cancellationToken
     )
@@ -76,31 +76,29 @@ public sealed class G34PreResetPasswordTokenHandler : IG34PreResetPasswordTokenH
         // Valdate the token fail.
         if (!validationResult.IsValid)
         {
-            return string.Empty;
+            return (string.Empty, string.Empty);
         }
 
         // Is token expired?
         if (ExtractUtcTimeFromToken(validationResult) < DateTime.UtcNow)
         {
-            return string.Empty;
+            return (string.Empty, string.Empty);
         }
-
-        var isEmailFound = validationResult.ClaimsIdentity.HasClaim(claim =>
-            claim.Type.Equals(CommonValues.Claims.AppUserEmailClaim)
-        );
 
         var isRightPurpose = validationResult.ClaimsIdentity.HasClaim(claim =>
             claim.Type.Equals(CommonValues.Claims.TokenPurposeClaim.ClaimType)
             && claim.Value.Equals(CommonValues.Claims.TokenPurposeClaim.ClaimValues.ResetPassword)
         );
 
-        if (!isEmailFound || !isRightPurpose)
+        // Token is not for reset password.
+        if (!isRightPurpose)
         {
-            return string.Empty;
+            return (string.Empty, string.Empty);
         }
 
-        return validationResult
-            .ClaimsIdentity.FindFirst(CommonValues.Claims.AppUserEmailClaim)
-            .Value;
+        return (
+            validationResult.ClaimsIdentity.FindFirst(CommonValues.Claims.TokenIdClaim).Value,
+            validationResult.ClaimsIdentity.FindFirst(CommonValues.Claims.UserIdClaim).Value
+        );
     }
 }
