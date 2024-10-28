@@ -7,7 +7,6 @@ using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.Feat
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt1.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt1.HttpResponse;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt1.HttpResponseManagers;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt5.HttpResponseMappers;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt1;
 
@@ -20,14 +19,21 @@ public sealed class Art1Endpoint : Endpoint<Art1RequestDto, Art1HttpResponse>
         AllowAnonymous();
     }
 
-    public override async Task<Art1HttpResponse> ExecuteAsync(Art1RequestDto requestDto, CancellationToken ct)
+    public override async Task<Art1HttpResponse> ExecuteAsync(
+        Art1RequestDto requestDto,
+        CancellationToken ct
+    )
     {
         const long creatorId = 123456789012345678;
         var featRequest = requestDto.MapToRequest(
             creatorId: creatorId,
-            pageSize: Art1PaginationOptions.DEFAULT_PAGE_SIZE);
+            pageSize: Art1PaginationOptions.DEFAULT_PAGE_SIZE
+        );
 
-        var featResponse = await FeatureExtensions.ExecuteAsync<Art1Request, Art1Response>(featRequest, ct);
+        var featResponse = await FeatureExtensions.ExecuteAsync<Art1Request, Art1Response>(
+            featRequest,
+            ct
+        );
 
         var httpResponse = Art1HttpResponseManager
             .Resolve(featResponse.AppCode)

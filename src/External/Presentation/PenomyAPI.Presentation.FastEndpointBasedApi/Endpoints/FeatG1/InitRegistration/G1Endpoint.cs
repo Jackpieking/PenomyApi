@@ -58,7 +58,7 @@ internal sealed class G1Endpoint : Endpoint<G1HttpRequest, G1HttpResponse>
     {
         var appRequest = new G1Request
         {
-            RegisterPageLink = "http://localhost:9000/auth/confirm-register",
+            RedirectPageLink = "http://localhost:9000/auth/confirm-register",
             Email = req.Email,
             MailTemplate = await ReadMailTemplateAsync(_registerMailTemplatePath, ct),
         };

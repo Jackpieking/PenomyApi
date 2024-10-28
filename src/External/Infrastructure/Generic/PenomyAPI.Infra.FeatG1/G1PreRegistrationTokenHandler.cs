@@ -85,11 +85,16 @@ public sealed class G1PreRegistrationTokenHandler : IG1PreRegistrationTokenHandl
             return string.Empty;
         }
 
-        var isClaimFound = validationResult.ClaimsIdentity.HasClaim(claim =>
+        var isEmailFound = validationResult.ClaimsIdentity.HasClaim(claim =>
             claim.Type.Equals(CommonValues.Claims.AppUserEmailClaim)
         );
 
-        if (!isClaimFound)
+        var isRightPurpose = validationResult.ClaimsIdentity.HasClaim(claim =>
+            claim.Type.Equals(CommonValues.Claims.TokenPurposeClaim.ClaimType)
+            && claim.Value.Equals(CommonValues.Claims.TokenPurposeClaim.ClaimValues.VerifyEmail)
+        );
+
+        if (!isEmailFound || !isRightPurpose)
         {
             return string.Empty;
         }
