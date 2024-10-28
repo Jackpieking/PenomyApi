@@ -23,7 +23,7 @@ public class G54Repository : IG54Repository
     {
         try
         {
-            var result = _artworkCommentDbSet.Find(CommentId);
+            var result = new ArtworkComment { Id = CommentId };
             var ChildComment = _commentParentChildDbSet
                 .Where(x => x.ChildCommentId == CommentId)
                 .FirstOrDefault();
