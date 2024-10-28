@@ -2,6 +2,6 @@
 {
     public class G14RequestDto
     {
-        public string CategoryId { get; set; }
+        public int Limit { get; set; }
     }
 }
