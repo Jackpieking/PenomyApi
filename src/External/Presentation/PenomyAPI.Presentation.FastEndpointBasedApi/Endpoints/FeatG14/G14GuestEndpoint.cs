@@ -1,3 +1,7 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG14;
@@ -5,10 +9,6 @@ using PenomyAPI.App.FeatG14.OtherHandler;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG14.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG14.HttpResponse;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG14;
 
@@ -20,18 +20,15 @@ public class G14GuestEndpoint : Endpoint<G14Request, G14HttpResponse>
 
         AllowAnonymous();
 
-        Description(builder: builder =>
-        {
-            builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest);
-        });
+        Description(builder => { builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest); });
 
-        Summary(endpointSummary: summary =>
+        Summary(summary =>
         {
             summary.Summary = "Endpoint for get recommended artworks based on category for guest";
             summary.Description = "This endpoint is used for get recommended artworks based on category for guests";
             summary.Response<G14HttpResponse>(
                 description: "Represent successful operation response.",
-                example: new() { AppCode = G14ResponseStatusCode.SUCCESS.ToString() }
+                example: new G14HttpResponse { AppCode = G14ResponseStatusCode.SUCCESS.ToString() }
             );
         });
     }
@@ -42,7 +39,6 @@ public class G14GuestEndpoint : Endpoint<G14Request, G14HttpResponse>
     )
     {
         var httpResponse = new G14HttpResponse();
-
         var g14req = new G14GuestRequest { GuestId = requestDto.UserId, Limit = requestDto.Limit };
 
         // Get FeatureHandler response.
@@ -64,9 +60,9 @@ public class G14GuestEndpoint : Endpoint<G14Request, G14HttpResponse>
                     AuthorName = artwork.AuthorName,
                     CountryName = artwork.Origin.CountryName,
                     Categories = artwork.ArtworkCategories.Select(x => x.Category.Name)
-                    .ToList(),
+                        .ToList(),
                     SeriesName = artwork.ArtworkSeries.Select(x => x.Series.Title)
-                    .FirstOrDefault(),
+                        .FirstOrDefault(),
                     HasSeries = artwork.HasSeries,
                     ArtworkStatus = artwork.ArtworkStatus.ToString(),
                     StarRates = artwork.ArtworkMetaData.AverageStarRate,
@@ -74,7 +70,7 @@ public class G14GuestEndpoint : Endpoint<G14Request, G14HttpResponse>
                     FavoriteCount = artwork.ArtworkMetaData.TotalFavorites,
                     ThumbnailUrl = artwork.ThumbnailUrl,
                     Introduction = artwork.Introduction,
-                    CommentCount = artwork.ArtworkMetaData.TotalComments,
+                    CommentCount = artwork.ArtworkMetaData.TotalComments
                 });
             });
             httpResponse.Body = new G14ResponseDto
@@ -82,6 +78,7 @@ public class G14GuestEndpoint : Endpoint<G14Request, G14HttpResponse>
                 Result = artworks
             };
         }
+
         await SendAsync(httpResponse, httpResponse.HttpCode, ct);
         return httpResponse;
     }

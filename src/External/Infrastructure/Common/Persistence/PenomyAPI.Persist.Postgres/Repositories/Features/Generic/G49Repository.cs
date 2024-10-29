@@ -19,11 +19,12 @@ public class G49Repository : IG49Repository
     public G49Repository(AppDbContext context)
     {
         _dbContext = context;
+        _artworkMetaData = _dbContext.Set<ArtworkMetaData>();
         _userRatingArtwork = context.Set<UserRatingArtwork>();
         _artwork = context.Set<Artwork>();
     }
 
-    public Task<bool> IsArtworkExistsAsync(int id, CancellationToken cancellationToken)
+    public Task<bool> IsArtworkExistsAsync(long id, CancellationToken cancellationToken)
     {
         return _artwork.AnyAsync(a => a.Id == id, cancellationToken);
     }
