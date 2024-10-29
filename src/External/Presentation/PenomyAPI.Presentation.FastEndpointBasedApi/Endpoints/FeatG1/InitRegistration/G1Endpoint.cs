@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG1;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
+using PenomyAPI.Infra.Configuration.Options;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG1.InitRegistration.HttpRequest;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG1.InitRegistration.HttpResponseManager;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG1.InitRegistration.Middlewares.Validation;
@@ -17,13 +18,16 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG1.InitRegis
 internal sealed class G1Endpoint : Endpoint<G1HttpRequest, G1HttpResponse>
 {
     private readonly string _registerMailTemplatePath;
+    private readonly RegisterMailSendingOption _option;
 
-    public G1Endpoint(IWebHostEnvironment webHostEnvironment)
+    public G1Endpoint(IWebHostEnvironment webHostEnvironment, RegisterMailSendingOption option)
     {
+        _option = option;
+
         var stringHandler = new DefaultInterpolatedStringHandler();
 
         stringHandler.AppendFormatted(webHostEnvironment.WebRootPath);
-        stringHandler.AppendLiteral("\\register_mail_template.html");
+        stringHandler.AppendLiteral(_option.MailTemplateRelativePath);
 
         _registerMailTemplatePath = stringHandler.ToStringAndClear();
     }
@@ -58,7 +62,7 @@ internal sealed class G1Endpoint : Endpoint<G1HttpRequest, G1HttpResponse>
     {
         var appRequest = new G1Request
         {
-            RedirectPageLink = "http://localhost:9000/auth/confirm-register",
+            RedirectPageLink = _option.VerifyRegisterLink,
             Email = req.Email,
             MailTemplate = await ReadMailTemplateAsync(_registerMailTemplatePath, ct),
         };
