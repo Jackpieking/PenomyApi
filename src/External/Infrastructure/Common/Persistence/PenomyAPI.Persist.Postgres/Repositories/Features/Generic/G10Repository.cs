@@ -22,7 +22,7 @@ public class G10Repository : IG10Repository
     public async Task<List<ArtworkComment>> GetCommentsAsync(long ArtworkId, long UserId)
     {
         var result = await _artworkCommentDbSet
-            .Where(acr => acr.ArtworkId == ArtworkId)
+            .Where(acr => acr.ArtworkId == ArtworkId && acr.IsDirectlyCommented == true)
             .GroupJoin(
                 _userLikeArtworkCommentDbSet,
                 c => c.Id,
