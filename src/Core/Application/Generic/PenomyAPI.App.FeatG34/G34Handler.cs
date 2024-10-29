@@ -44,14 +44,14 @@ public sealed class G34Handler : IFeatureHandler<G34Request, G34Response>
             return new() { StatusCode = G34ResponseStatusCode.USER_NOT_EXIST };
         }
 
-        // Generate pre reset password token metadata.
-        var preResetPasswordTokenMetadata = InitNewPreResetPasswordMetadataToken(
+        // Generate reset password token metadata.
+        var preResetPasswordTokenMetadata = InitNewResetPasswordMetadataToken(
             foundUserId,
             _idGenerator.Value.Get().ToString()
         );
 
-        // Persist token metadata to database
-        var dbResult = await _repository.SavePreResetPasswordTokenMetadataAsync(
+        // Persist reset password token metadata to database
+        var dbResult = await _repository.SaveResetPasswordTokenMetadataAsync(
             preResetPasswordTokenMetadata,
             ct
         );
@@ -62,7 +62,7 @@ public sealed class G34Handler : IFeatureHandler<G34Request, G34Response>
             return new() { StatusCode = G34ResponseStatusCode.DATABASE_ERROR };
         }
 
-        // Generate pre reset password token.
+        // Generate reset password token.
         var preResetPasswordToken = _accessToken.Value.Generate(
             [
                 new(CommonValues.Claims.TokenIdClaim, preResetPasswordTokenMetadata.LoginProvider),
@@ -103,14 +103,14 @@ public sealed class G34Handler : IFeatureHandler<G34Request, G34Response>
     // - SOURCE: https://btburnett.com/csharp/2021/12/17/string-interpolation-trickery-and-magic-with-csharp-10-and-net-6
     private static string GenerateResetPasswordLink(
         string resetPasswordLink,
-        string preResetPasswordToken
+        string resetPasswordToken
     )
     {
         var handler = new DefaultInterpolatedStringHandler();
 
         handler.AppendLiteral(resetPasswordLink);
         handler.AppendLiteral("?token=");
-        handler.AppendFormatted(preResetPasswordToken);
+        handler.AppendFormatted(resetPasswordToken);
 
         return handler.ToStringAndClear();
     }
@@ -127,8 +127,8 @@ public sealed class G34Handler : IFeatureHandler<G34Request, G34Response>
         var mailContent = new AppMailContent
         {
             To = email,
-            Subject = "Reset Password",
-            Body = mailBody,
+            Subject = "Thay đổi mật khẩu",
+            Body = mailBody
         };
 
         for (var iterator = 0; iterator < 3; iterator++)
@@ -147,7 +147,7 @@ public sealed class G34Handler : IFeatureHandler<G34Request, G34Response>
         return false;
     }
 
-    private static UserToken InitNewPreResetPasswordMetadataToken(long userId, string tokenId)
+    private static UserToken InitNewResetPasswordMetadataToken(long userId, string tokenId)
     {
         return new()
         {

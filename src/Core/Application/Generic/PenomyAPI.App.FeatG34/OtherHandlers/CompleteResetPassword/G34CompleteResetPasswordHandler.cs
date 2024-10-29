@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using PenomyAPI.App.Common;
+using PenomyAPI.App.FeatG34.Infrastructures;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 
@@ -11,10 +12,15 @@ public sealed class G34CompleteResetPasswordHandler
     : IFeatureHandler<G34CompleteResetPasswordRequest, G34CompleteResetPasswordResponse>
 {
     private readonly IG34Repository _repository;
+    private readonly Lazy<IG34PreResetPasswordTokenHandler> _tokenHandler;
 
-    public G34CompleteResetPasswordHandler(Lazy<IUnitOfWork> unitOfWork)
+    public G34CompleteResetPasswordHandler(
+        Lazy<IUnitOfWork> unitOfWork,
+        Lazy<IG34PreResetPasswordTokenHandler> tokenHandler
+    )
     {
         _repository = unitOfWork.Value.G34Repository;
+        _tokenHandler = tokenHandler;
     }
 
     public async Task<G34CompleteResetPasswordResponse> ExecuteAsync(
@@ -22,29 +28,32 @@ public sealed class G34CompleteResetPasswordHandler
         CancellationToken ct
     )
     {
-        // Get token info by token id.
-        var userIdByTokenId = await _repository.GetResetPasswordTokenInfoByTokenIdAsync(
-            request.ResetPasswordTokenId,
+        // Extract token info from token.
+        var (resetPasswordTokenId, userId) = await _tokenHandler.Value.GetTokenInfoFromTokenAsync(
+            request.ResetPasswordToken,
             ct
         );
 
-        if (userIdByTokenId == default)
+        // Token is not valid
+        if (string.IsNullOrWhiteSpace(resetPasswordTokenId))
         {
-            return new() { StatusCode = G34CompleteResetPasswordResponseStatusCode.INVALID_TOKEN };
+            return new() { StatusCode = G34CompleteResetPasswordResponseStatusCode.INVALID_TOKEN, };
         }
 
-        // find user id by email
-        var userIdByEmail = await _repository.GetUserIdByEmailAsync(request.Email, ct);
+        // Is token found
+        var isTokenFound = await _repository.IsTokenFoundByTokenIdAsync(resetPasswordTokenId, ct);
 
-        // Token is not valid because it does not match user id
-        if (userIdByTokenId != userIdByEmail)
+        // Token is not found
+        if (!isTokenFound)
         {
-            return new() { StatusCode = G34CompleteResetPasswordResponseStatusCode.INVALID_TOKEN };
+            return new() { StatusCode = G34CompleteResetPasswordResponseStatusCode.INVALID_TOKEN, };
         }
+
+        var userIdAsNumber = long.Parse(userId);
 
         // Validate user password.
         var isPasswordValid = await _repository.ValidatePasswordAsync(
-            new() { Id = userIdByTokenId },
+            new() { Id = userIdAsNumber },
             request.NewPassword
         );
 
@@ -59,9 +68,9 @@ public sealed class G34CompleteResetPasswordHandler
 
         // Update user password.
         var dbResult = await _repository.UpdatePasswordAsync(
-            userIdByTokenId,
+            userIdAsNumber,
             request.NewPassword,
-            request.ResetPasswordTokenId,
+            resetPasswordTokenId,
             ct
         );
 

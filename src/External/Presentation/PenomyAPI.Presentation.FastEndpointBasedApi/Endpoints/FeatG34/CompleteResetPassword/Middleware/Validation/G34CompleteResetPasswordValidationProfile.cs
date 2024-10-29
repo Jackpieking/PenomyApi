@@ -10,13 +10,7 @@ public sealed class G34CompleteResetPasswordValidationProfile
 {
     public G34CompleteResetPasswordValidationProfile()
     {
-        RuleFor(prop => prop.Email)
-            .NotEmpty()
-            .EmailAddress()
-            .MinimumLength(10)
-            .MaximumLength(User.MetaData.EmailLength);
-
-        RuleFor(prop => prop.ResetPasswordTokenId).NotEmpty().MinimumLength(10);
+        RuleFor(prop => prop.ResetPasswordToken).NotEmpty().MinimumLength(10);
 
         RuleFor(prop => prop.NewPassword)
             .NotEmpty()

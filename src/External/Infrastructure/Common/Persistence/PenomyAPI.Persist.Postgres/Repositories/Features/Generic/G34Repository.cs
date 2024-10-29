@@ -22,66 +22,6 @@ internal sealed class G34Repository : IG34Repository
         _userManager = userManager;
     }
 
-    public async Task<bool> SavePasswordResetTokenMetadatAsync(
-        string preResetPasswordTokenId,
-        string userId,
-        string resetPasswordTokenId,
-        CancellationToken ct
-    )
-    {
-        var dbResult = false;
-
-        await _dbContext
-            .Database.CreateExecutionStrategy()
-            .ExecuteAsync(async () =>
-            {
-                await using var dbTransaction = await _dbContext.Database.BeginTransactionAsync(ct);
-
-                try
-                {
-                    await _dbContext
-                        .Set<PgUserToken>()
-                        .Where(token => token.LoginProvider.Equals(preResetPasswordTokenId))
-                        .ExecuteDeleteAsync(ct);
-
-                    var pgUserToken = new PgUserToken
-                    {
-                        LoginProvider = resetPasswordTokenId,
-                        ExpiredAt = DateTime.UtcNow.AddMinutes(10),
-                        UserId = long.Parse(userId),
-                        Value = string.Empty,
-                        Name = "AppUserResetPasswordToken"
-                    };
-
-                    await _dbContext.Set<PgUserToken>().AddAsync(pgUserToken, ct);
-
-                    await _dbContext.SaveChangesAsync(ct);
-
-                    await dbTransaction.CommitAsync(ct);
-
-                    dbResult = true;
-                }
-                catch
-                {
-                    await dbTransaction.RollbackAsync(ct);
-                }
-            });
-
-        return dbResult;
-    }
-
-    public Task<long> GetResetPasswordTokenInfoByTokenIdAsync(
-        string resetPasswordTokenId,
-        CancellationToken ct
-    )
-    {
-        return _dbContext
-            .Set<PgUserToken>()
-            .Where(token => token.LoginProvider.Equals(resetPasswordTokenId))
-            .Select(token => token.UserId)
-            .FirstOrDefaultAsync(ct);
-    }
-
     public Task<long> GetUserIdByEmailAsync(string email, CancellationToken ct)
     {
         var upperEmail = email.ToUpper();
@@ -100,7 +40,7 @@ internal sealed class G34Repository : IG34Repository
             .AnyAsync(token => token.LoginProvider.Equals(tokenId), ct);
     }
 
-    public async Task<bool> SavePreResetPasswordTokenMetadataAsync(
+    public async Task<bool> SaveResetPasswordTokenMetadataAsync(
         UserToken preResetPasswordToken,
         CancellationToken ct
     )
@@ -201,5 +141,14 @@ internal sealed class G34Repository : IG34Repository
             });
 
         return dbResult;
+    }
+
+    public Task<string> GetUserEmailByUserIdAsync(long userId, CancellationToken ct)
+    {
+        return _dbContext
+            .Set<PgUser>()
+            .Where(user => user.Id == userId)
+            .Select(user => user.Email)
+            .FirstOrDefaultAsync(ct);
     }
 }

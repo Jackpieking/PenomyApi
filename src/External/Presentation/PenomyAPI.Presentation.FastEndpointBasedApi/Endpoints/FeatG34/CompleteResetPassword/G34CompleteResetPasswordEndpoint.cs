@@ -6,7 +6,6 @@ using PenomyAPI.App.FeatG34.OtherHandlers.CompleteResetPassword;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG34.CompleteResetPassword.HttpResponseManager;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG34.CompleteResetPassword.Middleware.Validation;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG34.VerifyResetPasswordToken.Middlewares.Validation;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG34.CompleteResetPassword;
 
@@ -30,9 +29,8 @@ public sealed class G34CompleteResetPasswordEndpoint
                 "This endpoint is used for complete reset password process purpose.";
             summary.ExampleRequest = new G34CompleteResetPasswordRequest()
             {
-                Email = "string",
-                NewPassword = "string",
-                ResetPasswordTokenId = "string"
+                ResetPasswordToken = "string",
+                NewPassword = "string"
             };
             summary.Response<G34CompleteResetPasswordHttpResponse>(
                 description: "Represent successful operation response.",

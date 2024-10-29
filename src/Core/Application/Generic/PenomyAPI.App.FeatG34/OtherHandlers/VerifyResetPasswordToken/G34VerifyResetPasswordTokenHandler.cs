@@ -2,7 +2,6 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using PenomyAPI.App.Common;
-using PenomyAPI.App.Common.IdGenerator.Snowflake;
 using PenomyAPI.App.FeatG34.Infrastructures;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
@@ -14,17 +13,14 @@ public sealed class G34VerifyResetPasswordTokenHandler
 {
     private readonly IG34Repository _repository;
     private readonly Lazy<IG34PreResetPasswordTokenHandler> _tokenHandler;
-    private readonly Lazy<ISnowflakeIdGenerator> _idGenerator;
 
     public G34VerifyResetPasswordTokenHandler(
         Lazy<IUnitOfWork> unitOfWork,
-        Lazy<IG34PreResetPasswordTokenHandler> tokenHandler,
-        Lazy<ISnowflakeIdGenerator> idGenerator
+        Lazy<IG34PreResetPasswordTokenHandler> tokenHandler
     )
     {
         _repository = unitOfWork.Value.G34Repository;
         _tokenHandler = tokenHandler;
-        _idGenerator = idGenerator;
     }
 
     public async Task<G34VerifyResetPasswordTokenResponse> ExecuteAsync(
@@ -33,55 +29,39 @@ public sealed class G34VerifyResetPasswordTokenHandler
     )
     {
         // Extract token info from token.
-        var (preResetPasswordTokenId, userId) =
-            await _tokenHandler.Value.GetTokenInfoFromTokenAsync(request.ResetPasswordToken, ct);
+        var (resetPasswordTokenId, userId) = await _tokenHandler.Value.GetTokenInfoFromTokenAsync(
+            request.ResetPasswordToken,
+            ct
+        );
 
         // Token is not valid
-        if (string.IsNullOrWhiteSpace(preResetPasswordTokenId))
+        if (string.IsNullOrWhiteSpace(resetPasswordTokenId))
         {
-            return new G34VerifyResetPasswordTokenResponse
+            return new()
             {
                 StatusCode = G34VerifyResetPasswordTokenResponseStatusCode.INVALID_TOKEN,
             };
         }
 
         // Is token found
-        var isTokenFound = await _repository.IsTokenFoundByTokenIdAsync(
-            preResetPasswordTokenId,
-            ct
-        );
+        var isTokenFound = await _repository.IsTokenFoundByTokenIdAsync(resetPasswordTokenId, ct);
 
         // Token is not found
         if (!isTokenFound)
         {
-            return new G34VerifyResetPasswordTokenResponse
+            return new()
             {
                 StatusCode = G34VerifyResetPasswordTokenResponseStatusCode.INVALID_TOKEN,
             };
         }
 
-        var resetPasswordTokenId = _idGenerator.Value.Get().ToString();
+        // Get user email by user id
+        var userEmail = await _repository.GetUserEmailByUserIdAsync(long.Parse(userId), ct);
 
-        // Delete pre-token and create reset password token using the same token id.
-        var dbResult = await _repository.SavePasswordResetTokenMetadatAsync(
-            preResetPasswordTokenId,
-            userId,
-            resetPasswordTokenId,
-            ct
-        );
-
-        if (!dbResult)
-        {
-            return new G34VerifyResetPasswordTokenResponse
-            {
-                StatusCode = G34VerifyResetPasswordTokenResponseStatusCode.DATABASE_ERROR
-            };
-        }
-
-        return new G34VerifyResetPasswordTokenResponse
+        return new()
         {
             StatusCode = G34VerifyResetPasswordTokenResponseStatusCode.SUCCESS,
-            Body = new() { ResetPasswordTokenId = resetPasswordTokenId }
+            Body = new() { Email = userEmail }
         };
     }
 }

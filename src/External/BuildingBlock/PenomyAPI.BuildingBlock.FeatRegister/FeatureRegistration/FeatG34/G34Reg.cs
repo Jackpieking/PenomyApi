@@ -1,7 +1,6 @@
 using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PenomyAPI.App.FeatG33;
 using PenomyAPI.App.FeatG34;
 using PenomyAPI.App.FeatG34.Infrastructures;
 using PenomyAPI.BuildingBlock.FeatRegister.FeatureRegistration.Common;
