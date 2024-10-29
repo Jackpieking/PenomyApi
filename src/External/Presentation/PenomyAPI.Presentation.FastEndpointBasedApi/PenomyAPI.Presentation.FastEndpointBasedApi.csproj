@@ -1,6 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG15\PenomyAPI.App.FeatG15.csproj"/>
     <ProjectReference Include="..\..\BuildingBlock\PenomyAPI.BuildingBlock.FeatRegister\PenomyAPI.BuildingBlock.FeatRegister.csproj"/>
   </ItemGroup>
   <ItemGroup>
