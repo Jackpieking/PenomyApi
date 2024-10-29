@@ -11,8 +11,14 @@ using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG14;
 
-public class G14Endpoint : Endpoint<G14Request, G14HttpResponse>
+public class G14Endpoint : Endpoint<G14RequestDto, G14HttpResponse>
 {
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public G14Endpoint(IHttpContextAccessor httpContextAccessor)
+    {
+        _httpContextAccessor = httpContextAccessor;
+    }
     public override void Configure()
     {
         Get("/g14/recommended-category");
@@ -36,20 +42,28 @@ public class G14Endpoint : Endpoint<G14Request, G14HttpResponse>
     }
 
     public override async Task<G14HttpResponse> ExecuteAsync(
-        G14Request requestDto,
+        G14RequestDto requestDto,
         CancellationToken ct
     )
     {
         var httpResponse = new G14HttpResponse();
 
-        var g14req = new G14Request { UserId = requestDto.UserId, Limit = requestDto.Limit };
+        var userIdClaim = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
+        if (userIdClaim == null || !long.TryParse(userIdClaim, out var userId))
+        {
+            return new G14HttpResponse
+            {
+                HttpCode = StatusCodes.Status401Unauthorized
+            };
+        }
+        var g14Req = new G14Request { UserId = userId, Limit = requestDto.Limit };
 
         // Get FeatureHandler response.
-        var featResponse = await FeatureExtensions.ExecuteAsync<G14Request, G14Response>(g14req, ct);
+        var featResponse = await FeatureExtensions.ExecuteAsync<G14Request, G14Response>(g14Req, ct);
 
         httpResponse = G14HttpResponseManager
             .Resolve(featResponse.StatusCode)
-            .Invoke(g14req, featResponse);
+            .Invoke(g14Req, featResponse);
 
         if (featResponse.IsSuccess)
         {

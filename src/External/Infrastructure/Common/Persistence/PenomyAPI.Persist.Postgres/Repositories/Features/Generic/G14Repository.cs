@@ -32,7 +32,7 @@ public class G14Repository : IG14Repository
     public async Task<List<Artwork>> GetRecommendedAnimeAsync(long cateId, CancellationToken cancellationToken = default)
     {
         var result = await _artworkSet
-            .Where(x => x.ArtworkType == ArtworkType.Animation && x.ArtworkCategories.Any(y => y.CategoryId == cateId))
+            .Where(x => x.ArtworkType == ArtworkType.Comic && x.ArtworkCategories.Any(y => y.CategoryId == cateId))
             .Take(18)
             .Select(x => new Artwork
             {
@@ -133,16 +133,6 @@ public class G14Repository : IG14Repository
             .Select(c => new Category { Id = c.Id, Name = c.Name })
             .Take(totalCategoriesToTake)
             .ToListAsync(token);
-        if (categories.Count < totalCategoriesToTake)
-        {
-            var extraCategories = await _categorySet
-                .Where(c => !categoryIds.Contains(c.Id))
-                .Select(c => new Category { Id = c.Id, Name = c.Name })
-                .Take(totalCategoriesToTake - categories.Count)
-                .ToListAsync(token);
-
-            categories.AddRange(extraCategories);
-        }
 
         return categories;
     }
