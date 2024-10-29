@@ -404,3 +404,4 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/src/External/Presentation/PenomyAPI.Presentation.FastEndpointBasedApi/Test.drawio.png
