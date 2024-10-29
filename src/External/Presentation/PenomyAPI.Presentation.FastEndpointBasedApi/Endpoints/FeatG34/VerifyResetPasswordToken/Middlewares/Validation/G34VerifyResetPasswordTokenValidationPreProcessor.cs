@@ -9,7 +9,7 @@ using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG34.VerifyResetP
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG34.VerifyResetPasswordToken.Middlewares.Validation;
 
-internal sealed class G34VerifyResetPasswordTokenValidationPreProcessor
+public sealed class G34VerifyResetPasswordTokenValidationPreProcessor
     : PreProcessor<G34VerifyResetPasswordTokenRequest, G34VerifyResetPasswordTokenStateBag>
 {
     public override async Task PreProcessAsync(

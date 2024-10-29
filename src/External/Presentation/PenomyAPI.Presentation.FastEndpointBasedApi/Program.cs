@@ -1,4 +1,5 @@
 using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using FastEndpoints;
 using FastEndpoints.Swagger;
@@ -11,6 +12,7 @@ using PenomyAPI.Presentation.FastEndpointBasedApi.ServiceConfigurations;
 
 // Global Configuration.
 Console.OutputEncoding = Encoding.UTF8;
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 JsonWebTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
 var builder = WebApplication.CreateBuilder(args);

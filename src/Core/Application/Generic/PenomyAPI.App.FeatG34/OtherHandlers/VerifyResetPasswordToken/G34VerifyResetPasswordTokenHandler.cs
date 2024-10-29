@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using PenomyAPI.App.Common;
+using PenomyAPI.App.Common.IdGenerator.Snowflake;
 using PenomyAPI.App.FeatG34.Infrastructures;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
@@ -13,14 +14,17 @@ public sealed class G34VerifyResetPasswordTokenHandler
 {
     private readonly IG34Repository _repository;
     private readonly Lazy<IG34PreResetPasswordTokenHandler> _tokenHandler;
+    private readonly Lazy<ISnowflakeIdGenerator> _idGenerator;
 
     public G34VerifyResetPasswordTokenHandler(
         Lazy<IUnitOfWork> unitOfWork,
-        Lazy<IG34PreResetPasswordTokenHandler> tokenHandler
+        Lazy<IG34PreResetPasswordTokenHandler> tokenHandler,
+        Lazy<ISnowflakeIdGenerator> idGenerator
     )
     {
         _repository = unitOfWork.Value.G34Repository;
         _tokenHandler = tokenHandler;
+        _idGenerator = idGenerator;
     }
 
     public async Task<G34VerifyResetPasswordTokenResponse> ExecuteAsync(
@@ -28,10 +32,11 @@ public sealed class G34VerifyResetPasswordTokenHandler
         CancellationToken ct
     )
     {
-        // Extract token id from token.
+        // Extract token info from token.
         var (preResetPasswordTokenId, userId) =
             await _tokenHandler.Value.GetTokenInfoFromTokenAsync(request.ResetPasswordToken, ct);
 
+        // Token is not valid
         if (string.IsNullOrWhiteSpace(preResetPasswordTokenId))
         {
             return new G34VerifyResetPasswordTokenResponse
@@ -55,14 +60,17 @@ public sealed class G34VerifyResetPasswordTokenHandler
             };
         }
 
-        // TODO: Delete pre-token and create reset password token using the same token id.
-        var passwordResetToken = await _repository.GenerateResetPasswordTokenAsync(
+        var resetPasswordTokenId = _idGenerator.Value.Get().ToString();
+
+        // Delete pre-token and create reset password token using the same token id.
+        var dbResult = await _repository.SavePasswordResetTokenMetadatAsync(
             preResetPasswordTokenId,
             userId,
+            resetPasswordTokenId,
             ct
         );
 
-        if (string.IsNullOrWhiteSpace(passwordResetToken))
+        if (!dbResult)
         {
             return new G34VerifyResetPasswordTokenResponse
             {
@@ -73,7 +81,7 @@ public sealed class G34VerifyResetPasswordTokenHandler
         return new G34VerifyResetPasswordTokenResponse
         {
             StatusCode = G34VerifyResetPasswordTokenResponseStatusCode.SUCCESS,
-            ResetPasswordToken = passwordResetToken
+            Body = new() { ResetPasswordTokenId = resetPasswordTokenId }
         };
     }
 }

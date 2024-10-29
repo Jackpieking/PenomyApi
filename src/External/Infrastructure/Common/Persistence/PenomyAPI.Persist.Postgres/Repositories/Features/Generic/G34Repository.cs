@@ -22,58 +22,64 @@ internal sealed class G34Repository : IG34Repository
         _userManager = userManager;
     }
 
-    public async Task<string> GenerateResetPasswordTokenAsync(
-        string tokenId,
+    public async Task<bool> SavePasswordResetTokenMetadatAsync(
+        string preResetPasswordTokenId,
         string userId,
+        string resetPasswordTokenId,
         CancellationToken ct
     )
     {
-        var dbResult = string.Empty;
+        var dbResult = false;
 
         await _dbContext
             .Database.CreateExecutionStrategy()
-            .ExecuteAsync(operation: async () =>
+            .ExecuteAsync(async () =>
             {
-                await using var dbTransaction = await _dbContext.Database.BeginTransactionAsync(
-                    cancellationToken: ct
-                );
+                await using var dbTransaction = await _dbContext.Database.BeginTransactionAsync(ct);
 
                 try
                 {
                     await _dbContext
                         .Set<PgUserToken>()
-                        .Where(token => token.LoginProvider.Equals(tokenId))
+                        .Where(token => token.LoginProvider.Equals(preResetPasswordTokenId))
                         .ExecuteDeleteAsync(ct);
-
-                    var foundUser = await _userManager.Value.FindByIdAsync(tokenId);
-
-                    var resetPasswordToken =
-                        await _userManager.Value.GeneratePasswordResetTokenAsync(foundUser);
 
                     var pgUserToken = new PgUserToken
                     {
-                        LoginProvider = tokenId,
+                        LoginProvider = resetPasswordTokenId,
                         ExpiredAt = DateTime.UtcNow.AddMinutes(10),
                         UserId = long.Parse(userId),
-                        Value = resetPasswordToken,
+                        Value = string.Empty,
                         Name = "AppUserResetPasswordToken"
                     };
 
                     await _dbContext.Set<PgUserToken>().AddAsync(pgUserToken, ct);
 
-                    await _dbContext.SaveChangesAsync(cancellationToken: ct);
+                    await _dbContext.SaveChangesAsync(ct);
 
-                    await dbTransaction.CommitAsync(cancellationToken: ct);
+                    await dbTransaction.CommitAsync(ct);
 
-                    dbResult = resetPasswordToken;
+                    dbResult = true;
                 }
                 catch
                 {
-                    await dbTransaction.RollbackAsync(cancellationToken: ct);
+                    await dbTransaction.RollbackAsync(ct);
                 }
             });
 
         return dbResult;
+    }
+
+    public Task<long> GetResetPasswordTokenInfoByTokenIdAsync(
+        string resetPasswordTokenId,
+        CancellationToken ct
+    )
+    {
+        return _dbContext
+            .Set<PgUserToken>()
+            .Where(token => token.LoginProvider.Equals(resetPasswordTokenId))
+            .Select(token => token.UserId)
+            .FirstOrDefaultAsync(ct);
     }
 
     public Task<long> GetUserIdByEmailAsync(string email, CancellationToken ct)
@@ -144,5 +150,56 @@ internal sealed class G34Repository : IG34Repository
         }
 
         return result.Succeeded;
+    }
+
+    public async Task<bool> UpdatePasswordAsync(
+        long userId,
+        string newPassword,
+        string resetPasswordTokenId,
+        CancellationToken ct
+    )
+    {
+        var dbResult = false;
+
+        await _dbContext
+            .Database.CreateExecutionStrategy()
+            .ExecuteAsync(async () =>
+            {
+                await using var dbTransaction = await _dbContext.Database.BeginTransactionAsync(ct);
+
+                try
+                {
+                    await _dbContext
+                        .Set<PgUserToken>()
+                        .Where(token => token.LoginProvider.Equals(resetPasswordTokenId))
+                        .ExecuteDeleteAsync(ct);
+
+                    var foundUser = await _userManager.Value.FindByIdAsync(userId.ToString());
+
+                    var resetPasswordToken =
+                        await _userManager.Value.GeneratePasswordResetTokenAsync(foundUser);
+
+                    var result = await _userManager.Value.ResetPasswordAsync(
+                        foundUser,
+                        resetPasswordToken,
+                        newPassword
+                    );
+
+                    if (!result.Succeeded)
+                    {
+                        throw new DbUpdateConcurrencyException();
+                    }
+
+                    await dbTransaction.CommitAsync(ct);
+
+                    dbResult = true;
+                }
+                catch
+                {
+                    await dbTransaction.RollbackAsync(ct);
+                }
+            });
+
+        return dbResult;
     }
 }

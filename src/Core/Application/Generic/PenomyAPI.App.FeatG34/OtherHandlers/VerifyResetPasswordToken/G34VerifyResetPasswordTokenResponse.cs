@@ -6,5 +6,10 @@ public sealed class G34VerifyResetPasswordTokenResponse : IFeatureResponse
 {
     public G34VerifyResetPasswordTokenResponseStatusCode StatusCode { get; init; }
 
-    public string ResetPasswordToken { get; init; }
+    public ResponseBody Body { get; init; }
+
+    public sealed class ResponseBody
+    {
+        public string ResetPasswordTokenId { get; init; }
+    }
 }

@@ -14,7 +14,7 @@ public sealed class G34VerifyResetPasswordTokenEndpoint
 {
     public override void Configure()
     {
-        Get("g34/forgot-password/verify/{registrationToken}");
+        Post("g34/forgot-password/verify");
         AllowAnonymous();
         DontThrowIfValidationFails();
         PreProcessor<G34VerifyResetPasswordTokenValidationPreProcessor>();

@@ -29,7 +29,7 @@ public static class G34VerifyResetPasswordTokenHttpResponseMapper
                     AppCode =
                         $"G34VerifyResetPasswordToken.{G34VerifyResetPasswordTokenResponseStatusCode.SUCCESS}",
                     HttpCode = StatusCodes.Status200OK,
-                    Body = response.ResetPasswordToken
+                    Body = response.Body
                 }
         );
 

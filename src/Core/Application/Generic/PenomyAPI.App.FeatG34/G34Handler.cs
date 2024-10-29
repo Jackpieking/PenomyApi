@@ -1,6 +1,5 @@
 using System;
 using System.Runtime.CompilerServices;
-using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using PenomyAPI.App.Common;
@@ -45,7 +44,7 @@ public sealed class G34Handler : IFeatureHandler<G34Request, G34Response>
             return new() { StatusCode = G34ResponseStatusCode.USER_NOT_EXIST };
         }
 
-        // Generate pre reset password token,
+        // Generate pre reset password token metadata.
         var preResetPasswordTokenMetadata = InitNewPreResetPasswordMetadataToken(
             foundUserId,
             _idGenerator.Value.Get().ToString()

@@ -23,9 +23,10 @@ public interface IG34Repository
 
     Task<bool> IsTokenFoundByTokenIdAsync(string tokenId, CancellationToken ct);
 
-    Task<string> GenerateResetPasswordTokenAsync(
-        string tokenId,
+    Task<bool> SavePasswordResetTokenMetadatAsync(
+        string preResetPasswordTokenId,
         string userId,
+        string resetPasswordTokenId,
         CancellationToken ct
     );
 
@@ -35,4 +36,16 @@ public interface IG34Repository
     );
 
     Task<long> GetUserIdByEmailAsync(string email, CancellationToken ct);
+
+    Task<long> GetResetPasswordTokenInfoByTokenIdAsync(
+        string resetPasswordTokenId,
+        CancellationToken ct
+    );
+
+    Task<bool> UpdatePasswordAsync(
+        long userId,
+        string newPassword,
+        string resetPasswordTokenId,
+        CancellationToken ct
+    );
 }

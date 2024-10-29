@@ -12,7 +12,7 @@ namespace PenomyAPI.BuildingBlock.FeatRegister.FeatureRegistration.FeatG34;
 
 internal sealed class G34Reg : FeatureDefinitionRegistration
 {
-    public override Type FeatRequestType => typeof(G33Request);
+    public override Type FeatRequestType => typeof(G34Request);
 
     public override Type FeatHandlerType => typeof(G34Handler);
 

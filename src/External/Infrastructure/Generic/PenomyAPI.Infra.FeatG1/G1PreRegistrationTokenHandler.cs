@@ -85,16 +85,13 @@ public sealed class G1PreRegistrationTokenHandler : IG1PreRegistrationTokenHandl
             return string.Empty;
         }
 
-        var isEmailFound = validationResult.ClaimsIdentity.HasClaim(claim =>
-            claim.Type.Equals(CommonValues.Claims.AppUserEmailClaim)
-        );
-
         var isRightPurpose = validationResult.ClaimsIdentity.HasClaim(claim =>
             claim.Type.Equals(CommonValues.Claims.TokenPurposeClaim.ClaimType)
             && claim.Value.Equals(CommonValues.Claims.TokenPurposeClaim.ClaimValues.VerifyEmail)
         );
 
-        if (!isEmailFound || !isRightPurpose)
+        // Token is not for verify email.
+        if (!isRightPurpose)
         {
             return string.Empty;
         }
