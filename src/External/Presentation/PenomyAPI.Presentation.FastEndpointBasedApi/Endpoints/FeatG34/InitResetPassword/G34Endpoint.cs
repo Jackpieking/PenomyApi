@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG34;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
+using PenomyAPI.Infra.Configuration.Options;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG34.InitResetPassword.HttpRequestManager;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG34.InitResetPassword.HttpResponseManager;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG34.InitResetPassword.Middlewares.Validation;
@@ -17,13 +18,19 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG34;
 public sealed class G34Endpoint : Endpoint<G34HttpRequest, G34HttpResponse>
 {
     private readonly string _registerMailTemplatePath;
+    private readonly ForgotPasswordMailSendingOption _option;
 
-    public G34Endpoint(IWebHostEnvironment webHostEnvironment)
+    public G34Endpoint(
+        IWebHostEnvironment webHostEnvironment,
+        ForgotPasswordMailSendingOption option
+    )
     {
+        _option = option;
+
         var stringHandler = new DefaultInterpolatedStringHandler();
 
         stringHandler.AppendFormatted(webHostEnvironment.WebRootPath);
-        stringHandler.AppendLiteral("\\forgot_password_mail_template.html");
+        stringHandler.AppendLiteral(_option.MailTemplateRelativePath);
 
         _registerMailTemplatePath = stringHandler.ToStringAndClear();
     }
@@ -61,7 +68,7 @@ public sealed class G34Endpoint : Endpoint<G34HttpRequest, G34HttpResponse>
     {
         var appRequest = new G34Request
         {
-            CurrentResetPasswordLink = "http://localhost:9000/auth/confirm-reset-password",
+            CurrentResetPasswordLink = _option.VerifyResetPasswordLink,
             Email = req.Email,
             MailTemplate = await ReadMailTemplateAsync(_registerMailTemplatePath, ct),
         };
