@@ -11,6 +11,7 @@ using PenomyAPI.App.FeatG33;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG33.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG33.HttpResponseManager;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Helpers;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG33.Middlewares.Authorization;
 
@@ -44,17 +45,11 @@ internal sealed class G33AuthorizationPreProcessor : PreProcessor<EmptyRequest, 
         }
 
         #region PreValidateAccessToken
-        // Validate access token.
-        var validateTokenResult = await _securityTokenHandler.Value.ValidateTokenAsync(
-            context.HttpContext.Request.Headers.Authorization[default].Split(" ")[1],
-            _tokenValidationParameters
-        );
-
         // Extract and convert access token expire time.
-        var tokenExpireTime = ExtractUtcTimeFromToken(context.HttpContext);
+        var tokenExpireTime = JwtHelper.ExtractUtcTimeFromToken(context.HttpContext);
 
         // Validate access token.
-        if (!validateTokenResult.IsValid || tokenExpireTime <= DateTime.UtcNow)
+        if (tokenExpireTime <= DateTime.UtcNow)
         {
             await SendResponseAsync(
                 G33ResponseStatusCode.UN_AUTHORIZED,
@@ -125,23 +120,5 @@ internal sealed class G33AuthorizationPreProcessor : PreProcessor<EmptyRequest, 
             .Invoke(appRequest, new() { StatusCode = statusCode });
 
         return context.Response.SendAsync(httpResponse, httpResponse.HttpCode, cancellation: ct);
-    }
-
-    /// <summary>
-    ///     Extract utc time from token.
-    /// </summary>
-    /// <param name="context">
-    ///     The context containe user info.
-    /// </param>
-    /// <returns>
-    ///     The utc time from token.
-    /// </returns>
-    private static DateTime ExtractUtcTimeFromToken(HttpContext context)
-    {
-        return DateTimeOffset
-            .FromUnixTimeSeconds(
-                long.Parse(context.User.FindFirstValue(JwtRegisteredClaimNames.Exp))
-            )
-            .UtcDateTime;
     }
 }
