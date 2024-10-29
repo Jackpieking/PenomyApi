@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using PenomyAPI.App.Common;
+using PenomyAPI.App.Common.AppConstants;
 using PenomyAPI.App.Common.IdGenerator.Snowflake;
 using PenomyAPI.App.Common.Tokens;
 using PenomyAPI.Domain.RelationalDb.Entities.UserIdentity;
@@ -84,7 +85,11 @@ public sealed class G31Handler : IFeatureHandler<G31Request, G31Response>
 
         // Generate access token.
         var newAccessToken = _accessTokenHandler.Value.Generate(
-            claims: [new("jti", tokenId), new("sub", userIdOfUserHasBeenValidated.ToString())],
+            claims:
+            [
+                new(CommonValues.Claims.TokenIdClaim, tokenId),
+                new(CommonValues.Claims.UserIdClaim, userIdOfUserHasBeenValidated.ToString())
+            ],
             additionalSecondsFromNow: 10 * 60 // 10 minutes
         );
 

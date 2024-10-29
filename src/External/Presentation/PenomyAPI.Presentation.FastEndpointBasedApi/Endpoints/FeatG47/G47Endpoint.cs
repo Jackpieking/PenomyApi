@@ -9,7 +9,7 @@ using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG47.HttpResponse
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG47;
 
-public class G47Endpoint: Endpoint<G47RequestDto, G47HttpResponse>
+public class G47Endpoint : Endpoint<G47RequestDto, G47HttpResponse>
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -17,6 +17,7 @@ public class G47Endpoint: Endpoint<G47RequestDto, G47HttpResponse>
     {
         _httpContextAccessor = httpContextAccessor;
     }
+
     public override void Configure()
     {
         Post("/g47/favorite/remove");
@@ -33,7 +34,8 @@ public class G47Endpoint: Endpoint<G47RequestDto, G47HttpResponse>
             summary.Description = "This endpoint is used for remove from favorite artwork list";
             summary.Response<G47HttpResponse>(
                 description: "Represent successful operation response.",
-                example: new(appCode: G47ResponseStatusCode.SUCCESS.ToString()));
+                example: new(appCode: G47ResponseStatusCode.SUCCESS.ToString())
+            );
         });
     }
 
@@ -45,18 +47,14 @@ public class G47Endpoint: Endpoint<G47RequestDto, G47HttpResponse>
         var userIdClaim = _httpContextAccessor.HttpContext?.User.FindFirst("userId")?.Value;
         if (userIdClaim == null || !long.TryParse(userIdClaim, out var userId))
         {
-            return new G47HttpResponse
-            {
-                HttpCode = StatusCodes.Status401Unauthorized
-            };
+            return new G47HttpResponse { HttpCode = StatusCodes.Status401Unauthorized };
         }
 
-        var g47Req = new G47Request
-        {
-            ArtworkId = requestDto.ArtworkId,
-            UserId = userId,
-        };
-        var featResponse = await FeatureExtensions.ExecuteAsync<G47Request, G47Response>(g47Req, ct);
+        var g47Req = new G47Request { ArtworkId = requestDto.ArtworkId, UserId = userId, };
+        var featResponse = await FeatureExtensions.ExecuteAsync<G47Request, G47Response>(
+            g47Req,
+            ct
+        );
 
         var httpResponse = G47HttpResponseManager
             .Resolve(featResponse.AppCode)
@@ -66,5 +64,4 @@ public class G47Endpoint: Endpoint<G47RequestDto, G47HttpResponse>
 
         return httpResponse;
     }
-
 }

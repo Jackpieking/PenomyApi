@@ -14,7 +14,7 @@ public class G1VerifyRegistrationTokenEndpoint
 {
     public override void Configure()
     {
-        Get("g1/register/verify/{registrationToken}");
+        Post("g1/register/verify");
         AllowAnonymous();
         DontThrowIfValidationFails();
         PreProcessor<G1VerifyRegistrationTokenValidationPreProcessor>();

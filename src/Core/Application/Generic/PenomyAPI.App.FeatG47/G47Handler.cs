@@ -17,15 +17,29 @@ public class G47Handler : IFeatureHandler<G47Request, G47Response>
     {
         try
         {
-            if (!IsValidRequest(request) || !await _g47Repository.IsUserActiveAsync(request.UserId, ct))
+            if (
+                !IsValidRequest(request)
+                || !await _g47Repository.IsUserActiveAsync(request.UserId, ct)
+            )
             {
                 return G47Response.INVALID_REQUEST;
             }
-            if (!await _g47Repository.IsArtworkExistAsync(request.ArtworkId, ct) || !await _g47Repository.IsAlreadyFavoriteAsync(request.UserId, request.ArtworkId, ct))
+            if (
+                !await _g47Repository.IsArtworkExistAsync(request.ArtworkId, ct)
+                || !await _g47Repository.IsAlreadyFavoriteAsync(
+                    request.UserId,
+                    request.ArtworkId,
+                    ct
+                )
+            )
             {
                 return G47Response.NOT_FOUND;
             }
-            bool isSuccess = await _g47Repository.RemoveFromFavoriteAsync(request.UserId, request.ArtworkId, ct);
+            bool isSuccess = await _g47Repository.RemoveFromFavoriteAsync(
+                request.UserId,
+                request.ArtworkId,
+                ct
+            );
             return isSuccess ? G47Response.SUCCESS : G47Response.FAILED;
         }
         catch

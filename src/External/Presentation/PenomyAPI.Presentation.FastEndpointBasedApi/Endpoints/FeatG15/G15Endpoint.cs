@@ -1,12 +1,12 @@
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG15;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG15.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG15.HttpResponse;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG115;
 
@@ -44,7 +44,10 @@ public class G15Endpoint : Endpoint<G15Request, G15HttpResponse>
         var g15req = new G15Request { Id = requestDto.Id };
 
         // Get FeatureHandler response.
-        var featResponse = await FeatureExtensions.ExecuteAsync<G15Request, G15Response>(g15req, ct);
+        var featResponse = await FeatureExtensions.ExecuteAsync<G15Request, G15Response>(
+            g15req,
+            ct
+        );
 
         httpResponse = G15HttpResponseManager
             .Resolve(featResponse.StatusCode)
