@@ -1,10 +1,12 @@
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG53;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG53.HttpResponse;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG53.Middlewares.Authorization;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG53;
 
@@ -13,7 +15,9 @@ public class G53Endpoint : Endpoint<G53Request, G53HttpResponse>
     public override void Configure()
     {
         Put("G53/comment/edit");
-        AllowAnonymous();
+        DontThrowIfValidationFails();
+        AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
+        PreProcessor<G53AuthorizationPreProcessor>();
 
         Description(builder: builder =>
         {
@@ -22,8 +26,8 @@ public class G53Endpoint : Endpoint<G53Request, G53HttpResponse>
 
         Summary(endpointSummary: summary =>
         {
-            summary.Summary = "Endpoint for creating artwork comment.";
-            summary.Description = "This endpoint is used for creating artwork comment.";
+            summary.Summary = "Endpoint for updating artwork comment.";
+            summary.Description = "This endpoint is used for updating artwork comment.";
             summary.Response<G53HttpResponse>(
                 description: "Represent successful operation response.",
                 example: new() { AppCode = G53ResponseStatusCode.SUCCESS.ToString() }
@@ -44,7 +48,7 @@ public class G53Endpoint : Endpoint<G53Request, G53HttpResponse>
             httpResponse.Body = new G53Response
             {
                 IsSuccess = featResponse.IsSuccess,
-                StatusCode = G53ResponseStatusCode.SUCCESS
+                StatusCode = G53ResponseStatusCode.SUCCESS,
             };
 
             return httpResponse;

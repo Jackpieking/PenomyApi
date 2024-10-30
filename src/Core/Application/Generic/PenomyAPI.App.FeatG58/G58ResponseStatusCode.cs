@@ -6,6 +6,9 @@ public enum G58ResponseStatusCode
 
     DATABASE_ERROR = 2,
 
-    Comment_NotFound = 3
-}
+    COMMENT_NOT_FOUND = 3,
 
+    FORBIDDEN = 4,
+
+    UN_AUTHORIZED = 5,
+}

@@ -20,7 +20,7 @@ public class G59Handler : IFeatureHandler<G59Request, G59Response>
         var unitOfWork = _unitOfWork.Value;
         var result = await unitOfWork.G59Repository.GetReplyCommentsAsync(
             request.ParentCommentId,
-            request.UserId
+            long.Parse(request.GetUserId())
         );
 
         return new G59Response { Result = result, StatusCode = G59ResponseStatusCode.SUCCESS };

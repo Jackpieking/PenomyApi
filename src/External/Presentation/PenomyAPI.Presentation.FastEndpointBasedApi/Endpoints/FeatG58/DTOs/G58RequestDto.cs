@@ -10,6 +10,4 @@ public class G58RequestDto
 
     public string ParentCommentId { get; init; }
 
-    public string UserId { get; init; }
-
 }
