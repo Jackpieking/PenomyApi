@@ -22,11 +22,7 @@ internal sealed class G33Repository : IG33Repository
     {
         return _context
             .Set<PgUserToken>()
-            .AnyAsync(
-                token =>
-                    token.LoginProvider.Equals(refreshTokenId) && token.ExpiredAt > DateTime.UtcNow,
-                ct
-            );
+            .AnyAsync(token => token.LoginProvider.Equals(refreshTokenId), ct);
     }
 
     public async Task<bool> RemoveRefreshTokenAsync(string refreshTokenId, CancellationToken ct)

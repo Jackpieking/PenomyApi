@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 using PenomyAPI.App.FeatG33;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG33.Common;
@@ -18,18 +17,10 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG33.Middlewa
 internal sealed class G33AuthorizationPreProcessor : PreProcessor<EmptyRequest, G33StateBag>
 {
     private readonly Lazy<IServiceScopeFactory> _serviceScopeFactory;
-    private readonly TokenValidationParameters _tokenValidationParameters;
-    private readonly Lazy<SecurityTokenHandler> _securityTokenHandler;
 
-    public G33AuthorizationPreProcessor(
-        Lazy<IServiceScopeFactory> serviceScopeFactory,
-        TokenValidationParameters tokenValidationParameters,
-        Lazy<SecurityTokenHandler> securityTokenHandler
-    )
+    public G33AuthorizationPreProcessor(Lazy<IServiceScopeFactory> serviceScopeFactory)
     {
         _serviceScopeFactory = serviceScopeFactory;
-        _tokenValidationParameters = tokenValidationParameters;
-        _securityTokenHandler = securityTokenHandler;
     }
 
     public override async Task PreProcessAsync(
@@ -38,18 +29,12 @@ internal sealed class G33AuthorizationPreProcessor : PreProcessor<EmptyRequest, 
         CancellationToken ct
     )
     {
-        // Bypass if response has started.
-        if (context.HttpContext.ResponseStarted())
-        {
-            return;
-        }
-
         #region PreValidateAccessToken
         // Extract and convert access token expire time.
         var tokenExpireTime = JwtHelper.ExtractUtcTimeFromToken(context.HttpContext);
 
         // Validate access token.
-        if (tokenExpireTime <= DateTime.UtcNow)
+        if (tokenExpireTime < DateTime.UtcNow)
         {
             await SendResponseAsync(
                 G33ResponseStatusCode.UN_AUTHORIZED,
@@ -66,10 +51,10 @@ internal sealed class G33AuthorizationPreProcessor : PreProcessor<EmptyRequest, 
 
         var repository = scope.Resolve<Lazy<IUnitOfWork>>().Value.G33Repository;
 
-        // Get refresh token id.
+        // Get access token id..
         var tokenId = context.HttpContext.User.FindFirstValue(JwtRegisteredClaimNames.Jti);
 
-        // Is refresh token found.
+        // Is refresh token found by access token id [both token use same id].
         var isRefreshTokenFound = await repository.IsRefreshTokenFoundByIdAsync(tokenId, ct);
 
         // Refresh token is not found.

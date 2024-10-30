@@ -58,7 +58,7 @@ public sealed class G31Handler : IFeatureHandler<G31Request, G31Response>
             return new() { StatusCode = G31ResponseStatusCode.PASSWORD_IS_INCORRECT };
         }
 
-        // Generate token id.
+        // Generate token id of both refresh and access token.
         var tokenId = _snowflakeIdGenerator.Value.Get().ToString();
 
         // Create new refresh token.
