@@ -43,7 +43,6 @@ public sealed class G31AHandler : IFeatureHandler<G31ARequest, G31AResponse>
             return new() { StatusCode = G31AResponseStatusCode.DATABASE_ERROR };
         }
 
-        // Init new access token.
         // Generate access token.
         var newAccessToken = _accessTokenHandler.Value.Generate(
             claims:

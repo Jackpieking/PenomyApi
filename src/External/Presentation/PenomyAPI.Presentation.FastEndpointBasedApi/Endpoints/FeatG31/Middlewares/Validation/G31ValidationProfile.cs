@@ -16,7 +16,5 @@ public sealed class G31ValidationProfile : Validator<G31Request>
             .MaximumLength(User.MetaData.EmailLength);
 
         RuleFor(prop => prop.Password).NotEmpty().MinimumLength(8);
-
-        RuleFor(prop => prop.RememberMe).NotEmpty();
     }
 }

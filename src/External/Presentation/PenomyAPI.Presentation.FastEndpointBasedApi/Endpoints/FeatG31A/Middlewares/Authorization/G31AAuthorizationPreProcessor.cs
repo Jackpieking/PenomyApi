@@ -40,8 +40,26 @@ internal sealed class G31AAuthorizationPreProcessor : PreProcessor<G31ARequest, 
         // Extract and convert access token expire time.
         var tokenExpireTime = JwtHelper.ExtractUtcTimeFromToken(context.HttpContext);
 
-        // Validate access token.
+        // Is token expired.
         if (tokenExpireTime > DateTime.UtcNow)
+        {
+            await SendResponseAsync(
+                G31AResponseStatusCode.FORBIDDEN,
+                context.Request,
+                context.HttpContext,
+                ct
+            );
+
+            return;
+        }
+
+        // Get token purpose.
+        var tokenPurpose = context.HttpContext.User.FindFirstValue(
+            CommonValues.Claims.TokenPurpose.Type
+        );
+
+        // Token is not for user access.
+        if (!tokenPurpose.Equals(CommonValues.Claims.TokenPurpose.Values.AppUserAccess))
         {
             await SendResponseAsync(
                 G31AResponseStatusCode.FORBIDDEN,

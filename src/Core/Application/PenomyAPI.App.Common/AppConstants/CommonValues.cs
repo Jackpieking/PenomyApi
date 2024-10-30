@@ -20,15 +20,17 @@ public static class CommonValues
     {
         public const string AppUserEmailClaim = "app-user-email";
 
-        public static class TokenPurposeClaim
+        public static class TokenPurpose
         {
-            public const string ClaimType = "purpose";
+            public const string Type = "purpose";
 
-            public static class ClaimValues
+            public static class Values
             {
                 public const string ResetPassword = "reset-password";
 
                 public const string VerifyEmail = "verify-email";
+
+                public const string AppUserAccess = "app-user-access";
             }
         }
 

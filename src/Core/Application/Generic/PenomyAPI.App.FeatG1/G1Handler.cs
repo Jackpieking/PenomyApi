@@ -42,8 +42,8 @@ public sealed class G1Handler : IFeatureHandler<G1Request, G1Response>
         var preRegistrationToken = _accessToken.Value.Generate(
             [
                 new(
-                    CommonValues.Claims.TokenPurposeClaim.ClaimType,
-                    CommonValues.Claims.TokenPurposeClaim.ClaimValues.VerifyEmail
+                    CommonValues.Claims.TokenPurpose.Type,
+                    CommonValues.Claims.TokenPurpose.Values.VerifyEmail
                 ),
                 new(CommonValues.Claims.AppUserEmailClaim, request.Email)
             ],
