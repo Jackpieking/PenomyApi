@@ -86,8 +86,8 @@ public sealed class G34PreResetPasswordTokenHandler : IG34PreResetPasswordTokenH
         }
 
         var isRightPurpose = validationResult.ClaimsIdentity.HasClaim(claim =>
-            claim.Type.Equals(CommonValues.Claims.TokenPurposeClaim.ClaimType)
-            && claim.Value.Equals(CommonValues.Claims.TokenPurposeClaim.ClaimValues.ResetPassword)
+            claim.Type.Equals(CommonValues.Claims.TokenPurpose.Type)
+            && claim.Value.Equals(CommonValues.Claims.TokenPurpose.Values.ResetPassword)
         );
 
         // Token is not for reset password.

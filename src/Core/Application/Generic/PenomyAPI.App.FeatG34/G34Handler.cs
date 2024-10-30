@@ -67,8 +67,8 @@ public sealed class G34Handler : IFeatureHandler<G34Request, G34Response>
             [
                 new(CommonValues.Claims.TokenIdClaim, preResetPasswordTokenMetadata.LoginProvider),
                 new(
-                    CommonValues.Claims.TokenPurposeClaim.ClaimType,
-                    CommonValues.Claims.TokenPurposeClaim.ClaimValues.ResetPassword
+                    CommonValues.Claims.TokenPurpose.Type,
+                    CommonValues.Claims.TokenPurpose.Values.ResetPassword
                 ),
                 new(CommonValues.Claims.UserIdClaim, foundUserId.ToString())
             ],

@@ -88,6 +88,10 @@ public sealed class G31Handler : IFeatureHandler<G31Request, G31Response>
             claims:
             [
                 new(CommonValues.Claims.TokenIdClaim, tokenId),
+                new(
+                    CommonValues.Claims.TokenPurpose.Type,
+                    CommonValues.Claims.TokenPurpose.Values.AppUserAccess
+                ),
                 new(CommonValues.Claims.UserIdClaim, userIdOfUserHasBeenValidated.ToString())
             ],
             additionalSecondsFromNow: 10 * 60 // 10 minutes
@@ -116,7 +120,7 @@ public sealed class G31Handler : IFeatureHandler<G31Request, G31Response>
         {
             LoginProvider = tokenId,
             ExpiredAt = isRememberMe
-                ? DateTime.UtcNow.AddDays(value: 15)
+                ? DateTime.UtcNow.AddDays(value: 365)
                 : DateTime.UtcNow.AddDays(value: 3),
             UserId = userId,
             Value = _refreshTokenHandler.Value.Generate(length: 15),
