@@ -20,7 +20,7 @@ public class G10Handler : IFeatureHandler<G10Request, G10Response>
         var unitOfWork = _unitOfWork.Value;
         var result = await unitOfWork.G10Repository.GetCommentsAsync(
             request.ArtworkId,
-            request.UserId
+            long.Parse(request.GetUserId())
         );
 
         return new G10Response { Result = result, StatusCode = G10ResponseStatusCode.SUCCESS };

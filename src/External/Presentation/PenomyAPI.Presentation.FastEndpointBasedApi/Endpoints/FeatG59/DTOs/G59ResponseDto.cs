@@ -12,7 +12,8 @@ public class G59ResponseDtoObject
     public string Id { get; set; }
     public string Content { get; set; }
     public long LikeCount { get; set; }
-    public bool IsAuthor { get; set; }
+    public bool IsArtworkAuthor { get; set; }
+    public bool IsCommentAuthor { get; set; }
     public string Username { get; set; }
     public string Avatar { get; set; }
     public string PostDate { get; set; }

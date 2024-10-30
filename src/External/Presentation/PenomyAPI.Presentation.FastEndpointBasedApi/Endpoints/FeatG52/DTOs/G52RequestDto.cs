@@ -8,7 +8,4 @@ public class G52RequestDto
 
     public string CommentContent { get; init; }
 
-    public long ParentCommentId { get; init; }
-
-    public long UserId { get; init; }
 }

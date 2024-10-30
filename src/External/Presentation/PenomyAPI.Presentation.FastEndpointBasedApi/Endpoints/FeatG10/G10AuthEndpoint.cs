@@ -2,21 +2,26 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG10;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG10.Common;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG10.Middlewares.Authorization;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G10.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G10.HttpResponse;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG10;
 
-public class G10Endpoint : Endpoint<G10RequestDto, G10HttpResponse>
+public class G10AuthEndpoint : Endpoint<G10Request, G10HttpResponse>
 {
     public override void Configure()
     {
-        Get("/g10/ArtworkComment/get");
-        AllowAnonymous();
-
+        Get("/g10/ArtworkComment/get/");
+        DontThrowIfValidationFails();
+        AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
+        PreProcessor<G10AuthorizationPreProcessor>();
         Description(builder: builder =>
         {
             builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest);
@@ -24,8 +29,8 @@ public class G10Endpoint : Endpoint<G10RequestDto, G10HttpResponse>
 
         Summary(endpointSummary: summary =>
         {
-            summary.Summary = "Endpoint for getting artwork comment.";
-            summary.Description = "This endpoint is used for getting artwork comment.";
+            summary.Summary = "Endpoint for getting artwork comment for authenticated user.";
+            summary.Description = "This endpoint is used for getting artwork comment for authenticated user.";
             summary.Response<G10HttpResponse>(
                 description: "Represent successful operation response.",
                 example: new() { AppCode = G10ResponseStatusCode.SUCCESS.ToString() }
@@ -33,26 +38,18 @@ public class G10Endpoint : Endpoint<G10RequestDto, G10HttpResponse>
         });
     }
 
-    public override async Task<G10HttpResponse> ExecuteAsync(
-        G10RequestDto req,
-        CancellationToken ct
-    )
+    public override async Task<G10HttpResponse> ExecuteAsync(G10Request req, CancellationToken ct)
     {
-        var featG10Request = new G10Request
-        {
-            ArtworkId = long.Parse(req.ArtworkId),
-            UserId = long.Parse(req.UserId),
-        };
+        var stateBag = ProcessorState<G10StateBag>();
+
+        req.SetUserId(stateBag.AppRequest.GetUserId());
 
         // Get FeatureHandler response.
-        var featResponse = await FeatureExtensions.ExecuteAsync<G10Request, G10Response>(
-            featG10Request,
-            ct
-        );
+        var featResponse = await FeatureExtensions.ExecuteAsync<G10Request, G10Response>(req, ct);
 
         var httpResponse = G10HttpResponseManager
             .Resolve(featResponse.StatusCode)
-            .Invoke(featG10Request, featResponse);
+            .Invoke(req, featResponse);
 
         httpResponse.Body = new G10ResponseDto
         {
@@ -65,7 +62,8 @@ public class G10Endpoint : Endpoint<G10RequestDto, G10HttpResponse>
                 Avatar = x.Creator.AvatarUrl,
                 TotalReplies = x.TotalChildComments,
                 LikeCount = x.TotalLikes,
-                IsAuthor = true,
+                IsArtworkAuthor = true,
+                IsCommentAuthor = long.Parse(stateBag.AppRequest.GetUserId()) == x.Creator?.UserId,
                 CreatedBy = x.Creator?.UserId.ToString(),
                 IsLiked = x.UserLikeArtworkComment.Count() > 0,
             }),

@@ -2,12 +2,15 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG58;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG58.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG58.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG58.HttpResponse;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG58.Middlewares.Authorization;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG58;
 
@@ -16,7 +19,9 @@ public class G58Endpoint : Endpoint<G58RequestDto, G58HttpResponse>
     public override void Configure()
     {
         Post("g58/replycomment/create");
-        AllowAnonymous();
+        DontThrowIfValidationFails();
+        AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
+        PreProcessor<G58AuthorizationPreProcessor>();
 
         Description(builder: builder =>
         {
@@ -39,14 +44,15 @@ public class G58Endpoint : Endpoint<G58RequestDto, G58HttpResponse>
         CancellationToken ct
     )
     {
-        //Comment.CreatedAt = DateTime.UtcNow;
+        var stateBag = ProcessorState<G58StateBag>();
+
         var _artworkComment = new ArtworkComment
         {
             Content = req.CommentContent,
             ArtworkId = long.Parse(req.ArtworkId),
             ChapterId = long.Parse(req.ChapterId),
             CreatedAt = DateTime.UtcNow,
-            CreatedBy = long.Parse(req.UserId),
+            CreatedBy = long.Parse(stateBag.AppRequest.GetUserId()),
         };
         var G58Request = new G58Request
         {
