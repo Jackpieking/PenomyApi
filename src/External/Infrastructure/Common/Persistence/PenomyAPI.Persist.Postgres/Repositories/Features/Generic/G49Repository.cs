@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -37,41 +38,56 @@ public class G49Repository : IG49Repository
             await using var transaction = await _dbContext.Database.BeginTransactionAsync(token);
             try
             {
-                // Find existing rating by the user for this artwork
+                // Check if an existing rating by this user for the artwork exists
                 var existingRating = await _userRatingArtwork
                     .FirstOrDefaultAsync(a => a.UserId == userId && a.ArtworkId == artworkId, token);
 
-                var artworkMetadata = await _artworkMetaData.FirstOrDefaultAsync(a => a.ArtworkId == artworkId, token);
-                if (artworkMetadata == null) return false; // Exit if no metadata exists for the artwork
-
                 if (existingRating == null)
                 {
-                    _userRatingArtwork.Add(new UserRatingArtwork
-                        { UserId = userId, ArtworkId = artworkId, StarRates = starRates });
+                    // Add a new rating
+                    await _userRatingArtwork.AddAsync(new UserRatingArtwork
+                        { UserId = userId, ArtworkId = artworkId, StarRates = starRates }, token);
 
-                    artworkMetadata.TotalUsersRated += 1;
-                    artworkMetadata.TotalStarRates += starRates;
+                    // Increment the TotalUsersRated and add to TotalStarRates
+                    await _artworkMetaData
+                        .Where(a => a.ArtworkId == artworkId)
+                        .ExecuteUpdateAsync(update => update
+                                .SetProperty(a => a.TotalUsersRated, a => a.TotalUsersRated + 1)
+                                .SetProperty(a => a.TotalStarRates, a => a.TotalStarRates + starRates)
+                            , token);
                 }
                 else
                 {
-                    artworkMetadata.TotalStarRates =
-                        artworkMetadata.TotalStarRates - existingRating.StarRates + starRates;
+                    // Update TotalStarRates based on the difference between the new and previous star rating
+                    await _artworkMetaData
+                        .Where(a => a.ArtworkId == artworkId)
+                        .ExecuteUpdateAsync(update => update
+                                .SetProperty(a => a.TotalStarRates,
+                                    a => a.TotalStarRates - existingRating.StarRates + starRates)
+                            , token);
 
-                    existingRating.StarRates = starRates;
+                    // Update the user's existing rating with the new star rate
+                    await _userRatingArtwork
+                        .Where(a => a.UserId == userId && a.ArtworkId == artworkId)
+                        .ExecuteUpdateAsync(update => update
+                                .SetProperty(a => a.StarRates, starRates)
+                            , token);
                 }
 
-                artworkMetadata.AverageStarRate =
-                    (double)artworkMetadata.TotalStarRates / artworkMetadata.TotalUsersRated;
+                await _artworkMetaData
+                    .Where(a => a.ArtworkId == artworkId)
+                    .ExecuteUpdateAsync(update => update
+                            .SetProperty(a => a.AverageStarRate,
+                                a => (double)a.TotalStarRates / a.TotalUsersRated)
+                        , token);
 
-                // Save changes
-                await _dbContext.SaveChangesAsync(token);
+                // Commit transaction if all updates are successful
                 await transaction.CommitAsync(token);
 
                 return true;
             }
             catch (Exception)
             {
-                // Rollback if an error occurs
                 await transaction.RollbackAsync(token);
                 return false;
             }

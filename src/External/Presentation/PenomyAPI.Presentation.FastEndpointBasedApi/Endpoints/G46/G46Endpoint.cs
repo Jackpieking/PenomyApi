@@ -1,4 +1,3 @@
-using System.IdentityModel.Tokens.Jwt;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
@@ -7,24 +6,20 @@ using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG46;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG46.HttpResponse;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G46.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G46.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G46.HttpResponse;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G46.Middlewares;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G46;
 
 public class G46Endpoint : Endpoint<G46RequestDto, G46HttpResponse>
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
-
-    public G46Endpoint(IHttpContextAccessor httpContextAccessor)
-    {
-        _httpContextAccessor = httpContextAccessor;
-    }
-
     public override void Configure()
     {
         Post("/g46/favorite/add");
         AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
+        PreProcessor<G46AuthPreProcessor>();
         DontThrowIfValidationFails();
         Description(builder => { builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest); });
 
@@ -43,17 +38,12 @@ public class G46Endpoint : Endpoint<G46RequestDto, G46HttpResponse>
         CancellationToken ct
     )
     {
-        var userIdClaim = _httpContextAccessor.HttpContext?.User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
-        if (userIdClaim == null || !long.TryParse(userIdClaim, out var userId))
-            return new G46HttpResponse
-            {
-                HttpCode = StatusCodes.Status401Unauthorized
-            };
+        var stateBag = ProcessorState<G46StateBag>();
 
         var g46Req = new G46Request
         {
             ArtworkId = requestDto.ArtworkId,
-            UserId = userId
+            UserId = stateBag.AppRequest.GetUserId()
         };
         var featResponse = await FeatureExtensions.ExecuteAsync<G46Request, G46Response>(g46Req, ct);
 

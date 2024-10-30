@@ -7,4 +7,5 @@ public enum G46ResponseStatusCode
     EXISTED = 2,
     FAILED = 3,
     NOT_FOUND = 4,
+    UNAUTHORIZED = 5
 }

@@ -46,6 +46,15 @@ public class G49HttpResponseManager
                     HttpCode = StatusCodes.Status404NotFound
                 }
         );
+        _dictionary.TryAdd(
+            G49ResponseStatusCode.UNAUTHORIZED,
+            (_, response) =>
+                new G49HttpResponse
+                {
+                    AppCode = $"G49.{G49ResponseStatusCode.UNAUTHORIZED}",
+                    HttpCode = StatusCodes.Status401Unauthorized
+                }
+        );
     }
 
     internal static Func<G49Request, G49Response, G49HttpResponse> Resolve(

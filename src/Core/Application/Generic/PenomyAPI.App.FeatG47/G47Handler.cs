@@ -1,3 +1,6 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using PenomyAPI.App.Common;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
@@ -21,9 +24,7 @@ public class G47Handler : IFeatureHandler<G47Request, G47Response>
                 !IsValidRequest(request)
                 || !await _g47Repository.IsUserActiveAsync(request.UserId, ct)
             )
-            {
                 return G47Response.INVALID_REQUEST;
-            }
             if (
                 !await _g47Repository.IsArtworkExistAsync(request.ArtworkId, ct)
                 || !await _g47Repository.IsAlreadyFavoriteAsync(
@@ -32,10 +33,8 @@ public class G47Handler : IFeatureHandler<G47Request, G47Response>
                     ct
                 )
             )
-            {
                 return G47Response.NOT_FOUND;
-            }
-            bool isSuccess = await _g47Repository.RemoveFromFavoriteAsync(
+            var isSuccess = await _g47Repository.RemoveFromFavoriteAsync(
                 request.UserId,
                 request.ArtworkId,
                 ct
@@ -48,6 +47,8 @@ public class G47Handler : IFeatureHandler<G47Request, G47Response>
         }
     }
 
-    private static bool IsValidRequest(G47Request request) =>
-        request is { UserId: > 0, ArtworkId: > 0 };
+    private static bool IsValidRequest(G47Request request)
+    {
+        return request is { UserId: > 0, ArtworkId: > 0 };
+    }
 }
