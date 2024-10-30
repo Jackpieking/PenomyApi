@@ -36,6 +36,26 @@ public static class G58HttpResponseManager
                     HttpCode = StatusCodes.Status400BadRequest,
                 }
         );
+
+        _dictionary.TryAdd(
+            key: G58ResponseStatusCode.FORBIDDEN,
+            value: (_, response) =>
+                new()
+                {
+                    AppCode = $"G58.{G58ResponseStatusCode.FORBIDDEN}",
+                    HttpCode = StatusCodes.Status403Forbidden,
+                }
+        );
+
+        _dictionary.TryAdd(
+            key: G58ResponseStatusCode.UN_AUTHORIZED,
+            value: (_, response) =>
+                new()
+                {
+                    AppCode = $"G58.{G58ResponseStatusCode.UN_AUTHORIZED}",
+                    HttpCode = StatusCodes.Status401Unauthorized,
+                }
+        );
     }
 
     internal static Func<G58Request, G58Response, G58HttpResponse> Resolve(

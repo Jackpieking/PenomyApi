@@ -48,7 +48,7 @@ public class G58Handler : IFeatureHandler<G58Request, G58Response>
             {
                 CommentId = result,
                 IsSuccess = false,
-                StatusCode = G58ResponseStatusCode.Comment_NotFound,
+                StatusCode = G58ResponseStatusCode.COMMENT_NOT_FOUND,
             };
         }
         else

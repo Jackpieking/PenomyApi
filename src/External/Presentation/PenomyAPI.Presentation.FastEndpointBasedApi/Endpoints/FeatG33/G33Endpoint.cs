@@ -22,6 +22,8 @@ internal sealed class G33Endpoint : Endpoint<EmptyRequest, G33HttpResponse>
         Description(builder =>
         {
             builder.ClearDefaultProduces(StatusCodes.Status400BadRequest);
+            builder.ClearDefaultProduces(StatusCodes.Status401Unauthorized);
+            builder.ClearDefaultProduces(StatusCodes.Status403Forbidden);
         });
         Summary(summary =>
         {

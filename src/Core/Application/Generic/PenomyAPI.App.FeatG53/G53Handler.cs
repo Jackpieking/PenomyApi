@@ -21,6 +21,7 @@ public class G53Handler : IFeatureHandler<G53Request, G53Response>
         var result = await unitOfWork.G53Repository.EditCommentAsync(
             long.Parse(request.CommentId),
             request.NewComment
+            // long.Parse(request.GetUserId())
         );
 
         if (result == true)
@@ -32,7 +33,7 @@ public class G53Handler : IFeatureHandler<G53Request, G53Response>
             return new G53Response
             {
                 IsSuccess = false,
-                StatusCode = G53ResponseStatusCode.DATABASE_ERROR
+                StatusCode = G53ResponseStatusCode.DATABASE_ERROR,
             };
         }
     }
