@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.Generic;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
-using PenomyAPI.Persist.Postgres.Repositories.Helpers;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -39,13 +38,7 @@ public class G61Repository : IG61Repository
 
     public async Task<bool> FollowCreator(long userId, long creatorId, CancellationToken ct)
     {
-        var executionStrategy = RepositoryHelper.CreateExecutionStrategy(_dbContext);
-
-        await executionStrategy.ExecuteAsync(operation: StartFollowCreator);
-
-        return true;
-
-        async Task StartFollowCreator()
+        await _dbContext.Database.CreateExecutionStrategy().ExecuteAsync(async () =>
         {
             using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken: ct);
 
@@ -89,7 +82,9 @@ public class G61Repository : IG61Repository
             await _dbContext.SaveChangesAsync(cancellationToken: ct);
 
             await transaction.CommitAsync(cancellationToken: ct);
-        }
+        });
+
+        return true;
     }
 
     public async Task<bool> IsCreator(long creatorId, CancellationToken ct)
