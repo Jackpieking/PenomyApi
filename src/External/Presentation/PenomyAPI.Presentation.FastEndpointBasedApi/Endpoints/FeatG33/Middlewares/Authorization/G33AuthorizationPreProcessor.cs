@@ -5,9 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 using PenomyAPI.App.FeatG33;
-using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG33.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG33.HttpResponseManager;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Helpers;
@@ -16,13 +14,6 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG33.Middlewa
 
 internal sealed class G33AuthorizationPreProcessor : PreProcessor<EmptyRequest, G33StateBag>
 {
-    private readonly Lazy<IServiceScopeFactory> _serviceScopeFactory;
-
-    public G33AuthorizationPreProcessor(Lazy<IServiceScopeFactory> serviceScopeFactory)
-    {
-        _serviceScopeFactory = serviceScopeFactory;
-    }
-
     public override async Task PreProcessAsync(
         IPreProcessorContext<EmptyRequest> context,
         G33StateBag state,
@@ -46,29 +37,8 @@ internal sealed class G33AuthorizationPreProcessor : PreProcessor<EmptyRequest, 
             return;
         }
         #endregion
-
-        await using var scope = _serviceScopeFactory.Value.CreateAsyncScope();
-
-        var repository = scope.Resolve<Lazy<IUnitOfWork>>().Value.G33Repository;
-
-        // Get access token id..
+        // Get access token id, also is the refresh token id.
         var tokenId = context.HttpContext.User.FindFirstValue(JwtRegisteredClaimNames.Jti);
-
-        // Is refresh token found by access token id [both token use same id].
-        var isRefreshTokenFound = await repository.IsRefreshTokenFoundByIdAsync(tokenId, ct);
-
-        // Refresh token is not found.
-        if (!isRefreshTokenFound)
-        {
-            await SendResponseAsync(
-                G33ResponseStatusCode.FORBIDDEN,
-                state.AppRequest,
-                context.HttpContext,
-                ct
-            );
-
-            return;
-        }
 
         // Save found refresh token id to state bag.
         state.AppRequest.SetRefreshTokenId(tokenId);

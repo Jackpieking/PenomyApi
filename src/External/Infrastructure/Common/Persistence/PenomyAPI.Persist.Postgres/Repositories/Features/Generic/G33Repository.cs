@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,13 +15,6 @@ internal sealed class G33Repository : IG33Repository
     public G33Repository(AppDbContext context)
     {
         _context = context;
-    }
-
-    public Task<bool> IsRefreshTokenFoundByIdAsync(string refreshTokenId, CancellationToken ct)
-    {
-        return _context
-            .Set<PgUserToken>()
-            .AnyAsync(token => token.LoginProvider.Equals(refreshTokenId), ct);
     }
 
     public async Task<bool> RemoveRefreshTokenAsync(string refreshTokenId, CancellationToken ct)

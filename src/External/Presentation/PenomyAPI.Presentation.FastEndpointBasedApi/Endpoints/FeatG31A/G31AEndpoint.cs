@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG31A;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG31.Middlewares.Validation;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG31A.HttpResponseManager;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG31A.Middlewares.Authorization;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG31A.Middlewares.Validation;
