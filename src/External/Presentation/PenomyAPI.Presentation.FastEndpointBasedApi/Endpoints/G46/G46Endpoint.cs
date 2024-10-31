@@ -18,8 +18,9 @@ public class G46Endpoint : Endpoint<G46RequestDto, G46HttpResponse>
     public override void Configure()
     {
         Post("/g46/favorite/add");
-        AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
+
         PreProcessor<G46AuthPreProcessor>();
+        AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
         DontThrowIfValidationFails();
         Description(builder => { builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest); });
 

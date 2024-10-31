@@ -18,4 +18,5 @@ public class G5ResponseDto
     public string ThumbnailUrl { get; set; }
     public string Introduction { get; set; }
     public long CommentCount { get; set; }
+    public bool IsUserFavorite { get; set; }
 }
