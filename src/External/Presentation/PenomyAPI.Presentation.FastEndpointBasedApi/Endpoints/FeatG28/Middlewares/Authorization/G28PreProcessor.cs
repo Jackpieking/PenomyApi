@@ -1,25 +1,20 @@
-using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
-using Microsoft.AspNetCore.Http;
-using Microsoft.IdentityModel.Tokens;
-using PenomyAPI.App.FeatG10;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG10.Common;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G10.DTOs;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G10.HttpResponse;
+using PenomyAPI.App.FeatG28;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG28.Common;
 
-namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG10.Middlewares.Authorization;
+namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG28.Middlewares;
 
-internal sealed class G10AuthorizationPreProcessor : PreProcessor<G10Request, G10StateBag>
+internal sealed class G28PreProcessor : PreProcessor<G28Request, G28StateBag>
 {
-    public G10AuthorizationPreProcessor() { }
+    public G28PreProcessor() { }
 
     public override Task PreProcessAsync(
-        IPreProcessorContext<G10Request> context,
-        G10StateBag state,
+        IPreProcessorContext<G28Request> context,
+        G28StateBag state,
         CancellationToken ct
     )
     {

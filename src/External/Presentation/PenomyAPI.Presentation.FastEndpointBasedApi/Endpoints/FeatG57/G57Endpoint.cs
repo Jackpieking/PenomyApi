@@ -1,20 +1,25 @@
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG57;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG57.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG57.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG57.HttpResponse;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG57.Middlewares;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG57;
 
-public class G57Endpoint : Endpoint<G57RequestDto, G57HttpResponse>
+public class G57Endpoint : Endpoint<G57Request, G57HttpResponse>
 {
     public override void Configure()
     {
         Post("/g57/comment/unlike/");
-        AllowAnonymous();
+        PreProcessor<G57PreProcessor>();
+        DontThrowIfValidationFails();
+        AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
 
         Description(builder: builder =>
         {
@@ -32,26 +37,18 @@ public class G57Endpoint : Endpoint<G57RequestDto, G57HttpResponse>
         });
     }
 
-    public override async Task<G57HttpResponse> ExecuteAsync(
-        G57RequestDto req,
-        CancellationToken ct
-    )
+    public override async Task<G57HttpResponse> ExecuteAsync(G57Request req, CancellationToken ct)
     {
-        var G57Request = new G57Request
-        {
-            CommentId = long.Parse(req.CommentId),
-            UserId = long.Parse(req.UserId),
-        };
-        
+        var stateBag = ProcessorState<G57StateBag>();
+
+        req.SetUserId(stateBag.AppRequest.GetUserId());
+
         // Get FeatureHandler response.
-        var featResponse = await FeatureExtensions.ExecuteAsync<G57Request, G57Response>(
-            G57Request,
-            ct
-        );
+        var featResponse = await FeatureExtensions.ExecuteAsync<G57Request, G57Response>(req, ct);
 
         var httpResponse = G57HttpResponseManager
             .Resolve(featResponse.StatusCode)
-            .Invoke(G57Request, featResponse);
+            .Invoke(req, featResponse);
 
         if (featResponse.IsSuccess)
         {

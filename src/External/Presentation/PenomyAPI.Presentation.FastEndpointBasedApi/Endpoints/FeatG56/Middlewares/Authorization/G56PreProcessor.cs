@@ -6,20 +6,18 @@ using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
-using PenomyAPI.App.FeatG10;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG10.Common;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G10.DTOs;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G10.HttpResponse;
+using PenomyAPI.App.FeatG56;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG56.Common;
 
-namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG10.Middlewares.Authorization;
+namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG56.Middlewares;
 
-internal sealed class G10AuthorizationPreProcessor : PreProcessor<G10Request, G10StateBag>
+internal sealed class G56PreProcessor : PreProcessor<G56Request, G56StateBag>
 {
-    public G10AuthorizationPreProcessor() { }
+    public G56PreProcessor() { }
 
     public override Task PreProcessAsync(
-        IPreProcessorContext<G10Request> context,
-        G10StateBag state,
+        IPreProcessorContext<G56Request> context,
+        G56StateBag state,
         CancellationToken ct
     )
     {
@@ -37,6 +35,7 @@ internal sealed class G10AuthorizationPreProcessor : PreProcessor<G10Request, G1
         }
         // Save found user id to state bag.
         state.AppRequest.SetUserId(userId);
+
         return Task.CompletedTask;
     }
 }

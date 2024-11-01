@@ -1,23 +1,20 @@
-using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
-using Microsoft.AspNetCore.Http;
-using Microsoft.IdentityModel.Tokens;
-using PenomyAPI.App.FeatG59;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG59.Common;
+using PenomyAPI.App.FeatG28.PageCount;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG28.Common;
 
-namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG59.Middlewares.Authorization;
+namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG28.PageCount.Middlewares;
 
-internal sealed class G59AuthorizationPreProcessor : PreProcessor<G59Request, G59StateBag>
+internal sealed class G28PageCountPreProcessor : PreProcessor<G28PageCountRequest, G28PageCountStateBag>
 {
-    public G59AuthorizationPreProcessor() { }
+    public G28PageCountPreProcessor() { }
 
     public override Task PreProcessAsync(
-        IPreProcessorContext<G59Request> context,
-        G59StateBag state,
+        IPreProcessorContext<G28PageCountRequest> context,
+        G28PageCountStateBag state,
         CancellationToken ct
     )
     {
@@ -34,8 +31,7 @@ internal sealed class G59AuthorizationPreProcessor : PreProcessor<G59Request, G5
             userId = "-1";
         }
         // Save found user id to state bag.
-        state.AppRequest.SetUserId(userId);
-
+        state.PageCountRequest.SetUserId(userId);
         return Task.CompletedTask;
     }
 }
