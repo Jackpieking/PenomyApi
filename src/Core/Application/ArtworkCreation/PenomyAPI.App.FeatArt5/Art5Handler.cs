@@ -1,7 +1,7 @@
 ﻿using PenomyAPI.App.Common;
+using PenomyAPI.Domain.RelationalDb.Repositories.Common;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
-using PenomyAPI.Domain.RelationalDb.UnitOfWorks.Common.Common;
 using System;
 using System.Threading;
 using System.Threading.Tasks;

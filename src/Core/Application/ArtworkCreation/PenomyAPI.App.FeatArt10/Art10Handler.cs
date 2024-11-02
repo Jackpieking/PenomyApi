@@ -112,9 +112,10 @@ public class Art10Handler : IFeatureHandler<Art10Request, Art10Response>
         {
             // Get the last chapter upload order of this comic, then the upload order
             // of the new chapter will be the last upload order increased by 1.
-            var lastChapterUploadOrder = await _art10Repository.GetLastChapterUploadOrderByComicIdAsync(
-                request.ComicId,
-                cancellationToken);
+            var lastChapterUploadOrder = await _unitOfWork.ArtworkRepository
+                .GetLastChapterUploadOrderByArtworkIdAsync(
+                    request.ComicId,
+                    cancellationToken);
 
             newChapterUploadOrder = lastChapterUploadOrder + 1;
         }
