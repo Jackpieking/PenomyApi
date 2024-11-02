@@ -17,7 +17,7 @@ internal sealed class G10AuthorizationPreProcessor : PreProcessor<G10Request, G1
 {
     public G10AuthorizationPreProcessor() { }
 
-    public override async Task PreProcessAsync(
+    public override Task PreProcessAsync(
         IPreProcessorContext<G10Request> context,
         G10StateBag state,
         CancellationToken ct
@@ -26,7 +26,7 @@ internal sealed class G10AuthorizationPreProcessor : PreProcessor<G10Request, G1
         // Bypass if response has started.
         if (context.HttpContext.ResponseStarted())
         {
-            return;
+            return Task.CompletedTask;
         }
 
         // Get user id.
@@ -37,5 +37,6 @@ internal sealed class G10AuthorizationPreProcessor : PreProcessor<G10Request, G1
         }
         // Save found user id to state bag.
         state.AppRequest.SetUserId(userId);
+        return Task.CompletedTask;
     }
 }

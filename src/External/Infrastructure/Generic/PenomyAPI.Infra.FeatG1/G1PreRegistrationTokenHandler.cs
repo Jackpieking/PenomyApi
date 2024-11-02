@@ -86,8 +86,8 @@ public sealed class G1PreRegistrationTokenHandler : IG1PreRegistrationTokenHandl
         }
 
         var isRightPurpose = validationResult.ClaimsIdentity.HasClaim(claim =>
-            claim.Type.Equals(CommonValues.Claims.TokenPurposeClaim.ClaimType)
-            && claim.Value.Equals(CommonValues.Claims.TokenPurposeClaim.ClaimValues.VerifyEmail)
+            claim.Type.Equals(CommonValues.Claims.TokenPurpose.Type)
+            && claim.Value.Equals(CommonValues.Claims.TokenPurpose.Values.VerifyEmail)
         );
 
         // Token is not for verify email.

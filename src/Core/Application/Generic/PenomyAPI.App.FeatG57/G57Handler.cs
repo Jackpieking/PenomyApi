@@ -20,7 +20,7 @@ public class G57Handler : IFeatureHandler<G57Request, G57Response>
         var unitOfWork = _unitOfWork.Value;
         var result = await unitOfWork.G57Repository.ExcecuteUnlikeCommentAsync(
             request.CommentId,
-            request.UserId,
+            long.Parse(request.GetUserId()),
             new CancellationToken()
         );
 

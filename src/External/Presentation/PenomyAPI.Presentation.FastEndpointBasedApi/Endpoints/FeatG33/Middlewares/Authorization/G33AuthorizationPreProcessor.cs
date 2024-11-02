@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
+using PenomyAPI.App.Common.AppConstants;
 using PenomyAPI.App.FeatG33;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG33.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG33.HttpResponseManager;
@@ -24,11 +25,29 @@ internal sealed class G33AuthorizationPreProcessor : PreProcessor<EmptyRequest, 
         // Extract and convert access token expire time.
         var tokenExpireTime = JwtHelper.ExtractUtcTimeFromToken(context.HttpContext);
 
-        // Validate access token.
+        // Is token expired.
         if (tokenExpireTime < DateTime.UtcNow)
         {
             await SendResponseAsync(
                 G33ResponseStatusCode.UN_AUTHORIZED,
+                state.AppRequest,
+                context.HttpContext,
+                ct
+            );
+
+            return;
+        }
+
+        // Get token purpose.
+        var tokenPurpose = context.HttpContext.User.FindFirstValue(
+            CommonValues.Claims.TokenPurpose.Type
+        );
+
+        // Token is not for user access.
+        if (!tokenPurpose.Equals(CommonValues.Claims.TokenPurpose.Values.AppUserAccess))
+        {
+            await SendResponseAsync(
+                G33ResponseStatusCode.FORBIDDEN,
                 state.AppRequest,
                 context.HttpContext,
                 ct

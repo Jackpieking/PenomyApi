@@ -20,7 +20,7 @@ internal sealed class Art10Reg : FeatureDefinitionRegistration
         IConfiguration configuration)
     {
         services
-            .AddScoped<IArt10FileService, Art10FileService>()
-            .MakeScopedLazy<IArt10FileService>();
+            .AddSingleton<IArt10FileService, Art10FileService>()
+            .MakeSingletonLazy<IArt10FileService>();
     }
 }

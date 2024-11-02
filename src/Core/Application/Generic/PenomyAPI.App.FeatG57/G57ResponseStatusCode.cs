@@ -8,5 +8,7 @@ public enum G57ResponseStatusCode
 
     INVALID_REQUEST = 3,
 
-    NOT_FOUND = 4
+    NOT_FOUND = 4,
+
+    UN_AUTHORIZED = 5
 }
