@@ -20,7 +20,7 @@ public class G56Handler : IFeatureHandler<G56Request, G56Response>
         var unitOfWork = _unitOfWork.Value;
         var result = await unitOfWork.G56Repository.ExcecuteLikeCommentAsync(
             request.CommentId,
-            request.UserId,
+            long.Parse(request.GetUserId()),
             new CancellationToken()
         );
 

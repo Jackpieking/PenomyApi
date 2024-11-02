@@ -40,14 +40,20 @@ public sealed class G1Handler : IFeatureHandler<G1Request, G1Response>
 
         // Generate pre-registration token.
         var preRegistrationToken = _accessToken.Value.Generate(
-            [new(CommonValues.Claims.AppUserEmailClaim, request.Email)],
+            [
+                new(
+                    CommonValues.Claims.TokenPurpose.Type,
+                    CommonValues.Claims.TokenPurpose.Values.VerifyEmail
+                ),
+                new(CommonValues.Claims.AppUserEmailClaim, request.Email)
+            ],
             15 * 60 // 15 minutes
         );
 
         // Replace the registration link with one that includes the token.
         var body = request.MailTemplate.Replace(
             "{registration_link}",
-            GenerateConfirmRegistrationLink(request.RegisterPageLink, preRegistrationToken)
+            GenerateConfirmRegistrationLink(request.RedirectPageLink, preRegistrationToken)
         );
 
         // Trying to send registration mail.

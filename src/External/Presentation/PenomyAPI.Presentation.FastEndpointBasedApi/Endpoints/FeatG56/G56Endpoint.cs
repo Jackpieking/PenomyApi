@@ -1,20 +1,25 @@
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG56;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG56.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG56.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG56.HttpResponse;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG56.Middlewares;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG56;
 
-public class G56Endpoint : Endpoint<G56RequestDto, G56HttpResponse>
+public class G56Endpoint : Endpoint<G56Request, G56HttpResponse>
 {
     public override void Configure()
     {
         Post("/g56/ArtworkComment/like/");
-        AllowAnonymous();
+        PreProcessor<G56PreProcessor>();
+        DontThrowIfValidationFails();
+        AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
 
         Description(builder: builder =>
         {
@@ -33,25 +38,23 @@ public class G56Endpoint : Endpoint<G56RequestDto, G56HttpResponse>
     }
 
     public override async Task<G56HttpResponse> ExecuteAsync(
-        G56RequestDto req,
+        G56Request req,
         CancellationToken ct
     )
     {
-        var G56Request = new G56Request
-        {
-            CommentId = long.Parse(req.CommentId),
-            UserId = long.Parse(req.UserId),
-        };
-        
+        var stateBag = ProcessorState<G56StateBag>();
+
+        req.SetUserId(stateBag.AppRequest.GetUserId());
+
         // Get FeatureHandler response.
         var featResponse = await FeatureExtensions.ExecuteAsync<G56Request, G56Response>(
-            G56Request,
+            req,
             ct
         );
 
         var httpResponse = G56HttpResponseManager
             .Resolve(featResponse.StatusCode)
-            .Invoke(G56Request, featResponse);
+            .Invoke(req, featResponse);
 
         if (featResponse.IsSuccess)
         {

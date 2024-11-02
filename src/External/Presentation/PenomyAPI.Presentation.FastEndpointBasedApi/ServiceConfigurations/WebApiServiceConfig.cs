@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using FastEndpoints.Swagger;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;

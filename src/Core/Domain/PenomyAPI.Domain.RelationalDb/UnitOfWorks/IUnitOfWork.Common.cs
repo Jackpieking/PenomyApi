@@ -1,4 +1,4 @@
-using PenomyAPI.Domain.RelationalDb.UnitOfWorks.Common.Common;
+using PenomyAPI.Domain.RelationalDb.Repositories.Common;
 
 namespace PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 
@@ -9,4 +9,6 @@ namespace PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 public partial interface IUnitOfWork
 {
     IArtworkRepository ArtworkRepository { get; }
+
+    IArtworkChapterRepository ChapterRepository { get; }
 }

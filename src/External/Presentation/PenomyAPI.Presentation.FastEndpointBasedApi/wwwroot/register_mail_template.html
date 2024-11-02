@@ -8,29 +8,46 @@
 			href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
 			rel="stylesheet"
 		/>
-		<link href="#" rel="stylesheet" />
 		<script
 			type="text/javascript"
 			src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"
 		></script>
 		<style>
+			* {
+				--penomy-primary: #53bf94;
+			}
+
+			.penomy-bg-primary {
+				background-color: var(--penomy-primary) !important;
+			}
+
+			.penomy-text-primary {
+				color: var(--penomy-primary) !important;
+				text-decoration: none !important;
+			}
+
+			.penomy-text-primary:hover {
+				color: var(--penomy-primary) !important;
+				text-decoration: underline solid var(--penomy-primary) !important;
+			}
+
 			::-webkit-scrollbar {
-			                                  width: 8px;
-			                                }
-			                                /* Track */
-			                                ::-webkit-scrollbar-track {
-			                                  background: #f1f1f1;
-			                                }
+				width: 8px;
+			}
+			/* Track */
+			::-webkit-scrollbar-track {
+				background: #f1f1f1;
+			}
 
-			                                /* Handle */
-			                                ::-webkit-scrollbar-thumb {
-			                                  background: #888;
-			                                }
+			/* Handle */
+			::-webkit-scrollbar-thumb {
+				background: #888;
+			}
 
-			                                /* Handle on hover */
-			                                ::-webkit-scrollbar-thumb:hover {
-			                                  background: #555;
-			                                } #
+			/* Handle on hover */
+			::-webkit-scrollbar-thumb:hover {
+				background: #555;
+			}
 		</style>
 	</head>
 	<body className="snippet-body">
@@ -226,17 +243,8 @@
 											line-height: 48px;
 										"
 									>
-										<h1
-											style="
-												font-size: 48px;
-												font-weight: 400;
-												margin: 2;
-											"
-										>
-											Welcome!
-										</h1>
 										<img
-											src=" https://img.icons8.com/clouds/100/000000/handshake.png"
+											src="https://res.cloudinary.com/dsjsmbdpw/image/upload/v1729522677/penomy_assets/penomy.png"
 											width="125"
 											height="120"
 											style="display: block; border: 0px"
@@ -274,10 +282,12 @@
 										"
 									>
 										<p style="margin: 0">
-											We're excited to have you get
-											started. First, you need to confirm
-											your account. Just press the button
-											below.
+											Penomy rất vui khi bạn đăng ký sử
+											dụng dịch vụ của nền tảng. Trước
+											tiên, bạn cần hoàn tất việc đăng ký
+											tài khoản của mình. Vui lòng nhất
+											nút bên dưới để đến trang hoàn tất
+											đăng ký.
 										</p>
 									</td>
 								</tr>
@@ -331,8 +341,12 @@
 																			#53bf94;
 																		display: inline-block;
 																	"
-																	>Confirm
-																	Account</a
+																>
+																	<strong
+																		>Hoàn
+																		tất đăng
+																		ký</strong
+																	></a
 																>
 															</td>
 														</tr>
@@ -358,8 +372,9 @@
 										"
 									>
 										<p style="margin: 0">
-											If that doesn't work, copy and paste
-											the following link in your browser:
+											Nếu bạn không thể truy cập trang,
+											vui lòng copy đường link bên dưới
+											vào thanh tìm kiếm của trình duyệt:
 										</p>
 									</td>
 								</tr>
@@ -403,9 +418,17 @@
 										"
 									>
 										<p style="margin: 0">
-											If you have any questions, just
-											reply to this email—we're always
-											happy to help out.
+											Nếu bạn có bất kì câu hỏi nào, vui
+											lòng liên hệ hoặc gửi mail đến địa
+											chỉ:
+											<a
+												href="mailto:admin@penomy.com"
+												class="penomy-text-primary"
+												><strong
+													>admin@penomy.com</strong
+												>
+											</a>
+											để được Penomy hỗ trợ.
 										</p>
 									</td>
 								</tr>
@@ -425,7 +448,7 @@
 										"
 									>
 										<p style="margin: 0">
-											Cheers,<br />BBB Team
+											Gửi từ,<br />Penomy Team
 										</p>
 									</td>
 								</tr>
@@ -469,13 +492,16 @@
 											"
 										>
 											<strong style="color: #53bf94"
-												>Need more help?</strong
+												>Cần hỗ trợ?</strong
 											>
 										</h2>
 										<p style="margin: 0">
-											<a style="color: #53bf94"
-												>We&rsquo;re here to help you
-												out</a
+											<a
+												style="color: #53bf94"
+												href="https://penomy.pages.dev"
+												target="_blank"
+												rel="noopener noreferrer"
+												>Penomy sẽ hỗ trợ bạn</a
 											>
 										</p>
 									</td>
@@ -521,12 +547,6 @@
 			type="text/javascript"
 			src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"
 		></script>
-		<script type="text/javascript" src="#"></script>
-		<script type="text/javascript" src="#"></script>
-		<script type="text/javascript" src="#"></script>
-		<script type="text/javascript">
-			#
-		</script>
 		<script type="text/javascript">
 			var myLink = document.querySelector('a[href="#"]');
 			myLink.addEventListener("click", function (e) {

@@ -6,5 +6,9 @@ public class G59Request : IFeatureRequest<G59Response>
 {
     public long ParentCommentId { get; set; }
 
-    public long UserId { get; set; }
+    private string _userId;
+
+    public string GetUserId() => _userId;
+
+    public void SetUserId(string userId) => _userId = userId;
 }

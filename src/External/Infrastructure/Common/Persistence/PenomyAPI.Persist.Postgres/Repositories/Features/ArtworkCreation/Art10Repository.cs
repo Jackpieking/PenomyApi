@@ -118,14 +118,4 @@ internal sealed class Art10Repository : IArt10Repository
             }
         }
     }
-
-    public Task<int> GetLastChapterUploadOrderByComicIdAsync(
-        long comicId,
-        CancellationToken cancellationToken)
-    {
-        return _dbContext.Set<Artwork>()
-            .Where(comic => comic.Id == comicId)
-            .Select(comic => comic.LastChapterUploadOrder)
-            .FirstOrDefaultAsync(cancellationToken);
-    }
 }

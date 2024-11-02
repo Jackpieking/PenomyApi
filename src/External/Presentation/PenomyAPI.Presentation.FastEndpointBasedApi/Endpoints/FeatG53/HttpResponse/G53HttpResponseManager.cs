@@ -36,6 +36,26 @@ public static class G53HttpResponseManager
                     HttpCode = StatusCodes.Status400BadRequest,
                 }
         );
+
+        _dictionary.TryAdd(
+            key: G53ResponseStatusCode.FORBIDDEN,
+            value: (_, response) =>
+                new()
+                {
+                    AppCode = $"G53.{G53ResponseStatusCode.FORBIDDEN}",
+                    HttpCode = StatusCodes.Status403Forbidden,
+                }
+        );
+
+        _dictionary.TryAdd(
+            key: G53ResponseStatusCode.UN_AUTHORIZED,
+            value: (_, response) =>
+                new()
+                {
+                    AppCode = $"G53.{G53ResponseStatusCode.UN_AUTHORIZED}",
+                    HttpCode = StatusCodes.Status401Unauthorized,
+                }
+        );
     }
 
     internal static Func<G53Request, G53Response, G53HttpResponse> Resolve(

@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using PenomyAPI.App.Common;
+using PenomyAPI.App.Common.AppConstants;
 using PenomyAPI.App.Common.IdGenerator.Snowflake;
 using PenomyAPI.App.Common.Tokens;
 using PenomyAPI.Domain.RelationalDb.Entities.UserIdentity;
@@ -57,7 +58,7 @@ public sealed class G31Handler : IFeatureHandler<G31Request, G31Response>
             return new() { StatusCode = G31ResponseStatusCode.PASSWORD_IS_INCORRECT };
         }
 
-        // Generate token id.
+        // Generate token id of both refresh and access token.
         var tokenId = _snowflakeIdGenerator.Value.Get().ToString();
 
         // Create new refresh token.
@@ -84,7 +85,15 @@ public sealed class G31Handler : IFeatureHandler<G31Request, G31Response>
 
         // Generate access token.
         var newAccessToken = _accessTokenHandler.Value.Generate(
-            claims: [new("jti", tokenId), new("sub", userIdOfUserHasBeenValidated.ToString())],
+            claims:
+            [
+                new(CommonValues.Claims.TokenIdClaim, tokenId),
+                new(
+                    CommonValues.Claims.TokenPurpose.Type,
+                    CommonValues.Claims.TokenPurpose.Values.AppUserAccess
+                ),
+                new(CommonValues.Claims.UserIdClaim, userIdOfUserHasBeenValidated.ToString())
+            ],
             additionalSecondsFromNow: 10 * 60 // 10 minutes
         );
 
@@ -111,7 +120,7 @@ public sealed class G31Handler : IFeatureHandler<G31Request, G31Response>
         {
             LoginProvider = tokenId,
             ExpiredAt = isRememberMe
-                ? DateTime.UtcNow.AddDays(value: 15)
+                ? DateTime.UtcNow.AddDays(value: 365)
                 : DateTime.UtcNow.AddDays(value: 3),
             UserId = userId,
             Value = _refreshTokenHandler.Value.Generate(length: 15),

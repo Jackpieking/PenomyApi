@@ -13,7 +13,7 @@ public sealed partial class UnitOfWork
         {
             if (Equals(_G47Repository, null))
             {
-                _G47Repository = new G47Repository(_dbContext);
+                _G47Repository = new G47Repository(_dbContext, _userManager);
             }
 
             return _G47Repository;

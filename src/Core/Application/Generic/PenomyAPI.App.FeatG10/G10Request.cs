@@ -6,5 +6,9 @@ public class G10Request : IFeatureRequest<G10Response>
 {
     public long ArtworkId { get; set; }
 
-    public long UserId { get; set; }
+    private string _userId;
+
+    public string GetUserId() => _userId;
+
+    public void SetUserId(string userId) => _userId = userId;
 }

@@ -19,6 +19,24 @@ public static class CommonValues
     public static class Claims
     {
         public const string AppUserEmailClaim = "app-user-email";
+
+        public static class TokenPurpose
+        {
+            public const string Type = "purpose";
+
+            public static class Values
+            {
+                public const string ResetPassword = "reset-password";
+
+                public const string VerifyEmail = "verify-email";
+
+                public const string AppUserAccess = "app-user-access";
+            }
+        }
+
+        public const string TokenIdClaim = "jti";
+
+        public const string UserIdClaim = "sub";
     }
 
     public static class Others

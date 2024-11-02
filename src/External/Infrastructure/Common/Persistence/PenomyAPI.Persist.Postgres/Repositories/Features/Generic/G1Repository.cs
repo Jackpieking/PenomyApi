@@ -6,16 +6,17 @@ using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.Generic;
 using PenomyAPI.Domain.RelationalDb.Entities.UserIdentity;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
+using PenomyAPI.Persist.Postgres.Data.DbContexts;
 using PenomyAPI.Persist.Postgres.Data.UserIdentity;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
 
 internal sealed class G1Repository : IG1Repository
 {
-    private readonly DbContext _dbContext;
+    private readonly AppDbContext _dbContext;
     private readonly Lazy<UserManager<PgUser>> _userManager;
 
-    public G1Repository(DbContext dbContext, Lazy<UserManager<PgUser>> userManager)
+    public G1Repository(AppDbContext dbContext, Lazy<UserManager<PgUser>> userManager)
     {
         _dbContext = dbContext;
         _userManager = userManager;
@@ -91,13 +92,13 @@ internal sealed class G1Repository : IG1Repository
         foreach (var validator in _userManager.Value.PasswordValidators)
         {
             result = await validator.ValidateAsync(
-                manager: _userManager.Value,
-                user: new() { Id = newUser.Id },
-                password: newPassword
+                _userManager.Value,
+                new() { Id = newUser.Id },
+                newPassword
             );
         }
 
-        if (Equals(objA: result, objB: default))
+        if (Equals(result, default))
         {
             return false;
         }
