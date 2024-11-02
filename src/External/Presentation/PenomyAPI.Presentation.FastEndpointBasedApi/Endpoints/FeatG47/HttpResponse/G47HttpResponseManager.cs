@@ -1,9 +1,9 @@
-﻿namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG47.HttpResponse;
-
+﻿using System;
+using System.Collections.Concurrent;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG47;
-using System;
-using System.Collections.Concurrent;
+
+namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG47.HttpResponse;
 
 public class G47HttpResponseManager
 {
@@ -14,44 +14,53 @@ public class G47HttpResponseManager
 
     private static void Init()
     {
-        _dictionary = new();
+        _dictionary = new ConcurrentDictionary<G47ResponseStatusCode, Func<G47Request, G47Response, G47HttpResponse>>();
 
         // Add each feature status code with its HttpResponse information.
         _dictionary.TryAdd(
-            key: G47ResponseStatusCode.SUCCESS,
-            value: (_, response) =>
-                new()
+            G47ResponseStatusCode.SUCCESS,
+            (_, response) =>
+                new G47HttpResponse
                 {
                     AppCode = $"G47.{G47ResponseStatusCode.SUCCESS}",
-                    HttpCode = StatusCodes.Status200OK,
+                    HttpCode = StatusCodes.Status200OK
                 }
         );
 
         _dictionary.TryAdd(
-            key: G47ResponseStatusCode.FAILED,
-            value: (_, response) =>
-                new()
+            G47ResponseStatusCode.FAILED,
+            (_, response) =>
+                new G47HttpResponse
                 {
                     AppCode = $"G47.{G47ResponseStatusCode.FAILED}",
-                    HttpCode = StatusCodes.Status500InternalServerError,
+                    HttpCode = StatusCodes.Status500InternalServerError
                 }
         );
         _dictionary.TryAdd(
-            key: G47ResponseStatusCode.INVALID_REQUEST,
-            value: (_, response) =>
-                new()
+            G47ResponseStatusCode.INVALID_REQUEST,
+            (_, response) =>
+                new G47HttpResponse
                 {
                     AppCode = $"G47.{G47ResponseStatusCode.INVALID_REQUEST}",
-                    HttpCode = StatusCodes.Status400BadRequest,
+                    HttpCode = StatusCodes.Status400BadRequest
                 }
         );
         _dictionary.TryAdd(
-            key: G47ResponseStatusCode.NOT_FOUND,
-            value: (_, response) =>
-                new()
+            G47ResponseStatusCode.NOT_FOUND,
+            (_, response) =>
+                new G47HttpResponse
                 {
                     AppCode = $"G47.{G47ResponseStatusCode.NOT_FOUND}",
-                    HttpCode = StatusCodes.Status404NotFound,
+                    HttpCode = StatusCodes.Status404NotFound
+                }
+        );
+        _dictionary.TryAdd(
+            G47ResponseStatusCode.UNAUTHORIZED,
+            (_, response) =>
+                new G47HttpResponse
+                {
+                    AppCode = $"G47.{G47ResponseStatusCode.UNAUTHORIZED}",
+                    HttpCode = StatusCodes.Status401Unauthorized
                 }
         );
     }
@@ -60,10 +69,7 @@ public class G47HttpResponseManager
         G47ResponseStatusCode statusCode
     )
     {
-        if (Equals(objA: _dictionary, objB: default))
-        {
-            Init();
-        }
+        if (Equals(_dictionary, default)) Init();
 
         return _dictionary[statusCode];
     }

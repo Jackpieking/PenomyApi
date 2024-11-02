@@ -1,8 +1,8 @@
+using System;
+using System.Collections.Concurrent;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG46;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G46.HttpResponse;
-using System;
-using System.Collections.Concurrent;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG46.HttpResponse;
 
@@ -15,53 +15,62 @@ public class G46HttpResponseManager
 
     private static void Init()
     {
-        _dictionary = new();
+        _dictionary = new ConcurrentDictionary<G46ResponseStatusCode, Func<G46Request, G46Response, G46HttpResponse>>();
 
         // Add each feature status code with its HttpResponse information.
         _dictionary.TryAdd(
-            key: G46ResponseStatusCode.SUCCESS,
-            value: (_, response) =>
-                new()
+            G46ResponseStatusCode.SUCCESS,
+            (_, response) =>
+                new G46HttpResponse
                 {
                     AppCode = $"G46.{G46ResponseStatusCode.SUCCESS}",
-                    HttpCode = StatusCodes.Status200OK,
+                    HttpCode = StatusCodes.Status200OK
                 }
         );
 
         _dictionary.TryAdd(
-            key: G46ResponseStatusCode.FAILED,
-            value: (_, response) =>
-                new()
+            G46ResponseStatusCode.FAILED,
+            (_, response) =>
+                new G46HttpResponse
                 {
                     AppCode = $"G46.{G46ResponseStatusCode.FAILED}",
-                    HttpCode = StatusCodes.Status500InternalServerError,
+                    HttpCode = StatusCodes.Status500InternalServerError
                 }
         );
         _dictionary.TryAdd(
-            key: G46ResponseStatusCode.INVALID_REQUEST,
-            value: (_, response) =>
-                new()
+            G46ResponseStatusCode.INVALID_REQUEST,
+            (_, response) =>
+                new G46HttpResponse
                 {
                     AppCode = $"G46.{G46ResponseStatusCode.INVALID_REQUEST}",
-                    HttpCode = StatusCodes.Status400BadRequest,
+                    HttpCode = StatusCodes.Status400BadRequest
                 }
         );
         _dictionary.TryAdd(
-            key: G46ResponseStatusCode.NOT_FOUND,
-            value: (_, response) =>
-                new()
+            G46ResponseStatusCode.NOT_FOUND,
+            (_, response) =>
+                new G46HttpResponse
                 {
                     AppCode = $"G46.{G46ResponseStatusCode.NOT_FOUND}",
-                    HttpCode = StatusCodes.Status404NotFound,
+                    HttpCode = StatusCodes.Status404NotFound
                 }
         );
         _dictionary.TryAdd(
-            key: G46ResponseStatusCode.EXISTED,
-            value: (_, response) =>
-                new()
+            G46ResponseStatusCode.UNAUTHORIZED,
+            (_, response) =>
+                new G46HttpResponse
+                {
+                    AppCode = $"G46.{G46ResponseStatusCode.UNAUTHORIZED}",
+                    HttpCode = StatusCodes.Status401Unauthorized
+                }
+        );
+        _dictionary.TryAdd(
+            G46ResponseStatusCode.EXISTED,
+            (_, response) =>
+                new G46HttpResponse
                 {
                     AppCode = $"G46.{G46ResponseStatusCode.EXISTED}",
-                    HttpCode = StatusCodes.Status409Conflict,
+                    HttpCode = StatusCodes.Status409Conflict
                 }
         );
     }
@@ -70,10 +79,7 @@ public class G46HttpResponseManager
         G46ResponseStatusCode statusCode
     )
     {
-        if (Equals(objA: _dictionary, objB: default))
-        {
-            Init();
-        }
+        if (Equals(_dictionary, default)) Init();
 
         return _dictionary[statusCode];
     }

@@ -6,4 +6,5 @@ public enum G47ResponseStatusCode
     INVALID_REQUEST = 1,
     FAILED = 2,
     NOT_FOUND = 3,
+    UNAUTHORIZED = 4
 }
