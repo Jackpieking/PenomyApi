@@ -13,7 +13,18 @@ public interface IFormFileHelper
     /// <returns>
     ///     The extension of the input <paramref name="formFile"/>.
     /// </returns>
-    public string GetFileExtension(IFormFile formFile);
+    string GetFileExtension(IFormFile formFile);
+
+    /// <summary>
+    ///     Get the name of the input <paramref name="formFile"/> without its extension part.
+    /// </summary>
+    /// <param name="formFile">
+    ///     The form file to get the filename.
+    /// </param>
+    /// <returns>
+    ///     The filename without extension of the input <paramref name="formFile"/>.
+    /// </returns>
+    string GetFileNameWithoutExtension(IFormFile formFile);
 
     /// <summary>
     ///     Check if the input <paramref name="formFile"/> is actually
@@ -26,7 +37,7 @@ public interface IFormFileHelper
     /// <returns>
     ///     The result (<see langword="bool"/>) after checking the file.
     /// </returns>
-    public bool IsValidImageFile(IFormFile formFile);
+    bool IsValidImageFile(IFormFile formFile);
 
     /// <summary>
     ///     Check if the input file has extension that
@@ -41,7 +52,7 @@ public interface IFormFileHelper
     /// <returns>
     ///     The result (<see langword="bool"/>) after checking the file.
     /// </returns>
-    public bool HasValidExtension(
+    bool HasValidExtension(
         IFormFile formFile,
         params string[] validExtensions);
 }

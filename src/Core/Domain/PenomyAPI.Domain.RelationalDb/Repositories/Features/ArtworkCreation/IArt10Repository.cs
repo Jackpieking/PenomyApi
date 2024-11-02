@@ -26,21 +26,6 @@ public interface IArt10Repository
         CancellationToken cancellationToken);
 
     /// <summary>
-    ///     Get last chapter upload order of the comic with specified <paramref name="comicId"/>
-    ///     to create the new chapter for the comic.
-    /// </summary>
-    /// <param name="comicId">
-    ///     The id of the comic to get detail support for creating a new chapter.
-    /// </param>
-    /// <param name="cancellationToken"></param>
-    /// <returns>
-    ///     The last upload order of the specified comic.
-    /// </returns>
-    Task<int> GetLastChapterUploadOrderByComicIdAsync(
-        long comicId,
-        CancellationToken cancellationToken);
-
-    /// <summary>
     ///     Create a new comic chapter with specified detail.
     /// </summary>
     /// <param name="comicChapter">

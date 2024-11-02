@@ -1,4 +1,4 @@
-﻿using PenomyAPI.Domain.RelationalDb.UnitOfWorks.Common.Common;
+﻿using PenomyAPI.Domain.RelationalDb.Repositories.Common;
 using PenomyAPI.Persist.Postgres.Repositories.Common;
 
 namespace PenomyAPI.Persist.Postgres.UnitOfWorks;

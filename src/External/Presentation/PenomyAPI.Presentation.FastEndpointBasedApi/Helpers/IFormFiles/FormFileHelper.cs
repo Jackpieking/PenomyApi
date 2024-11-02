@@ -24,6 +24,13 @@ public sealed class FormFileHelper : IFormFileHelper
         return mimeTypeSplit.LastOrDefault();
     }
 
+    public string GetFileNameWithoutExtension(IFormFile formFile)
+    {
+        var fileExtensionIndex = formFile.FileName.LastIndexOf('.');
+
+        return formFile.FileName.Substring(0, fileExtensionIndex);
+    }
+
     public bool HasValidExtension(IFormFile formFile, params string[] validFileExtensions)
     {
         // Return false when form file is null.

@@ -3,7 +3,7 @@ using PenomyAPI.Domain.RelationalDb.UnitOfWorks.Common.Base;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PenomyAPI.Domain.RelationalDb.UnitOfWorks.Common.Common;
+namespace PenomyAPI.Domain.RelationalDb.Repositories.Common;
 
 /// <summary>
 ///     The repository for the <see cref="Artwork"/> entity, includes common methods to check the <see cref="Artwork"/>.
@@ -15,7 +15,7 @@ public interface IArtworkRepository : IEntityRepository<Artwork>
     ///     is existed in the database or not.
     /// </summary>
     /// <remarks>
-    ///     This method is only check the existence of the artwork with the specified id,
+    ///     This method only checks the existence of the artwork with the specified id,
     ///     not including any check such as the <see cref="Entities.ArtworkCreation.Common.ArtworkPublicLevel"/>,
     ///     the taken down flag, etc.
     /// </remarks>
@@ -102,6 +102,22 @@ public interface IArtworkRepository : IEntityRepository<Artwork>
     ///     The checking result (<see langword="bool"/>).
     /// </returns>
     Task<bool> IsArtworkTemporarilyRemovedByIdAsync(
+        long artworkId,
+        CancellationToken cancellationToken);
+
+    /// <summary>
+    ///     Get last chapter upload order of the artwork with 
+    ///     specified <paramref name="artworkId"/>
+    ///     to create the new chapter for the artwork.
+    /// </summary>
+    /// <param name="artworkId">
+    ///     The id of the artwork to get detail support for creating a new chapter.
+    /// </param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>
+    ///     The last upload order of the specified artwork.
+    /// </returns>
+    Task<int> GetLastChapterUploadOrderByArtworkIdAsync(
         long artworkId,
         CancellationToken cancellationToken);
 }
