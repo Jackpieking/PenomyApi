@@ -27,7 +27,7 @@ public interface IG61Repository
         CancellationToken ct);
 
     /// <summary>
-    ///     Check the user has followed a creator.
+    ///     Check the creator's Id.
     /// </summary>
     /// <param name="creatorId">
     ///     The creator's ID.
@@ -36,7 +36,7 @@ public interface IG61Repository
     ///     The token to notify the server to cancel the operation.
     /// </param>
     /// <returns>
-    ///     Return true if the user already followed a creator.
+    ///     Return true if this is a creator's Id.
     ///     Otherwise, false.
     /// </returns>
     Task<bool> IsCreator(
