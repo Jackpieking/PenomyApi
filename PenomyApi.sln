@@ -185,11 +185,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatG33", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.FeatG49", "src\Core\Application\Generic\PenomyAPI.App.FeatG49\PenomyAPI.App.FeatG49.csproj", "{E3D2C825-7F11-411D-ADE4-146AAC1E8E7D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatG58", "src\Core\Application\Generic\PenomyAPI.App.FeatG58\PenomyAPI.App.FeatG58.csproj", "{616975C0-689A-4705-B830-5ECC00046536}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.FeatG58", "src\Core\Application\Generic\PenomyAPI.App.FeatG58\PenomyAPI.App.FeatG58.csproj", "{616975C0-689A-4705-B830-5ECC00046536}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.G48", "src\Core\Application\Generic\PenomyAPI.App.G48\PenomyAPI.App.G48.csproj", "{091C4DFE-C917-4F3B-91AA-B7489A8715F9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.G48", "src\Core\Application\Generic\PenomyAPI.App.G48\PenomyAPI.App.G48.csproj", "{091C4DFE-C917-4F3B-91AA-B7489A8715F9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatG59", "src\Core\Application\Generic\PenomyAPI.App.FeatG59\PenomyAPI.App.FeatG59.csproj", "{A9B01CF1-6A9E-41DC-BC9C-DEC687AEB0FF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.FeatG59", "src\Core\Application\Generic\PenomyAPI.App.FeatG59\PenomyAPI.App.FeatG59.csproj", "{A9B01CF1-6A9E-41DC-BC9C-DEC687AEB0FF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.G61", "src\Core\Application\Generic\PenomyAPI.App.G61\PenomyAPI.App.G61.csproj", "{A9F32134-4447-4B1F-A0FC-9C2782CA5D25}"
 EndProject
