@@ -1,21 +1,26 @@
 ﻿using FastEndpoints;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.G61;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G61.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G61.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G61.HttpResponse;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G61.Middlewares.Authorization;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G61;
 
-public class G61Endpoint : Endpoint<G61Request, G61HttpResponse>
+public class G61Endpoint : Endpoint<G61RequestDto, G61HttpResponse>
 {
     public override void Configure()
     {
-        Post("/G61/favorite-artworks");
+        Post("/G61/follow-creator");
 
-        AllowAnonymous();
+        AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
+
+        PreProcessor<G61AuthPreProcessor>();
 
         Description(builder: builder =>
         {
@@ -34,13 +39,15 @@ public class G61Endpoint : Endpoint<G61Request, G61HttpResponse>
     }
 
     public override async Task<G61HttpResponse> ExecuteAsync(
-        G61Request requestDto,
+        G61RequestDto requestDto,
         CancellationToken ct
     )
     {
+        var stateBag = ProcessorState<G61StateBag>();
+
         var featRequest = new G61Request
         {
-            UserId = requestDto.UserId,
+            UserId = stateBag.AppRequest.UserId,
             CreatorId = requestDto.CreatorId
         };
 

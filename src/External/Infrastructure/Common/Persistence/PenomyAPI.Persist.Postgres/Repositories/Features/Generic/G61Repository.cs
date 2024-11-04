@@ -11,6 +11,7 @@ public class G61Repository : IG61Repository
 {
     private readonly DbContext _dbContext;
     private readonly DbSet<UserFollowedCreator> _userFollowedCreators;
+    private readonly DbSet<UserProfile> _userProfiles;
     private readonly DbSet<CreatorProfile> _creatorProfiles;
 
     public G61Repository(DbContext dbContext)
@@ -18,6 +19,7 @@ public class G61Repository : IG61Repository
         _dbContext = dbContext;
         _userFollowedCreators = dbContext.Set<UserFollowedCreator>();
         _creatorProfiles = dbContext.Set<CreatorProfile>();
+
     }
 
     public async Task<bool> IsFollowedCreator(long userId, long creatorId, CancellationToken ct)
@@ -55,8 +57,7 @@ public class G61Repository : IG61Repository
                 );
 
             // Update meta data
-            await _dbContext
-                .Set<UserProfile>()
+            await _userProfiles
                 .Where(o => o.UserId == userId)
                 .ExecuteUpdateAsync(
                     setters => setters
@@ -67,8 +68,7 @@ public class G61Repository : IG61Repository
                     cancellationToken: ct
                 );
 
-            await _dbContext
-                .Set<CreatorProfile>()
+            await _creatorProfiles
                 .Where(o => o.CreatorId == creatorId)
                 .ExecuteUpdateAsync(
                     setters => setters

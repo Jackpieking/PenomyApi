@@ -1,7 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Cryptography;
 using System.Text;
-using FastEndpoints.Security;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -38,40 +37,59 @@ internal sealed class IdentityServicesRegistration : IServiceRegistration
         IConfiguration configuration
     )
     {
-        var authOption = configuration
+        var appAuthOption = configuration
             .GetRequiredSection("Authentication")
             .GetRequiredSection("Jwt")
             .Get<JwtAuthenticationOptions>();
 
         var tokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = authOption.ValidateIssuer,
-            ValidateAudience = authOption.ValidateAudience,
-            ValidateLifetime = authOption.ValidateLifetime,
-            ValidateIssuerSigningKey = authOption.ValidateIssuerSigningKey,
-            RequireExpirationTime = authOption.RequireExpirationTime,
-            ValidTypes = authOption.ValidTypes,
-            ValidIssuer = authOption.ValidIssuer,
-            ValidAudience = authOption.ValidAudience,
+            ValidateIssuer = appAuthOption.ValidateIssuer,
+            ValidateAudience = appAuthOption.ValidateAudience,
+            ValidateLifetime = appAuthOption.ValidateLifetime,
+            ValidateIssuerSigningKey = appAuthOption.ValidateIssuerSigningKey,
+            RequireExpirationTime = appAuthOption.RequireExpirationTime,
+            ValidTypes = appAuthOption.ValidTypes,
+            ValidIssuer = appAuthOption.ValidIssuer,
+            ValidAudience = appAuthOption.ValidAudience,
             IssuerSigningKey = new SymmetricSecurityKey(
-                key: new HMACSHA256(key: Encoding.UTF8.GetBytes(s: authOption.IssuerSigningKey)).Key
+                new HMACSHA256(Encoding.UTF8.GetBytes(appAuthOption.IssuerSigningKey)).Key
             )
         };
 
+        var googleAuthOption = configuration
+            .GetRequiredSection("Authentication")
+            .GetRequiredSection("Google")
+            .Get<GoogleAuthenticationOption>();
+
+        // Revert back to default authentication, adandon fast endpoints.
         services
             .AddSingleton(tokenValidationParameters)
-            .AddAuthenticationJwtBearer(
-                jwtSigningOption =>
-                {
-                    jwtSigningOption.SigningKey = authOption.IssuerSigningKey;
-                },
-                jwtBearerOption =>
-                {
-                    jwtBearerOption.TokenValidationParameters = tokenValidationParameters;
+            .AddAuthentication()
+            .AddJwtBearer(config => config.TokenValidationParameters = tokenValidationParameters)
+            .AddGoogle(config =>
+            {
+                config.ClientId = googleAuthOption.ClientId;
+                config.ClientSecret = googleAuthOption.ClientSecret;
+                config.CallbackPath = googleAuthOption.CallBackPath;
+            });
 
-                    jwtBearerOption.Validate();
-                }
-            )
-            .AddAuthorization();
+        services.AddAuthorization();
+
+        // services
+        //     .AddSingleton(tokenValidationParameters)
+        //     .AddAuthenticationJwtBearer(
+        //         jwtSigningOption =>
+        //         {
+        //             jwtSigningOption.SigningKey = authOption.IssuerSigningKey;
+        //         },
+        //         jwtBearerOption =>
+        //         {
+        //             jwtBearerOption.TokenValidationParameters = tokenValidationParameters;
+
+        //             jwtBearerOption.Validate();
+        //         }
+        //     )
+        //     .AddAuthorization();
     }
 }

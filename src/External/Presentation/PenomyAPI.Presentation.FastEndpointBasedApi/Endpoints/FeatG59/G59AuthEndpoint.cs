@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG59;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;

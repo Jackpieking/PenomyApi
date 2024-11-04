@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG10;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
@@ -30,7 +29,8 @@ public class G10AuthEndpoint : Endpoint<G10Request, G10HttpResponse>
         Summary(endpointSummary: summary =>
         {
             summary.Summary = "Endpoint for getting artwork comment for authenticated user.";
-            summary.Description = "This endpoint is used for getting artwork comment for authenticated user.";
+            summary.Description =
+                "This endpoint is used for getting artwork comment for authenticated user.";
             summary.Response<G10HttpResponse>(
                 description: "Represent successful operation response.",
                 example: new() { AppCode = G10ResponseStatusCode.SUCCESS.ToString() }
