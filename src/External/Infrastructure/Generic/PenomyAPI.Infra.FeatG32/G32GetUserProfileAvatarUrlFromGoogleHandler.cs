@@ -20,20 +20,20 @@ public sealed class G32GetUserProfileAvatarUrlFromGoogleHandler
         _peopleService = InitPeopleService(_option.ApiKey);
     }
 
-    public string Execute(long userId)
+    public string Execute(string userGoogleId)
     {
-        const string GoogleAuthQueryPeopleRoute = "people";
-        const string GoogleAuthQueryPersonFields = "photos";
+        const string GooglePeopleApiBaseRoute = "people/";
+        const string GooglePeopleApiPersonFields = "photos";
 
         var stringHandler = new DefaultInterpolatedStringHandler();
 
-        stringHandler.AppendLiteral(GoogleAuthQueryPeopleRoute);
-        stringHandler.AppendFormatted(userId);
+        stringHandler.AppendLiteral(GooglePeopleApiBaseRoute);
+        stringHandler.AppendFormatted(userGoogleId);
 
         var userUrlPart = stringHandler.ToStringAndClear();
 
         var peopleRequest = _peopleService.People.Get(userUrlPart);
-        peopleRequest.PersonFields = GoogleAuthQueryPersonFields;
+        peopleRequest.PersonFields = GooglePeopleApiPersonFields;
 
         var profile = peopleRequest.Execute();
 

@@ -9,4 +9,6 @@ public sealed class G32VerifyGoogleSignInRequest : IFeatureRequest<G32VerifyGoog
     public string NickName { get; init; }
 
     public string Email { get; init; }
+
+    public string UserGoogleId { get; init; }
 }

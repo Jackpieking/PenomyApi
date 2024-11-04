@@ -49,7 +49,7 @@ public sealed class G32VerifyGoogleSignInHandler
         if (!isUserFound)
         {
             // Get user avatar url.
-            var userAvatarUrl = _avatarUrlFromGoogleHandler.Value.Execute(request.UserId);
+            var userAvatarUrl = _avatarUrlFromGoogleHandler.Value.Execute(request.UserGoogleId);
 
             // Init new user.
             var (newUser, newUserProfile) = CreateNewUser(

@@ -59,7 +59,9 @@ public class G32VerifyGoogleSignInEndpoint : EndpointWithoutRequest
     public override async Task<object> ExecuteAsync(CancellationToken ct)
     {
         // Find user id from auth state
-        var (userId, email, nickName) = await ValidateAndGetUserIdFromAuthStateAsync(ct);
+        var (userId, email, nickName, userGoogleId) = await ValidateAndGetUserIdFromAuthStateAsync(
+            ct
+        );
 
         // Cannot find user id in the auth state value.
         if (userId == long.MinValue)
@@ -74,7 +76,8 @@ public class G32VerifyGoogleSignInEndpoint : EndpointWithoutRequest
         {
             UserId = userId,
             Email = email,
-            NickName = nickName
+            NickName = nickName,
+            UserGoogleId = userGoogleId
         };
 
         // Execute main logic.
@@ -133,7 +136,7 @@ public class G32VerifyGoogleSignInEndpoint : EndpointWithoutRequest
         return stringHandler.ToStringAndClear();
     }
 
-    private async Task<(long, string, string)> ValidateAndGetUserIdFromAuthStateAsync(
+    private async Task<(long, string, string, string)> ValidateAndGetUserIdFromAuthStateAsync(
         CancellationToken ct
     )
     {
@@ -148,7 +151,7 @@ public class G32VerifyGoogleSignInEndpoint : EndpointWithoutRequest
         // if not found, this request from google is not made by server, so invalid.
         if (!isAuthStateInCookieFound)
         {
-            return (long.MinValue, string.Empty, string.Empty);
+            return (long.MinValue, string.Empty, string.Empty, string.Empty);
         }
 
         // Decrypt the jwt [auth state value] and get user id
@@ -157,7 +160,7 @@ public class G32VerifyGoogleSignInEndpoint : EndpointWithoutRequest
         // Cannot find user id in the auth state value in cookie [maybe fake by hacker?].
         if (string.IsNullOrWhiteSpace(newUserId))
         {
-            return (long.MinValue, string.Empty, string.Empty);
+            return (long.MinValue, string.Empty, string.Empty, string.Empty);
         }
 
         // Try to get the login info from last login with
@@ -167,7 +170,7 @@ public class G32VerifyGoogleSignInEndpoint : EndpointWithoutRequest
         // if not found, this request from google is not made by server, so invalid.
         if (Equals(loginInfo, null))
         {
-            return (long.MinValue, string.Empty, string.Empty);
+            return (long.MinValue, string.Empty, string.Empty, string.Empty);
         }
 
         // Clear all cookie
@@ -175,14 +178,18 @@ public class G32VerifyGoogleSignInEndpoint : EndpointWithoutRequest
         HttpContext.Response.Cookies.Delete(IdentityExternalCookieName);
 
         var userIdAsLong = long.Parse(newUserId);
+
         var userEmail = loginInfo
             .Principal.Claims.First(claim => claim.Type.Equals(ClaimTypes.Email))
             .Value;
+
         var userNickname = loginInfo
             .Principal.Claims.First(claim => claim.Type.Equals(ClaimTypes.Name))
             .Value;
 
-        return (long.Parse(newUserId), userEmail, userNickname);
+        var userGoogleId = loginInfo.ProviderKey;
+
+        return (long.Parse(newUserId), userEmail, userNickname, userGoogleId);
     }
 
     public async Task<string> VerifyJwtFoundInCookieAndGetUserIdAsync(string token)
