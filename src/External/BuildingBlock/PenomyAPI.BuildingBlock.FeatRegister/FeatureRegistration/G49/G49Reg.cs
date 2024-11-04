@@ -15,7 +15,5 @@ internal sealed class G49Reg : FeatureDefinitionRegistration
     public override void AddFeatureDependency(
         IServiceCollection services,
         IConfiguration configuration
-    )
-    {
-    }
+    ) { }
 }
