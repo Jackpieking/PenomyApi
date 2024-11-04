@@ -105,7 +105,7 @@ public class G49Repository : IG49Repository
                 // Return the updated average star rate
                 return updatedAverageStarRate;
             }
-            catch
+            catch (Exception)
             {
                 // Rollback if any error occurs
                 await transaction.RollbackAsync(token);

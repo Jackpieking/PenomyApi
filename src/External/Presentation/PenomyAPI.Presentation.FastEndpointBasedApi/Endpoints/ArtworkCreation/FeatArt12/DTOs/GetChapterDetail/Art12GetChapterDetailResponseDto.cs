@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
-using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt12.DTOs.GetChapterDetail;
 
@@ -50,7 +49,9 @@ public sealed class Art12GetChapterDetailResponseDto
             PublishStatus = chapterDetail.PublishStatus,
             AllowComment = chapterDetail.AllowComment,
             PublishedAt = chapterDetail.PublishedAt,
-            ChapterMedias = chapterDetail.ChapterMedias.Select(Art12ChapterMediaItemResponseDto.MapFrom),
+            ChapterMedias = chapterDetail.ChapterMedias.Select(
+                Art12ChapterMediaItemResponseDto.MapFrom
+            ),
             TotalMediaSize = chapterDetail.ChapterMedias.Sum(media => media.FileSize)
         };
     }

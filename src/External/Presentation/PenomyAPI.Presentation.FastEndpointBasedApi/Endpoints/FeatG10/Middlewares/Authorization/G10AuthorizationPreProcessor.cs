@@ -1,15 +1,10 @@
-using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
-using Microsoft.AspNetCore.Http;
-using Microsoft.IdentityModel.Tokens;
 using PenomyAPI.App.FeatG10;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG10.Common;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G10.DTOs;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G10.HttpResponse;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG10.Middlewares.Authorization;
 

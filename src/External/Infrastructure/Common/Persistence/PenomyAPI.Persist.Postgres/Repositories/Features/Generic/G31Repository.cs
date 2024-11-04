@@ -84,11 +84,13 @@ internal sealed class G31Repository : IG31Repository
     {
         return _dbContext
             .Set<UserProfile>()
+            .AsNoTracking()
             .Where(user => user.UserId == userId)
             .Select(user => new UserProfile
             {
                 NickName = user.NickName,
-                AvatarUrl = user.AvatarUrl
+                AvatarUrl = user.AvatarUrl,
+                RegisterAsCreator = user.RegisterAsCreator
             })
             .FirstOrDefaultAsync(ct);
     }

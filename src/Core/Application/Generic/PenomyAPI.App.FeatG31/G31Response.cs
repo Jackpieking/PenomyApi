@@ -23,6 +23,8 @@ public sealed class G31Response : IFeatureResponse
             public string Nickname { get; init; }
 
             public string AvatarUrl { get; init; }
+
+            public bool RegisterAsCreator { get; init; }
         }
     }
 }
