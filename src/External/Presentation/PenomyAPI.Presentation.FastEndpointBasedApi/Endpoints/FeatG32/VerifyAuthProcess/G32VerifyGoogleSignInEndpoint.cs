@@ -211,6 +211,17 @@ public class G32VerifyGoogleSignInEndpoint : EndpointWithoutRequest
             return string.Empty;
         }
 
+        var isRightPurpose = validationResult.ClaimsIdentity.HasClaim(claim =>
+            claim.Type.Equals(CommonValues.Claims.TokenPurpose.Type)
+            && claim.Value.Equals(CommonValues.Claims.TokenPurpose.Values.GoogleSignin)
+        );
+
+        // Token is not for verify email.
+        if (!isRightPurpose)
+        {
+            return string.Empty;
+        }
+
         // Return user id.
         return validationResult.ClaimsIdentity.FindFirst(CommonValues.Claims.UserIdClaim)?.Value;
     }
