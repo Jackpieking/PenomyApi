@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
+using FastEndpoints.Security;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -58,17 +59,20 @@ public class G32VerifyGoogleSignInEndpoint : EndpointWithoutRequest
 
     public override async Task<object> ExecuteAsync(CancellationToken ct)
     {
-        // Find user id from auth state
+        const string InValidAuthStateMessage =
+            "Cannot process google login. Invalid auth state value.";
+
+        // Validate auth state.
         var (userId, email, nickName, userGoogleId) = await ValidateAndGetUserIdFromAuthStateAsync(
             ct
         );
 
-        // Cannot find user id in the auth state value.
+        // Auth state is invalid.
         if (userId == long.MinValue)
         {
-            await SendAsync(string.Empty, StatusCodes.Status422UnprocessableEntity, ct);
+            await SendAsync(InValidAuthStateMessage, StatusCodes.Status422UnprocessableEntity, ct);
 
-            return string.Empty;
+            return InValidAuthStateMessage;
         }
 
         // Construct internal app request.
@@ -108,6 +112,9 @@ public class G32VerifyGoogleSignInEndpoint : EndpointWithoutRequest
             );
         }
 
+        HttpContext.Response.Cookies.Delete(G32Common.AuthStateCookieName);
+        await _signInManager.Value.SignOutAsync();
+
         await SendRedirectAsync(redirectUrl, true, true);
 
         return string.Empty;
@@ -140,8 +147,6 @@ public class G32VerifyGoogleSignInEndpoint : EndpointWithoutRequest
         CancellationToken ct
     )
     {
-        const string IdentityExternalCookieName = "Identity.External";
-
         // try get auth state value in cookie.
         var isAuthStateInCookieFound = HttpContext.Request.Cookies.TryGetValue(
             G32Common.AuthStateCookieName,
@@ -172,10 +177,6 @@ public class G32VerifyGoogleSignInEndpoint : EndpointWithoutRequest
         {
             return (long.MinValue, string.Empty, string.Empty, string.Empty);
         }
-
-        // Clear all cookie
-        HttpContext.Response.Cookies.Delete(G32Common.AuthStateCookieName);
-        HttpContext.Response.Cookies.Delete(IdentityExternalCookieName);
 
         var userIdAsLong = long.Parse(newUserId);
 
