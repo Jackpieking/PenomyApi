@@ -3,12 +3,14 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Claims;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.IdentityModel.Tokens;
 using PenomyAPI.App.Common.AppConstants;
 using PenomyAPI.App.FeatG32.OtherHandlers.VerifyGoogleSignIn;
@@ -89,7 +91,7 @@ public class G32VerifyGoogleSignInEndpoint : EndpointWithoutRequest
             redirectUrl = ConstructFinalRedirectUrl(
                 _googleSignInOptions.Verify.ResponseRedirectBaseUrl,
                 appResponse.Body.AccessToken,
-                appResponse.Body.RefreshToken,
+                WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(appResponse.Body.RefreshToken)),
                 appResponse.StatusCode.ToString()
             );
         }
