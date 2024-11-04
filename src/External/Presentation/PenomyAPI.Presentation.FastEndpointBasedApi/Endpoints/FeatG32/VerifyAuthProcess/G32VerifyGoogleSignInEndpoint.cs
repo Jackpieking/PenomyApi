@@ -91,7 +91,7 @@ public class G32VerifyGoogleSignInEndpoint : EndpointWithoutRequest
             redirectUrl = ConstructFinalRedirectUrl(
                 _googleSignInOptions.Verify.ResponseRedirectBaseUrl,
                 appResponse.Body.AccessToken,
-                appResponse.Body.RefreshToken,
+                WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(appResponse.Body.RefreshToken)),
                 appResponse.StatusCode.ToString()
             );
         }
@@ -104,9 +104,6 @@ public class G32VerifyGoogleSignInEndpoint : EndpointWithoutRequest
                 appResponse.StatusCode.ToString()
             );
         }
-
-        // Encode redirect url.
-        redirectUrl = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(redirectUrl));
 
         await SendRedirectAsync(redirectUrl, true, true);
 
