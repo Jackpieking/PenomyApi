@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
@@ -50,7 +51,9 @@ public class G49Endpoint : Endpoint<G49RequestDto, G49HttpResponse>
         var httpResponse = G49HttpResponseManager
             .Resolve(featResponse.AppCode)
             .Invoke(g49Req, featResponse);
-
+        if (featResponse.AppCode is G49ResponseStatusCode.SUCCESS)
+            httpResponse.StarRate =
+                Math.Round(featResponse.StarRate, 2);
         await SendAsync(httpResponse, httpResponse.HttpCode, ct);
 
         return httpResponse;

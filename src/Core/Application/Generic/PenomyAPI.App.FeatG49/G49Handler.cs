@@ -18,16 +18,22 @@ public class G49Handler : IFeatureHandler<G49Request, G49Response>
 
     public async Task<G49Response> ExecuteAsync(G49Request request, CancellationToken ct)
     {
+        G49Response response = new();
         try
         {
-            if (!await _g49Repository.IsArtworkExistsAsync(request.ArtworkId, ct)) return G49Response.NOT_FOUND;
-            var isSuccess =
+            if (!await _g49Repository.IsArtworkExistsAsync(request.ArtworkId, ct))
+                response.AppCode
+                    = G49ResponseStatusCode.NOT_FOUND;
+            var starRates =
                 await _g49Repository.RateArtworkAsync(request.UserId, request.ArtworkId, request.StarRate, ct);
-            return isSuccess ? G49Response.SUCCESS : G49Response.FAILED;
+            response.StarRate = starRates;
+            response.AppCode = starRates > 0 ? G49ResponseStatusCode.SUCCESS : G49ResponseStatusCode.FAILED;
         }
         catch
         {
-            return G49Response.FAILED;
+            response.AppCode = G49ResponseStatusCode.FAILED;
         }
+
+        return response;
     }
 }
