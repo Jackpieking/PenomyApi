@@ -108,7 +108,8 @@ public sealed class G31Handler : IFeatureHandler<G31Request, G31Response>
                 {
                     Id = userIdOfUserHasBeenValidated,
                     AvatarUrl = foundUserProfile.AvatarUrl,
-                    Nickname = foundUserProfile.NickName
+                    Nickname = foundUserProfile.NickName,
+                    RegisterAsCreator = foundUserProfile.RegisterAsCreator
                 }
             }
         };

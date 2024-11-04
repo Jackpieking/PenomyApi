@@ -1,6 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG32\PenomyAPI.App.FeatG32.csproj" />
+    <ProjectReference Include="..\..\Common\PenomyAPI.Infra.Configuration\PenomyAPI.Infra.Configuration.csproj" />
+    <ProjectReference Include="..\..\Common\IdentityService\PenomyAPI.Identity.GoogleAuthenticator\PenomyAPI.Identity.GoogleAuthenticator.csproj" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
