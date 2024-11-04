@@ -31,6 +31,8 @@ public static class CommonValues
                 public const string VerifyEmail = "verify-email";
 
                 public const string AppUserAccess = "app-user-access";
+
+                public const string GoogleSignin = "google-signin";
             }
         }
 

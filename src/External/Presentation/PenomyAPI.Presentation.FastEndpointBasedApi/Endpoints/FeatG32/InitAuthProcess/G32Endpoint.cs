@@ -82,7 +82,13 @@ public sealed class G32Endpoint : EndpointWithoutRequest
 
         // Generating state as jwt containing user id.
         var authStateValueAsJwt = _accessTokenHandler.Value.Generate(
-            [new(CommonValues.Claims.UserIdClaim, userId)],
+            [
+                new(CommonValues.Claims.UserIdClaim, userId),
+                new(
+                    CommonValues.Claims.TokenPurpose.Type,
+                    CommonValues.Claims.TokenPurpose.Values.GoogleSignin
+                )
+            ],
             AuthValidDuration
         );
 
