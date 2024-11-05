@@ -29,17 +29,16 @@ public class FeatG3Repository : IFeatG3Repository
                 Id = a.Id,
                 Title = a.Title,
                 ThumbnailUrl = a.ThumbnailUrl,
+                // UpdatedAt = a.Chapters.ToList().OrderByDescending(c => c.CreatedAt).FirstOrDefault().CreatedAt,
                 UpdatedAt = a.UpdatedAt,
                 AuthorName = a.AuthorName,
-                Origin = new ArtworkOrigin
-                {
-                    ImageUrl = a.Origin.ImageUrl
-                },
+                Origin = new ArtworkOrigin { ImageUrl = a.Origin.ImageUrl },
                 ArtworkMetaData = new ArtworkMetaData
                 {
                     TotalFavorites = a.ArtworkMetaData.TotalFavorites,
-                    AverageStarRate = a.ArtworkMetaData.AverageStarRate
-                }
+                    AverageStarRate = a.ArtworkMetaData.AverageStarRate,
+                },
+                Chapters = a.Chapters.OrderByDescending(c => c.CreatedAt).Take(2),
             })
             .OrderByDescending(a => a.UpdatedAt)
             .Take(20)
