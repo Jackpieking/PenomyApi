@@ -71,7 +71,7 @@ public sealed class Art12Handler
         // to prevent the user from changing the chapter that been published into drafted mode.
         var currentUploadOrder = ArtworkChapter.DRAFTED_UPLOAD_ORDER;
 
-        if (request.IsDrafted)
+        if (request.IsDrafted())
         {
             currentUploadOrder = await _art12Repository.GetCurrentUploadOrderByChapterIdAsync(
                 request.ChapterId,
@@ -121,18 +121,18 @@ public sealed class Art12Handler
         };
 
         // If upload in drafted mode then updated related info differently.
-        if (request.IsDrafted)
+        if (request.IsDrafted())
         {
             chapterDetail.PublicLevel = ArtworkPublicLevel.Private;
             chapterDetail.PublishStatus = PublishStatus.Drafted;
         }
-        // If upload in drafted mode then updated related info differently.
-        else if (request.IsScheduled)
+        else if (request.IsScheduled())
         {
-            chapterDetail.PublicLevel = ArtworkPublicLevel.Private;
+            chapterDetail.PublicLevel = request.PublicLevel;
             chapterDetail.PublishStatus = PublishStatus.Scheduled;
+            chapterDetail.PublishedAt = request.ScheduledAt;
         }
-        else
+        else if (request.IsPublished())
         {
             chapterDetail.PublicLevel = request.PublicLevel;
             chapterDetail.PublishStatus = PublishStatus.Published;
@@ -141,7 +141,7 @@ public sealed class Art12Handler
         // If not upload in drafted mode, check if the current upload order
         // is equal ArtworkChapter.DRAFTED_UPLOAD_ORDER or not
         // then update the upload order differently.
-        var isChangedFromDrafted = !request.IsDrafted
+        var isChangedFromDrafted = !request.IsDrafted()
             && currentUploadOrder == ArtworkChapter.DRAFTED_UPLOAD_ORDER;
 
         // If this chapter is changed from drafted mode to other mode then resolve.
@@ -164,6 +164,7 @@ public sealed class Art12Handler
         // Update the related data into database.
         var updateResult = await _art12Repository.UpdateComicChapterAsync(
             changeFromDrafted: isChangedFromDrafted,
+            updateContentOnly: request.IsUpdateContentOnly(),
             chapterDetail: chapterDetail,
             updatedChapterMediaItems: request.UpdatedChapterMedias,
             deletedChapterMediaIds: request.DeletedChapterMediaIds,

@@ -105,6 +105,7 @@ internal sealed class Art12Repository : IArt12Repository
 
     public async Task<bool> UpdateComicChapterAsync(
         bool changeFromDrafted,
+        bool updateContentOnly,
         ArtworkChapter chapterDetail,
         IEnumerable<ArtworkChapterMedia> updatedChapterMediaItems,
         IEnumerable<long> deletedChapterMediaIds,
@@ -119,6 +120,7 @@ internal sealed class Art12Repository : IArt12Repository
             operation: async () =>
                 await InternalUpdateComicChapterAsync(
                     changeFromDrafted: changeFromDrafted,
+                    updateContentOnly: updateContentOnly,
                     updatedDetail: chapterDetail,
                     updatedChapterMediaItems: updatedChapterMediaItems,
                     deletedChapterMediaIds: deletedChapterMediaIds,
@@ -133,6 +135,7 @@ internal sealed class Art12Repository : IArt12Repository
 
     private async Task InternalUpdateComicChapterAsync(
         bool changeFromDrafted,
+        bool updateContentOnly,
         ArtworkChapter updatedDetail,
         IEnumerable<ArtworkChapterMedia> updatedChapterMediaItems,
         IEnumerable<long> deletedChapterMediaIds,
@@ -147,7 +150,9 @@ internal sealed class Art12Repository : IArt12Repository
             transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
 
             // Update the chapter detail information.
-            await _chapterDbSet
+            if (updateContentOnly)
+            {
+                await _chapterDbSet
                 .Where(chapter => chapter.Id == updatedDetail.Id)
                 .ExecuteUpdateAsync(
                     chapter => chapter
@@ -157,9 +162,6 @@ internal sealed class Art12Repository : IArt12Repository
                         .SetProperty(
                             chapter => chapter.Description,
                             chapter => updatedDetail.Description)
-                        .SetProperty(
-                            chapter => chapter.UploadOrder,
-                            chapter => updatedDetail.UploadOrder)
                         .SetProperty(
                             chapter => chapter.PublicLevel,
                             chapter => updatedDetail.PublicLevel)
@@ -171,11 +173,44 @@ internal sealed class Art12Repository : IArt12Repository
                             chapter => updatedDetail.UpdatedAt)
                         .SetProperty(
                             chapter => chapter.UpdatedBy,
-                            chapter => updatedDetail.UpdatedBy)
-                        .SetProperty(
-                            chapter => chapter.PublishedAt,
-                            chapter => updatedDetail.PublishedAt),
+                            chapter => updatedDetail.UpdatedBy),
                     cancellationToken);
+            }
+            else
+            {
+                await _chapterDbSet
+                    .Where(chapter => chapter.Id == updatedDetail.Id)
+                    .ExecuteUpdateAsync(
+                        chapter => chapter
+                            .SetProperty(
+                                chapter => chapter.Title,
+                                chapter => updatedDetail.Title)
+                            .SetProperty(
+                                chapter => chapter.Description,
+                                chapter => updatedDetail.Description)
+                            .SetProperty(
+                                chapter => chapter.UploadOrder,
+                                chapter => updatedDetail.UploadOrder)
+                            .SetProperty(
+                                chapter => chapter.PublicLevel,
+                                chapter => updatedDetail.PublicLevel)
+                            .SetProperty(
+                                chapter => chapter.AllowComment,
+                                chapter => updatedDetail.AllowComment)
+                            .SetProperty(
+                                chapter => chapter.UpdatedAt,
+                                chapter => updatedDetail.UpdatedAt)
+                            .SetProperty(
+                                chapter => chapter.UpdatedBy,
+                                chapter => updatedDetail.UpdatedBy)
+                            .SetProperty(
+                                chapter => chapter.PublishedAt,
+                                chapter => updatedDetail.PublishedAt)
+                            .SetProperty(
+                                chapter => chapter.PublishStatus,
+                                chapter => updatedDetail.PublishStatus),
+                        cancellationToken);
+            }
 
             // If changed from drafted mode to other mode,
             // then update the last chapter upload order
