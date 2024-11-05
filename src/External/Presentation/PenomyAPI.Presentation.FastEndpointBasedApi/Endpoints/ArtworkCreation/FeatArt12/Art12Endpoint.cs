@@ -1,4 +1,6 @@
-﻿using FastEndpoints;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using FastEndpoints;
 using PenomyAPI.App.Common.Models.Common;
 using PenomyAPI.App.FeatArt12;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
@@ -6,8 +8,6 @@ using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.Feat
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt12.HttpResponseMappers;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt12.HttpResponses;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Helpers.IFormFiles;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt12;
 
@@ -25,7 +25,8 @@ public class Art12Endpoint : Endpoint<Art12RequestDto, Art12HttpResponse>
         AllowFileUploads();
     }
 
-    public override async Task<Art12HttpResponse> ExecuteAsync(Art12RequestDto requestDto, CancellationToken cancellationToken)
+    public override async Task<Art12HttpResponse> ExecuteAsync(Art12RequestDto requestDto,
+        CancellationToken cancellationToken)
     {
         var validationResult = ValidateRequestDto(requestDto);
         var httpResponse = validationResult.Value;
@@ -38,10 +39,7 @@ public class Art12Endpoint : Endpoint<Art12RequestDto, Art12HttpResponse>
         }
 
         // Check if any image files are uploaded new, then map them to the MediaUpdatedInfoItems
-        if (requestDto.HasNewUploadImageFiles())
-        {
-            requestDto.MapRelatedFormFilesIntoMediaUpdatedInfoItems();
-        }
+        if (requestDto.HasNewUploadImageFiles()) requestDto.MapRelatedFormFilesIntoMediaUpdatedInfoItems();
 
         // Map the request from the DTO and execute.
         var creatorId = 123456789012345678;
