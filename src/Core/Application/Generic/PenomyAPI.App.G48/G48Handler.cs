@@ -19,12 +19,12 @@ public class G48Handler : IFeatureHandler<G48Request, G48Response>
         try
         {
             ICollection<Artwork> artworks = await _g48Repository
-                .GetAllFavoriteArtworks(
+                .GetFavoriteArtworksByTypeAndUserIdWithPaginationAsync(
                     request.UserId,
                     request.ArtworkType,
-                    ct,
                     request.PageNum,
-                    request.ArtNum
+                    request.ArtNum,
+                    ct
                     );
 
             return new G48Response
@@ -34,7 +34,7 @@ public class G48Handler : IFeatureHandler<G48Request, G48Response>
                 StatusCode = G48ResponseStatusCode.SUCCESS
             };
         }
-        catch (Exception ex)
+        catch
         {
             return new G48Response
             {
