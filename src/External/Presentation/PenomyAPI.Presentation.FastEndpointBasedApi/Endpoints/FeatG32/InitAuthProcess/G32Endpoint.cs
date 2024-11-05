@@ -79,6 +79,7 @@ public sealed class G32Endpoint : EndpointWithoutRequest
         authPropperties.ExpiresUtc = DateTime.UtcNow.AddSeconds(AuthValidDuration);
         authPropperties.AllowRefresh = false;
         authPropperties.IsPersistent = false;
+        authPropperties.Items["prompt"] = "consent";
 
         // Generating state as jwt containing user id.
         var authStateValueAsJwt = _accessTokenHandler.Value.Generate(
