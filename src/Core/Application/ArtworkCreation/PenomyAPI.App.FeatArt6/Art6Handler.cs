@@ -1,10 +1,9 @@
-﻿using PenomyAPI.App.Common;
-using PenomyAPI.Domain.RelationalDb.Repositories.Common;
-using PenomyAPI.Domain.RelationalDb.Repositories.Features.ArtworkCreation;
-using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using PenomyAPI.App.Common;
+using PenomyAPI.Domain.RelationalDb.Repositories.Features.ArtworkCreation;
+using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 
 namespace PenomyAPI.App.FeatArt6;
 
@@ -22,11 +21,9 @@ public sealed class Art6Handler : IFeatureHandler<Art6Request, Art6Response>
         var chapters = await _repository.GetChaptersByPublishStatusAsync(
             request.ComicId,
             request.PublishStatus,
-            ct);
+            ct
+        );
 
-        return new()
-        {
-            Chapters = chapters,
-        };
+        return new() { Chapters = chapters, };
     }
 }

@@ -1,11 +1,8 @@
-using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
-using Microsoft.AspNetCore.Http;
-using Microsoft.IdentityModel.Tokens;
 using PenomyAPI.App.FeatG57;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG57.Common;
 

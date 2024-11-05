@@ -203,6 +203,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.Infra.FeatArt12",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.FeatArt6", "src\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt6\PenomyAPI.App.FeatArt6.csproj", "{4BAAFF17-D13E-4334-917C-C77DACA20334}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.G62", "src\Core\Application\Generic\PenomyAPI.App.G62\PenomyAPI.App.G62.csproj", "{6B6CF8C6-F2EA-4B83-B864-3AF959E8E6C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.Identity.GoogleAuthenticator", "src\External\Infrastructure\Common\IdentityService\PenomyAPI.Identity.GoogleAuthenticator\PenomyAPI.Identity.GoogleAuthenticator.csproj", "{52C939EA-3740-4B17-8ABF-17F5004E3103}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -509,6 +513,14 @@ Global
 		{4BAAFF17-D13E-4334-917C-C77DACA20334}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4BAAFF17-D13E-4334-917C-C77DACA20334}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4BAAFF17-D13E-4334-917C-C77DACA20334}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B6CF8C6-F2EA-4B83-B864-3AF959E8E6C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B6CF8C6-F2EA-4B83-B864-3AF959E8E6C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B6CF8C6-F2EA-4B83-B864-3AF959E8E6C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B6CF8C6-F2EA-4B83-B864-3AF959E8E6C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52C939EA-3740-4B17-8ABF-17F5004E3103}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52C939EA-3740-4B17-8ABF-17F5004E3103}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52C939EA-3740-4B17-8ABF-17F5004E3103}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52C939EA-3740-4B17-8ABF-17F5004E3103}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -613,6 +625,8 @@ Global
 		{AA931A50-73F5-46C3-89DA-BFC129D0CFB5} = {315DDDD8-6E85-4C09-9F74-B81ECD9CD65A}
 		{059DDC25-C16C-4484-A06B-091A5D6DC30A} = {7FE9F6F6-8D8B-489A-8C9A-B9174D77C050}
 		{4BAAFF17-D13E-4334-917C-C77DACA20334} = {315DDDD8-6E85-4C09-9F74-B81ECD9CD65A}
+		{6B6CF8C6-F2EA-4B83-B864-3AF959E8E6C5} = {93238DD1-0977-422A-A564-56BD09E1EC18}
+		{52C939EA-3740-4B17-8ABF-17F5004E3103} = {6C791628-E81A-478B-8BAC-A653B0C30B24}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D57C122E-3458-4428-82FB-FF6E7A97A032}

@@ -1,8 +1,7 @@
-﻿using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 
 namespace PenomyAPI.Domain.RelationalDb.Repositories.Features.ArtworkCreation;
 
@@ -21,7 +20,8 @@ public interface IArt12Repository
     /// </returns>
     Task<bool> IsChapterTemporarilyRemovedByIdAsync(
         long chapterId,
-        CancellationToken cancellationToken);
+        CancellationToken cancellationToken
+    );
 
     /// <summary>
     ///     Check if the chapter with input id and comicId is existed or not.
@@ -37,7 +37,8 @@ public interface IArt12Repository
     Task<bool> IsComicChapterExistedAsync(
         long comicId,
         long chapterId,
-        CancellationToken cancellationToken);
+        CancellationToken cancellationToken
+    );
 
     /// <summary>
     ///     Check if the input the creator with specified input id has permission
@@ -57,7 +58,8 @@ public interface IArt12Repository
     Task<bool> HasPermissionToUpdateChapterDetailAsync(
         long creatorId,
         long chapterId,
-        CancellationToken cancellationToken);
+        CancellationToken cancellationToken
+    );
 
     /// <summary>
     ///     Get the detail of the chapter by the specified input id.
@@ -71,7 +73,8 @@ public interface IArt12Repository
     /// </returns>
     Task<ArtworkChapter> GetChapterDetailByIdAsync(
         long chapterId,
-        CancellationToken cancellationToken);
+        CancellationToken cancellationToken
+    );
 
     /// <summary>
     ///     Get the current upload order of the specified chapter.
@@ -83,7 +86,8 @@ public interface IArt12Repository
     /// <returns></returns>
     Task<int> GetCurrentUploadOrderByChapterIdAsync(
         long chapterId,
-        CancellationToken cancellationToken);
+        CancellationToken cancellationToken
+    );
 
     /// <summary>
     ///     Update the comic chapter detail by the provided information.
@@ -114,9 +118,11 @@ public interface IArt12Repository
         IEnumerable<ArtworkChapterMedia> updatedChapterMediaItems,
         IEnumerable<long> deletedChapterMediaIds,
         IEnumerable<ArtworkChapterMedia> createdNewChapterMediaItems,
-        CancellationToken cancellationToken);
+        CancellationToken cancellationToken
+    );
 
     Task<List<ArtworkChapterMedia>> GetChapterMediasByChapterIdAsync(
         long chapterId,
-        CancellationToken cancellationToken);
+        CancellationToken cancellationToken
+    );
 }

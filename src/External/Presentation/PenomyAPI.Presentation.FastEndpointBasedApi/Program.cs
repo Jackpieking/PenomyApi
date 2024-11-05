@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.JsonWebTokens;
 using PenomyAPI.BuildingBlock.FeatRegister;
 using PenomyAPI.BuildingBlock.FeatRegister.Common;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.ServiceConfigurations;
 
 // Global Configuration.
@@ -34,7 +35,8 @@ FeatureHandlerResolver.SetProvider(app.Services);
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseCors()
+    app.UseMiddleware<AppGlobalExceptionHandler>()
+        .UseCors()
         .UseFastEndpoints()
         .UseSwaggerGen()
         .UseSwaggerUi(options =>
