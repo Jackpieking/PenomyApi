@@ -1,5 +1,6 @@
 ﻿using PenomyAPI.App.Common;
 using PenomyAPI.App.Common.FileServices.Models;
+using PenomyAPI.App.FeatArt12.Enums;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
 using System;
@@ -24,15 +25,40 @@ public sealed class Art12Request : IFeatureRequest<Art12Response>
 
     public bool AllowComment { get; set; }
 
-    /// <summary>
-    ///     Indicate to keep updating the chapter as drafted mode or not.
-    /// </summary>
-    public bool IsDrafted { get; set; }
+    public ChapterUpdateMode UpdateMode { get; set; }
 
     /// <summary>
-    ///     Indicate updating the chapter as scheduled mode.
+    ///     Check if current chapter keep updating as drafted mode or not.
     /// </summary>
-    public bool IsScheduled { get; set; }
+    public bool IsDrafted()
+    {
+        return UpdateMode == ChapterUpdateMode.Drafted;
+    }
+
+    /// <summary>
+    ///     Check if current chapter want to update as scheduled mode or not.
+    /// </summary>
+    public bool IsScheduled()
+    {
+        return UpdateMode == ChapterUpdateMode.Scheduled;
+    }
+
+    /// <summary>
+    ///     Check if current chapter want to update as published mode or not.
+    /// </summary>
+    public bool IsPublished()
+    {
+        return UpdateMode == ChapterUpdateMode.Published;
+    }
+
+    /// <summary>
+    ///     Check if current chapter just want to update its content only.
+    /// </summary>
+    /// <returns></returns>
+    public bool IsUpdateContentOnly()
+    {
+        return UpdateMode == ChapterUpdateMode.UpdateContentOnly;
+    }
 
     public DateTime ScheduledAt { get; set; }
 

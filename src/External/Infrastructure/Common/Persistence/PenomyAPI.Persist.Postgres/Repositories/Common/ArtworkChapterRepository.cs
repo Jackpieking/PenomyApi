@@ -59,4 +59,16 @@ internal sealed class ArtworkChapterRepository
                 chapter => chapter.Id == chapterId,
                 cancellationToken);
     }
+
+    public Task<bool> IsChapterBelongedToArtworkByIdAsync(
+        long artworkId,
+        long chapterId,
+        CancellationToken cancellationToken)
+    {
+        return _dbContext.Set<ArtworkChapter>()
+            .AnyAsync(
+                predicate: chapter => chapter.Id == chapterId
+                    && chapter.ArtworkId == artworkId,
+                cancellationToken: cancellationToken);
+    }
 }

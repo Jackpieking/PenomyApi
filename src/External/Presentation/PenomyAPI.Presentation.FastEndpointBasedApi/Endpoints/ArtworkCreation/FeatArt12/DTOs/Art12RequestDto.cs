@@ -2,6 +2,7 @@
 using PenomyAPI.App.Common.FileServices.Models;
 using PenomyAPI.App.Common.Models.Common;
 using PenomyAPI.App.FeatArt12;
+using PenomyAPI.App.FeatArt12.Enums;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
 using PenomyAPI.Domain.RelationalDb.Entities.Contraints.ArtworkCreation;
@@ -33,10 +34,7 @@ public sealed class Art12RequestDto
 
     public bool AllowComment { get; set; }
 
-    /// <summary>
-    ///     Indicate to keep updating the chapter as drafted mode or not.
-    /// </summary>
-    public bool IsDrafted { get; set; }
+    public ChapterUpdateMode UpdateMode { get; set; }
 
     public DateTime ScheduledAt { get; set; }
 
@@ -71,6 +69,17 @@ public sealed class Art12RequestDto
     /// </returns>
     public Result<IDictionary<string, ChapterMediaUpdatedInfoItem>> DeserializeChapterMediaUpdatedInfoItems()
     {
+        // Check if the input chapter medias in json after trim.
+        // IsNullOrEmpty or equal empty_array_in_json before go to deserialize process.
+        ChapterMediaItemsInJson = $"{ChapterMediaItemsInJson}".Trim();
+        const string EMPTY_ARRAY_IN_JSON = "[]";
+
+        if (String.IsNullOrEmpty(ChapterMediaItemsInJson)
+            || EMPTY_ARRAY_IN_JSON.Equals(ChapterMediaItemsInJson))
+        {
+            return Result<IDictionary<string, ChapterMediaUpdatedInfoItem>>.Failed();
+        }
+
         try
         {
             var chapterMediaUpdatedInfoItems = JsonSerializer.Deserialize<IEnumerable<ChapterMediaUpdatedInfoItem>>(
@@ -172,7 +181,7 @@ public sealed class Art12RequestDto
             Title = Title,
             Description = Description,
             AllowComment = AllowComment,
-            IsDrafted = IsDrafted,
+            UpdateMode = UpdateMode,
             PublicLevel = PublicLevel,
             ScheduledAt = ScheduledAt.ToUniversalTime(),
         };
@@ -190,12 +199,15 @@ public sealed class Art12RequestDto
 
         // Traverse through the updateInfoItems and add the items to their correct list to process. 
         var chapterMediaUpdatedInfoItems = _chapterMediaUpdatedInfoItems.Values;
-        bool canParse = true;
-        long chapterMediaId = default;
+
         // This dictionary will be used to check if any upload order is duplicated
         // or not to prevent user input invalid chapter media item.
         var uploadOrderDictionary = new Dictionary<int, int>();
 
+        // Variables to verify if the input chapter media id is valid to parse as long or not.
+        bool canParse = true;
+        long chapterMediaId = default;
+        
         foreach (var infoItem in chapterMediaUpdatedInfoItems)
         {
             // Resolve the item that has change in upload order and 

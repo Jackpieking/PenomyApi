@@ -73,7 +73,7 @@ public sealed class Art12GetChapterDetailHandler
                     chapterDetail.ArtworkId,
                     cancellationToken);
 
-                chapterDetail.UploadOrder = lastChapterUploadOrder;
+                chapterDetail.UploadOrder = lastChapterUploadOrder + 1;
             }
 
             return Art12GetChapterDetailResponse.SUCCESS(chapterDetail);

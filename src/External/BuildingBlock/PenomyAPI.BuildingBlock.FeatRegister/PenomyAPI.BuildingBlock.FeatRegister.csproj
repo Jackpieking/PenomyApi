@@ -1,17 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG35\PenomyAPI.App.FeatG35.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\PenomyAPI.App.Common\PenomyAPI.App.Common.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt1\PenomyAPI.App.FeatArt1.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt5\PenomyAPI.App.FeatArt5.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt6\PenomyAPI.App.FeatArt6.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt7\PenomyAPI.App.FeatArt7.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt8\PenomyAPI.App.FeatArt8.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG9\PenomyAPI.App.FeatG9.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG10\PenomyAPI.App.FeatG10.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG12\PenomyAPI.App.FeatG12.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG15\PenomyAPI.App.FeatG15.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG19\PenomyAPI.App.FeatG19.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG46\PenomyAPI.App.FeatG46.csproj" />
-    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG49\PenomyAPI.App.FeatG49.csproj"/>
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG49\PenomyAPI.App.FeatG49.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG4\PenomyAPI.App.FeatG4.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG5\PenomyAPI.App.FeatG5.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.APP.FeatG6\PenomyAPI.APP.FeatG6.csproj" />
