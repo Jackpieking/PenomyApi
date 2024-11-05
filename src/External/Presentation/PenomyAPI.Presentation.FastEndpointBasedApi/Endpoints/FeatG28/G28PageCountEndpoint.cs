@@ -3,13 +3,10 @@ using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
-using PenomyAPI.App.FeatG28;
 using PenomyAPI.App.FeatG28.PageCount;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG28.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG28.PageCount.Middlewares;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G28.DTOs;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G28.HttpResponse;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G28.PageCount.HttpResponse;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG28.PageCount;
@@ -58,7 +55,11 @@ public class G28PageCountEndpoint : Endpoint<G28PageCountRequest, G28PageCountHt
             .Resolve(featResponse.StatusCode)
             .Invoke(req, featResponse);
 
-        httpResponse.Body = new G28PageCountResponse { };
+        httpResponse.Body = new G28PageCountResponse
+        {
+            result = featResponse.result,
+            StatusCode = featResponse.StatusCode,
+        };
 
         return httpResponse;
     }
