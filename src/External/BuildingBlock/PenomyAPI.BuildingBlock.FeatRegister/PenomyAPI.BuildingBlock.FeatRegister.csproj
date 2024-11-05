@@ -41,6 +41,7 @@
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG20\PenomyAPI.App.FeatG20.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG14\PenomyAPI.App.FeatG14.csproj" />
 	<ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.G62\PenomyAPI.App.G62.csproj" />
+	<ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG50\PenomyAPI.App.FeatG50.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
