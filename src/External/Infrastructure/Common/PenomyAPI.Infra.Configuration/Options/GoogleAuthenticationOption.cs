@@ -13,6 +13,8 @@ public sealed class GoogleAuthenticationOption : AppOptions
 
     public string ApiKey { get; init; }
 
+    public string InitLoginPath { get; init; }
+
     public override void Bind(IConfiguration configuration)
     {
         configuration.GetRequiredSection("Authentication").GetRequiredSection("Google").Bind(this);

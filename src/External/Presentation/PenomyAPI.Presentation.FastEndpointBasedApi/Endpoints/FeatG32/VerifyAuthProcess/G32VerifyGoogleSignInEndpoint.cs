@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
 using FastEndpoints.Security;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -113,7 +114,7 @@ public class G32VerifyGoogleSignInEndpoint : EndpointWithoutRequest
         }
 
         HttpContext.Response.Cookies.Delete(G32Common.AuthStateCookieName);
-        await _signInManager.Value.SignOutAsync();
+        await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
         await SendRedirectAsync(redirectUrl, true, true);
 
