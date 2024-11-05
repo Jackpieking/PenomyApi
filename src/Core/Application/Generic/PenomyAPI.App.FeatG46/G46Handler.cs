@@ -1,9 +1,9 @@
-using PenomyAPI.App.Common;
-using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
-using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using PenomyAPI.App.Common;
+using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
+using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 
 namespace PenomyAPI.App.FeatG46;
 
@@ -18,29 +18,28 @@ public class G46Handler : IFeatureHandler<G46Request, G46Response>
 
     public async Task<G46Response> ExecuteAsync(G46Request request, CancellationToken ct)
     {
+        G46Response response = new();
         try
         {
             if (!IsValidRequest(request) || !await _g46Repository.IsUserActiveAsync(request.UserId, ct))
-            {
-                return G46Response.INVALID_REQUEST;
-            }
+                response.AppCode = G46ResponseStatusCode.INVALID_REQUEST;
             if (!await _g46Repository.IsArtworkExistAsync(request.ArtworkId, ct))
-            {
-                return G46Response.NOT_FOUND;
-            }
+                response.AppCode = G46ResponseStatusCode.NOT_FOUND;
             if (await _g46Repository.IsAlreadyFavoriteAsync(request.UserId, request.ArtworkId, ct))
-            {
-                return G46Response.EXISTED;
-            }
-            bool isSuccess = await _g46Repository.AddArtworkFavoriteAsync(request.UserId, request.ArtworkId, ct);
-            return isSuccess ? G46Response.SUCCESS : G46Response.FAILED;
+                response.AppCode = G46ResponseStatusCode.EXISTED;
+            response.FavoriteCount =
+                await _g46Repository.AddArtworkFavoriteAsync(request.UserId, request.ArtworkId, ct);
         }
         catch
         {
-            return G46Response.FAILED;
+            response.AppCode = G46ResponseStatusCode.FAILED;
         }
+
+        return response;
     }
 
-    private static bool IsValidRequest(G46Request request) =>
-        request.UserId > 0 && request.ArtworkId > 0;
+    private static bool IsValidRequest(G46Request request)
+    {
+        return request.UserId > 0 && request.ArtworkId > 0;
+    }
 }

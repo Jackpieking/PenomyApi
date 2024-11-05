@@ -13,4 +13,6 @@ public class G47HttpResponse : AppHttpResponse<G47ResponseDto>
     {
         AppCode = appCode;
     }
+
+    public long FavoriteCount { get; set; }
 }
