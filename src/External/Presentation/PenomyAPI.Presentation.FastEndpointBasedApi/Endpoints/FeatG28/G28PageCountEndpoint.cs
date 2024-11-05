@@ -55,7 +55,11 @@ public class G28PageCountEndpoint : Endpoint<G28PageCountRequest, G28PageCountHt
             .Resolve(featResponse.StatusCode)
             .Invoke(req, featResponse);
 
-        httpResponse.Body = new G28PageCountResponse { };
+        httpResponse.Body = new G28PageCountResponse
+        {
+            result = featResponse.result,
+            StatusCode = featResponse.StatusCode,
+        };
 
         return httpResponse;
     }

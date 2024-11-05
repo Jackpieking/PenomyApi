@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using NSwag;
 using PenomyAPI.BuildingBlock.FeatRegister.ServiceExtensions;
 using PenomyAPI.Infra.Configuration.Options;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Common;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.ServiceConfigurations;
 
@@ -20,6 +21,8 @@ public static class WebApiServiceConfig
 
         services.ConfigureLogging(configuration);
 
+        services.AddGlobalExceptionHandler();
+
         services.AddAppDefinedServices(configuration);
     }
 
@@ -29,6 +32,11 @@ public static class WebApiServiceConfig
     )
     {
         services.MakeSingletonLazy<IServiceScopeFactory>();
+    }
+
+    private static void AddGlobalExceptionHandler(this IServiceCollection services)
+    {
+        services.AddScoped<AppGlobalExceptionHandler>();
     }
 
     private static void ConfigureNSwag(

@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -66,7 +67,7 @@ public class G5Endpoint : Endpoint<G5Request, G5HttpResponse>
                     .FirstOrDefault(),
                 HasSeries = featResponse.Result.HasSeries,
                 ArtworkStatus = featResponse.Result.ArtworkStatus.ToString(),
-                StarRates = featResponse.Result.ArtworkMetaData.AverageStarRate,
+                StarRates = Math.Round(featResponse.Result.ArtworkMetaData.AverageStarRate, 2),
                 ViewCount = featResponse.Result.ArtworkMetaData.TotalViews,
                 FavoriteCount = featResponse.Result.ArtworkMetaData.TotalFavorites,
                 ThumbnailUrl = featResponse.Result.ThumbnailUrl,

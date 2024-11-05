@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
+using PenomyAPI.Domain.RelationalDb.Entities.Generic;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
@@ -11,11 +12,13 @@ public class G28Repository : IG28Repository
 {
     private readonly DbContext _dbContext;
     private readonly DbSet<Artwork> _artworkDbSet;
+    private readonly DbSet<Series> _seriesDbSet;
 
     public G28Repository(DbContext dbContext)
     {
         _dbContext = dbContext;
         _artworkDbSet = dbContext.Set<Artwork>();
+        _seriesDbSet = dbContext.Set<Series>();
     }
 
     public async Task<long> GetPaginationOptionsByArtworkTypeAsync(long artworkType, long UserId)
@@ -25,14 +28,19 @@ public class G28Repository : IG28Repository
             var count = await _artworkDbSet
                 .Where(a => a.ArtworkType == ArtworkType.Comic && a.CreatedBy == UserId)
                 .CountAsync();
-            return count / 8;
+            return count;
         }
         else if (artworkType == 2)
         {
             var count = await _artworkDbSet
                 .Where(a => a.ArtworkType == ArtworkType.Animation && a.CreatedBy == UserId)
                 .CountAsync();
-            return count / 8;
+            return count;
+        }
+        else if (artworkType == 3)
+        {
+            var count = await _seriesDbSet.Where(a => a.CreatedBy == UserId).CountAsync();
+            return count;
         }
         else
             return 0;
@@ -46,10 +54,13 @@ public class G28Repository : IG28Repository
     )
     {
         List<Artwork> artworks = new List<Artwork>();
+        List<Series> series = new List<Series>();
         if (ArtworkType == 1)
             await GetComicPaginationDetailAsync(UserId, PageNumber, PageSize, artworks);
         else if (ArtworkType == 2)
             await GetAnimePaginationDetailAsync(UserId, PageNumber, PageSize, artworks);
+        else if (ArtworkType == 3)
+            await GetSeriesPaginationDetailAsync(UserId, PageNumber, PageSize, series);
         return artworks;
     }
 
@@ -123,5 +134,31 @@ public class G28Repository : IG28Repository
             .ToListAsync();
 
         artworks.AddRange(result);
+    }
+
+    public async Task GetSeriesPaginationDetailAsync(
+        long UserId,
+        int PageNumber,
+        int PageSize,
+        List<Series> series
+    )
+    {
+        var result = await _seriesDbSet
+            .Where(a => a.CreatedBy == UserId && a.IsTemporarilyRemoved == false)
+            .Select(a => new Series()
+            {
+                Id = a.Id,
+                Title = a.Title,
+                ThumbnailUrl = a.ThumbnailUrl,
+                UpdatedAt = a.UpdatedAt,
+                Creator = new UserProfile { NickName = a.Creator.NickName },
+            })
+            .OrderByDescending(a => a.UpdatedAt)
+            .Skip((PageNumber - 1) * PageSize)
+            .Take(PageSize)
+            .AsNoTracking()
+            .ToListAsync();
+
+        series.AddRange(result);
     }
 }

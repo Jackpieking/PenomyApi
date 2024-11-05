@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3.DTOs
 {
@@ -7,6 +8,7 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3.DTOs
     {
         public IEnumerable<FeatG3ResponseDtoObject> ArtworkList { get; set; }
     }
+
     public class FeatG3ResponseDtoObject
     {
         public long ArtworkId { get; set; }
@@ -17,5 +19,7 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3.DTOs
         public string FlagUrl { get; set; }
         public string Thumbnail { get; set; }
         public DateTime LastUpdateAt { get; set; }
+
+        public IEnumerable<ArtworkChapter> Chapters { get; set; }
     }
 }
