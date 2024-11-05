@@ -18,10 +18,32 @@ public class G48Repository : IG48Repository
         _userFavoriteArtworks = dbContext.Set<UserFavoriteArtwork>();
     }
 
-    public async Task<ICollection<Artwork>> GetAllFavoriteArtworks(long userId, ArtworkType artworkType, CancellationToken ct, int pageNum = 1, int artNum = 20)
+    public Task<int> GetTotalOfArtworksByTypeAndUserIdAsync(
+        long userId,
+        ArtworkType artworkType,
+        CancellationToken cancellationToken)
+    {
+        return _userFavoriteArtworks.CountAsync(
+            predicate: o =>
+                o.UserId == userId
+                && o.FavoriteArtwork.ArtworkType == artworkType
+                && !o.FavoriteArtwork.IsTemporarilyRemoved,
+            cancellationToken: cancellationToken);
+    }
+
+    public async Task<ICollection<Artwork>> GetFavoriteArtworksByTypeAndUserIdWithPaginationAsync(
+        long userId,
+        ArtworkType artworkType,
+        int pageNum,
+        int artNum,
+        CancellationToken ct)
     {
         return await _userFavoriteArtworks.AsNoTracking()
-            .Where(o => o.UserId == userId && o.ArtworkType == artworkType && !o.FavoriteArtwork.IsTakenDown && !o.FavoriteArtwork.IsTemporarilyRemoved)
+            .Where(o =>
+                o.UserId == userId &&
+                o.ArtworkType == artworkType &&
+                !o.FavoriteArtwork.IsTakenDown &&
+                !o.FavoriteArtwork.IsTemporarilyRemoved)
             .OrderByDescending(o => o.StartedAt)
             .Skip((pageNum - 1) * artNum)
             .Take(artNum)

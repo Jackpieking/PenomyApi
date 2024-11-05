@@ -8,8 +8,31 @@ namespace PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 public interface IG48Repository
 {
     /// <summary>
-    ///     Get the user's favourited artworks.
+    ///     Get the total numbers of artwork by the specified
+    ///     <paramref name="artworkType"/> and <paramref name="userId"/>.
     /// </summary>
+    /// <param name="artworkType">
+    ///     The type of artwork to take.
+    /// </param>
+    /// <param name="userId">
+    ///     The id of the user who favorite these artworks.
+    /// </param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>
+    ///     The total numbers of artwork.
+    /// </returns>
+    Task<int> GetTotalOfArtworksByTypeAndUserIdAsync(
+        long userId,
+        ArtworkType artworkType,
+        CancellationToken cancellationToken);
+
+    /// <summary>
+    ///     Get all the artworks by the specified <paramref name="userId"/>
+    ///     and <paramref name="artworkType"/> using pagination.
+    /// </summary>
+    /// <remarks>
+    ///     This method uses offset-based pagination to retrieve data.
+    /// </remarks>
     /// <param name="userId">
     ///     The user's ID.
     /// </param>
@@ -29,10 +52,10 @@ public interface IG48Repository
     ///     The user's favourited artworks.
     ///     Otherwise, empty.
     /// </returns>
-    Task<ICollection<Artwork>> GetAllFavoriteArtworks(
+    Task<ICollection<Artwork>> GetFavoriteArtworksByTypeAndUserIdWithPaginationAsync(
         long userId,
         ArtworkType artworkType,
-        CancellationToken ct,
-        int pageNum = 1,
-        int artNum = 20);
+        int pageNum,
+        int artNum,
+        CancellationToken ct);
 }
