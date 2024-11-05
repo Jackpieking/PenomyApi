@@ -1,3 +1,6 @@
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG3;
@@ -5,8 +8,7 @@ using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3.HttpResponse;
-using System.Threading;
-using System.Threading.Tasks;
+
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3;
 
 public class G3Endpoint : Endpoint<EmptyDto, FeatG3HttpResponse>
@@ -37,17 +39,18 @@ public class G3Endpoint : Endpoint<EmptyDto, FeatG3HttpResponse>
         var featG3Request = new FeatG3Request();
 
         // Get FeatureHandler response.
-        var featResponse = await FeatureExtensions.ExecuteAsync<FeatG3Request, FeatG3Response>(featG3Request, ct);
+        var featResponse = await FeatureExtensions.ExecuteAsync<FeatG3Request, FeatG3Response>(
+            featG3Request,
+            ct
+        );
 
         var httpResponse = G3HttpResponseManager
             .Resolve(featResponse.StatusCode)
             .Invoke(featG3Request, featResponse);
 
-
         httpResponse.Body = new G3ResponseDto
         {
-            ArtworkList = featResponse.ArtworkList
-            .ConvertAll(x => new FeatG3ResponseDtoObject()
+            ArtworkList = featResponse.ArtworkList.ConvertAll(x => new FeatG3ResponseDtoObject()
             {
                 ArtworkId = x.Id,
                 Title = x.Title,
@@ -56,11 +59,11 @@ public class G3Endpoint : Endpoint<EmptyDto, FeatG3HttpResponse>
                 Favorite = x.ArtworkMetaData.TotalFavorites,
                 Rating = x.ArtworkMetaData.AverageStarRate,
                 LastUpdateAt = x.UpdatedAt,
-                FlagUrl = x.Origin.ImageUrl
+                FlagUrl = x.Origin.ImageUrl,
+                Chapters = x.Chapters,
             }),
         };
 
         return httpResponse;
-
     }
 }

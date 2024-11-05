@@ -1,5 +1,6 @@
 ﻿using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks.Common.Base;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -25,6 +26,25 @@ public interface IArtworkChapterRepository
     ///     The <see cref="Task{Boolean}"/> instance contains the result of checking.
     /// </returns>
     Task<bool> IsChapterExistedByIdAsync(
+        long chapterId,
+        CancellationToken cancellationToken);
+
+    /// <summary>
+    ///     Check if the specified chapter with input id
+    ///     is belonged to the specified artwork.
+    /// </summary>
+    /// <param name="artworkId">
+    ///     Id of the artwork to check.
+    /// </param>
+    /// <param name="chapterId">
+    ///     Id of the chapter to check.
+    /// </param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>
+    ///     The <see cref="Task{Boolean}"/> instance contains the result.
+    /// </returns>
+    Task<bool> IsChapterBelongedToArtworkByIdAsync(
+        long artworkId,
         long chapterId,
         CancellationToken cancellationToken);
 

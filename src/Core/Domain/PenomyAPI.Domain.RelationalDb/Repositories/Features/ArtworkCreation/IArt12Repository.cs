@@ -96,6 +96,10 @@ public interface IArt12Repository
     ///     Specify to update the chapter from drafted mode to other mode.
     ///     If true, then must have updated in the artwork upload order.
     /// </param>
+    /// <param name="updateContentOnly">
+    ///     Specify to update the content of the chapter only
+    ///     without affecting its publish-status and published at.
+    /// </param>
     /// <param name="chapterDetail">
     ///     The detail of the chapter to update.
     /// </param>
@@ -114,6 +118,7 @@ public interface IArt12Repository
     /// </returns>
     Task<bool> UpdateComicChapterAsync(
         bool changeFromDrafted,
+        bool updateContentOnly,
         ArtworkChapter chapterDetail,
         IEnumerable<ArtworkChapterMedia> updatedChapterMediaItems,
         IEnumerable<long> deletedChapterMediaIds,

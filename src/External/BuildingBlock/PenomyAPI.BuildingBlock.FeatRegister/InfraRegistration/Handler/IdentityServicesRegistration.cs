@@ -1,6 +1,11 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
+using FastEndpoints;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -67,12 +72,26 @@ internal sealed class IdentityServicesRegistration : IServiceRegistration
             .AddSingleton(tokenValidationParameters)
             .AddAuthentication()
             .AddJwtBearer(config => config.TokenValidationParameters = tokenValidationParameters)
-            .AddGoogle(config =>
-            {
-                config.ClientId = googleAuthOption.ClientId;
-                config.ClientSecret = googleAuthOption.ClientSecret;
-                config.CallbackPath = googleAuthOption.CallBackPath;
-            });
+            .AddGoogle(
+                GoogleDefaults.AuthenticationScheme,
+                config =>
+                {
+                    config.ClientId = googleAuthOption.ClientId;
+                    config.ClientSecret = googleAuthOption.ClientSecret;
+                    config.CallbackPath = googleAuthOption.CallBackPath;
+                    config.SignInScheme = IdentityConstants.ExternalScheme;
+                    config.Events.OnRemoteFailure = async context =>
+                    {
+                        await context.Response.SendRedirectAsync(
+                            googleAuthOption.InitLoginPath,
+                            true,
+                            true
+                        );
+
+                        context.HandleResponse();
+                    };
+                }
+            );
 
         services.AddAuthorization();
 

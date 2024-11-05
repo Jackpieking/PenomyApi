@@ -7,7 +7,7 @@ namespace PenomyAPI.App.G48
     {
         public long UserId { get; set; }
         public ArtworkType ArtworkType { get; set; }
-        public int PageNum { get; set; } = 1;
-        public int ArtNum { get; set; } = 20;
+        public int PageNum { get; set; }
+        public int ArtNum { get; set; }
     }
 }

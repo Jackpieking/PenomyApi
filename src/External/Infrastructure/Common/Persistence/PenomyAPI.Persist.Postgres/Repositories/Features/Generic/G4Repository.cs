@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
@@ -25,7 +26,13 @@ public class G4Repository : IG4Repository
     public async Task<List<ArtworkCategory>> GetComicsByCategoryAsync(long CategoryId)
     {
         var result = await _artworkCategoryDbSet
-            .Where(c => c.CategoryId == CategoryId && c.Artwork.ArtworkType == ArtworkType.Comic)
+            .Where(c =>
+                c.CategoryId == CategoryId
+                && c.Artwork.ArtworkType == ArtworkType.Comic
+                && c.Artwork.IsTemporarilyRemoved == false
+                && c.Artwork.PublicLevel == ArtworkPublicLevel.Everyone
+                && c.Artwork.IsTakenDown == false
+            )
             .Select(a => new ArtworkCategory
             {
                 Category = new Category { Name = a.Category.Name },
