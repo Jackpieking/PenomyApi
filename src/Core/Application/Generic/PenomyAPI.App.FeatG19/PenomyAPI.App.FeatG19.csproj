@@ -7,11 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-<<<<<<<< HEAD:src/External/Infrastructure/Generic/PenomyAPI.Infra.G43/PenomyAPI.Infra.G43.csproj
-    <ProjectReference Include="..\..\..\..\Core\Application\Generic\PenomyAPI.App.G43\PenomyAPI.App.G43.csproj" />
-========
     <ProjectReference Include="..\..\PenomyAPI.App.Common\PenomyAPI.App.Common.csproj" />
->>>>>>>> 3f6dacb9d981923f2964ba2c3b4f695fe5579e86:src/Core/Application/Generic/PenomyAPI.App.FeatG19/PenomyAPI.App.FeatG19.csproj
   </ItemGroup>
 
 </Project>
