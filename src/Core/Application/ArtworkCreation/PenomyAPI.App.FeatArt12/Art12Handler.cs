@@ -34,6 +34,7 @@ public sealed class Art12Handler
 
     public async Task<Art12Response> ExecuteAsync(Art12Request request, CancellationToken cancellationToken)
     {
+        // Validate the request detail before updating.
         // Checking the existence of the comic chapter.
         var isChapterExisted = await _art12Repository.IsComicChapterExistedAsync(
             request.ComicId,
@@ -66,25 +67,6 @@ public sealed class Art12Handler
             return Art12Response.NO_PERMISSION_GRANTED_FOR_CURRENT_CREATOR;
         }
 
-        // Check if the specified updated mode is valid or not
-        // if the request body has flag (isDrafted = true).
-        // to prevent the user from changing the chapter that been published into drafted mode.
-        var currentUploadOrder = ArtworkChapter.DRAFTED_UPLOAD_ORDER;
-
-        if (request.IsDrafted())
-        {
-            currentUploadOrder = await _art12Repository.GetCurrentUploadOrderByChapterIdAsync(
-                request.ChapterId,
-                cancellationToken);
-
-            var isValidPublishMode = currentUploadOrder == ArtworkChapter.DRAFTED_UPLOAD_ORDER;
-
-            if (!isValidPublishMode)
-            {
-                return Art12Response.INVALID_PUBLISH_STATUS;
-            }
-        }
-
         // Upload new chapter images files, if have
         var hasFilesUpload = request.HasThumbnailFile()
             || request.HasNewUploadChapterImageFiles();
@@ -105,86 +87,78 @@ public sealed class Art12Handler
             }
         }
 
+        // Init artwork chapter instance to update the detail.
         // Set related data to update the chapter detail to the database.
-        var updatedAt = DateTime.UtcNow;
-
         var chapterDetail = new ArtworkChapter
         {
             Id = request.ChapterId,
+            ArtworkId = request.ComicId,
             Title = request.Title,
             Description = request.Description,
-            AllowComment = request.AllowComment,
+            ThumbnailUrl = request.GetUpdatedThumbnailUrl(),
             PublicLevel = request.PublicLevel,
-            PublishedAt = request.ScheduledAt,
-            UpdatedAt = updatedAt,
+            AllowComment = request.AllowComment,
+            UpdatedAt = DateTime.UtcNow,
             UpdatedBy = request.CreatorId,
         };
 
-        // If upload in drafted mode then updated related info differently.
-        if (request.IsDrafted())
+        // If creator only need to update content of the chapter, then resolve.
+        if (request.IsUpdateContentOnly())
         {
-            chapterDetail.PublicLevel = ArtworkPublicLevel.Private;
-            chapterDetail.PublishStatus = PublishStatus.Drafted;
-        }
-        else if (request.IsScheduled())
-        {
-            chapterDetail.PublicLevel = request.PublicLevel;
-            chapterDetail.PublishStatus = PublishStatus.Scheduled;
-            chapterDetail.PublishedAt = request.ScheduledAt;
-        }
-        else if (request.IsPublished())
-        {
-            chapterDetail.PublicLevel = request.PublicLevel;
-            chapterDetail.PublishStatus = PublishStatus.Published;
+            return await UpdateChapterContentOnlyAsync(
+                request,
+                chapterDetail,
+                cancellationToken);
         }
 
-        // If not upload in drafted mode, check if the current upload order
-        // is equal ArtworkChapter.DRAFTED_UPLOAD_ORDER or not
-        // then update the upload order differently.
-        var isChangedFromDrafted = !request.IsDrafted()
-            && currentUploadOrder == ArtworkChapter.DRAFTED_UPLOAD_ORDER;
+        // If move to this step, the chapter must fall into 2 situations:
+        // 1. From draft to other publish status.
+        // 2. To update from Scheduled publish status to other publish status OR
+        // update again the Schedule date.
 
-        // If this chapter is changed from drafted mode to other mode then resolve.
+        // Then get the current chapter publish status to resolve the update.
+        var currentChapterPublishStatus = await _art12Repository.GetCurrentChapterPublishStatusAsync(
+            request.ChapterId,
+            cancellationToken);
+
+        // If current publish status is drafted,
+        // then the creator want to publish the draft with other publish status.
+        var isChangedFromDrafted =
+            currentChapterPublishStatus == PublishStatus.Drafted;
+
+        // If this chapter is changed from drafted mode
+        // to other mode then update its upload order.
         if (isChangedFromDrafted)
         {
-            // Get the last chapter upload order of this comic, then the upload order
-            // of the new chapter will be the last upload order increased by 1.
-            var lastChapterUploadOrder = await _unitOfWork.ArtworkRepository
-                .GetLastChapterUploadOrderByArtworkIdAsync(
-                    request.ComicId,
-                    cancellationToken);
-
-            chapterDetail.UploadOrder = lastChapterUploadOrder + 1;
-        }
-        else
-        {
-            chapterDetail.UploadOrder = currentUploadOrder;
+            return await UpdateFromDraftToDifferentPublishStatusAsync(
+                request,
+                chapterDetail,
+                cancellationToken);
         }
 
-        // Update the related data into database.
-        var updateResult = await _art12Repository.UpdateComicChapterAsync(
-            changeFromDrafted: isChangedFromDrafted,
-            updateContentOnly: request.IsUpdateContentOnly(),
-            chapterDetail: chapterDetail,
-            updatedChapterMediaItems: request.UpdatedChapterMedias,
-            deletedChapterMediaIds: request.DeletedChapterMediaIds,
-            createdNewChapterMediaItems: request.CreatedNewComicChapterMediaItems,
-            cancellationToken: cancellationToken);
-
-        if (!updateResult)
-        {
-            return Art12Response.DATABASE_ERROR;
-        }
-
-        // Remove all chapter media items that marked as deleted.
-        if (request.HasDeletedChapterMediaIdList())
-        {
-            _ = RemoveMarkDeletedFilesAsync(request, cancellationToken);
-        }
-
-        return Art12Response.SUCCESS;
+        // If not fall to any above update situation, then current chapter
+        // must has scheduled status and need to update the schedule detail
+        // or to change to published status.
+        return await UpdateChapterWithChangeInPublishDetailAsync(
+            request,
+            currentChapterPublishStatus,
+            chapterDetail,
+            cancellationToken);
     }
 
+    #region Private Methods
+    /// <summary>
+    ///     Process to upload the file to the storage
+    ///     and return the storageURLs to persistent in database.
+    /// </summary>
+    /// <param name="request">
+    ///     Request that contains the list of files to upload.
+    /// </param>
+    /// <param name="chapterFolderRelativePath">
+    ///     Relative path of the folder of current chapter.
+    /// </param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     private async Task<bool> InternalProcessUploadFileAsync(
         Art12Request request,
         string chapterFolderRelativePath,
@@ -235,6 +209,170 @@ public sealed class Art12Handler
         return uploadResult.IsSuccess;
     }
 
+    /// <summary>
+    ///     Update the current chapter's content only
+    ///     without affecting its publish status or schedule time.
+    /// </summary>
+    /// <param name="request">
+    ///     Request contains related information supported for updating.
+    /// </param>
+    /// <param name="chapterDetail">
+    ///     ArtworkChapter instance contains information to update.
+    /// </param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>
+    ///     A <see cref="Task{Art12Response}"/> contains result of updating.
+    /// </returns>
+    private async Task<Art12Response> UpdateChapterContentOnlyAsync(
+        Art12Request request,
+        ArtworkChapter chapterDetail,
+        CancellationToken cancellationToken)
+    {
+        // Update the related data into database.
+        var updateResult = await _art12Repository.UpdateComicChapterAsync(
+            isChangedFromDraftedToOtherPublishStatus: false,
+            isScheduleDateTimeChanged: false,
+            chapterDetail: chapterDetail,
+            updatedChapterMediaItems: request.UpdatedChapterMedias,
+            deletedChapterMediaIds: request.DeletedChapterMediaIds,
+            createdNewChapterMediaItems: request.CreatedNewComicChapterMediaItems,
+            cancellationToken: cancellationToken);
+
+        if (!updateResult)
+        {
+            return Art12Response.DATABASE_ERROR;
+        }
+
+        // Remove all chapter media items that marked as deleted.
+        if (request.HasDeletedChapterMediaIdList())
+        {
+            _ = RemoveMarkDeletedFilesAsync(request, cancellationToken);
+        }
+
+        return Art12Response.SUCCESS;
+    }
+
+    /// <summary>
+    ///     Update the current chapter's that changed from 
+    ///     draft status to different publish status.
+    /// </summary>
+    /// <param name="request">
+    ///     Request contains related information supported for updating.
+    /// </param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>
+    ///     A <see cref="Task{Art12Response}"/> contains result of updating.
+    /// </returns>
+    private async Task<Art12Response> UpdateFromDraftToDifferentPublishStatusAsync(
+        Art12Request request,
+        ArtworkChapter chapterDetail,
+        CancellationToken cancellationToken)
+    {
+        // Get the last chapter upload order of this comic, then the upload order
+        // of the new chapter will be the last upload order increased by 1.
+        var lastChapterUploadOrderOfCurrentComic = await _unitOfWork.ArtworkRepository
+            .GetLastChapterUploadOrderByArtworkIdAsync(
+                request.ComicId,
+                cancellationToken);
+
+        chapterDetail.UploadOrder = lastChapterUploadOrderOfCurrentComic + 1;
+
+        // Update related info differently based on the update mode.
+        if (request.IsChangedToSchedule())
+        {
+            chapterDetail.PublishStatus = PublishStatus.Scheduled;
+            chapterDetail.PublishedAt = request.ScheduledAt;
+        }
+        else if (request.IsChangeToPublish())
+        {
+            chapterDetail.PublishStatus = PublishStatus.Published;
+            chapterDetail.PublishedAt = chapterDetail.UpdatedAt;
+        }
+
+        // Update the related data into database.
+        var updateResult = await _art12Repository.UpdateComicChapterAsync(
+            isChangedFromDraftedToOtherPublishStatus: true,
+            isScheduleDateTimeChanged: true,
+            chapterDetail: chapterDetail,
+            updatedChapterMediaItems: request.UpdatedChapterMedias,
+            deletedChapterMediaIds: request.DeletedChapterMediaIds,
+            createdNewChapterMediaItems: request.CreatedNewComicChapterMediaItems,
+            cancellationToken: cancellationToken);
+
+        if (!updateResult)
+        {
+            return Art12Response.DATABASE_ERROR;
+        }
+
+        return Art12Response.SUCCESS;
+    }
+
+    /// <summary>
+    ///     Update the current chapter's that has any change 
+    ///     in publish detail (publish datetime or publish status).
+    /// </summary>
+    /// <param name="request">
+    ///     Request contains related information supported for updating.
+    /// </param>
+    /// <param name="currentChapterPublishStatus">
+    ///     The publish status of current chapter supported for updating.
+    /// </param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>
+    ///     A <see cref="Task{Art12Response}"/> contains result of updating.
+    /// </returns>
+    private async Task<Art12Response> UpdateChapterWithChangeInPublishDetailAsync(
+        Art12Request request,
+        PublishStatus currentChapterPublishStatus,
+        ArtworkChapter chapterDetail,
+        CancellationToken cancellationToken)
+    {
+        // Update schedule datetime based on the current chapter publish status.
+        var isScheduleDateTimeChanged = request.IsChangedToSchedule()
+            && currentChapterPublishStatus == PublishStatus.Scheduled;
+
+        if (isScheduleDateTimeChanged)
+        {
+            chapterDetail.PublishStatus = PublishStatus.Scheduled;
+            chapterDetail.PublishedAt = request.ScheduledAt;
+        }
+        else if (request.IsChangeToPublish())
+        {
+            chapterDetail.PublishStatus = PublishStatus.Published;
+            chapterDetail.PublishedAt = chapterDetail.UpdatedAt;
+        }
+
+        // Update the related data into database.
+        var updateResult = await _art12Repository.UpdateComicChapterAsync(
+            isChangedFromDraftedToOtherPublishStatus: false,
+            isScheduleDateTimeChanged: true,
+            chapterDetail: chapterDetail,
+            updatedChapterMediaItems: request.UpdatedChapterMedias,
+            deletedChapterMediaIds: request.DeletedChapterMediaIds,
+            createdNewChapterMediaItems: request.CreatedNewComicChapterMediaItems,
+            cancellationToken: cancellationToken);
+
+        if (!updateResult)
+        {
+            return Art12Response.DATABASE_ERROR;
+        }
+
+        // Remove all chapter media items that marked as deleted.
+        if (request.HasDeletedChapterMediaIdList())
+        {
+            _ = RemoveMarkDeletedFilesAsync(request, cancellationToken);
+        }
+
+        return Art12Response.SUCCESS;
+    }
+
+    /// <summary>
+    ///     Remove the files that are marked as deleted from the storage.
+    /// </summary>
+    /// <param name="request">
+    ///     The request contains the list of files that are marked as deleted.
+    /// </param>
+    /// <param name="cancellationToken"></param>
     private async Task<bool> RemoveMarkDeletedFilesAsync(
         Art12Request request,
         CancellationToken cancellationToken)
@@ -260,4 +398,5 @@ public sealed class Art12Handler
 
         return chapterFolderRelativePath;
     }
+    #endregion
 }

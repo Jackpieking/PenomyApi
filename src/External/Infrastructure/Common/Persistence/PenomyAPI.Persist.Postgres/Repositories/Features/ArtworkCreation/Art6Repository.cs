@@ -2,8 +2,10 @@
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.ArtworkCreation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -25,27 +27,32 @@ internal sealed class Art6Repository : IArt6Repository
         PublishStatus publishStatus,
         CancellationToken cancellationToken)
     {
+        Expression<Func<ArtworkChapter, bool>> filterExpression = (ArtworkChapter chapter) => chapter.ArtworkId == comicId
+            && chapter.PublishStatus == PublishStatus.Drafted;
+
+        // If publish status is not drafted, then get both published and scheduled.
+        if (publishStatus != PublishStatus.Drafted)
+        {
+            filterExpression = (ArtworkChapter chapter) => chapter.ArtworkId == comicId
+            && chapter.PublishStatus != PublishStatus.Drafted;
+        }
+
         return await _chapters
             .AsNoTracking()
-            .Where(chapter =>
-                chapter.ArtworkId == comicId
-                && chapter.PublishStatus == publishStatus)
+            .Where(filterExpression)
             .Select(chapter => new ArtworkChapter
             {
                 Id = chapter.Id,
                 Title = chapter.Title,
                 UploadOrder = chapter.UploadOrder,
-                PublishStatus = publishStatus,
+                PublishStatus = chapter.PublishStatus,
                 ThumbnailUrl = chapter.ThumbnailUrl,
                 AllowComment = chapter.AllowComment,
                 CreatedAt = chapter.CreatedAt,
-                ChapterMetaData = new ArtworkChapterMetaData
-                {
-                    TotalComments = chapter.ChapterMetaData.TotalComments,
-                    TotalViews = chapter.ChapterMetaData.TotalViews,
-                    TotalFavorites = chapter.ChapterMetaData.TotalFavorites,
-                }
+                PublishedAt = chapter.PublishedAt,
+                PublicLevel = chapter.PublicLevel,
             })
+            .OrderBy(chapter => chapter.UploadOrder)
             .ToListAsync(cancellationToken);
     }
 }
