@@ -49,10 +49,10 @@ public class G47Repository : IG47Repository
         return true;
     }
 
-    public async Task<bool> RemoveFromFavoriteAsync(long userId, long artworkId, CancellationToken token = default)
+    public async Task<long> RemoveFromFavoriteAsync(long userId, long artworkId, CancellationToken token = default)
     {
         var executionStrategy = RepositoryHelper.CreateExecutionStrategy(_dbContext);
-
+        long FavoriteCount = 0;
         return await executionStrategy.ExecuteAsync(async () =>
         {
             await using var transaction = await _dbContext.Database.BeginTransactionAsync(token);
@@ -72,19 +72,19 @@ public class G47Repository : IG47Repository
                             m => m.TotalFavorites - 1),
                         token);
 
+                FavoriteCount = await _metaDataContext.Where(x => x.ArtworkId == artworkId)
+                    .Select(x => x.TotalFavorites).FirstOrDefaultAsync(token);
                 await _dbContext.SaveChangesAsync(token);
 
                 await transaction.CommitAsync(token);
 
-                return true;
+                return FavoriteCount;
             }
             catch (Exception)
             {
                 // Rollback and dispose the transaction if an error occurs
                 await transaction.RollbackAsync(token);
-                await transaction.DisposeAsync();
-
-                return false;
+                return 0;
             }
         });
     }

@@ -29,13 +29,13 @@ public class G46Repository : IG46Repository
         _dbContext = dbContext;
     }
 
-    public async Task<bool> AddArtworkFavoriteAsync(
+    public async Task<long> AddArtworkFavoriteAsync(
         long userId,
         long artworkId,
         CancellationToken cancellationToken = default)
     {
         var executionStrategy = RepositoryHelper.CreateExecutionStrategy(_dbContext);
-
+        long favoriteCount = 0;
         return await executionStrategy.ExecuteAsync(async () =>
         {
             await using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
@@ -57,19 +57,21 @@ public class G46Repository : IG46Repository
                         m => m.TotalFavorites,
                         m => m.TotalFavorites + 1), cancellationToken);
 
-
+                var artworkMetadata = _metaDataContext.Where(m => m.ArtworkId == artworkId).Select
+                    (x => x.TotalFavorites);
+                favoriteCount = await artworkMetadata.FirstOrDefaultAsync(cancellationToken);
                 await _dbContext.SaveChangesAsync(cancellationToken);
 
                 await transaction.CommitAsync(cancellationToken);
-
-                return true;
             }
             catch (Exception)
             {
                 // Rollback and dispose the transaction if an error occurs
                 await transaction.RollbackAsync(cancellationToken);
-                return false;
+                favoriteCount = 0;
             }
+
+            return favoriteCount;
         });
     }
 

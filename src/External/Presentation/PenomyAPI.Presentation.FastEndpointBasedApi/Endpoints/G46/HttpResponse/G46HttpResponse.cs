@@ -13,4 +13,6 @@ public class G46HttpResponse : AppHttpResponse<G46ResponseDto>
     {
         AppCode = appCode;
     }
+
+    public long FavoriteCount { get; set; }
 }

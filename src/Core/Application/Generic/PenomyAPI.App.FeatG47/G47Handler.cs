@@ -18,13 +18,14 @@ public class G47Handler : IFeatureHandler<G47Request, G47Response>
 
     public async Task<G47Response> ExecuteAsync(G47Request request, CancellationToken ct)
     {
+        G47Response response = new();
         try
         {
             if (
                 !IsValidRequest(request)
                 || !await _g47Repository.IsUserActiveAsync(request.UserId, ct)
             )
-                return G47Response.INVALID_REQUEST;
+                response.AppCode = G47ResponseStatusCode.INVALID_REQUEST;
             if (
                 !await _g47Repository.IsArtworkExistAsync(request.ArtworkId, ct)
                 || !await _g47Repository.IsAlreadyFavoriteAsync(
@@ -33,18 +34,19 @@ public class G47Handler : IFeatureHandler<G47Request, G47Response>
                     ct
                 )
             )
-                return G47Response.NOT_FOUND;
-            var isSuccess = await _g47Repository.RemoveFromFavoriteAsync(
+                response.AppCode = G47ResponseStatusCode.NOT_FOUND;
+            response.FavoriteCount = await _g47Repository.RemoveFromFavoriteAsync(
                 request.UserId,
                 request.ArtworkId,
                 ct
             );
-            return isSuccess ? G47Response.SUCCESS : G47Response.FAILED;
         }
         catch
         {
-            return G47Response.FAILED;
+            response.AppCode = G47ResponseStatusCode.FAILED;
         }
+
+        return response;
     }
 
     private static bool IsValidRequest(G47Request request)

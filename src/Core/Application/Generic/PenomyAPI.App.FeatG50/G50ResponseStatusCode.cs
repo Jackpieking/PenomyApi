@@ -1,4 +1,4 @@
-namespace PenomyAPI.App.FeatG49;
+namespace PenomyAPI.App.FeatG50;
 
 public enum G50ResponseStatusCode
 {

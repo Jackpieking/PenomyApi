@@ -51,7 +51,8 @@ public class G46Endpoint : Endpoint<G46RequestDto, G46HttpResponse>
         var httpResponse = G46HttpResponseManager
             .Resolve(featResponse.AppCode)
             .Invoke(g46Req, featResponse);
-
+        if (featResponse.AppCode is G46ResponseStatusCode.SUCCESS)
+            httpResponse.FavoriteCount = featResponse.FavoriteCount;
         await SendAsync(httpResponse, httpResponse.HttpCode, ct);
 
         return httpResponse;

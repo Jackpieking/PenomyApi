@@ -47,7 +47,8 @@ public class G47Endpoint : Endpoint<G47RequestDto, G47HttpResponse>
         var httpResponse = G47HttpResponseManager
             .Resolve(featResponse.AppCode)
             .Invoke(g47Req, featResponse);
-
+        if (featResponse.AppCode is G47ResponseStatusCode.SUCCESS)
+            httpResponse.FavoriteCount = featResponse.FavoriteCount;
         await SendAsync(httpResponse, httpResponse.HttpCode, ct);
 
         return httpResponse;

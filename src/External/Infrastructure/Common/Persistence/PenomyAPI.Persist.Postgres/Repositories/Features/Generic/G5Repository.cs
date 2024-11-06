@@ -59,7 +59,8 @@ public class G5Repository : IG5Repository
                     TotalViews = x.ArtworkMetaData.TotalViews,
                     TotalStarRates = x.ArtworkMetaData.TotalStarRates,
                     TotalUsersRated = x.ArtworkMetaData.TotalUsersRated,
-                    AverageStarRate = x.ArtworkMetaData.AverageStarRate
+                    AverageStarRate = x.ArtworkMetaData.AverageStarRate,
+                    TotalFollowers = x.ArtworkMetaData.TotalFollowers
                 },
                 ThumbnailUrl = x.ThumbnailUrl
             })
