@@ -23,12 +23,12 @@ public class G45Handler : IFeatureHandler<G45Request, G45Response>
         try
         {
             ICollection<Artwork> artworks = await _G45Repository
-                    .GetAllFollowedArtworks(
+                    .GetFollowedArtworksByTypeAndUserIdWithPaginationAsync(
                         request.UserId,
                         request.ArtworkType,
-                        ct,
                         request.PageNum,
-                        request.ArtNum
+                        request.ArtNum,
+                        ct
                     );
 
             return new G45Response

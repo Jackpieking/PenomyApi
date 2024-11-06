@@ -20,7 +20,7 @@ public class G45Repository : IG45Repository
         _userFolloweds = dbContext.Set<UserFollowedArtwork>();
     }
 
-    public async Task<ICollection<Artwork>> GetAllFollowedArtworks(long userId, ArtworkType artworkType, CancellationToken ct, int pageNum = 1, int artNum = 20)
+    public async Task<ICollection<Artwork>> GetFollowedArtworksByTypeAndUserIdWithPaginationAsync(long userId, ArtworkType artworkType, int pageNum, int artNum, CancellationToken ct)
     {
         return await _userFolloweds.AsNoTracking()
             .Where(o => o.UserId == userId && o.ArtworkType == artworkType && !o.FollowedArtwork.IsTakenDown)
@@ -56,5 +56,15 @@ public class G45Repository : IG45Repository
                     })
             })
             .ToListAsync();
+    }
+
+    public async Task<int> GetTotalOfArtworksByTypeAndUserIdAsync(long userId, ArtworkType artworkType, CancellationToken cancellationToken)
+    {
+        return await _userFolloweds.AsNoTracking()
+            .CountAsync(o =>
+                o.UserId == userId &&
+                o.ArtworkType == artworkType &&
+                !o.FollowedArtwork.IsTakenDown,
+                cancellationToken: cancellationToken);
     }
 }
