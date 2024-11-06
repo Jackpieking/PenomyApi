@@ -40,7 +40,7 @@ public sealed class ChatGroup : EntityWithId<long>, ICreatedEntity<long>
     {
         public const int GroupNameLength = 200;
 
-        public const int CoverPhotoUrlLength = 256;
+        public const int CoverPhotoUrlLength = 2000;
     }
     #endregion
 }

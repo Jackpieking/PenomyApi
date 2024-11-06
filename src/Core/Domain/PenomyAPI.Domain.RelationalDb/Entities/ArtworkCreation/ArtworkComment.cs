@@ -7,6 +7,8 @@ namespace PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 
 public sealed class ArtworkComment : EntityWithId<long>, ICreatedEntity<long>
 {
+    public const long EmptyChapterId = -1;
+
     public long ArtworkId { get; set; }
 
     public long ChapterId { get; set; }
@@ -38,6 +40,8 @@ public sealed class ArtworkComment : EntityWithId<long>, ICreatedEntity<long>
     public IEnumerable<ArtworkCommentParentChild> ArtworkCommentParentChilds { get; set; }
 
     public IEnumerable<ArtworkCommentReference> ArtworkCommentReferences { get; set; }
+
+    public IEnumerable<UserLikeArtworkComment> UserLikeArtworkComment { get; set; }
     #endregion
 
     #region MetaData

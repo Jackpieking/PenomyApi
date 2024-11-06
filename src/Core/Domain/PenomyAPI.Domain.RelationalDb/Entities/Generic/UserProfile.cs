@@ -1,11 +1,11 @@
+using System;
+using System.Collections.Generic;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Entities.Base;
 using PenomyAPI.Domain.RelationalDb.Entities.Chat;
 using PenomyAPI.Domain.RelationalDb.Entities.Monetization;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
 using PenomyAPI.Domain.RelationalDb.Entities.SystemManagement;
-using System;
-using System.Collections.Generic;
 
 namespace PenomyAPI.Domain.RelationalDb.Entities.Generic;
 
@@ -126,13 +126,7 @@ public sealed class UserProfile : IEntity
 
     public IEnumerable<ArtworkChapterReport> CreatedChapterReports { get; set; }
 
-    public IEnumerable<UserManagedArtwork> CollaboratedArtworks { get; set; }
-
-    public IEnumerable<UserManagedArtwork> ManagedArtworks { get; set; }
-
     public IEnumerable<ArtworkBugReport> CreatedArtworkBugReports { get; set; }
-
-    public IEnumerable<ArtworkViolationFlag> ResolvedViolationFlags { get; set; }
 
     // Monetization section.
     public IEnumerable<UserDonationTransaction> UserDonationTransactions { get; set; }
@@ -143,9 +137,23 @@ public sealed class UserProfile : IEntity
     {
         public const int NickNameLength = 32;
 
-        public const int AvatarUrlLength = 256;
+        public const int AvatarUrlLength = 2000;
 
         public const int AboutMeLength = 2000;
+    }
+    #endregion
+
+    #region Static Methods
+    public static UserProfile NewProfile(long userId, string nickname, string avatarUrl)
+    {
+        return new UserProfile
+        {
+            UserId = userId,
+            Gender = UserGender.NotSelected,
+            NickName = nickname,
+            AboutMe = "None",
+            AvatarUrl = avatarUrl,
+        };
     }
     #endregion
 }

@@ -1,9 +1,9 @@
-﻿using PenomyAPI.App.Common;
-using PenomyAPI.Domain.RelationalDb.Repositories.Features.ArtworkCreation;
-using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using PenomyAPI.App.Common;
+using PenomyAPI.Domain.RelationalDb.Repositories.Features.ArtworkCreation;
+using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 
 namespace PenomyAPI.App.FeatArt4.OtherHandlers.LoadCategory;
 
@@ -24,9 +24,6 @@ public class Art4LoadCategoryHandler
     {
         var categories = await _art4Repository.GetAllCategoriesAsync(ct);
 
-        return new Art4LoadCategoryResponse
-        {
-            Categories = categories,
-        };
+        return new Art4LoadCategoryResponse { Categories = categories, };
     }
 }

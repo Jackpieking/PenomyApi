@@ -6,16 +6,17 @@ using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.Generic;
 using PenomyAPI.Domain.RelationalDb.Entities.UserIdentity;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
+using PenomyAPI.Persist.Postgres.Data.DbContexts;
 using PenomyAPI.Persist.Postgres.Data.UserIdentity;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
 
 internal sealed class G1Repository : IG1Repository
 {
-    private readonly DbContext _dbContext;
+    private readonly AppDbContext _dbContext;
     private readonly Lazy<UserManager<PgUser>> _userManager;
 
-    public G1Repository(DbContext dbContext, Lazy<UserManager<PgUser>> userManager)
+    public G1Repository(AppDbContext dbContext, Lazy<UserManager<PgUser>> userManager)
     {
         _dbContext = dbContext;
         _userManager = userManager;
@@ -40,13 +41,16 @@ internal sealed class G1Repository : IG1Repository
 
                 try
                 {
+                    var newPgUser = new PgUser
+                    {
+                        Id = newUser.Id,
+                        UserName = newUser.UserName,
+                        Email = newUser.Email,
+                        EmailConfirmed = newUser.EmailConfirmed,
+                    };
+
                     var result = await _userManager.Value.CreateAsync(
-                        user: new()
-                        {
-                            Id = newUser.Id,
-                            UserName = newUser.UserName,
-                            Email = newUser.Email,
-                        },
+                        user: newPgUser,
                         password: password
                     );
 
@@ -72,7 +76,7 @@ internal sealed class G1Repository : IG1Repository
         return dbResult;
     }
 
-    public Task<bool> IsUserFoundByEmailQueryAsync(string email, CancellationToken ct)
+    public Task<bool> IsUserFoundByEmailAsync(string email, CancellationToken ct)
     {
         var upperEmail = email.ToUpper();
 
@@ -88,13 +92,13 @@ internal sealed class G1Repository : IG1Repository
         foreach (var validator in _userManager.Value.PasswordValidators)
         {
             result = await validator.ValidateAsync(
-                manager: _userManager.Value,
-                user: new() { Id = newUser.Id },
-                password: newPassword
+                _userManager.Value,
+                new() { Id = newUser.Id },
+                newPassword
             );
         }
 
-        if (Equals(objA: result, objB: default))
+        if (Equals(result, default))
         {
             return false;
         }

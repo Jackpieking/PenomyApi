@@ -12,11 +12,15 @@ public sealed class ArtworkChapter
         IUpdatedEntity<long>,
         ITemporarilyRemovedEntity<long>
 {
-    public const int DraftedUploadOrder = -1;
+    public const int DRAFTED_UPLOAD_ORDER = -1;
+
+    public const string THUMBNAIL_IMAGE_FILE_PREFIX = "thumbnail";
 
     public long ArtworkId { get; set; }
 
     public string Title { get; set; }
+
+    public string Description { get; set; }
 
     public int UploadOrder { get; set; }
 
@@ -67,7 +71,9 @@ public sealed class ArtworkChapter
     {
         public const int TitleLength = 200;
 
-        public const int ThumbnailUrlLength = 256;
+        public const int DescriptionLength = 2000;
+
+        public const int ThumbnailUrlLength = 2000;
     }
     #endregion
 }

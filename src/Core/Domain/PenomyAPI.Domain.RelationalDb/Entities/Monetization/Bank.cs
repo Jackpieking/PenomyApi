@@ -61,7 +61,7 @@ public sealed class Bank :
         
         public const int ShortNameLength = 64;
         
-        public const int LogoUrlLength = 256;
+        public const int LogoUrlLength = 2000;
         
         public const int SwiftCodeLength = 32;
     }

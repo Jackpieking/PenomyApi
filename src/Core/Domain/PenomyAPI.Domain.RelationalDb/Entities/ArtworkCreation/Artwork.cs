@@ -13,9 +13,9 @@ public sealed class Artwork
         IUpdatedEntity<long>,
         ITemporarilyRemovedEntity<long>
 {
-    public string Title { get; set; }
+    public const string THUMBNAIL_IMAGE_FILE_PREFIX = "thumbnail";
 
-    public string OtherName { get; set; }
+    public string Title { get; set; }
 
     public ArtworkPublicLevel PublicLevel { get; set; }
 
@@ -32,6 +32,11 @@ public sealed class Artwork
     ///     that belonged to this artwork
     /// </summary>
     public int LastChapterUploadOrder { get; set; }
+
+    /// <summary>
+    ///     This property is supported for artwork type animation.
+    /// </summary>
+    public int FixedTotalChapters { get; set; }
 
     public ArtworkStatus ArtworkStatus { get; set; }
 
@@ -101,11 +106,13 @@ public sealed class Artwork
 
     public IEnumerable<UserArtworkViewHistory> UserArtworkViewHistories { get; set; }
 
-    public IEnumerable<UserWatchingHistory> UserWatchingHistories { get; set; }
+    public IEnumerable<UserRealtimeWatchingHistory> UserRealtimeWatchingHistories { get; set; }
 
-    public IEnumerable<UserManagedArtwork> UserManagedArtworks { get; set; }
+    public IEnumerable<CreatorCollaboratedArtwork> UserManagedArtworks { get; set; }
 
     public IEnumerable<ArtworkCommentReference> CommentReferences { get; set; }
+
+    public IEnumerable<ArtworkOtherInfo> ArtworkOtherInfos { get; set; }
 
     // Report and Violation section
     public IEnumerable<ArtworkReport> ArtworkReports { get; set; }
@@ -127,9 +134,11 @@ public sealed class Artwork
 
         public const int OtherNameLength = 200;
 
+        public const int StudioNameLength = 200;
+
         public const int AuthorNameLength = 100;
 
-        public const int ThumbnailUrlLength = 256;
+        public const int ThumbnailUrlLength = 2000;
 
         public const int IntroductionLength = 2000;
     }

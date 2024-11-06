@@ -1,22 +1,22 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
-namespace PenomyAPI.Persist.Postgres.Repositories.Helpers
+namespace PenomyAPI.Persist.Postgres.Repositories.Helpers;
+
+internal static class RepositoryHelper
 {
-    internal static class RepositoryHelper
+    public static IExecutionStrategy CreateExecutionStrategy(DbContext dbContext)
     {
-        public static IExecutionStrategy CreateExecutionStrategy(DbContext dbContext)
-        {
-            return dbContext.Database.CreateExecutionStrategy();
-        }
+        return dbContext.Database.CreateExecutionStrategy();
+    }
 
-        public static Task<IDbContextTransaction> CreateTransactionAsync(
-            DbContext dbContext,
-            CancellationToken ct)
-        {
-            return dbContext.Database.BeginTransactionAsync(ct);
-        }
+    public static Task<IDbContextTransaction> CreateTransactionAsync(
+        DbContext dbContext,
+        CancellationToken ct
+    )
+    {
+        return dbContext.Database.BeginTransactionAsync(ct);
     }
 }

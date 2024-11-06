@@ -9,7 +9,7 @@ public sealed class AppDbContext : IdentityDbContext<PgUser, PgRole, long>
     public AppDbContext(DbContextOptions options) : base(options)
     {
     }
-
+    
     protected override void OnModelCreating(ModelBuilder builder)
     {
         // Apply the configuration from the Identity.

@@ -6,5 +6,5 @@ public enum PublishStatus
 
     Published = 2,
 
-    Scheduled = 3
+    Scheduled = 3,
 }

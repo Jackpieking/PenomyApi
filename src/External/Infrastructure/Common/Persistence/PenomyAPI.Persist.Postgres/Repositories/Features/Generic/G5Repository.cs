@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -29,26 +26,31 @@ public class G5Repository : IG5Repository
             .Where(x => x.Id == artworkId)
             .Select(x => new Artwork
             {
+                Title = x.Title,
+                AuthorName = x.AuthorName,
+                HasSeries = x.HasSeries,
+                Introduction = x.Introduction,
                 Id = x.Id,
                 Origin = new ArtworkOrigin
                 {
                     Id = x.Origin.Id,
-                    CountryName = x.Origin.CountryName,
+                    CountryName = x.Origin.CountryName
                 },
                 ArtworkCategories = x.ArtworkCategories.Select(y => new ArtworkCategory
                 {
+                    Category = new Category { Name = y.Category.Name },
                     ArtworkId = y.ArtworkId,
-                    CategoryId = y.CategoryId,
+                    CategoryId = y.CategoryId
                 }),
                 ArtworkSeries = x.ArtworkSeries.Select(y => new ArtworkSeries
                 {
                     ArtworkId = y.ArtworkId,
-                    Series = y.Series,
+                    Series = y.Series
                 }),
                 ArtworkStatus = x.ArtworkStatus,
                 UserRatingArtworks = x.UserRatingArtworks.Select(y => new UserRatingArtwork
                 {
-                    StarRates = y.StarRates,
+                    StarRates = y.StarRates
                 }),
                 ArtworkMetaData = new ArtworkMetaData
                 {
@@ -58,10 +60,23 @@ public class G5Repository : IG5Repository
                     TotalStarRates = x.ArtworkMetaData.TotalStarRates,
                     TotalUsersRated = x.ArtworkMetaData.TotalUsersRated,
                     AverageStarRate = x.ArtworkMetaData.AverageStarRate,
+                    TotalFollowers = x.ArtworkMetaData.TotalFollowers
                 },
-                ThumbnailUrl = x.ThumbnailUrl,
+                ThumbnailUrl = x.ThumbnailUrl
             })
+            .AsNoTracking()
+            .AsSplitQuery()
             .FirstOrDefaultAsync(token);
         return artwork;
+    }
+
+    public Task<bool> IsArtworkFavoriteAsync(long userId, long artworkId, CancellationToken ct = default)
+    {
+        return _dbContext.Set<UserFavoriteArtwork>().AnyAsync(x => x.UserId == userId && x.ArtworkId == artworkId, ct);
+    }
+
+    public Task<bool> IsArtworkExistAsync(long artworkId, CancellationToken ct = default)
+    {
+        return _dbContext.Set<Artwork>().AnyAsync(x => x.Id == artworkId && x.ArtworkType == ArtworkType.Comic, ct);
     }
 }

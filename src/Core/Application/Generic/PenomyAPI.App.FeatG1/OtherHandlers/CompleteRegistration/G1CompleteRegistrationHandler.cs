@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using PenomyAPI.App.Common;
+using PenomyAPI.App.Common.AppConstants;
 using PenomyAPI.App.Common.IdGenerator.Snowflake;
 using PenomyAPI.App.FeatG1.Infrastructures;
 using PenomyAPI.Domain.RelationalDb.Entities.Generic;
@@ -35,7 +36,7 @@ public sealed class G1CompleteRegistrationHandler
     )
     {
         // Extract email from token.
-        var newUserEmail = await _preRegistrationTokenHandler.Value.ExtractEmailFromTokenAsync(
+        var email = await _preRegistrationTokenHandler.Value.GetEmailFromTokenAsync(
             request.PreRegistrationToken,
             ct
         );
@@ -44,16 +45,34 @@ public sealed class G1CompleteRegistrationHandler
         // - maybe users insert them,
         // - not from penomy website but by
         //      calling api directly with their token =)).
-        if (Equals(newUserEmail, default))
+        if (string.IsNullOrWhiteSpace(email))
         {
-            return new()
-            {
-                StatusCode = G1CompleteRegistrationResponseStatusCode.INVALID_PRE_REGISTRATION_TOKEN
-            };
+            return new() { StatusCode = G1CompleteRegistrationResponseStatusCode.INVALID_TOKEN };
         }
 
-        // Generate bundle for new user.
-        var (newUser, newuserProfile) = CreateNewUser(newUserEmail);
+        // Is user found by email.
+        var isUserFound = await _repository.IsUserFoundByEmailAsync(email, ct);
+
+        // Email already registered
+        if (isUserFound)
+        {
+            return new() { StatusCode = G1CompleteRegistrationResponseStatusCode.USER_EXIST };
+        }
+
+        // Pre init new user profile.
+        var newUser = PreInitUserProfile(email);
+
+        // Validate user password
+        var isPasswordValid = await _repository.ValidatePasswordAsync(newUser, request.Password);
+
+        // User password is invalid
+        if (!isPasswordValid)
+        {
+            return new() { StatusCode = G1CompleteRegistrationResponseStatusCode.PASSWORD_INVALID };
+        }
+
+        // Complete init user profile process.
+        var newuserProfile = CreateNewUser(newUser, request.ConfirmedNickName);
 
         // Add bundle to database.
         var isAdded = await _repository.AddNewUserToDatabaseAsync(
@@ -65,30 +84,43 @@ public sealed class G1CompleteRegistrationHandler
 
         // Adding user fail, please check the error logging in database.
         // Or debug through above step.
-        if (isAdded)
+        if (!isAdded)
         {
             return new() { StatusCode = G1CompleteRegistrationResponseStatusCode.DATABASE_ERROR };
         }
 
         return new()
         {
-            NewUserEmail = newUserEmail,
+            NewUserEmail = email,
             StatusCode = G1CompleteRegistrationResponseStatusCode.SUCCESS
         };
     }
 
-    private (User, UserProfile) CreateNewUser(string email)
+    private User PreInitUserProfile(string email)
     {
-        var newUser = new User
+        return new()
         {
             Id = _snowflakeIdGenerator.Value.Get(),
             Email = email,
-            UserName = email
+            UserName = email,
+            EmailConfirmed = true,
+        };
+    }
+
+    private static UserProfile CreateNewUser(User newUser, string nickname)
+    {
+        var newUserProfile = new UserProfile
+        {
+            UserId = newUser.Id,
+            Gender = UserGender.NotSelected,
+            NickName = nickname,
+            AboutMe = string.Empty,
+            AvatarUrl = CommonValues.Others.DefaultUserAvaterUrl,
+            RegisteredAt = DateTime.UtcNow,
+            LastActiveAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
         };
 
-        // TODO: Add avatar url
-        var newUserProfile = new UserProfile { UserId = newUser.Id, AvatarUrl = "" };
-
-        return (newUser, newUserProfile);
+        return newUserProfile;
     }
 }

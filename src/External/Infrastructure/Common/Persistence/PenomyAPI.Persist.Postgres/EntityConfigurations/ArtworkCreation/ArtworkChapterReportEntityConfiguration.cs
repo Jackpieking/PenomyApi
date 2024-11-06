@@ -32,6 +32,20 @@ internal sealed class ArtworkChapterReportEntityConfiguration : IEntityConfigura
             .HasColumnType(DatabaseNativeTypes.TIMESTAMPTZ)
             .IsRequired();
 
+        builder.Property(violationFlag => violationFlag.ResolveStatus).IsRequired();
+
+        builder
+            .Property(violationFlag => violationFlag.ResolveNote)
+            .HasMaxLength(ArtworkViolationFlag.MetaData.ResolveNoteLength)
+            .IsRequired();
+
+        builder.Property(violationFlag => violationFlag.ResolvedBy).IsRequired();
+
+        builder
+            .Property(violationFlag => violationFlag.ResolvedAt)
+            .HasColumnType(DatabaseNativeTypes.TIMESTAMPTZ)
+            .IsRequired();
+
         #region Relationships
         builder
             .HasOne(report => report.ReportedArtwork)

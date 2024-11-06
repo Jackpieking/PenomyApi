@@ -1,12 +1,23 @@
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.JsonWebTokens;
 using PenomyAPI.BuildingBlock.FeatRegister;
 using PenomyAPI.BuildingBlock.FeatRegister.Common;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.ServiceConfigurations;
 
+// Global Configuration.
+Console.OutputEncoding = Encoding.UTF8;
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+JsonWebTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
 var builder = WebApplication.CreateBuilder(args);
+
 var services = builder.Services;
 var configuration = builder.Configuration;
 
@@ -22,18 +33,24 @@ var app = builder.Build();
 FeatureHandlerResolver.SetProvider(app.Services);
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment()) { }
+if (app.Environment.IsDevelopment())
+{
+    app.UseMiddleware<AppGlobalExceptionHandler>()
+        .UseCors()
+        .UseFastEndpoints()
+        .UseSwaggerGen()
+        .UseSwaggerUi(options =>
+        {
+            options.Path = string.Empty;
+            options.DefaultModelsExpandDepth = -1;
+        });
+}
 
 if (app.Environment.IsStaging()) { }
 
-if (app.Environment.IsProduction()) { }
-
-app.UseFastEndpoints();
-app.UseCors();
-app.UseSwaggerGen()
-    .UseSwaggerUi(configure: options =>
-    {
-        options.Path = string.Empty;
-    });
+if (app.Environment.IsProduction())
+{
+    app.UseCors().UseFastEndpoints();
+}
 
 await app.RunAsync();

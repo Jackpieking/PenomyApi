@@ -1,18 +1,13 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
-using PenomyAPI.App.FeatG5;
 using PenomyAPI.App.FeatG7;
-using PenomyAPI.App.FeatG8;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG7.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG7.HttpResponse;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG8.DTOs;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG8.HttpResponse;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG7;
 
@@ -35,9 +30,9 @@ public class G7Endpoint : Endpoint<G7Request, G7HttpResponse>
                 "Endpoint for get list of artworks have the same series as current artwork";
             summary.Description =
                 "This endpoint is used for get list of artworks have the same series as current artwork";
-            summary.Response<G8HttpResponse>(
+            summary.Response<G7HttpResponse>(
                 description: "Represent successful operation response.",
-                example: new() { AppCode = G5ResponseStatusCode.SUCCESS.ToString() }
+                example: new() { AppCode = G7ResponseStatusCode.SUCCESS.ToString() }
             );
         });
     }
@@ -59,7 +54,7 @@ public class G7Endpoint : Endpoint<G7Request, G7HttpResponse>
         // Get FeatureHandler response.
         var featResponse = await FeatureExtensions.ExecuteAsync<G7Request, G7Response>(g7Req, ct);
 
-        httpResponse = G7ResponseManager
+        httpResponse = G7HttpResponseManager
             .Resolve(featResponse.StatusCode)
             .Invoke(g7Req, featResponse);
 
@@ -71,6 +66,7 @@ public class G7Endpoint : Endpoint<G7Request, G7HttpResponse>
                 g7ResponseDtos.Add(
                     new ArtworkDto()
                     {
+                        Id = response.Id,
                         AuthorName = response.AuthorName,
                         CategoryName = response
                             .ArtworkCategories.Select(x => x.Category.Name)
@@ -84,7 +80,7 @@ public class G7Endpoint : Endpoint<G7Request, G7HttpResponse>
             httpResponse.Body = new G7ResponseDto { Result = g7ResponseDtos };
             return httpResponse;
         }
-
+        await SendAsync(httpResponse, httpResponse.HttpCode, ct);
         return httpResponse;
     }
 }

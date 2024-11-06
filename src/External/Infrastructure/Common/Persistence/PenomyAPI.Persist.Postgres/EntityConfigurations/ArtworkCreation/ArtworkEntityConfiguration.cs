@@ -19,11 +19,6 @@ internal sealed class ArtworkEntityConfiguration : IEntityConfiguration<Artwork>
             .HasMaxLength(Artwork.MetaData.TitleLength)
             .IsRequired();
 
-        builder
-            .Property(artwork => artwork.OtherName)
-            .HasMaxLength(Artwork.MetaData.OtherNameLength)
-            .IsRequired();
-
         builder.Property(artwork => artwork.PublicLevel).IsRequired();
 
         builder
@@ -44,6 +39,8 @@ internal sealed class ArtworkEntityConfiguration : IEntityConfiguration<Artwork>
             .IsRequired();
 
         builder.Property(artwork => artwork.LastChapterUploadOrder).IsRequired();
+
+        builder.Property(artwork => artwork.FixedTotalChapters).IsRequired();
 
         builder.Property(artwork => artwork.ArtworkStatus).IsRequired();
 

@@ -44,6 +44,16 @@ public sealed class ArtworkMetaData : IEntity
 
     public bool HasAdRevenueEnabled { get; set; }
 
+    public double GetAverageStarRate()
+    {
+        if (TotalUsersRated == 0)
+        {
+            return 0;
+        }
+
+        return (double) TotalStarRates / TotalUsersRated;
+    }
+
     #region Navigation
     public Artwork Artwork { get; set; }
     #endregion

@@ -38,7 +38,7 @@ internal sealed class BugReportEntityConfiguration : IEntityConfiguration<BugRep
             .HasColumnType(DatabaseNativeTypes.TIMESTAMPTZ)
             .IsRequired();
 
-        builder.Property(report => report.IsResolved).IsRequired();
+        builder.Property(report => report.ResolveStatus).IsRequired();
 
         builder
             .Property(report => report.ResolveNote)

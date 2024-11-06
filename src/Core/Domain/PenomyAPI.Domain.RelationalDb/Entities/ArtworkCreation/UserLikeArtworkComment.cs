@@ -14,4 +14,8 @@ public sealed class UserLikeArtworkComment : IEntity
     #region MetaData
     public static class MetaData { }
     #endregion
+
+    #region Navigation Properties
+    public ArtworkComment Comment { get; set; }
+    #endregion
 }

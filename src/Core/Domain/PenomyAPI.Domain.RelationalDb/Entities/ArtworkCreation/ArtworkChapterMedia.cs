@@ -12,6 +12,8 @@ public sealed class ArtworkChapterMedia : EntityWithId<long>
 
     public string FileName { get; set; }
 
+    public long FileSize { get; set; }
+
     public string StorageUrl { get; set; }
 
     #region Navigation
@@ -23,7 +25,7 @@ public sealed class ArtworkChapterMedia : EntityWithId<long>
     {
         public const int FileNameLength = 32;
 
-        public const int StorageUrlLength = 256;
+        public const int StorageUrlLength = 2000;
     }
     #endregion
 }

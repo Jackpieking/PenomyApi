@@ -11,13 +11,15 @@ public static class DirectoryPathHelper
     public static string BuildPath(
         string pathSeparator,
         string rootDirectory,
-        params string[] childFolders)
+        params string[] childFolders
+    )
     {
         const int includingRootDirectory = 1;
 
         var handler = new DefaultInterpolatedStringHandler(
             literalLength: childFolders.Length,
-            formattedCount: includingRootDirectory + childFolders.Length);
+            formattedCount: includingRootDirectory + childFolders.Length
+        );
 
         handler.AppendFormatted(rootDirectory);
 
