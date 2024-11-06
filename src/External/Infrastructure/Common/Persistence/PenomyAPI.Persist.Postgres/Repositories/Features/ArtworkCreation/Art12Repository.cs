@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore.Storage;
 using PenomyAPI.App.Common.Models.Common;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
+using PenomyAPI.Domain.RelationalDb.Models.ArtworkCreation.FeatArt12;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.ArtworkCreation;
 using PenomyAPI.Persist.Postgres.Repositories.Helpers;
 using System.Collections.Generic;
@@ -92,20 +94,39 @@ internal sealed class Art12Repository : IArt12Repository
             cancellationToken);
     }
 
-    public Task<int> GetCurrentUploadOrderByChapterIdAsync(
+    public Task<PublishStatus> GetCurrentChapterPublishStatusAsync(
         long chapterId,
         CancellationToken cancellationToken)
     {
         return _chapterDbSet
             .AsNoTracking()
             .Where(chapter => chapter.Id == chapterId)
-            .Select(chapter => chapter.UploadOrder)
+            .Select(chapter => chapter.PublishStatus)
             .FirstOrDefaultAsync(cancellationToken);
     }
 
+    public Task<List<ArtworkChapterMedia>> GetChapterMediasByChapterIdAsync(
+    long chapterId,
+    CancellationToken cancellationToken)
+    {
+        return _dbContext
+            .Set<ArtworkChapterMedia>()
+            .AsNoTracking()
+            .Where(chapterMedia => chapterMedia.ChapterId == chapterId)
+            .Select(chapterMedia => new ArtworkChapterMedia
+            {
+                Id = chapterMedia.Id,
+                UploadOrder = chapterMedia.UploadOrder,
+                FileSize = chapterMedia.FileSize,
+                StorageUrl = chapterMedia.StorageUrl
+            })
+            .OrderBy(chapterMedia => chapterMedia.UploadOrder)
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<bool> UpdateComicChapterAsync(
-        bool changeFromDrafted,
-        bool updateContentOnly,
+        bool isChangedFromDraftedToOtherPublishStatus,
+        bool isScheduleDateTimeChanged,
         ArtworkChapter chapterDetail,
         IEnumerable<ArtworkChapterMedia> updatedChapterMediaItems,
         IEnumerable<long> deletedChapterMediaIds,
@@ -119,8 +140,8 @@ internal sealed class Art12Repository : IArt12Repository
         await executionStrategy.ExecuteAsync(
             operation: async () =>
                 await InternalUpdateComicChapterAsync(
-                    changeFromDrafted: changeFromDrafted,
-                    updateContentOnly: updateContentOnly,
+                    isChangedFromDraftedToOtherPublishStatus,
+                    isScheduleDateTimeChanged,
                     updatedDetail: chapterDetail,
                     updatedChapterMediaItems: updatedChapterMediaItems,
                     deletedChapterMediaIds: deletedChapterMediaIds,
@@ -134,8 +155,8 @@ internal sealed class Art12Repository : IArt12Repository
     }
 
     private async Task InternalUpdateComicChapterAsync(
-        bool changeFromDrafted,
-        bool updateContentOnly,
+        bool isChangedFromDraftedToOtherPublishStatus,
+        bool isScheduleDateTimeChanged,
         ArtworkChapter updatedDetail,
         IEnumerable<ArtworkChapterMedia> updatedChapterMediaItems,
         IEnumerable<long> deletedChapterMediaIds,
@@ -149,34 +170,10 @@ internal sealed class Art12Repository : IArt12Repository
         {
             transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
 
-            // Update the chapter detail information.
-            if (updateContentOnly)
-            {
-                await _chapterDbSet
-                .Where(chapter => chapter.Id == updatedDetail.Id)
-                .ExecuteUpdateAsync(
-                    chapter => chapter
-                        .SetProperty(
-                            chapter => chapter.Title,
-                            chapter => updatedDetail.Title)
-                        .SetProperty(
-                            chapter => chapter.Description,
-                            chapter => updatedDetail.Description)
-                        .SetProperty(
-                            chapter => chapter.PublicLevel,
-                            chapter => updatedDetail.PublicLevel)
-                        .SetProperty(
-                            chapter => chapter.AllowComment,
-                            chapter => updatedDetail.AllowComment)
-                        .SetProperty(
-                            chapter => chapter.UpdatedAt,
-                            chapter => updatedDetail.UpdatedAt)
-                        .SetProperty(
-                            chapter => chapter.UpdatedBy,
-                            chapter => updatedDetail.UpdatedBy),
-                    cancellationToken);
-            }
-            else
+            // If changed from drafted mode to other mode,
+            // then update the current chapter upload order and
+            // the current comic last chapter upload order.
+            if (isChangedFromDraftedToOtherPublishStatus)
             {
                 await _chapterDbSet
                     .Where(chapter => chapter.Id == updatedDetail.Id)
@@ -189,8 +186,51 @@ internal sealed class Art12Repository : IArt12Repository
                                 chapter => chapter.Description,
                                 chapter => updatedDetail.Description)
                             .SetProperty(
+                                chapter => chapter.PublicLevel,
+                                chapter => updatedDetail.PublicLevel)
+                            .SetProperty(
+                                chapter => chapter.AllowComment,
+                                chapter => updatedDetail.AllowComment)
+                            .SetProperty(
                                 chapter => chapter.UploadOrder,
                                 chapter => updatedDetail.UploadOrder)
+                            .SetProperty(
+                                chapter => chapter.UpdatedAt,
+                                chapter => updatedDetail.UpdatedAt)
+                            .SetProperty(
+                                chapter => chapter.UpdatedBy,
+                                chapter => updatedDetail.UpdatedBy)
+                            .SetProperty(
+                                chapter => chapter.PublishedAt,
+                                chapter => updatedDetail.PublishedAt)
+                            .SetProperty(
+                                chapter => chapter.PublishStatus,
+                                chapter => updatedDetail.PublishStatus),
+                        cancellationToken);
+
+                await _dbContext.Set<Artwork>()
+                    .Where(comic => comic.Id == updatedDetail.ArtworkId)
+                    .ExecuteUpdateAsync(
+                        comic => comic
+                            .SetProperty(
+                                updateDetail => updateDetail.LastChapterUploadOrder,
+                                updateDetail => updateDetail.LastChapterUploadOrder + 1),
+                        cancellationToken);
+            }
+            // If not changed from draft, then check if
+            // the current chapter has any change in publish detail.
+            else if (isScheduleDateTimeChanged)
+            {
+                await _chapterDbSet
+                    .Where(chapter => chapter.Id == updatedDetail.Id)
+                    .ExecuteUpdateAsync(
+                        chapter => chapter
+                            .SetProperty(
+                                chapter => chapter.Title,
+                                chapter => updatedDetail.Title)
+                            .SetProperty(
+                                chapter => chapter.Description,
+                                chapter => updatedDetail.Description)
                             .SetProperty(
                                 chapter => chapter.PublicLevel,
                                 chapter => updatedDetail.PublicLevel)
@@ -211,18 +251,43 @@ internal sealed class Art12Repository : IArt12Repository
                                 chapter => updatedDetail.PublishStatus),
                         cancellationToken);
             }
-
-            // If changed from drafted mode to other mode,
-            // then update the last chapter upload order
-            if (changeFromDrafted)
+            else
             {
-                await _dbContext.Set<Artwork>()
-                    .Where(comic => comic.Id == updatedDetail.ArtworkId)
+                await _chapterDbSet
+                    .Where(chapter => chapter.Id == updatedDetail.Id)
                     .ExecuteUpdateAsync(
-                        comic => comic
+                        chapter => chapter
                             .SetProperty(
-                                comic => comic.LastChapterUploadOrder,
-                                comic => comic.LastChapterUploadOrder + 1),
+                                chapter => chapter.Title,
+                                chapter => updatedDetail.Title)
+                            .SetProperty(
+                                chapter => chapter.Description,
+                                chapter => updatedDetail.Description)
+                            .SetProperty(
+                                chapter => chapter.PublicLevel,
+                                chapter => updatedDetail.PublicLevel)
+                            .SetProperty(
+                                chapter => chapter.AllowComment,
+                                chapter => updatedDetail.AllowComment)
+                            .SetProperty(
+                                chapter => chapter.UpdatedAt,
+                                chapter => updatedDetail.UpdatedAt)
+                            .SetProperty(
+                                chapter => chapter.UpdatedBy,
+                                chapter => updatedDetail.UpdatedBy),
+                        cancellationToken);
+            }
+
+            // If the thumbnail URL is not null, then update again.
+            if (!string.IsNullOrEmpty(updatedDetail.ThumbnailUrl))
+            {
+                await _chapterDbSet
+                    .Where(chapter => chapter.Id == updatedDetail.Id)
+                    .ExecuteUpdateAsync(
+                        chapter => chapter
+                            .SetProperty(
+                                chapter => chapter.ThumbnailUrl,
+                                chapter => updatedDetail.ThumbnailUrl),
                         cancellationToken);
             }
 
@@ -282,24 +347,5 @@ internal sealed class Art12Repository : IArt12Repository
                 await transaction.DisposeAsync();
             }
         }
-    }
-
-    public Task<List<ArtworkChapterMedia>> GetChapterMediasByChapterIdAsync(
-        long chapterId,
-        CancellationToken cancellationToken)
-    {
-        return _dbContext
-            .Set<ArtworkChapterMedia>()
-            .AsNoTracking()
-            .Where(chapterMedia => chapterMedia.ChapterId == chapterId)
-            .Select(chapterMedia => new ArtworkChapterMedia
-            {
-                Id = chapterMedia.Id,
-                UploadOrder = chapterMedia.UploadOrder,
-                FileSize = chapterMedia.FileSize,
-                StorageUrl = chapterMedia.StorageUrl
-            })
-            .OrderBy(chapterMedia => chapterMedia.UploadOrder)
-            .ToListAsync(cancellationToken);
     }
 }

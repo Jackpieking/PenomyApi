@@ -1,6 +1,7 @@
 ﻿using FastEndpoints;
 using PenomyAPI.App.FeatArt6;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt6.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt6.HttpResponses;
 using System.Linq;
 using System.Threading;
@@ -25,19 +26,7 @@ public class Art6Endpoint : Endpoint<Art6Request, Art6HttpResponse>
 
         var httpResponse = new Art6HttpResponse
         {
-            Body = featureResponse.Chapters.Select(chapter => new DTOs.ComicChapterDto
-            {
-                Id = chapter.Id.ToString(),
-                Title = chapter.Title,
-                UploadOrder = chapter.UploadOrder,
-                PublishStatus = chapter.PublishStatus,
-                ThumbnailUrl = chapter.ThumbnailUrl,
-                AllowComment = chapter.AllowComment,
-                CreatedAt = chapter.CreatedAt,
-                TotalComments = chapter.ChapterMetaData.TotalComments,
-                TotalViews = chapter.ChapterMetaData.TotalViews,
-                TotalFavorites = chapter.ChapterMetaData.TotalFavorites,
-            })
+            Body = featureResponse.Chapters.Select(ComicChapterDto.MapFrom)
         };
 
         await SendAsync(httpResponse);
