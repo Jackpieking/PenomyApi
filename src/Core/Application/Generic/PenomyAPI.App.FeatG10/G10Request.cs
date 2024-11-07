@@ -4,7 +4,9 @@ namespace PenomyAPI.App.FeatG10;
 
 public class G10Request : IFeatureRequest<G10Response>
 {
-    public long ArtworkId { get; set; }
+    public string ArtworkId { get; set; }
+
+    public string CommentSection { get; set; }
 
     private string _userId;
 
