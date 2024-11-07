@@ -1,7 +1,10 @@
 using FastEndpoints;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.G44;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Common;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Common.Middlewares;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G44.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G44.HttpResponse;
 using System.Threading;
@@ -9,13 +12,15 @@ using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G44;
 
-public class G44Endpoint : Endpoint<G44Request, G44HttpResponse>
+public class G44Endpoint : Endpoint<G44RequestDto, G44HttpResponse>
 {
     public override void Configure()
     {
         Post("/profile/user/unfollowed-artworks");
 
-        AllowAnonymous();
+        AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
+
+        PreProcessor<AuthPreProcessor<G44RequestDto>>();
 
         Description(builder: builder =>
         {
@@ -34,14 +39,16 @@ public class G44Endpoint : Endpoint<G44Request, G44HttpResponse>
     }
 
     public override async Task<G44HttpResponse> ExecuteAsync(
-        G44Request requestDto,
+        G44RequestDto requestDto,
         CancellationToken ct
     )
     {
+        var stateBag = ProcessorState<StateBag>();
+
         var featRequest = new G44Request
         {
-            userId = requestDto.userId,
-            artworkId = requestDto.artworkId,
+            UserId = stateBag.AppRequest.UserId,
+            ArtworkId = requestDto.ArtworkId,
             ArtworkType = requestDto.ArtworkType,
         };
 
