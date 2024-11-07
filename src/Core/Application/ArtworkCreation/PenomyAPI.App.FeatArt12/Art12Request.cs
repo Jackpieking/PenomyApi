@@ -28,25 +28,17 @@ public sealed class Art12Request : IFeatureRequest<Art12Response>
     public ChapterUpdateMode UpdateMode { get; set; }
 
     /// <summary>
-    ///     Check if current chapter keep updating as drafted mode or not.
+    ///     Check if current chapter want to update to scheduled status or not.
     /// </summary>
-    public bool IsDrafted()
-    {
-        return UpdateMode == ChapterUpdateMode.Drafted;
-    }
-
-    /// <summary>
-    ///     Check if current chapter want to update as scheduled mode or not.
-    /// </summary>
-    public bool IsScheduled()
+    public bool IsChangedToSchedule()
     {
         return UpdateMode == ChapterUpdateMode.Scheduled;
     }
 
     /// <summary>
-    ///     Check if current chapter want to update as published mode or not.
+    ///     Check if current chapter want to update to published status or not.
     /// </summary>
-    public bool IsPublished()
+    public bool IsChangeToPublish()
     {
         return UpdateMode == ChapterUpdateMode.Published;
     }
@@ -63,6 +55,16 @@ public sealed class Art12Request : IFeatureRequest<Art12Response>
     public DateTime ScheduledAt { get; set; }
 
     public AppFileInfo ThumbnailFileInfo { get; set; }
+
+    public string GetUpdatedThumbnailUrl()
+    {
+        if (Equals(ThumbnailFileInfo, null))
+        {
+            return null;
+        }
+
+        return ThumbnailFileInfo.StorageUrl;
+    }
 
     /// <summary>
     ///     List of all newly upload chapter images file info.

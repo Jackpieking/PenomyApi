@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 
 namespace PenomyAPI.Domain.RelationalDb.Repositories.Features.ArtworkCreation;
 
@@ -77,14 +78,16 @@ public interface IArt12Repository
     );
 
     /// <summary>
-    ///     Get the current upload order of the specified chapter.
+    ///     Get the current publish status of the specified chapter.
     /// </summary>
     /// <param name="chapterId">
-    ///     Id of the chapter to get upload order.
+    ///     Id of the chapter to get publish status.
     /// </param>
     /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    Task<int> GetCurrentUploadOrderByChapterIdAsync(
+    /// <returns>
+    ///     <see cref="Task{PublishStatus}"/> contains the result of current chapter publish status.
+    /// </returns>
+    Task<PublishStatus> GetCurrentChapterPublishStatusAsync(
         long chapterId,
         CancellationToken cancellationToken
     );
@@ -92,13 +95,16 @@ public interface IArt12Repository
     /// <summary>
     ///     Update the comic chapter detail by the provided information.
     /// </summary>
-    /// <param name="changeFromDrafted">
+    /// <param name="isChangedFromDraftedToOtherPublishStatus">
     ///     Specify to update the chapter from drafted mode to other mode.
     ///     If true, then must have updated in the artwork upload order.
     /// </param>
-    /// <param name="updateContentOnly">
-    ///     Specify to update the content of the chapter only
+    /// <param name="isScheduleDateTimeChanged">
+    ///     If <see langword="false"/>, then update the content of the chapter only
     ///     without affecting its publish-status and published at.
+    ///     <br/> 
+    ///     If <see langword="true"/>, update the content of the chapter
+    ///     with its publish-status and published at.
     /// </param>
     /// <param name="chapterDetail">
     ///     The detail of the chapter to update.
@@ -117,8 +123,8 @@ public interface IArt12Repository
     ///     The <see cref="Task{Boolean}"/> instance contain updating result.
     /// </returns>
     Task<bool> UpdateComicChapterAsync(
-        bool changeFromDrafted,
-        bool updateContentOnly,
+        bool isChangedFromDraftedToOtherPublishStatus,
+        bool isScheduleDateTimeChanged,
         ArtworkChapter chapterDetail,
         IEnumerable<ArtworkChapterMedia> updatedChapterMediaItems,
         IEnumerable<long> deletedChapterMediaIds,
