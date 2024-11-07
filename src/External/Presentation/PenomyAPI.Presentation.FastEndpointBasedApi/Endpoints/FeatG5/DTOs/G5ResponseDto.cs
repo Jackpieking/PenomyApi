@@ -20,4 +20,5 @@ public class G5ResponseDto
     public long CommentCount { get; set; }
     public long FollowCount { get; set; }
     public bool IsUserFavorite { get; set; }
+    public bool IsAllowComment { get; set; }
 }

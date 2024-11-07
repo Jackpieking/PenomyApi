@@ -62,7 +62,8 @@ public class G5Repository : IG5Repository
                     AverageStarRate = x.ArtworkMetaData.AverageStarRate,
                     TotalFollowers = x.ArtworkMetaData.TotalFollowers
                 },
-                ThumbnailUrl = x.ThumbnailUrl
+                ThumbnailUrl = x.ThumbnailUrl,
+                AllowComment = x.AllowComment
             })
             .AsNoTracking()
             .AsSplitQuery()

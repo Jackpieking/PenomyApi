@@ -74,7 +74,8 @@ public class G5Endpoint : Endpoint<G5Request, G5HttpResponse>
                 Introduction = featResponse.Result.Introduction,
                 CommentCount = featResponse.Result.ArtworkMetaData.TotalComments,
                 IsUserFavorite = featResponse.IsArtworkFavorite,
-                FollowCount = featResponse.Result.ArtworkMetaData.TotalFollowers
+                FollowCount = featResponse.Result.ArtworkMetaData.TotalFollowers,
+                IsAllowComment = featResponse.Result.AllowComment
             };
         await SendAsync(httpResponse, httpResponse.HttpCode, ct);
         return httpResponse;
