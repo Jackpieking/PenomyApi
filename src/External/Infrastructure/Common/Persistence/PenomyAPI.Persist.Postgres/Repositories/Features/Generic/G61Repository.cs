@@ -18,6 +18,7 @@ public class G61Repository : IG61Repository
     {
         _dbContext = dbContext;
         _userFollowedCreators = dbContext.Set<UserFollowedCreator>();
+        _userProfiles = dbContext.Set<UserProfile>();
         _creatorProfiles = dbContext.Set<CreatorProfile>();
 
     }
