@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
-using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using PenomyAPI.Persist.Postgres.Data.DbContexts;
 
@@ -76,11 +75,5 @@ public class G8Repository : IG8Repository
     public Task<bool> IsArtworkExistAsync(long id, CancellationToken token = default)
     {
         return _dbContext.Set<Artwork>().AnyAsync(x => x.Id == id && x.ArtworkType == ArtworkType.Comic, token);
-    }
-
-    private static bool IsValidArtworkAsync(Artwork artwork)
-    {
-        return artwork.ArtworkType == ArtworkType.Comic && artwork.IsTemporarilyRemoved == false &&
-               artwork.IsTakenDown == false && artwork.PublicLevel != ArtworkPublicLevel.Private;
     }
 }
