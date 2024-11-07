@@ -1,7 +1,10 @@
 using FastEndpoints;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.G43;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Common;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Common.Middlewares;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G43.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G43.HttpResponse;
 using System.Threading;
@@ -15,7 +18,9 @@ public class G43Endpoint : Endpoint<G43Request, G43HttpResponse>
     {
         Post("/profile/user/followed-artworks");
 
-        AllowAnonymous();
+        AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
+
+        PreProcessor<AuthPreProcessor<G43Request>>();
 
         Description(builder: builder =>
         {
@@ -38,9 +43,11 @@ public class G43Endpoint : Endpoint<G43Request, G43HttpResponse>
         CancellationToken ct
     )
     {
+        var stateBag = ProcessorState<StateBag>();
+
         var featRequest = new G43Request
         {
-            UserId = requestDto.UserId,
+            UserId = stateBag.AppRequest.UserId,
             ArtworkId = requestDto.ArtworkId,
             ArtworkType = requestDto.ArtworkType,
         };
