@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G43;
 
-public class G43Endpoint : Endpoint<G43Request, G43HttpResponse>
+public class G43Endpoint : Endpoint<G43RequestDto, G43HttpResponse>
 {
     public override void Configure()
     {
@@ -20,7 +20,7 @@ public class G43Endpoint : Endpoint<G43Request, G43HttpResponse>
 
         AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
 
-        PreProcessor<AuthPreProcessor<G43Request>>();
+        PreProcessor<AuthPreProcessor<G43RequestDto>>();
 
         Description(builder: builder =>
         {
@@ -39,7 +39,7 @@ public class G43Endpoint : Endpoint<G43Request, G43HttpResponse>
     }
 
     public override async Task<G43HttpResponse> ExecuteAsync(
-        G43Request requestDto,
+        G43RequestDto requestDto,
         CancellationToken ct
     )
     {
