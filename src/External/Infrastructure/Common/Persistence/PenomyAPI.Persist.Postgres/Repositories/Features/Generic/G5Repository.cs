@@ -38,7 +38,7 @@ public class G5Repository : IG5Repository
                 },
                 ArtworkCategories = x.ArtworkCategories.Select(y => new ArtworkCategory
                 {
-                    Category = new Category { Name = y.Category.Name },
+                    Category = new Category {Id = y.Category.Id, Name = y.Category.Name },
                     ArtworkId = y.ArtworkId,
                     CategoryId = y.CategoryId
                 }),
