@@ -14,7 +14,7 @@ using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5.Middlewares;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5;
 
-public class G5Endpoint : Endpoint<G5Request, G5HttpResponse>
+public class G5Endpoint : Endpoint<G5RequestDto, G5HttpResponse>
 {
     public override void Configure()
     {
@@ -37,13 +37,13 @@ public class G5Endpoint : Endpoint<G5Request, G5HttpResponse>
     }
 
     public override async Task<G5HttpResponse> ExecuteAsync(
-        G5Request requestDto,
+        G5RequestDto requestDto,
         CancellationToken ct
     )
     {
         var stateBag = ProcessorState<G5StateBag>();
 
-        var g5Req = new G5Request { Id = requestDto.Id, UserId = stateBag.AppRequest.GetUserId() };
+        var g5Req = new G5Request { Id = requestDto.ArtworkId, UserId = stateBag.AppRequest.GetUserId() };
 
         // Get FeatureHandler response.
         var featResponse = await FeatureExtensions.ExecuteAsync<G5Request, G5Response>(g5Req, ct);
@@ -59,9 +59,6 @@ public class G5Endpoint : Endpoint<G5Request, G5HttpResponse>
                 Name = featResponse.Result.Title,
                 AuthorName = featResponse.Result.AuthorName,
                 CountryName = featResponse.Result.Origin.CountryName,
-                Categories = featResponse
-                    .Result.ArtworkCategories.Select(x => x.Category.Name)
-                    .ToList(),
                 SeriesName = featResponse
                     .Result.ArtworkSeries.Select(x => x.Series.Title)
                     .FirstOrDefault(),
@@ -74,8 +71,16 @@ public class G5Endpoint : Endpoint<G5Request, G5HttpResponse>
                 Introduction = featResponse.Result.Introduction,
                 CommentCount = featResponse.Result.ArtworkMetaData.TotalComments,
                 IsUserFavorite = featResponse.IsArtworkFavorite,
-                FollowCount = featResponse.Result.ArtworkMetaData.TotalFollowers
+                FollowCount = featResponse.Result.ArtworkMetaData.TotalFollowers,
+                IsAllowComment = featResponse.Result.AllowComment
             };
+        httpResponse.Body.Categories = featResponse.Result.ArtworkCategories
+            .Select(cate => new CategoryDto
+            {
+                CategoryId = cate.Category.Id,
+                CategoryName = cate.Category.Name
+            })
+            .ToList();
         await SendAsync(httpResponse, httpResponse.HttpCode, ct);
         return httpResponse;
     }
