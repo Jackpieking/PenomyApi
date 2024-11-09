@@ -48,7 +48,11 @@ public sealed class G31AHandler : IFeatureHandler<G31ARequest, G31AResponse>
             claims:
             [
                 new(CommonValues.Claims.TokenIdClaim, newTokenId),
-                new(CommonValues.Claims.UserIdClaim, request.GetUserId())
+                new(CommonValues.Claims.UserIdClaim, request.GetUserId()),
+                new(
+                    CommonValues.Claims.TokenPurpose.Type,
+                    CommonValues.Claims.TokenPurpose.Values.AppUserAccess
+                ),
             ],
             additionalSecondsFromNow: 10 * 60 // 10 minutes
         );
