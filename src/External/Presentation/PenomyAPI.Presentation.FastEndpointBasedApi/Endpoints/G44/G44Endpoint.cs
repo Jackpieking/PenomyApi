@@ -16,7 +16,7 @@ public class G44Endpoint : Endpoint<G44RequestDto, G44HttpResponse>
 {
     public override void Configure()
     {
-        Post("/profile/user/unfollowed-artworks");
+        Post("/G44/profile/user/unfollowed-artworks");
 
         AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
 
