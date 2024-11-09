@@ -1,40 +1,40 @@
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 
 namespace PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 
 public interface IG25Repository
 {
     /// <summary>
-    ///     Get the number of artworks the user has viewed.
+    ///     Get the total numbers of artwork by the specified
+    ///     <paramref name="artworkType"/> and <paramref name="userId"/>.
     /// </summary>
+    /// <param name="artworkType">
+    ///     The type of artwork to take.
+    /// </param>
     /// <param name="userId">
-    ///     The id of the user wants to view histories.
+    ///     The id of the user who favorite these artworks.
     /// </param>
-    /// <param name="artType">
-    ///     The type of the artworks.
-    /// </param>
-    /// <param name="ct">
-    ///     The token to notify the server to cancel the operation.
-    /// </param>
+    /// <param name="cancellationToken"></param>
     /// <returns>
-    ///     Return number of artworks the user has viewed if the user has login.
+    ///     The total numbers of artwork.
     /// </returns>
-    Task<int> ArtworkHistoriesCount(long userId, ArtworkType artType, CancellationToken ct);
+    Task<int> GetTotalOfArtworksByUserIdAndTypeAsync(
+        long userId,
+        ArtworkType artworkType,
+        CancellationToken cancellationToken);
 
     /// <summary>
-    ///     Get user artworks view history.
+    ///    Get all the artworks by the specified <paramref name="userId"/>
+    ///    and <paramref name="artworkType"/> using pagination.
     /// </summary>
     /// <param name="userId">
     ///     The id of the user wants to view histories.
     /// </param>
     /// <param name="artType">
     ///     The type of the artworks.
-    /// </param>
-    /// <param name="ct">
-    ///     The token to notify the server to cancel the operation.
     /// </param>
     /// <param name="pageNum">
     ///     The number of current page.
@@ -42,20 +42,24 @@ public interface IG25Repository
     /// <param name="artNum">
     ///     The number of artwork to show.
     /// </param>
+    /// <param name="ct">
+    ///     The token to notify the server to cancel the operation.
+    /// </param>
     /// <returns>
-    ///     Return artworks view history if the user has login.
-    ///     Otherwise, false.
+    ///     Return the user's artworks view history.
+    ///     Otherwise, empty.
     /// </returns>
-    Task<IEnumerable<IEnumerable<UserArtworkViewHistory>>> GetArtworkViewHistories(
+    Task<IEnumerable<IEnumerable<UserArtworkViewHistory>>> GetArtworkViewHistByUserIdAndTypeWithPaginationAsync(
         long userId,
         ArtworkType artType,
-        CancellationToken ct,
-        int pageNum = 1,
-        int artNum = 20
+        int pageNum,
+        int artNum,
+        CancellationToken ct
     );
 
     /// <summary>
-    ///     Get user artworks view history.
+    ///    Add the user's artworks view history by the specified <paramref name="userId"/>,
+    ///    <paramref name="chapterId"/> and <paramref name="artworkType"/>.
     /// </summary>
     /// <param name="userId">
     ///     The id of the user has viewed the chapter.
@@ -69,22 +73,22 @@ public interface IG25Repository
     /// <param name="type">
     ///     The type of the artworks.
     /// </param>
-    /// <param name="ct">
-    ///     The token to notify the server to cancel the operation.
-    /// </param>
     /// <param name="limitChapter">
     ///     The number of chapters can be saved for one art.
     /// </param>
+    /// <param name="ct">
+    ///     The token to notify the server to cancel the operation.
+    /// </param>
     /// <returns>
-    ///     Return artworks view history if the user has login.
+    ///     Return true if add succesfully.
     ///     Otherwise, false.
     /// </returns>
-    Task<bool> AddArtworkViewHist(
+    Task<bool> AddUserArtworkViewHistAsync(
         long userId,
         long artworkId,
         long chapterId,
         ArtworkType type,
-        CancellationToken ct,
-        int limitChapter = 5
+        int limitChapter,
+        CancellationToken ct
     );
 }

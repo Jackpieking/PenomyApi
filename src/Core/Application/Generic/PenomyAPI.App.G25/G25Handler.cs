@@ -18,22 +18,31 @@ public class G25Handler : IFeatureHandler<G25Request, G25Response>
 
     public async Task<G25Response> ExecuteAsync(G25Request request, CancellationToken ct)
     {
-        if (request.UserId == 0)
+        try
         {
-            return new G25Response { StatusCode = G25ResponseStatusCode.EMPTY };
-        }
+            var artViewHist = await _g25Repository
+                .GetArtworkViewHistByUserIdAndTypeWithPaginationAsync(
+                    request.UserId,
+                    request.ArtworkType,
+                    request.PageNum,
+                    request.ArtNum,
+                    ct
+                );
 
-        return new G25Response
+            return new G25Response
+            {
+                Result = artViewHist,
+                IsSuccess = true,
+                StatusCode = G25ResponseStatusCode.SUCCESS
+            };
+        }
+        catch
         {
-            Result = await _g25Repository.GetArtworkViewHistories(
-                request.UserId,
-                request.ArtworkType,
-                ct,
-                request.PageNum,
-                request.ArtNum
-            ),
-            IsSuccess = true,
-            StatusCode = G25ResponseStatusCode.SUCCESS
-        };
+            return new G25Response
+            {
+                IsSuccess = false,
+                StatusCode = G25ResponseStatusCode.FAILED
+            };
+        }
     }
 }

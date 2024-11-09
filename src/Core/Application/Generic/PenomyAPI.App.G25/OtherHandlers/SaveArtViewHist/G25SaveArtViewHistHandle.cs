@@ -1,9 +1,9 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using PenomyAPI.App.Common;
+﻿using PenomyAPI.App.Common;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.App.G25.OtherHandlers.SaveArtViewHist;
 
@@ -22,26 +22,30 @@ public class G25SaveArtViewHistHandle
         CancellationToken ct
     )
     {
-        if (request.UserId == 0)
+        try
         {
-            return new G25SaveArtViewHistResponse
-            {
-                StatusCode = G25SaveArtViewHistResponseStatusCode.DATABASE_ERROR
-            };
-        }
-
-        await _g25Repository.AddArtworkViewHist(
+            await _g25Repository.AddUserArtworkViewHistAsync(
             request.UserId,
             request.ArtworkId,
             request.ChapterId,
             request.ArtworkType,
+            limitChapter: 5,
             ct
-        );
+            );
+        }
+        catch
+        {
+            return new G25SaveArtViewHistResponse
+            {
+                IsSuccess = false,
+                StatusCode = G25ResponseStatusCode.FAILED
+            };
+        }
 
         return new G25SaveArtViewHistResponse
         {
             IsSuccess = true,
-            StatusCode = G25SaveArtViewHistResponseStatusCode.SUCCESS
+            StatusCode = G25ResponseStatusCode.SUCCESS
         };
     }
 }
