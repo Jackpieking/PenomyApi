@@ -2,6 +2,6 @@
 {
     public class G4RequestDto
     {
-        public long CategoryId { get; set; }
+        public string CategoryId { get; set; }
     }
 }
