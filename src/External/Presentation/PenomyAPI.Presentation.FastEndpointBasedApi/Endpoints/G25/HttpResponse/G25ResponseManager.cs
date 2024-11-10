@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Concurrent;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.G25;
+using System;
+using System.Collections.Concurrent;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G25.HttpResponse;
 
@@ -28,12 +28,42 @@ public class G25ResponseManager
         );
 
         _dictionary.TryAdd(
-            key: G25ResponseStatusCode.EMPTY,
+            key: G25ResponseStatusCode.SUCCESS,
             value: (_, response) =>
                 new()
                 {
-                    AppCode = $"G25.{G25ResponseStatusCode.EMPTY}",
-                    HttpCode = StatusCodes.Status404NotFound,
+                    AppCode = $"G25.{G25ResponseStatusCode.INVALID_REQUEST}",
+                    HttpCode = StatusCodes.Status200OK,
+                }
+        );
+
+        _dictionary.TryAdd(
+            key: G25ResponseStatusCode.SUCCESS,
+            value: (_, response) =>
+                new()
+                {
+                    AppCode = $"G25.{G25ResponseStatusCode.FAILED}",
+                    HttpCode = StatusCodes.Status200OK,
+                }
+        );
+
+        _dictionary.TryAdd(
+            key: G25ResponseStatusCode.SUCCESS,
+            value: (_, response) =>
+                new()
+                {
+                    AppCode = $"G25.{G25ResponseStatusCode.UN_AUTHORIZED}",
+                    HttpCode = StatusCodes.Status200OK,
+                }
+        );
+
+        _dictionary.TryAdd(
+            key: G25ResponseStatusCode.FAILED,
+            value: (_, response) =>
+                new()
+                {
+                    AppCode = $"G25.{G25ResponseStatusCode.FORBIDDEN}",
+                    HttpCode = StatusCodes.Status400BadRequest,
                 }
         );
     }

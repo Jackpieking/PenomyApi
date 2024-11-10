@@ -22,7 +22,7 @@ internal sealed class G25Repository : IG25Repository
         _artworkMetaDataDbSet = dbContext.Set<ArtworkMetaData>();
     }
 
-    public async Task<int> ArtworkHistoriesCount(
+    public async Task<int> GetTotalOfArtworksByUserIdAndTypeAsync(
         long userId,
         ArtworkType artType,
         CancellationToken ct
@@ -35,12 +35,12 @@ internal sealed class G25Repository : IG25Repository
             .CountAsync(ct);
     }
 
-    public async Task<IEnumerable<IEnumerable<UserArtworkViewHistory>>> GetArtworkViewHistories(
+    public async Task<IEnumerable<IEnumerable<UserArtworkViewHistory>>> GetArtworkViewHistByUserIdAndTypeWithPaginationAsync(
         long userId,
         ArtworkType artType,
-        CancellationToken ct,
-        int pageNum = 1,
-        int artNum = 20
+        int pageNum,
+        int artNum,
+        CancellationToken ct
     )
     {
         var viewHist = await _viewHistDbSet
@@ -84,17 +84,19 @@ internal sealed class G25Repository : IG25Repository
         return viewHist;
     }
 
-    public async Task<bool> AddArtworkViewHist(
+    public async Task<bool> AddUserArtworkViewHistAsync(
         long userId,
         long artworkId,
         long chapterId,
         ArtworkType type,
-        CancellationToken ct,
-        int limitChapter = 5
+        int limitChapter,
+        CancellationToken ct
     )
     {
-        try
+        await _dbContext.Database.CreateExecutionStrategy().ExecuteAsync(async () =>
         {
+            using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken: ct);
+
             var readViewHist = _viewHistDbSet;
 
             // If the chapter has viewed update the chapter view time
@@ -136,12 +138,11 @@ internal sealed class G25Repository : IG25Repository
                 .Where(o => o.ArtworkId == artworkId)
                 .ExecuteUpdateAsync(o => o.SetProperty(o => o.TotalViews, e => e.TotalViews + 1));
 
-            _dbContext.SaveChanges();
-        }
-        catch
-        {
-            return false;
-        }
+            await _dbContext.SaveChangesAsync(ct);
+
+            await transaction.CommitAsync(ct);
+
+        });
 
         return true;
     }
