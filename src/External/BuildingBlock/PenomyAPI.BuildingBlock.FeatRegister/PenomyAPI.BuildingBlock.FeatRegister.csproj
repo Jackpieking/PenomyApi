@@ -2,6 +2,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG35\PenomyAPI.App.FeatG35.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG50\PenomyAPI.App.FeatG50.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.G63\PenomyAPI.App.G63.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.G44\PenomyAPI.App.G44.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\PenomyAPI.App.Common\PenomyAPI.App.Common.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt1\PenomyAPI.App.FeatArt1.csproj" />
