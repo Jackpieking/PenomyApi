@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.G61;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G61.Common;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Common;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Common.Middlewares;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G61.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G61.HttpResponse;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G61.Middlewares.Authorization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -20,7 +20,7 @@ public class G61Endpoint : Endpoint<G61RequestDto, G61HttpResponse>
 
         AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
 
-        PreProcessor<G61AuthPreProcessor>();
+        PreProcessor<AuthPreProcessor<G61RequestDto>>();
 
         Description(builder: builder =>
         {
@@ -43,7 +43,7 @@ public class G61Endpoint : Endpoint<G61RequestDto, G61HttpResponse>
         CancellationToken ct
     )
     {
-        var stateBag = ProcessorState<G61StateBag>();
+        var stateBag = ProcessorState<StateBag>();
 
         var featRequest = new G61Request
         {
