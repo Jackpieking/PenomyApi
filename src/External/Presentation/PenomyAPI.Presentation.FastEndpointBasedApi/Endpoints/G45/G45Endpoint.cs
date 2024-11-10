@@ -1,8 +1,13 @@
 using FastEndpoints;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.G45;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Common;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Common.Middlewares;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Common;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G45.Common;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G45.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G45.HttpResponse;
 using System.Linq;
 using System.Threading;
@@ -10,13 +15,15 @@ using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G45;
 
-public class G45Endpoint : Endpoint<G45Request, G45HttpResponse>
+public class G45Endpoint : Endpoint<G45RequestDTO, G45HttpResponse>
 {
     public override void Configure()
     {
         Get("/g45/followed-artworks");
 
-        AllowAnonymous();
+        AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
+
+        PreProcessor<AuthPreProcessor<G45RequestDTO>>();
 
         Description(builder: builder =>
         {
@@ -35,15 +42,17 @@ public class G45Endpoint : Endpoint<G45Request, G45HttpResponse>
     }
 
     public override async Task<G45HttpResponse> ExecuteAsync(
-        G45Request requestDto,
+        G45RequestDTO requestDto,
         CancellationToken ct
     )
     {
+        var stateBag = ProcessorState<StateBag>();
+
         var featRequest = new G45Request
         {
-            UserId = requestDto.UserId,
+            UserId = stateBag.AppRequest.UserId,
             ArtworkType = requestDto.ArtworkType,
-            ArtNum = requestDto.ArtNum,
+            ArtNum = G45PaginationOptions.DEFAULT_PAGE_SIZE,
             PageNum = requestDto.PageNum
         };
 
