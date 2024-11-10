@@ -7,7 +7,7 @@ public sealed class G35UserProfileResponseDto
 {
     public string UserId { get; set; }
 
-    public string NickName { get; set; }
+    public string Nickname { get; set; }
 
     public string AvatarUrl { get; set; }
 
@@ -47,7 +47,7 @@ public sealed class G35UserProfileResponseDto
             AboutMe = userProfile.AboutMe,
             AvatarUrl = userProfile.AvatarUrl,
             LastActiveAt = userProfile.LastActiveAt,
-            NickName = userProfile.NickName,
+            Nickname = userProfile.NickName,
             IsCreator = userProfile.RegisterAsCreator,
             RegisteredAt = userProfile.RegisteredAt,
             TotalFollowedCreators = userProfile.TotalFollowedCreators,

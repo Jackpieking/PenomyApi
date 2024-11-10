@@ -54,7 +54,7 @@ public sealed class G31AHandler : IFeatureHandler<G31ARequest, G31AResponse>
                     CommonValues.Claims.TokenPurpose.Values.AppUserAccess
                 ),
             ],
-            additionalSecondsFromNow: 10 * 60 // 10 minutes
+            additionalSecondsFromNow: 15 * 60 // 15 minutes
         );
 
         // Return new access token.

@@ -1,8 +1,3 @@
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Threading;
-using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +7,11 @@ using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG31A.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG31A.HttpResponseManager;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Helpers;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG31A.Middlewares.Authorization;
 
@@ -40,11 +40,11 @@ internal sealed class G31AAuthorizationPreProcessor : PreProcessor<G31ARequest, 
         // Extract and convert access token expire time.
         var tokenExpireTime = JwtHelper.ExtractUtcTimeFromToken(context.HttpContext);
 
-        // Is token expired.
+        // If access token is not expired.
         if (tokenExpireTime > DateTime.UtcNow)
         {
             await SendResponseAsync(
-                G31AResponseStatusCode.FORBIDDEN,
+                G31AResponseStatusCode.ACCESS_TOKEN_IS_NOT_EXPIRED,
                 context.Request,
                 context.HttpContext,
                 ct
@@ -59,7 +59,7 @@ internal sealed class G31AAuthorizationPreProcessor : PreProcessor<G31ARequest, 
         );
 
         // Token is not for user access.
-        if (!tokenPurpose.Equals(CommonValues.Claims.TokenPurpose.Values.AppUserAccess))
+        if (!CommonValues.Claims.TokenPurpose.Values.AppUserAccess.Equals(tokenPurpose))
         {
             await SendResponseAsync(
                 G31AResponseStatusCode.FORBIDDEN,

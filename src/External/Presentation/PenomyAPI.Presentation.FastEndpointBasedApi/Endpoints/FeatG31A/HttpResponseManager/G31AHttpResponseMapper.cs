@@ -54,7 +54,17 @@ internal static class G31AHttpResponseMapper
                 new()
                 {
                     AppCode = $"G31A.{G31AResponseStatusCode.UN_AUTHORIZED}",
-                    HttpCode = StatusCodes.Status429TooManyRequests,
+                    HttpCode = StatusCodes.Status401Unauthorized,
+                }
+        );
+        
+        _dictionary.TryAdd(
+            key: G31AResponseStatusCode.ACCESS_TOKEN_IS_NOT_EXPIRED,
+            value: (_, response) =>
+                new()
+                {
+                    AppCode = $"G31A.{G31AResponseStatusCode.ACCESS_TOKEN_IS_NOT_EXPIRED}",
+                    HttpCode = StatusCodes.Status400BadRequest,
                 }
         );
     }

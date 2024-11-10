@@ -94,7 +94,7 @@ public sealed class G32VerifyGoogleSignInHandler
                     ),
                     new(CommonValues.Claims.UserIdClaim, request.UserId.ToString())
                 ],
-                additionalSecondsFromNow: 10 * 60 // 10 minutes
+                additionalSecondsFromNow: 15 * 60 // 15 minutes
             );
 
             return new()
@@ -138,7 +138,7 @@ public sealed class G32VerifyGoogleSignInHandler
                     ),
                     new(CommonValues.Claims.UserIdClaim, userId.ToString())
                 ],
-                additionalSecondsFromNow: 10 * 60 // 10 minutes
+                additionalSecondsFromNow: 15 * 60 // 15 minutes
             );
 
             return new()

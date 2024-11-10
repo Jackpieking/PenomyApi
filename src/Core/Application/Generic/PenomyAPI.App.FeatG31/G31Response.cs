@@ -18,13 +18,13 @@ public sealed class G31Response : IFeatureResponse
 
         public sealed class UserCredential
         {
-            public long Id { get; init; }
+            public long UserId { get; init; }
 
             public string Nickname { get; init; }
 
             public string AvatarUrl { get; init; }
 
-            public bool RegisterAsCreator { get; init; }
+            public bool IsCreator { get; init; }
         }
     }
 }

@@ -94,7 +94,7 @@ public sealed class G31Handler : IFeatureHandler<G31Request, G31Response>
                 ),
                 new(CommonValues.Claims.UserIdClaim, userIdOfUserHasBeenValidated.ToString())
             ],
-            additionalSecondsFromNow: 10 * 60 // 10 minutes
+            additionalSecondsFromNow: 15 * 60 // 15 minutes
         );
 
         return new()
@@ -106,10 +106,10 @@ public sealed class G31Handler : IFeatureHandler<G31Request, G31Response>
                 RefreshToken = newRefreshToken.Value,
                 User = new()
                 {
-                    Id = userIdOfUserHasBeenValidated,
+                    UserId = userIdOfUserHasBeenValidated,
                     AvatarUrl = foundUserProfile.AvatarUrl,
                     Nickname = foundUserProfile.NickName,
-                    RegisterAsCreator = foundUserProfile.RegisterAsCreator
+                    IsCreator = foundUserProfile.RegisterAsCreator
                 }
             }
         };
