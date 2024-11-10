@@ -30,7 +30,8 @@ public class G49Repository : IG49Repository
         return _artwork.AnyAsync(a => a.Id == id, cancellationToken);
     }
 
-    public async Task<double> RateArtworkAsync(long userId, long artworkId, byte starRates, CancellationToken token)
+    public async Task<ArtworkMetaData> RateArtworkAsync(long userId, long artworkId, byte starRates,
+        CancellationToken token)
     {
         var executionStrategy = RepositoryHelper.CreateExecutionStrategy(_dbContext);
         return await executionStrategy.ExecuteAsync(async () =>
@@ -103,7 +104,12 @@ public class G49Repository : IG49Repository
                 await transaction.CommitAsync(token);
 
                 // Return the updated average star rate
-                return updatedAverageStarRate;
+                return await _artworkMetaData.Where(x => x.ArtworkId == artworkId).Select(x => new ArtworkMetaData
+                {
+                    TotalStarRates = x.TotalStarRates,
+                    TotalUsersRated = x.TotalUsersRated,
+                    AverageStarRate = x.AverageStarRate
+                }).FirstOrDefaultAsync(token);
             }
             catch (Exception)
             {
@@ -112,5 +118,12 @@ public class G49Repository : IG49Repository
                 throw;
             }
         });
+    }
+
+    public async Task<long> GetCurrentUserRatingAsync(long userId, long artworkId, CancellationToken cancellationToken)
+    {
+        return await _userRatingArtwork.Where(x => x.UserId == userId && x.ArtworkId == artworkId)
+            .Select(x => x.StarRates)
+            .FirstOrDefaultAsync(cancellationToken);
     }
 }

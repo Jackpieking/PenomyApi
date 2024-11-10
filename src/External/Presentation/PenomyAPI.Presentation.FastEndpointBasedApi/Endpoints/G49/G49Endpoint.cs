@@ -52,8 +52,13 @@ public class G49Endpoint : Endpoint<G49RequestDto, G49HttpResponse>
             .Resolve(featResponse.AppCode)
             .Invoke(g49Req, featResponse);
         if (featResponse.AppCode is G49ResponseStatusCode.SUCCESS)
-            httpResponse.StarRate =
-                Math.Round(featResponse.StarRate, 2);
+            httpResponse.Body = new G49ResponseDto
+            {
+                StarRate = Math.Round(featResponse.StarRate, 2),
+                CurrentUserRate = featResponse.CurrentUserRate,
+                TotalUsersRate = featResponse.TotalUsersRate,
+                TotalStarRate = featResponse.TotalStarRate
+            };
         await SendAsync(httpResponse, httpResponse.HttpCode, ct);
 
         return httpResponse;
