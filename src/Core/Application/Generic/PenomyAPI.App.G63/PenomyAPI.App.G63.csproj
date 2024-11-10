@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Core\Application\Generic\PenomyAPI.App.G44\PenomyAPI.App.G44.csproj" />
+    <ProjectReference Include="..\..\PenomyAPI.App.Common\PenomyAPI.App.Common.csproj" />
   </ItemGroup>
 
 </Project>

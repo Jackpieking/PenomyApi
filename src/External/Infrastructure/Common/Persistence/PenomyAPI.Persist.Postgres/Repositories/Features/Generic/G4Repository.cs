@@ -50,6 +50,7 @@ public class G4Repository : IG4Repository
                 },
             })
             .AsNoTracking()
+            .Take(32)
             .ToListAsync();
         return result;
     }
