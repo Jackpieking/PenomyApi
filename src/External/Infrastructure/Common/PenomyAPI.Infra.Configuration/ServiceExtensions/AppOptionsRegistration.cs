@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using PenomyAPI.Infra.Configuration.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using PenomyAPI.Infra.Configuration.Common;
 
 namespace PenomyAPI.Infra.Configuration.ServiceExtensions;
 
@@ -29,7 +29,7 @@ public static class AppOptionsRegistration
 
         foreach (var type in appOptionsAssembly.GetTypes())
         {
-            var isAppOptions = type.IsSubclassOf(typeof(AppOptions));
+            var isAppOptions = type.IsSubclassOf(typeof(AppOptions)) && !type.IsAbstract;
 
             if (isAppOptions)
             {
