@@ -1,34 +1,39 @@
+using Microsoft.EntityFrameworkCore;
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
+using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
+using PenomyAPI.Persist.Postgres.Data.DbContexts;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
-using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
-using PenomyAPI.Persist.Postgres.Data.DbContexts;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
 
 public class G8Repository : IG8Repository
 {
     private readonly AppDbContext _dbContext;
+    private readonly DbSet<ArtworkChapter> _chapterDbSet;
 
     public G8Repository(AppDbContext dbContext)
     {
         _dbContext = dbContext;
+        _chapterDbSet = dbContext.Set<ArtworkChapter>();
     }
 
-    public async Task<(List<ArtworkChapter>, int)> GetArtWorkChapterByIdAsync(
+    public async Task<List<ArtworkChapter>> GetChapterByComicIdWithPaginationAsync(
         long id,
         int startPage = 1,
         int pageSize = 10,
         CancellationToken cancellationToken = default
     )
     {
-        var count = _dbContext.Set<ArtworkChapter>().Count(x => x.ArtworkId == id);
-        var res = await _dbContext
-            .Set<ArtworkChapter>()
-            .Where(x => x.ArtworkId == id)
+        return await _chapterDbSet
+            .AsNoTracking()
+            .Where(chapter => chapter.ArtworkId == id
+                && chapter.PublicLevel == ArtworkPublicLevel.Everyone
+                && !chapter.IsTemporarilyRemoved
+                && chapter.PublishStatus == PublishStatus.Published)
             .Select(x => new ArtworkChapter
             {
                 Id = x.Id,
@@ -43,37 +48,28 @@ public class G8Repository : IG8Repository
                     TotalComments = x.ChapterMetaData.TotalComments,
                     TotalFavorites = x.ChapterMetaData.TotalFavorites,
                     TotalViews = x.ChapterMetaData.TotalViews
-                }
+                },
+                AllowComment = x.AllowComment,
             })
-            .AsNoTracking()
             .Skip((startPage - 1) * pageSize)
             .Take(pageSize)
             .OrderBy(x => x.UploadOrder)
             .ToListAsync(cancellationToken);
-        return (res, count);
     }
 
-    public async Task<ArtworkChapterMetaData> GetArtworkChapterMetaDataAsync(
-        long id,
-        CancellationToken token = default
-    )
+    public Task<int> GetTotalChaptersByComicIdAsync(
+        long comicId,
+        CancellationToken cancellationToken)
     {
-        return await _dbContext
-            .Set<ArtworkChapterMetaData>()
-            .Where(x => x.ChapterId == id)
-            .Select(x => new ArtworkChapterMetaData
-            {
-                ChapterId = x.ChapterId,
-                TotalComments = x.TotalComments,
-                TotalFavorites = x.TotalFavorites,
-                TotalViews = x.TotalViews
-            })
-            .AsNoTracking()
-            .FirstOrDefaultAsync(token);
+        return _chapterDbSet.CountAsync(
+            chapter => chapter.ArtworkId == comicId
+            && chapter.PublicLevel == ArtworkPublicLevel.Everyone
+            && !chapter.IsTemporarilyRemoved
+            && chapter.PublishStatus == PublishStatus.Published);
     }
 
     public Task<bool> IsArtworkExistAsync(long id, CancellationToken token = default)
     {
-        return _dbContext.Set<Artwork>().AnyAsync(x => x.Id == id && x.ArtworkType == ArtworkType.Comic, token);
+        return _dbContext.Set<Artwork>().AnyAsync(x => x.Id == id, token);
     }
 }
