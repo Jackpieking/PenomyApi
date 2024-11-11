@@ -1,9 +1,7 @@
 using PenomyAPI.App.Common;
-using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -20,17 +18,12 @@ public class G8Handler : IFeatureHandler<G8Request, G8Response>
 
     public async Task<G8Response> ExecuteAsync(G8Request request, CancellationToken ct)
     {
-        List<ArtworkChapter> chapters;
-        int chapterCount = 0;
-        if (request.Id == 0 || request.StartPage <= 0 || request.PageSize <= 0)
-        {
-            return new() { StatusCode = G8ResponseStatusCode.INVALID_REQUEST, IsSuccess = false };
-        }
         if (!await _g8Repository.IsArtworkExistAsync(request.Id, ct))
         {
-            return new() { StatusCode = G8ResponseStatusCode.NOT_FOUND, IsSuccess = false };
+            return G8Response.COMIC_IS_NOT_FOUND;
         }
-        (chapters, chapterCount) = await _g8Repository.GetArtWorkChapterByIdAsync(
+
+        var chapters = await _g8Repository.GetChapterByComicIdWithPaginationAsync(
             request.Id,
             request.StartPage,
             request.PageSize,
@@ -39,7 +32,7 @@ public class G8Handler : IFeatureHandler<G8Request, G8Response>
 
         return new()
         {
-            ChapterCount = chapterCount,
+            ChapterCount = 0,
             Chapters = chapters,
             StatusCode = G8ResponseStatusCode.SUCCESS,
             IsSuccess = true

@@ -35,25 +35,19 @@ public class G8Endpoint : Endpoint<G8Request, G8HttpResponse>
     }
 
     public override async Task<G8HttpResponse> ExecuteAsync(
-        G8Request requestDto,
+        G8Request request,
         CancellationToken ct
     )
     {
         var httpResponse = new G8HttpResponse();
 
-        var g8Req = new G8Request
-        {
-            Id = requestDto.Id,
-            PageSize = requestDto.PageSize,
-            StartPage = requestDto.StartPage
-        };
-
         // Get FeatureHandler response.
-        var featResponse = await FeatureExtensions.ExecuteAsync<G8Request, G8Response>(g8Req, ct);
+        var featResponse = await FeatureExtensions
+            .ExecuteAsync<G8Request, G8Response>(request, ct);
 
         httpResponse = G8HttpResponseManager
             .Resolve(featResponse.StatusCode)
-            .Invoke(g8Req, featResponse);
+            .Invoke(request, featResponse);
 
         if (featResponse.IsSuccess && featResponse.Chapters.Count > 0)
         {
@@ -71,14 +65,22 @@ public class G8Endpoint : Endpoint<G8Request, G8HttpResponse>
                         FavoriteCount = chapter.ChapterMetaData.TotalFavorites,
                         ViewCount = chapter.ChapterMetaData.TotalViews,
                         ThumbnailUrl = chapter.ThumbnailUrl,
+                        AllowComment = chapter.AllowComment,
                     }
                 );
             }
 
-            httpResponse.Body = new G8ResponseDto { Result = g8ResponseDtos, ChapterCount = featResponse.ChapterCount, IsPagination = featResponse.ChapterCount > g8Req.PageSize };
+            httpResponse.Body = new G8ResponseDto
+            {
+                Result = g8ResponseDtos,
+                ChapterCount = featResponse.ChapterCount
+            };
+
             return httpResponse;
         }
+
         await SendAsync(httpResponse, httpResponse.HttpCode, ct);
+
         return httpResponse;
     }
 }
