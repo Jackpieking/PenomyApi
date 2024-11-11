@@ -24,10 +24,14 @@ public class G49Handler : IFeatureHandler<G49Request, G49Response>
             if (!await _g49Repository.IsArtworkExistsAsync(request.ArtworkId, ct))
                 response.AppCode
                     = G49ResponseStatusCode.NOT_FOUND;
-            var starRates =
+            var result =
                 await _g49Repository.RateArtworkAsync(request.UserId, request.ArtworkId, request.StarRate, ct);
-            response.StarRate = starRates;
-            response.AppCode = starRates > 0 ? G49ResponseStatusCode.SUCCESS : G49ResponseStatusCode.FAILED;
+            response.TotalStarRate = result.TotalStarRates;
+            response.TotalUsersRate = result.TotalUsersRated;
+            response.StarRate = result.AverageStarRate;
+            response.CurrentUserRate =
+                await _g49Repository.GetCurrentUserRatingAsync(request.UserId, request.ArtworkId, ct);
+            response.AppCode = G49ResponseStatusCode.SUCCESS;
         }
         catch
         {

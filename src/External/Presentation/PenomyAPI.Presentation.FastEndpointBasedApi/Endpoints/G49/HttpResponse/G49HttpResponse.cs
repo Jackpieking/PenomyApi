@@ -13,6 +13,4 @@ public class G49HttpResponse : AppHttpResponse<G49ResponseDto>
     {
         AppCode = appCode;
     }
-
-    public double StarRate { get; set; }
 }
