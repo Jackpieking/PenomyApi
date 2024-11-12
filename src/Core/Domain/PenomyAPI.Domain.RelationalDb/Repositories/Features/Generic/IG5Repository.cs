@@ -8,5 +8,5 @@ public interface IG5Repository
 {
     Task<bool> IsArtworkExistAsync(long artworkId, CancellationToken ct = default);
     Task<Artwork> GetArtWorkDetailByIdAsync(long artworkId, CancellationToken ct = default);
-    Task<bool> IsArtworkFavoriteAsync(long userId, long artworkId, CancellationToken ct = default);
+    Task<bool> IsComicInUserFavoriteListAsync(long userId, long artworkId, CancellationToken ct = default);
 }

@@ -1,10 +1,10 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using PenomyAPI.App.Common;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.App.FeatG5;
 
@@ -19,37 +19,44 @@ public class G5Handler : IFeatureHandler<G5Request, G5Response>
 
     public async Task<G5Response> ExecuteAsync(G5Request request, CancellationToken ct)
     {
-        Artwork result;
-        var isArtworkFavorite = false;
         try
         {
-            var rq = request.Id;
-            if (rq == 0)
-                return new G5Response
-                {
-                    StatusCode = G5ResponseStatusCode.INVALID_REQUEST,
-                    IsSuccess = false
-                };
-            if (!await _IG5Repository.IsArtworkExistAsync(rq, ct))
-                return new G5Response
-                {
-                    StatusCode = G5ResponseStatusCode.NOT_FOUND,
-                    IsSuccess = false
-                };
-            result = await _IG5Repository.GetArtWorkDetailByIdAsync(rq, ct);
-            isArtworkFavorite = await _IG5Repository.IsArtworkFavoriteAsync(request.UserId, request.Id, ct);
+            var invalidId = request.ComicId == default;
+
+            if (invalidId)
+            {
+                return G5Response.INVALID_REQUEST;
+            }
+
+            // Check if the comic is existed or not.
+            var isComicExisted = await _IG5Repository.IsArtworkExistAsync(request.ComicId, ct);
+
+            if (!isComicExisted)
+            {
+                return G5Response.NOT_FOUND;
+            }
+
+            // Get the comic detail,
+            Artwork comicDetail = await _IG5Repository.GetArtWorkDetailByIdAsync(
+                request.ComicId,
+                ct);
+
+            var isInUserFavoriteList = await _IG5Repository.IsComicInUserFavoriteListAsync(
+                request.UserId,
+                request.ComicId,
+                ct);
+
+            return new G5Response
+            {
+                IsSuccess = true,
+                IsUserFavorite = isInUserFavoriteList,
+                Result = comicDetail,
+                StatusCode = G5ResponseStatusCode.SUCCESS
+            };
         }
         catch
         {
-            return new G5Response { StatusCode = G5ResponseStatusCode.FAILED, IsSuccess = false };
+            return G5Response.FAILED;
         }
-
-        return new G5Response
-        {
-            Result = result,
-            IsArtworkFavorite = isArtworkFavorite,
-            StatusCode = G5ResponseStatusCode.SUCCESS,
-            IsSuccess = true
-        };
     }
 }

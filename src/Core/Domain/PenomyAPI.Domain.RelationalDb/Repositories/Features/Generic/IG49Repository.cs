@@ -11,5 +11,5 @@ public interface IG49Repository
     Task<ArtworkMetaData> RateArtworkAsync(long userId, long artworkId, byte starRates,
         CancellationToken cancellationToken);
 
-    Task<long> GetCurrentUserRatingAsync(long userId, long artworkId, CancellationToken cancellationToken);
+    Task<byte> GetCurrentUserRatingAsync(long userId, long artworkId, CancellationToken cancellationToken);
 }

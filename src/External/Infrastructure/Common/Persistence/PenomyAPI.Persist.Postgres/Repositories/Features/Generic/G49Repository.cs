@@ -120,7 +120,7 @@ public class G49Repository : IG49Repository
         });
     }
 
-    public async Task<long> GetCurrentUserRatingAsync(long userId, long artworkId, CancellationToken cancellationToken)
+    public async Task<byte> GetCurrentUserRatingAsync(long userId, long artworkId, CancellationToken cancellationToken)
     {
         return await _userRatingArtwork.Where(x => x.UserId == userId && x.ArtworkId == artworkId)
             .Select(x => x.StarRates)
