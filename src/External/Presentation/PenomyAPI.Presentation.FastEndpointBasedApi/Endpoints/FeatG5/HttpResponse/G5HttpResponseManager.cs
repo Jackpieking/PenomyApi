@@ -1,7 +1,8 @@
-using System;
-using System.Collections.Concurrent;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG5;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5.DTOs;
+using System;
+using System.Collections.Concurrent;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5.HttpResponse;
 
@@ -23,7 +24,8 @@ public class G5HttpResponseManager
                 new G5HttpResponse
                 {
                     AppCode = $"G5.{G5ResponseStatusCode.SUCCESS}",
-                    HttpCode = StatusCodes.Status200OK
+                    HttpCode = StatusCodes.Status200OK,
+                    Body = G5ResponseDto.MapFrom(response)
                 }
         );
 

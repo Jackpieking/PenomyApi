@@ -1,16 +1,12 @@
-using System;
-using System.Security.Claims;
-using System.Threading;
-using System.Threading.Tasks;
 using FastEndpoints;
-using Microsoft.AspNetCore.Http;
-using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
-using PenomyAPI.App.FeatG5;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5.DTOs;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5.HttpResponse;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Helpers;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5.Middlewares;
 
@@ -37,50 +33,66 @@ public class G5AuthPreProcessor : PreProcessor<G5RequestDto, G5StateBag>
         // Bypass if response has started.
         if (context.HttpContext.ResponseStarted()) return;
 
-        #region PreValidateAccessToken
+        // Check if the request has access token or not to resolve different.
+        var accessToken = context.Request.AccessToken;
 
-        // Extract and convert access token expire time.
-        var tokenExpireTime = JwtHelper.ExtractUtcTimeFromToken(context.HttpContext);
+        const int MINIMUM_TOKEN_LENGTH = 10;
 
-        // Validate access token.
-        if (tokenExpireTime <= DateTime.UtcNow)
+        var hasToken = !string.IsNullOrEmpty(accessToken)
+            && accessToken.Length > MINIMUM_TOKEN_LENGTH;
+
+        // If no token is passed, then resolve for guest user.
+        if (!hasToken)
         {
-            await SendResponseAsync(
-                G5ResponseStatusCode.UNAUTHORIZED,
-                state.AppRequest,
-                context.HttpContext,
-                ct
-            );
+            state.AsGuestUser();
 
             return;
         }
 
-        #endregion
+        var tokenValidationResult = await ValidateTokenAsync(accessToken, ct);
 
-        // Get refresh token id.
-        var userId = context.HttpContext.User.FindFirstValue(JwtRegisteredClaimNames.Sub);
-        if (!long.TryParse(userId, out var id))
-            await SendResponseAsync(
-                G5ResponseStatusCode.UNAUTHORIZED,
-                state.AppRequest,
-                context.HttpContext,
-                ct
-            );
-        // Save found refresh token id to state bag.
-        state.AppRequest.SetUserId(id);
+        // If the token is invalid, then resolve the request as for guest user.
+        if (!tokenValidationResult.IsValid)
+        {
+            state.AsGuestUser();
+
+            return;
+        }
+
+        // If the token is valid, then resolve the request for the user who has this access token.
+        var userIdClaim = tokenValidationResult.ClaimsIdentity.FindFirst(JwtRegisteredClaimNames.Sub);
+
+        // Check if the claim can be parsed or not. If parse failed, then resolve as guest user.
+        var canParse = long.TryParse(userIdClaim.Value, out var userId);
+
+        if (!canParse)
+        {
+            state.AsGuestUser();
+
+            return;
+        }
+
+        state.AuthenticateWithUserId(userId);
     }
 
-    private static Task SendResponseAsync(
-        G5ResponseStatusCode statusCode,
-        G5Request appRequest,
-        HttpContext context,
-        CancellationToken ct
-    )
+    private async Task<TokenValidationResult> ValidateTokenAsync(
+        string accessToken,
+        CancellationToken cancellationToken)
     {
-        var httpResponse = G5HttpResponseManager
-            .Resolve(statusCode)
-            .Invoke(appRequest, new G5Response { StatusCode = statusCode });
+        // Check if the access token is using Bearer format or not.
+        const string BearerPrefix = "Bearer ";
 
-        return context.Response.SendAsync(httpResponse, httpResponse.HttpCode, cancellation: ct);
+        if (accessToken.Contains(BearerPrefix))
+        {
+            accessToken = accessToken.Split(BearerPrefix).LastOrDefault("null");
+        }
+
+        var tokenHandler = _securityTokenHandler.Value;
+
+        TokenValidationResult validationResult = await tokenHandler.ValidateTokenAsync(
+            accessToken,
+            _tokenValidationParameters);
+
+        return validationResult;
     }
 }

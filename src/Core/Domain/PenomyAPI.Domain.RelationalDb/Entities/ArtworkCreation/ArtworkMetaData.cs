@@ -1,4 +1,5 @@
 using PenomyAPI.Domain.RelationalDb.Entities.Base;
+using System;
 
 namespace PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 
@@ -51,7 +52,7 @@ public sealed class ArtworkMetaData : IEntity
             return 0;
         }
 
-        return (double) TotalStarRates / TotalUsersRated;
+        return Math.Round((double) TotalStarRates / TotalUsersRated, 2);
     }
 
     #region Navigation

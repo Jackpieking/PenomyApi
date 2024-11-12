@@ -4,16 +4,13 @@ namespace PenomyAPI.App.FeatG5;
 
 public class G5Request : IFeatureRequest<G5Response>
 {
-    public long Id { get; set; }
+    /// <summary>
+    ///     This value is used to mark the current
+    ///     request will resolve for guest user.
+    /// </summary>
+    public const int GUEST_USER_ID = -1;
+
+    public long ComicId { get; set; }
+
     public long UserId { get; set; }
-
-    public long GetUserId()
-    {
-        return UserId;
-    }
-
-    public void SetUserId(long userId)
-    {
-        UserId = userId;
-    }
 }

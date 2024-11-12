@@ -17,7 +17,7 @@ public class G49GetStarRateEndpoint : Endpoint<G49GetStarRateRequestDto, G49GetS
 {
     public override void Configure()
     {
-        Post("/g49/artwork/get-rate");
+        Get("/g49/artwork/get-rate");
         PreProcessor<AuthPreProcessor<G49GetStarRateRequestDto>>();
         AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
         DontThrowIfValidationFails();
