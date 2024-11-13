@@ -23,17 +23,17 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic
             _artwork = dbContext.Set<Artwork>();
         }
 
-        public async Task<ArtworkType> CheckArtworkExist(long artworkId, CancellationToken ct)
+        public async Task<ArtworkType> GetArtworTypeById(long artworkId, CancellationToken ct)
         {
             var artWork = await _artwork.AsNoTracking()
-                .FirstOrDefaultAsync(o => o.Id == artworkId);
+                .FirstOrDefaultAsync(o => o.Id == artworkId, cancellationToken: ct);
 
             return artWork.ArtworkType;
         }
 
         public async Task<bool> CheckFollowedArtwork(long userId, long artworkId, CancellationToken ct)
         {
-            return await _userFollowedArtwork.AnyAsync(o => o.ArtworkId == artworkId);
+            return await _userFollowedArtwork.AnyAsync(o => o.ArtworkId == artworkId, cancellationToken: ct);
         }
 
         public async Task<bool> FollowArtwork(
@@ -43,20 +43,30 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic
             CancellationToken ct
         )
         {
-            await _userFollowedArtwork.AddAsync(
+            await _dbContext.Database.CreateExecutionStrategy().ExecuteAsync(async () =>
+            {
+                var transaction = await _dbContext.Database.BeginTransactionAsync(ct);
+
+                await _userFollowedArtwork.AddAsync(
                 new UserFollowedArtwork
                 {
                     UserId = userId,
                     ArtworkId = artworkId,
                     ArtworkType = artworkType,
                     StartedAt = DateTime.UtcNow
-                }, ct);
+                }, cancellationToken: ct);
 
-            await _artworkMetaData
-                .Where(o => o.ArtworkId == artworkId)
-                .ExecuteUpdateAsync(o => o.SetProperty(o => o.TotalFollowers, e => (e.TotalFollowers + 1)), ct);
+                await _artworkMetaData
+                    .Where(o => o.ArtworkId == artworkId)
+                    .ExecuteUpdateAsync(o =>
+                        o.SetProperty(o => o.TotalFollowers,
+                            e => (e.TotalFollowers + 1)),
+                            cancellationToken: ct);
 
-            await _dbContext.SaveChangesAsync(ct);
+                await _dbContext.SaveChangesAsync(cancellationToken: ct);
+
+                await transaction.CommitAsync(ct);
+            });
 
             return true;
         }
