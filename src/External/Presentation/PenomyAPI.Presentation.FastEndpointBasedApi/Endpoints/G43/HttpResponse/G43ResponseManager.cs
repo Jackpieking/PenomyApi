@@ -36,6 +36,7 @@ public class G43ResponseManager
                     HttpCode = StatusCodes.Status500InternalServerError,
                 }
         );
+
         _dictionary.TryAdd(
             key: G43ResponseStatusCode.INVALID_REQUEST,
             value: (_, response) =>

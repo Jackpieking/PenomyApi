@@ -16,7 +16,7 @@ public class G43Endpoint : Endpoint<G43RequestDto, G43HttpResponse>
 {
     public override void Configure()
     {
-        Post("/G43/profile/user/followed-artworks");
+        Post("/g43/follow/add");
 
         AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
 
@@ -48,8 +48,7 @@ public class G43Endpoint : Endpoint<G43RequestDto, G43HttpResponse>
         var featRequest = new G43Request
         {
             UserId = stateBag.AppRequest.UserId,
-            ArtworkId = requestDto.ArtworkId,
-            ArtworkType = requestDto.ArtworkType,
+            ArtworkId = requestDto.ArtworkId
         };
 
         // Get FeatureHandler response.

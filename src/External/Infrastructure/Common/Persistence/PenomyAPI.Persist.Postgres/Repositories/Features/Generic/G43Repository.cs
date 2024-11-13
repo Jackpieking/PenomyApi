@@ -23,28 +23,17 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic
             _artwork = dbContext.Set<Artwork>();
         }
 
-        public async Task<bool> CheckArtworkExist(long artworkId, ArtworkType artworkType, CancellationToken ct)
+        public async Task<ArtworkType> CheckArtworkExist(long artworkId, CancellationToken ct)
         {
-            if (await _artwork.AsNoTracking().AnyAsync(o => o.Id == artworkId))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            var artWork = await _artwork.AsNoTracking()
+                .FirstOrDefaultAsync(o => o.Id == artworkId);
+
+            return artWork.ArtworkType;
         }
 
-        public async Task<bool> CheckFollowedArtwork(long userId, long artworkId, ArtworkType artworkType, CancellationToken ct)
+        public async Task<bool> CheckFollowedArtwork(long userId, long artworkId, CancellationToken ct)
         {
-            if (await _userFollowedArtwork.AnyAsync(o => o.ArtworkId == artworkId))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return await _userFollowedArtwork.AnyAsync(o => o.ArtworkId == artworkId);
         }
 
         public async Task<bool> FollowArtwork(
@@ -54,27 +43,20 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic
             CancellationToken ct
         )
         {
-            try
-            {
-                await _userFollowedArtwork.AddAsync(
-                    new UserFollowedArtwork
-                    {
-                        UserId = userId,
-                        ArtworkId = artworkId,
-                        ArtworkType = artworkType,
-                        StartedAt = DateTime.UtcNow
-                    }, ct);
+            await _userFollowedArtwork.AddAsync(
+                new UserFollowedArtwork
+                {
+                    UserId = userId,
+                    ArtworkId = artworkId,
+                    ArtworkType = artworkType,
+                    StartedAt = DateTime.UtcNow
+                }, ct);
 
-                await _artworkMetaData
-                    .Where(o => o.ArtworkId == artworkId)
-                    .ExecuteUpdateAsync(o => o.SetProperty(o => o.TotalFollowers, e => (e.TotalFollowers + 1)), ct);
+            await _artworkMetaData
+                .Where(o => o.ArtworkId == artworkId)
+                .ExecuteUpdateAsync(o => o.SetProperty(o => o.TotalFollowers, e => (e.TotalFollowers + 1)), ct);
 
-                await _dbContext.SaveChangesAsync(ct);
-            }
-            catch
-            {
-                return false;
-            }
+            await _dbContext.SaveChangesAsync(ct);
 
             return true;
         }
