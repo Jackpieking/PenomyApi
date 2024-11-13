@@ -1,5 +1,4 @@
-﻿using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 
 namespace PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic
@@ -22,6 +21,6 @@ namespace PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic
         ///     True if data has been deleted.
         ///     Otherwise, false.
         /// </returns>
-        Task<bool> UnFollowArtwork(long userId, long artworkId, ArtworkType artworkType, CancellationToken ct);
+        Task<bool> UnFollowArtwork(long userId, long artworkId, CancellationToken ct);
     }
 }
