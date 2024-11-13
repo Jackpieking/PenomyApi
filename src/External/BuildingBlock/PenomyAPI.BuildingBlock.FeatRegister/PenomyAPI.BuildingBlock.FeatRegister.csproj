@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG2\PenomyAPI.App.FeatG2.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG35\PenomyAPI.App.FeatG35.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG50\PenomyAPI.App.FeatG50.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.G25\PenomyAPI.App.G25.csproj" />
