@@ -2,7 +2,7 @@
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Common;
 
-public abstract class AppHttpResponse<TBody>
+public class AppHttpResponse<TBody>
 {
     public int HttpCode { get; set; }
 
