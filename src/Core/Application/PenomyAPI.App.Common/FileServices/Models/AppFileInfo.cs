@@ -6,11 +6,18 @@ namespace PenomyAPI.App.Common.FileServices.Models;
 ///     The base class to store file information
 ///     that will be used to work with file service.
 /// </summary>
+/// <remarks>
+///     The implementation of this class are: <see cref="ImageFileInfo"/>.
+/// </remarks>
 public abstract class AppFileInfo
 {
     /// <summary>
     ///     The id of the file that upload to the file service.
     /// </summary>
+    /// <remarks>
+    ///     This field should be specified explicitly to manage the id
+    ///     of the file instead of randomly init by the implementation service.
+    /// </remarks>
     public string FileId { get; set; }
 
     /// <summary>
@@ -20,10 +27,15 @@ public abstract class AppFileInfo
 
     public string FileName { get; set; }
 
+    /// <summary>
+    ///     (Optional) The extension of the file you upload.
+    /// </summary>
     public string FileExtension { get; set; }
 
     /// <summary>
     ///     The path of the folder that will store this file.
+    ///     Example: If the group want to store its background image to folder: /groups/group_id,
+    ///     then it must specify the FolderPath = /groups/group_id.
     /// </summary>
     public string FolderPath { get; set; }
 
@@ -33,12 +45,17 @@ public abstract class AppFileInfo
     public int UploadOrder { get; set; }
 
     /// <summary>
-    ///     The url of the file that received from the storage service.
+    ///     (No need to init) The url of the file that located on the storage service.
     /// </summary>
+    /// <remarks>
+    ///     This storage URL will be set when the storage service upload success
+    ///     and then be used for database persistence.
+    /// </remarks>
     public string StorageUrl { get; set; }
 
     /// <summary>
-    ///     The stream contains the data of the file.
+    ///     The stream contains the data of the file. This field must
+    ///     be specified to include the data of the file to upload.
     /// </summary>
     public Stream FileDataStream { get; set; }
 

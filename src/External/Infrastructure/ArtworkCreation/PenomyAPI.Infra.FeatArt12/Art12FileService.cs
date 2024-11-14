@@ -64,7 +64,7 @@ public sealed class Art12FileService : IArt12FileService
             var folderPath = DirectoryPathHelper.BuildPath(
                 pathSeparator: DirectoryPathHelper.WebPathSeparator,
                 rootDirectory: _options.ComicRootFolder,
-                childFolders: fileInfos.First().FolderPath);
+                subFolders: fileInfos.First().FolderPath);
 
             foreach (var fileInfo in fileInfos)
             {
@@ -137,7 +137,7 @@ public sealed class Art12FileService : IArt12FileService
             chapterFolderRelativePath = DirectoryPathHelper.BuildPath(
                 pathSeparator: DirectoryPathHelper.WebPathSeparator,
                 rootDirectory: _options.ComicRootFolder,
-                childFolders: chapterFolderRelativePath);
+                subFolders: chapterFolderRelativePath);
 
             var deletedResult = await cloudinary.DeleteResourcesAsync(
                 ResourceType.Image,

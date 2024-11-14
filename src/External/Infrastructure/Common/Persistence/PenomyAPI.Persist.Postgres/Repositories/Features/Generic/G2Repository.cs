@@ -54,10 +54,8 @@ internal sealed class G2Repository : IG2Repository
                           INNER JOIN penomy_artwork_metadata AS metadata ON artwork.""Id"" = metadata.""ArtworkId""
                           WHERE artwork.""ArtworkType"" = {ArtworkType.Comic} AND NOT (artwork.""IsTakenDown"") AND NOT (artwork.""IsTemporarilyRemoved"") AND artwork.""PublicLevel"" = {ArtworkPublicLevel.Everyone}
                           ORDER BY metadata.""TotalFollowers"" DESC, metadata.""TotalFavorites"" DESC, metadata.""TotalViews"" DESC, metadata.""TotalStarRates"" DESC
-                          LIMIT {MAXIMUM_NUMBER_OF_CANDIDATE_IDS}
-                    ) AS metadata_and_artwork
-                    ORDER BY metadata_and_artwork.""TotalStarRates"" / metadata_and_artwork.""TotalUsersRated"" DESC
-                    LIMIT {NUMBER_OF_CANDIDATE_IDS_TO_BE_RETURNED}";
+                          LIMIT {NUMBER_OF_CANDIDATE_IDS_TO_BE_RETURNED}
+                    ) AS metadata_and_artwork";
 
                 // Set up for animation type.
                 GetCandidateArtworkIdsAnimationType = $@"
@@ -68,10 +66,8 @@ internal sealed class G2Repository : IG2Repository
                           INNER JOIN penomy_artwork_metadata AS metadata ON artwork.""Id"" = metadata.""ArtworkId""
                           WHERE artwork.""ArtworkType"" = {ArtworkType.Animation} AND NOT (artwork.""IsTakenDown"") AND NOT (artwork.""IsTemporarilyRemoved"") AND artwork.""PublicLevel"" = {ArtworkPublicLevel.Everyone}
                           ORDER BY metadata.""TotalFollowers"" DESC, metadata.""TotalFavorites"" DESC, metadata.""TotalViews"" DESC, metadata.""TotalStarRates"" DESC
-                          LIMIT {MAXIMUM_NUMBER_OF_CANDIDATE_IDS}
-                    ) AS metadata_and_artwork
-                    ORDER BY metadata_and_artwork.""TotalStarRates"" / metadata_and_artwork.""TotalUsersRated"" DESC
-                    LIMIT {NUMBER_OF_CANDIDATE_IDS_TO_BE_RETURNED}";
+                          LIMIT {NUMBER_OF_CANDIDATE_IDS_TO_BE_RETURNED}
+                    ) AS metadata_and_artwork";
             }
         }
 

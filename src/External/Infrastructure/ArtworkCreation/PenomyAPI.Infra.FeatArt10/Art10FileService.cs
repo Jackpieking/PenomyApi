@@ -29,7 +29,7 @@ public class Art10FileService : IArt10FileService
             folderInfo.AbsolutePath = DirectoryPathHelper.BuildPath(
                 pathSeparator: DirectoryPathHelper.WebPathSeparator,
                 rootDirectory: _options.ComicRootFolder,
-                childFolders: folderInfo.RelativePath
+                subFolders: folderInfo.RelativePath
             );
 
             var result = await cloudinary.CreateFolderAsync(folderInfo.AbsolutePath);
