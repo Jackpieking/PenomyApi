@@ -49,7 +49,6 @@ public class G44Endpoint : Endpoint<G44RequestDto, G44HttpResponse>
         {
             UserId = stateBag.AppRequest.UserId,
             ArtworkId = requestDto.ArtworkId,
-            ArtworkType = requestDto.ArtworkType,
         };
 
         // Get FeatureHandler response.

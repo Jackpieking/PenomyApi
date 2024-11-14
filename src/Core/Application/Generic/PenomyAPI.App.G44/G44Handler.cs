@@ -23,7 +23,6 @@ public class G44Handler : IFeatureHandler<G44Request, G44Response>
             await _g44Repository.UnFollowArtwork(
                 request.UserId,
                 request.ArtworkId,
-                request.ArtworkType,
                 ct
             );
         }
