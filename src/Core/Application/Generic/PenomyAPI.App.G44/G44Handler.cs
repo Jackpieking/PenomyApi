@@ -20,17 +20,27 @@ public class G44Handler : IFeatureHandler<G44Request, G44Response>
     {
         try
         {
+            var hasFollowed = await _g44Repository.HasFollowedArtworkAsync(
+                request.UserId,
+                request.ArtworkId,
+                ct);
+
+            if (!hasFollowed)
+            {
+                return G44Response.INVALID_REQUEST;
+            }
+
             await _g44Repository.UnFollowArtwork(
                 request.UserId,
                 request.ArtworkId,
                 ct
             );
+
+            return G44Response.SUCCESS;
         }
         catch
         {
-            return new G44Response { IsSuccess = false, StatusCode = G44ResponseStatusCode.INVALID_REQUEST };
+            return G44Response.FAILED;
         }
-
-        return new G44Response { IsSuccess = true, StatusCode = G44ResponseStatusCode.SUCCESS };
     }
 }

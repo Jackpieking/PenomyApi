@@ -4,5 +4,7 @@ public enum ArtworkType
 {
     Comic = 1,
 
-    Animation = 2
+    Animation = 2,
+
+    NotFound = int.MinValue,
 }

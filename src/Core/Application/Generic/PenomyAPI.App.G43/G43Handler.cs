@@ -21,11 +21,21 @@ public class G43Handler : IFeatureHandler<G43Request, G43Response>
     {
         try
         {
-            ArtworkType artworkType = await _g43Repository.CheckArtworkExist(request.ArtworkId, ct);
+            ArtworkType artworkType = await _g43Repository.GetArtworTypeById(request.ArtworkId, ct);
 
-            if (await _g43Repository.CheckFollowedArtwork(request.UserId, request.ArtworkId, ct))
+            // Check artwork is existed or not
+            if (artworkType == ArtworkType.NotFound)
             {
-                throw new Exception("Request invalid");
+                return G43Response.FAILED;
+            }
+
+            var isAlreadyFollowed = await _g43Repository.CheckFollowedArtwork(
+                request.UserId,
+                request.ArtworkId, ct);
+
+            if (isAlreadyFollowed)
+            {
+                return G43Response.INVALID_REQUEST;
             }
 
             await _g43Repository.FollowArtwork(
@@ -34,12 +44,12 @@ public class G43Handler : IFeatureHandler<G43Request, G43Response>
                 artworkType,
                 ct
             );
+
+            return G43Response.SUCCESS;
         }
         catch
         {
-            return new G43Response { IsSuccess = false, StatusCode = G43ResponseStatusCode.INVALID_REQUEST };
+            return G43Response.FAILED;
         }
-
-        return new G43Response { IsSuccess = true, StatusCode = G43ResponseStatusCode.SUCCESS };
     }
 }
