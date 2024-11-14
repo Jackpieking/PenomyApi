@@ -15,6 +15,9 @@ namespace PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic
         /// <param name="artworkId">
         ///     The artwork's ID has been followed.
         /// </param>
+        /// <param name="artworkType">
+        ///     The artwork's type.
+        /// </param>
         /// <param name="ct">
         ///     The token to notify the server to cancel the operation.
         /// </param>
@@ -40,10 +43,10 @@ namespace PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic
         ///     True if user has followed.
         ///     Otherwise, false.
         /// </returns>
-        Task<bool> CheckFollowedArtwork(long userId, long artworkId, ArtworkType artworkType, CancellationToken ct);
+        Task<bool> CheckFollowedArtwork(long userId, long artworkId, CancellationToken ct);
 
         /// <summary>
-        ///     Check the artwork is exist.
+        ///     Get artwork's type by the specified <paramref name="artworkId"/>.
         /// </summary>
         /// <param name="artworkId">
         ///     The artwork's ID has been followed.
@@ -52,9 +55,9 @@ namespace PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic
         ///     The token to notify the server to cancel the operation.
         /// </param>
         /// <returns>
-        ///     True if artwork has exist.
-        ///     Otherwise, false.
+        ///     Return artworkType if artwork exist.
+        ///     Otherwise, return null.
         /// </returns>
-        Task<bool> CheckArtworkExist(long artworkId, ArtworkType artworkType, CancellationToken ct);
+        Task<ArtworkType> GetArtworTypeById(long artworkId, CancellationToken ct);
     }
 }

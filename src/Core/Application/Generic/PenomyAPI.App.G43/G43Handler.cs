@@ -1,4 +1,5 @@
 using PenomyAPI.App.Common;
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 using System;
@@ -20,8 +21,9 @@ public class G43Handler : IFeatureHandler<G43Request, G43Response>
     {
         try
         {
-            if (await _g43Repository.CheckArtworkExist(request.ArtworkId, request.ArtworkType, ct)
-                && await _g43Repository.CheckFollowedArtwork(request.UserId, request.ArtworkId, request.ArtworkType, ct))
+            ArtworkType artworkType = await _g43Repository.CheckArtworkExist(request.ArtworkId, ct);
+
+            if (await _g43Repository.CheckFollowedArtwork(request.UserId, request.ArtworkId, ct))
             {
                 throw new Exception("Request invalid");
             }
@@ -29,7 +31,7 @@ public class G43Handler : IFeatureHandler<G43Request, G43Response>
             await _g43Repository.FollowArtwork(
                 request.UserId,
                 request.ArtworkId,
-                request.ArtworkType,
+                artworkType,
                 ct
             );
         }
