@@ -27,8 +27,12 @@ public interface IFeatureDistributedFileService<TFeatureHandler, TRequest, TResp
     where TResponse : IFeatureResponse
 {
     /// <summary>
-    ///     Create a folder on the storage with input <paramref name="folderInfo"/>
+    ///     Create a folder on the storage with input <paramref name="folderInfo"/>.
     /// </summary>
+    /// <remarks>
+    ///     If you don't specify the relative path or absolute path in folder info,
+    ///     this method will create the folder at the root path.
+    /// </remarks>
     /// <param name="folderInfo">
     ///     Information about the folder to create.
     /// </param>

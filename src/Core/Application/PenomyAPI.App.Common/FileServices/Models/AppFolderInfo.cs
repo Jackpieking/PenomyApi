@@ -2,10 +2,9 @@
 
 public sealed class AppFolderInfo
 {
-    public string FolderName { get; set; }
-
     /// <summary>
     ///     The relative path of this folder on the storage.
+    ///     Example: /groups/group_a
     /// </summary>
     public string RelativePath { get; set; }
 
