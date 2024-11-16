@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
@@ -9,6 +7,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG14;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Common;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Common.Middlewares;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG14.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG14.HttpResponse;
 
@@ -16,19 +16,11 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG14;
 
 public class G14Endpoint : Endpoint<G14RequestDto, G14HttpResponse>
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
-
-    public G14Endpoint(IHttpContextAccessor httpContextAccessor)
-    {
-        _httpContextAccessor = httpContextAccessor;
-    }
-
     public override void Configure()
     {
         Get("/g14/recommended-category");
-
+        PreProcessor<AuthPreProcessor<G14RequestDto>>();
         AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
-
         Description(builder => { builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest); });
 
         Summary(summary =>
@@ -47,20 +39,13 @@ public class G14Endpoint : Endpoint<G14RequestDto, G14HttpResponse>
         CancellationToken ct
     )
     {
-        var httpResponse = new G14HttpResponse();
-
-        var userIdClaim = _httpContextAccessor.HttpContext?.User.FindFirstValue(JwtRegisteredClaimNames.Sub);
-        if (userIdClaim == null || !long.TryParse(userIdClaim, out var userId))
-            return new G14HttpResponse
-            {
-                HttpCode = StatusCodes.Status401Unauthorized
-            };
-        var g14Req = new G14Request { UserId = userId, Limit = requestDto.Limit };
+        var stateBag = ProcessorState<StateBag>();
+        var g14Req = new G14Request { UserId = stateBag.AppRequest.UserId, Limit = requestDto.Limit };
 
         // Get FeatureHandler response.
         var featResponse = await FeatureExtensions.ExecuteAsync<G14Request, G14Response>(g14Req, ct);
 
-        httpResponse = G14HttpResponseManager
+        var httpResponse = G14HttpResponseManager
             .Resolve(featResponse.StatusCode)
             .Invoke(g14Req, featResponse);
 

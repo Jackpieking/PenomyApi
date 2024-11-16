@@ -46,7 +46,6 @@ public class SM12Handler : IFeatureHandler<SM12Request, SM12Response>
         // The info of folder to store the thumbnail of this comic.
         var folderInfo = new AppFolderInfo
         {
-            FolderName = $"{request.UserPostId}",
             RelativePath = DirectoryPathHelper.BuildPath(
                 DirectoryPathHelper.WebPathSeparator,
                 "post",
@@ -68,7 +67,7 @@ public class SM12Handler : IFeatureHandler<SM12Request, SM12Response>
         if (request.AppFileInfos.Any())
             foreach (var fileInfo in request.AppFileInfos)
             {
-                fileInfo.FolderPath = folderInfo.RelativePath;
+                fileInfo.FolderPath = folderInfo.AbsolutePath;
                 var uploadResult = await fileService.UploadFileAsync(
                     fileInfo,
                     false,
