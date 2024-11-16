@@ -1,0 +1,26 @@
+name: dev-ci
+
+on:
+    pull_request:
+        branches: ["dev"]
+
+jobs:
+    build:
+        runs-on: ubuntu-22.04
+
+        steps:
+            - name: Checkout to the source code
+              uses: actions/checkout@v4
+              with:
+                  ref: dev
+
+            - name: Setup
+              uses: actions/setup-dotnet@v4
+              with:
+                  global-json-file: /global.json
+
+            - name: Restore dependencies
+              run: dotnet restore
+
+            - name: Build app
+              run: dotnet build --no-restore
