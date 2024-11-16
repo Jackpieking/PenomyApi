@@ -2,5 +2,5 @@
 
 public class G44RequestDto
 {
-    public long ArtworkId { get; set; }
+    public string ArtworkId { get; set; }
 }
