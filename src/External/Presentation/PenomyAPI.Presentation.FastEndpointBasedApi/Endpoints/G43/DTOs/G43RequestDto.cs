@@ -2,6 +2,6 @@
 {
     public class G43RequestDto
     {
-        public long ArtworkId { get; set; }
+        public string ArtworkId { get; set; }
     }
 }
