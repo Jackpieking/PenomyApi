@@ -38,11 +38,10 @@ public class Art4Handler : IFeatureHandler<Art4Request, Art4Response>
         // The info of folder to store the thumbnail of this comic.
         var folderInfo = new AppFolderInfo
         {
-            FolderName = $"{request.ComicId}",
             RelativePath = DirectoryPathHelper.BuildPath(
                 pathSeparator: DirectoryPathHelper.WebPathSeparator,
                 rootDirectory: _options.ComicRootFolder,
-                childFolders: artworkFolderName
+                subFolders: artworkFolderName
             )
         };
 

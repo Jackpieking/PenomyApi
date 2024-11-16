@@ -111,7 +111,7 @@ public sealed class Art7Handler : IFeatureHandler<Art7Request, Art7Response>
         thumnailFileInfo.FolderPath = DirectoryPathHelper.BuildPath(
             pathSeparator: DirectoryPathHelper.WebPathSeparator,
             rootDirectory: _options.ComicRootFolder,
-            childFolders: artworkFolderName
+            subFolders: artworkFolderName
         );
 
         // Get the file service to upload the file.

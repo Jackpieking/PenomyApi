@@ -25,10 +25,21 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic
 
         public async Task<ArtworkType> GetArtworTypeById(long artworkId, CancellationToken ct)
         {
-            var artWork = await _artwork.AsNoTracking()
-                .FirstOrDefaultAsync(o => o.Id == artworkId, cancellationToken: ct);
+            var artwork = await _artwork
+                .AsNoTracking()
+                .Where(artwork => artwork.Id == artworkId)
+                .Select(artwork => new Artwork
+                {
+                    ArtworkType = artwork.ArtworkType
+                })
+                .FirstOrDefaultAsync(cancellationToken: ct);
 
-            return artWork.ArtworkType;
+            if (Equals(artwork, null))
+            {
+                return ArtworkType.NotFound;
+            }
+
+            return artwork.ArtworkType;
         }
 
         public async Task<bool> CheckFollowedArtwork(long userId, long artworkId, CancellationToken ct)

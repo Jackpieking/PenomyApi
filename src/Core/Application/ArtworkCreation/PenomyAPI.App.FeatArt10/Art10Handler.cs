@@ -44,11 +44,10 @@ public class Art10Handler : IFeatureHandler<Art10Request, Art10Response>
         // The relative path of the chapter folder will be: {comicId}/{chapterId}
         var chapterFolderInfo = new AppFolderInfo
         {
-            FolderName = chapterFolderName,
             RelativePath = DirectoryPathHelper.BuildPath(
                 pathSeparator: DirectoryPathHelper.WebPathSeparator,
                 rootDirectory: comicFolderName,
-                childFolders: chapterFolderName
+                subFolders: chapterFolderName
             )
         };
 

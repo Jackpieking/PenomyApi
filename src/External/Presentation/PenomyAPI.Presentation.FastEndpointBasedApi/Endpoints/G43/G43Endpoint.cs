@@ -16,7 +16,7 @@ public class G43Endpoint : Endpoint<G43RequestDto, G43HttpResponse>
 {
     public override void Configure()
     {
-        Post("/g43/follow/add");
+        Post("g43/artwork/follow");
 
         AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
 

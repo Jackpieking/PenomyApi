@@ -12,6 +12,8 @@ namespace PenomyAPI.FileService.CloudinaryService;
 
 public sealed class CloudinaryFileService : IDefaultDistributedFileService
 {
+    private static Cloudinary _cloudinaryInstance;
+    private static readonly object _lock = new object();
     private readonly CloudinaryOptions _options;
 
     public CloudinaryFileService(CloudinaryOptions options)
@@ -28,7 +30,9 @@ public sealed class CloudinaryFileService : IDefaultDistributedFileService
 
         try
         {
-            var result = await cloudinary.CreateFolderAsync(folderInfo.RelativePath);
+            var folderPath = folderInfo.RelativePath ?? folderInfo.AbsolutePath;
+
+            var result = await cloudinary.CreateFolderAsync(folderPath);
 
             return result.Success;
         }
@@ -93,13 +97,74 @@ public sealed class CloudinaryFileService : IDefaultDistributedFileService
         return Task.FromResult(false);
     }
 
-    public Task<Result<IEnumerable<AppFileInfo>>> UploadMultipleFilesAsync(
+    public async Task<Result<IEnumerable<AppFileInfo>>> UploadMultipleFilesAsync(
         IEnumerable<AppFileInfo> fileInfos,
         bool overwrite,
         CancellationToken cancellationToken
     )
     {
-        return Task.FromResult(Result<IEnumerable<AppFileInfo>>.Failed());
+        var cloudinary = CreateCloudinary();
+
+        try
+        {
+            Dictionary<AppFileInfo, Task<ImageUploadResult>> imageUploadTasks = new();
+
+            foreach (var fileInfo in fileInfos)
+            {
+                var uploadTask = InternalHandleFileUploadAsync(
+                    cloudinary,
+                    fileInfo,
+                    overwrite,
+                    cancellationToken);
+
+                imageUploadTasks.Add(fileInfo, uploadTask);
+            }
+
+            await Task.WhenAll(imageUploadTasks.Values);
+
+            return Result<IEnumerable<AppFileInfo>>.Success(imageUploadTasks.Keys);
+        }
+        catch
+        {
+            return Result<IEnumerable<AppFileInfo>>.Failed();
+        }
+    }
+
+    #region Private Methods
+    private async Task<ImageUploadResult> InternalHandleFileUploadAsync(
+        Cloudinary cloudinary,
+        AppFileInfo fileInfo,
+        bool overwrite,
+        CancellationToken cancellationToken)
+    {
+        fileInfo.ResetFileDataStream();
+
+        // If the overwrite is set true, then invalidate is set (true) too.
+        var imageUploadParams = new ImageUploadParams
+        {
+            Folder = fileInfo.FolderPath,
+            AssetFolder = fileInfo.FolderPath,
+            PublicId = fileInfo.FileId,
+            File = new FileDescription(
+            name: fileInfo.FileName,
+                stream: fileInfo.FileDataStream
+            ),
+            DisplayName = fileInfo.FileName,
+            Overwrite = overwrite,
+            Invalidate = overwrite,
+        };
+
+        // Get the uploading result.
+        var uploadResult = await cloudinary.UploadAsync(
+            parameters: imageUploadParams,
+            cancellationToken: cancellationToken
+        );
+
+        fileInfo.CleanFileDataStream();
+
+        fileInfo.StorageUrl = uploadResult.SecureUrl.OriginalString;
+
+        return uploadResult;
     }
 
     /// <summary>
@@ -107,10 +172,16 @@ public sealed class CloudinaryFileService : IDefaultDistributedFileService
     /// </summary>
     private Cloudinary CreateCloudinary()
     {
-        var cloudinary = new Cloudinary(cloudinaryUrl: _options.CloudinaryUrl);
+        lock (_lock)
+        {
+            if (Equals(_cloudinaryInstance, null))
+            {
+                _cloudinaryInstance = new Cloudinary(cloudinaryUrl: _options.CloudinaryUrl);
+                _cloudinaryInstance.Api.Secure = true;
+            }
+        }
 
-        cloudinary.Api.Secure = true;
-
-        return cloudinary;
+        return _cloudinaryInstance;
     }
+    #endregion
 }

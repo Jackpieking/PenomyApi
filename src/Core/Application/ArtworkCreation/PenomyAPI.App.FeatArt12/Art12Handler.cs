@@ -394,7 +394,7 @@ public sealed class Art12Handler
         var chapterFolderRelativePath = DirectoryPathHelper.BuildPath(
             pathSeparator: DirectoryPathHelper.WebPathSeparator,
             rootDirectory: comicFolderName,
-            childFolders: chapterFolderName);
+            subFolders: chapterFolderName);
 
         return chapterFolderRelativePath;
     }

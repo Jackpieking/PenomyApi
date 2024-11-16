@@ -21,24 +21,36 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic
 
         }
 
-        public async Task<bool> UnFollowArtwork(long userId, long artworkId, ArtworkType artworkType, CancellationToken ct)
+        public Task<bool> HasFollowedArtworkAsync(
+            long userId,
+            long artworkId,
+            CancellationToken cancellationToken)
         {
-            try
+            return _userFollowedArtwork.AnyAsync(
+                userFollow
+                    => userFollow.UserId == userId
+                    && userFollow.ArtworkId == artworkId,
+                cancellationToken);
+        }
+
+        public async Task<bool> UnFollowArtwork(long userId, long artworkId, CancellationToken ct)
+        {
+            await _dbContext.Database.CreateExecutionStrategy().ExecuteAsync(async () =>
             {
+                using var transaction = await _dbContext.Database.BeginTransactionAsync();
+
                 await _userFollowedArtwork
-                    .Where(o => o.UserId == userId && o.ArtworkId == artworkId)
-                    .ExecuteDeleteAsync(ct);
+                        .Where(o => o.UserId == userId && o.ArtworkId == artworkId)
+                        .ExecuteDeleteAsync(ct);
 
                 await _artworkMetaData
                     .Where(o => o.ArtworkId == artworkId)
                     .ExecuteUpdateAsync(o => o.SetProperty(o => o.TotalFollowers, e => e.TotalFollowers - 1), ct);
 
                 await _dbContext.SaveChangesAsync(ct);
-            }
-            catch
-            {
-                return false;
-            }
+
+                await transaction.CommitAsync();
+            });
 
             return true;
         }

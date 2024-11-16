@@ -16,7 +16,7 @@ public class G44Endpoint : Endpoint<G44RequestDto, G44HttpResponse>
 {
     public override void Configure()
     {
-        Post("/G44/profile/user/unfollowed-artworks");
+        Post("g44/artwork/unfollow");
 
         AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
 
@@ -49,7 +49,6 @@ public class G44Endpoint : Endpoint<G44RequestDto, G44HttpResponse>
         {
             UserId = stateBag.AppRequest.UserId,
             ArtworkId = requestDto.ArtworkId,
-            ArtworkType = requestDto.ArtworkType,
         };
 
         // Get FeatureHandler response.

@@ -1,4 +1,6 @@
 ﻿using FastEndpoints;
+using Microsoft.AspNetCore.Http;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Helpers;
 using System;
 using System.IdentityModel.Tokens.Jwt;
@@ -8,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Common.Middlewares;
 
-internal sealed class AuthPreProcessor<T> : PreProcessor<T, StateBag> where T : class
+internal sealed class AuthPreProcessor<TRequest> : PreProcessor<TRequest, StateBag> where TRequest : class
 {
     public override async Task PreProcessAsync(
-        IPreProcessorContext<T> context,
+        IPreProcessorContext<TRequest> context,
         StateBag state,
         CancellationToken ct
     )
@@ -23,12 +25,16 @@ internal sealed class AuthPreProcessor<T> : PreProcessor<T, StateBag> where T : 
         // Is token expired.
         if (tokenExpireTime < DateTime.UtcNow)
         {
-            //await SendResponseAsync(
-            //    G48ResponseStatusCode.FORBIDDEN,
-            //    state.AppRequest,
-            //    context.HttpContext,
-            //    ct
-            //);
+            await context.HttpContext.Response.SendAsync(
+                new AppHttpResponse<string>
+                {
+                    HttpCode = StatusCodes.Status403Forbidden,
+                    Body = "User token forbidden or expired"
+                },
+                StatusCodes.Status403Forbidden,
+                null,
+                ct
+            );
 
             return;
         }
@@ -39,12 +45,16 @@ internal sealed class AuthPreProcessor<T> : PreProcessor<T, StateBag> where T : 
 
         if (!long.TryParse(userId, out var id))
         {
-            //await SendResponseAsync(
-            //    G48ResponseStatusCode.UN_AUTHORIZED,
-            //    state.AppRequest,
-            //    context.HttpContext,
-            //    ct
-            //);
+            await context.HttpContext.Response.SendAsync(
+                new AppHttpResponse<string>
+                {
+                    HttpCode = StatusCodes.Status401Unauthorized,
+                    Body = "The user's ID is invalid"
+                },
+                StatusCodes.Status401Unauthorized,
+                null,
+                ct
+            );
 
             return;
         }
@@ -52,37 +62,4 @@ internal sealed class AuthPreProcessor<T> : PreProcessor<T, StateBag> where T : 
         // Save found user id to state bag.
         state.AppRequest.UserId = id;
     }
-
-    ///// <summary>
-    /////     Send response extension method.
-    ///// </summary>
-    ///// <param name="statusCode">
-    /////     The app status code.
-    ///// </param>
-    ///// <param name="appRequest">
-    /////     The app request.
-    ///// </param>
-    ///// <param name="context">
-    /////     The http context.
-    ///// </param>
-    ///// <param name="ct">
-    /////     The cancellation token used to propagate
-    /////     notification that operations should be canceled.
-    ///// </param>
-    ///// <returns>
-    /////     Empty
-    ///// </returns>
-    //private static Task SendResponseAsync(
-    //    ResponseStatusCode statusCode,
-    //    AuthRequest appRequest,
-    //    HttpContext context,
-    //    CancellationToken ct
-    //)
-    //{
-    //    var httpResponse = G48ResponseManager
-    //        .Resolve(statusCode)
-    //        .Invoke(appRequest, new() { StatusCode = statusCode });
-
-    //    return context.Response.SendAsync(httpResponse, httpResponse.HttpCode, cancellation: ct);
-    //}
 }
