@@ -49,7 +49,7 @@ public class G58Repository : IG58Repository
         ArtworkComment Comment,
         long ParentCommentId,
         CancellationToken cancellationToken,
-        Result<long> result
+        Result<long> result 
     )
     {
         IDbContextTransaction transaction = null;

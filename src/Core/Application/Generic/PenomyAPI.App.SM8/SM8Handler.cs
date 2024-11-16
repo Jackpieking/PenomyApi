@@ -96,10 +96,17 @@ public class SM8Handler : IFeatureHandler<SM8Request, SM8Response>
                 CreatedAt = DateTime.UtcNow,
                 CreatedBy = long.Parse(request.GetUserId()),
                 GroupStatus = SocialGroupStatus.Active,
+                TotalMembers = 1,
             };
 
             long createdId = await _SM8Repository.CreateSocialGroupAsync(socialGroup);
 
+            if (createdId == 0)
+                return new SM8Response
+                {
+                    IsSuccess = false,
+                    StatusCode = SM8ResponseStatusCode.FAILED,
+                };
             return new SM8Response
             {
                 IsSuccess = true,
