@@ -33,7 +33,11 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic
 
         public async Task<bool> CheckFollowedArtwork(long userId, long artworkId, CancellationToken ct)
         {
-            return await _userFollowedArtwork.AnyAsync(o => o.ArtworkId == artworkId, cancellationToken: ct);
+            return await _userFollowedArtwork
+                .AnyAsync(o =>
+                    o.ArtworkId == artworkId &&
+                    o.UserId == userId,
+                    cancellationToken: ct);
         }
 
         public async Task<bool> FollowArtwork(
