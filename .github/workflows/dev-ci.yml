@@ -6,21 +6,60 @@ on:
 
 jobs:
     build:
-        runs-on: ubuntu-22.04
+        name: Check dotnet version
+        runs-on: self-hosted
+
+        env:
+            DOTNET_INSTALL_DIR: "dotnet-sdk"
+            DOTNET_ROOT: "dotnet-sdk"
+            NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+            DOTNET_CLI_TELEMETRY_OPTOUT: 1
 
         steps:
+            # Load source code from the branch that has the new PR
+            # In this case, it is the source code of dev branch
             - name: Checkout to the source code
               uses: actions/checkout@v4
-              with:
-                  ref: dev
 
-            - name: Setup
+            # Compute hash values of sdk and csproj
+            - name: Compute hash values
+              id: compute-hashes
+              run: |
+                  echo "global_hash=$(git ls-files | grep 'global.json' | xargs sha256sum | cut -d' ' -f1)" >> $GITHUB_OUTPUT
+                  echo "csproj_hash=$(git ls-files '**/*.csproj' | xargs sha256sum | sha256sum | cut -d' ' -f1)" >> $GITHUB_OUTPUT
+
+            # Combined cache step for dotnet installation and nuget packages
+            - name: Cache dotnet installation and nuget packages
+              id: cache-dotnet
+              uses: actions/cache@v4
+              with:
+                  key: ${{ runner.os }}-dotnet--sdk-${{ steps.compute-hashes.outputs.global_hash }}--nuget-${{ steps.compute-hashes.outputs.csproj_hash }}
+
+                  restore-keys: ${{ runner.os }}-dotnet--sdk-${{ steps.compute-hashes.outputs.global_hash }}--nuget-${{ steps.compute-hashes.outputs.csproj_hash }}
+
+                  path: |
+                      ${{ env.DOTNET_INSTALL_DIR }}
+                      ${{ env.NUGET_PACKAGES }}
+
+            # Setup environment variables if cache is hit for dotnet installation
+            - name: Setup path if cache is hit
+              if: steps.cache-dotnet.outputs.cache-hit == 'true'
+              run: echo "${{ env.DOTNET_INSTALL_DIR }}" >> $GITHUB_PATH
+
+            # Install dotnet sdk
+            # If dotnet sdk is not found in cache
+            #
+            # This step would be skipped if cache is hit
+            - name: Setup dotnet installation
+              if: steps.cache-dotnet.outputs.cache-hit != 'true'
               uses: actions/setup-dotnet@v4
               with:
-                  global-json-file: /global.json
+                  global-json-file: global.json
 
+            # Restore dependencies of the project
             - name: Restore dependencies
               run: dotnet restore
 
+            # Build the project
             - name: Build app
-              run: dotnet build --no-restore
+              run: dotnet build --no-restore -c Release
