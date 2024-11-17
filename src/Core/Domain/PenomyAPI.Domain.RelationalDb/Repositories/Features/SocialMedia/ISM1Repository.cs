@@ -14,11 +14,11 @@ public interface ISM1Repository
     ///     The type of artwork to take.
     /// </param>
     /// <param name="userId">
-    ///     The id of the user who favorite these artworks.
+    ///     The id of the user.
     /// </param>
     /// <param name="cancellationToken"></param>
     /// <returns>
-    ///     The total numbers of artwork.
+    ///     Return user's profile, if not exist return null.
     /// </returns>
     Task<UserProfile> GetUserFrofileByUserIdAsync(
         long userId,
