@@ -4,5 +4,5 @@ namespace PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 
 public partial interface IUnitOfWork
 {
-    IFeatSM1Repository FeatSM1Repository { get; }
+    ISM1Repository SM1Repository { get; }
 }
