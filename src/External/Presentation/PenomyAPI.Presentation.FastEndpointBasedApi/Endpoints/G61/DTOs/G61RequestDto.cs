@@ -2,6 +2,6 @@
 {
     public class G61RequestDto
     {
-        public long CreatorId { get; set; }
+        public string CreatorId { get; set; }
     }
 }

@@ -48,7 +48,7 @@ public class G62Endpoint : Endpoint<G62RequestDto, G62HttpResponse>
         var featRequest = new G62Request
         {
             UserId = stateBag.AppRequest.UserId,
-            CreatorId = requestDto.CreatorId
+            CreatorId = long.Parse(requestDto.CreatorId)
         };
 
         // Get FeatureHandler response.

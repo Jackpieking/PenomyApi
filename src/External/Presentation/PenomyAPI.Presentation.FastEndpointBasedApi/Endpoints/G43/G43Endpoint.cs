@@ -48,7 +48,7 @@ public class G43Endpoint : Endpoint<G43RequestDto, G43HttpResponse>
         var featRequest = new G43Request
         {
             UserId = stateBag.AppRequest.UserId,
-            ArtworkId = requestDto.ArtworkId
+            ArtworkId = long.Parse(requestDto.ArtworkId)
         };
 
         // Get FeatureHandler response.

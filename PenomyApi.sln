@@ -217,6 +217,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.SM12", "src\C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.SM13", "src\Core\Application\SocialMedia\PenomyAPI.App.SM13\PenomyAPI.App.SM13.csproj", "{404A22D3-941E-4D3D-80D9-C624346FB4D1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.SM8", "src\Core\Application\Generic\PenomyAPI.App.SM8\PenomyAPI.App.SM8.csproj", "{8B1C99E7-16FF-4897-B182-80BD27CE4A9D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -551,6 +553,10 @@ Global
 		{404A22D3-941E-4D3D-80D9-C624346FB4D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{404A22D3-941E-4D3D-80D9-C624346FB4D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{404A22D3-941E-4D3D-80D9-C624346FB4D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B1C99E7-16FF-4897-B182-80BD27CE4A9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B1C99E7-16FF-4897-B182-80BD27CE4A9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B1C99E7-16FF-4897-B182-80BD27CE4A9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B1C99E7-16FF-4897-B182-80BD27CE4A9D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -662,6 +668,7 @@ Global
 		{1CC737E3-3174-4AB0-B24E-AC778A77BBAC} = {93238DD1-0977-422A-A564-56BD09E1EC18}
 		{AC7B4F26-E118-41E8-A0EE-2F9200A9CC30} = {AD061D85-C1FB-4F50-8B36-93E3D49AAEF2}
 		{404A22D3-941E-4D3D-80D9-C624346FB4D1} = {AD061D85-C1FB-4F50-8B36-93E3D49AAEF2}
+		{8B1C99E7-16FF-4897-B182-80BD27CE4A9D} = {93238DD1-0977-422A-A564-56BD09E1EC18}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D57C122E-3458-4428-82FB-FF6E7A97A032}
