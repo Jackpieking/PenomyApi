@@ -52,6 +52,11 @@ public class SM12Handler : IFeatureHandler<SM12Request, SM12Response>
                 artworkFolderName
             )
         };
+        folderInfo.AbsolutePath = DirectoryPathHelper.BuildPath(
+            DirectoryPathHelper.WebPathSeparator,
+            _options.ComicRootFolder,
+            folderInfo.RelativePath
+        );
         var fileService = _fileService.Value;
         var folderCreateResult = await fileService.CreateFolderAsync(
             folderInfo,
@@ -98,7 +103,7 @@ public class SM12Handler : IFeatureHandler<SM12Request, SM12Response>
             AllowComment = request.AllowComment,
             CreatedAt = dateTimeNow,
             UpdatedAt = dateTimeNow,
-            Content = request.Title,
+            Content = request.Content,
             PublicLevel = request.PublicLevel,
             CreatedBy = request.UserId,
             TotalLikes = 0
