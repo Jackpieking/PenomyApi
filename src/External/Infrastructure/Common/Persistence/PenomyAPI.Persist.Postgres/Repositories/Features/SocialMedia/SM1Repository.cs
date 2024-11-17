@@ -18,7 +18,7 @@ public sealed class SM1Repository : ISM1Repository
         _userProfile = _dbContext.Set<UserProfile>();
     }
 
-    public async Task<UserProfile> GetUserFrofileByUserIdAsync(long userId, CancellationToken cancellationToken)
+    public async Task<UserProfile> GetUserFrofileByUserIdAsync(long userId, CancellationToken ct)
     {
         return await _userProfile
             .Where(o => o.UserId == userId)
@@ -31,6 +31,6 @@ public sealed class SM1Repository : ISM1Repository
                 TotalFollowedCreators = o.TotalFollowedCreators,
                 RegisteredAt = o.RegisteredAt
             })
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(ct);
     }
 }
