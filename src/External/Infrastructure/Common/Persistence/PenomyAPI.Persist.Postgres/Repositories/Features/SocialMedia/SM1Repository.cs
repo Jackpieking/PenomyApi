@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.Generic;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -20,6 +21,16 @@ public sealed class SM1Repository : ISM1Repository
     public async Task<UserProfile> GetUserFrofileByUserIdAsync(long userId, CancellationToken cancellationToken)
     {
         return await _userProfile
-            .FirstOrDefaultAsync(x => x.UserId == userId);
+            .Where(o => o.UserId == userId)
+            .Select(o => new UserProfile
+            {
+                NickName = o.NickName,
+                Gender = o.Gender,
+                AvatarUrl = o.AvatarUrl,
+                AboutMe = o.AboutMe,
+                TotalFollowedCreators = o.TotalFollowedCreators,
+                RegisteredAt = o.RegisteredAt
+            })
+            .FirstOrDefaultAsync();
     }
 }
