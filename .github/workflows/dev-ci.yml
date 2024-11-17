@@ -7,7 +7,7 @@ on:
 jobs:
     build:
         name: Check dotnet version
-        runs-on: ubuntu-22.04
+        runs-on: self-hosted
 
         env:
             DOTNET_INSTALL_DIR: "dotnet-sdk"
