@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Common.Middlewares;
 
-internal sealed class AuthPreProcessor<TRequest> : PreProcessor<TRequest, StateBag> where TRequest : class
+internal sealed class AuthPreProcessor<TRequest> : PreProcessor<TRequest, StateBag> where TRequest : notnull
 {
     public override async Task PreProcessAsync(
         IPreProcessorContext<TRequest> context,
