@@ -49,6 +49,7 @@ jobs:
             # Install dotnet sdk
             # If dotnet sdk is not found in cache
             #
+            # TODO: test
             # This step would be skipped if cache is hit
             - name: Setup dotnet installation
               if: steps.cache-dotnet.outputs.cache-hit != 'true'
