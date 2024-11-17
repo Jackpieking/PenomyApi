@@ -16,7 +16,7 @@ public class SM1Endpoint : Endpoint<EmptyRequest, SM1HttpResponse>
 {
     public override void Configure()
     {
-        Get("/SM1/get/user-profile");
+        Get("/SM1/user-profile/get");
 
         AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
 
