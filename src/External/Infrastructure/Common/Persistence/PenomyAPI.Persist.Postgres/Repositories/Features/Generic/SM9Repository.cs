@@ -24,6 +24,7 @@ public class SM9Repository : ISM9Repository
             .Where(g => g.CreatedBy == userId)
             .AsQueryable()
             .AsNoTracking()
+            .Take(4)
             .ToListAsync();
         return result;
         } catch{
