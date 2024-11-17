@@ -62,7 +62,15 @@ public class SM1Endpoint : Endpoint<EmptyRequest, SM1HttpResponse>
 
         if (featResponse.IsSuccess)
         {
-            httpResponse.Body = new SM1ResponseDto { Isuccess = true };
+            httpResponse.Body = new SM1ResponseDto
+            {
+                NickName = featResponse.Result.NickName,
+                Gender = featResponse.Result.Gender,
+                AvatarUrl = featResponse.Result.AvatarUrl,
+                AboutMe = featResponse.Result.AboutMe,
+                TotalFollowedCreators = featResponse.Result.TotalFollowedCreators,
+                RegisteredAt = featResponse.Result.RegisteredAt
+            };
         }
 
         await SendAsync(httpResponse, httpResponse.HttpCode, ct);
