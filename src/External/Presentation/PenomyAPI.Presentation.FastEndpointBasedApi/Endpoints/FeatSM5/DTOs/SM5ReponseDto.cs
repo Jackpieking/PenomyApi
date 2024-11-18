@@ -19,4 +19,6 @@ public class SM5ResponseDto
     public string ManagerName { get; set; }
 
     public bool IsManager { get; set; }
+
+    public bool HasJoin { get; set; }
 }

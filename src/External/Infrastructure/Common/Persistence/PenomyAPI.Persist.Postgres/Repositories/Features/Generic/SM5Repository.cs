@@ -32,7 +32,7 @@ public class SM5Repository : ISM5Repository
                     TotalMembers = g.TotalMembers,
                     CreatedAt = g.CreatedAt,
                     GroupMembers = g.GroupMembers.Where(m => m.MemberId == userId).ToList(),
-                    Creator = g.Creator
+                    Creator = g.Creator,
                 })
                 .AsNoTracking()
                 .AsQueryable()

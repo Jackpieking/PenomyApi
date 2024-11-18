@@ -69,7 +69,8 @@ public class SM5Endpoint : Endpoint<SM5RequestDto, SM5HttpResponse>
                 TotalMembers = featResponse.Group.TotalMembers,
                 CreatedAt = featResponse.Group.CreatedAt.ToString("dd/MM/yyyy"),
                 RequireApprovedWhenPost = featResponse.Group.RequireApprovedWhenPost,
-                IsManager = featResponse.Group.GroupMembers.Count() > 0,
+                HasJoin = featResponse.Group.GroupMembers.Count() > 0,
+                IsManager = stateBag.UserId == featResponse.Group.Creator.UserId,
                 ManagerName = featResponse.Group.Creator.NickName,
             };
 
