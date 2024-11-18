@@ -12,13 +12,19 @@ public sealed class UserSavedUserPost : IEntity
 
     public DateTime SavedAt { get; set; }
 
+    #region MetaData
+
+    public static class MetaData
+    {
+    }
+
+    #endregion
+
     #region Navigation
+
     public UserProfile User { get; set; }
 
     public UserPost UserPost { get; set; }
-    #endregion
 
-    #region MetaData
-    public static class MetaData { }
     #endregion
 }

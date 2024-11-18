@@ -26,6 +26,7 @@ public class SM9Repository : ISM9Repository
             .AsNoTracking()
             .Take(4)
             .ToListAsync();
+            
         return result;
         } catch{
             return null;
