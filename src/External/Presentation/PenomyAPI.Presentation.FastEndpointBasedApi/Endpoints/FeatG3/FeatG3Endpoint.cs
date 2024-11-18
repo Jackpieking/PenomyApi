@@ -11,11 +11,11 @@ using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3.HttpResponse;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3;
 
-public class G3Endpoint : Endpoint<EmptyDto, FeatG3HttpResponse>
+public class G3Endpoint : EndpointWithoutRequest<FeatG3HttpResponse>
 {
     public override void Configure()
     {
-        Get("/g3/RecentlyUpdatedComics");
+        Get("g3/recently-updated/comics");
         AllowAnonymous();
 
         Description(builder: builder =>
@@ -34,7 +34,7 @@ public class G3Endpoint : Endpoint<EmptyDto, FeatG3HttpResponse>
         });
     }
 
-    public override async Task<FeatG3HttpResponse> ExecuteAsync(EmptyDto req, CancellationToken ct)
+    public override async Task<FeatG3HttpResponse> ExecuteAsync(CancellationToken ct)
     {
         var featG3Request = new FeatG3Request();
 
@@ -47,22 +47,6 @@ public class G3Endpoint : Endpoint<EmptyDto, FeatG3HttpResponse>
         var httpResponse = G3HttpResponseManager
             .Resolve(featResponse.StatusCode)
             .Invoke(featG3Request, featResponse);
-
-        httpResponse.Body = new G3ResponseDto
-        {
-            ArtworkList = featResponse.ArtworkList.ConvertAll(x => new FeatG3ResponseDtoObject()
-            {
-                ArtworkId = x.Id,
-                Title = x.Title,
-                Supplier = x.AuthorName,
-                Thumbnail = x.ThumbnailUrl,
-                Favorite = x.ArtworkMetaData.TotalFavorites,
-                Rating = x.ArtworkMetaData.AverageStarRate,
-                LastUpdateAt = x.UpdatedAt,
-                FlagUrl = x.Origin.ImageUrl,
-                Chapters = x.Chapters,
-            }),
-        };
 
         return httpResponse;
     }

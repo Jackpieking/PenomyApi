@@ -24,7 +24,7 @@ public static class G2HttpResponseMapper
             {
                 AppCode = G2HttpResponse.GetAppCode(G2ResponseAppCode.SUCCESS),
                 HttpCode = StatusCodes.Status200OK,
-                Body = G2RecommendedArtworkItemResponseDto.MapFrom(response.TopRecommendedArtworks)
+                Body = G2TopArtworkItemResponseDto.MapFrom(response.TopArtworks)
             });
 
         _dictionary.TryAdd(

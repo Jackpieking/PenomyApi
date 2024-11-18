@@ -1,15 +1,19 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
+using PenomyAPI.Domain.RelationalDb.Entities.Generic;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
 
 public class FeatG3Repository : IFeatG3Repository
 {
+    private const int NUMBER_OF_ARTWORKS_TO_RETURN = 16;
+    private const int NUMBER_OF_RECOMMENDED_CHAPTERS_PER_ARTWORK = 2;
+
     private readonly DbContext _dbContext;
     private readonly DbSet<Artwork> _artworkDbSet;
     private readonly DbSet<ArtworkMetaData> _statisticDbSet;
@@ -35,21 +39,41 @@ public class FeatG3Repository : IFeatG3Repository
                 Id = a.Id,
                 Title = a.Title,
                 ThumbnailUrl = a.ThumbnailUrl,
-                // UpdatedAt = a.Chapters.ToList().OrderByDescending(c => c.CreatedAt).FirstOrDefault().CreatedAt,
                 UpdatedAt = a.UpdatedAt,
-                AuthorName = a.AuthorName,
-                Origin = new ArtworkOrigin { ImageUrl = a.Origin.ImageUrl },
+                Creator = new UserProfile
+                {
+                    UserId = a.Creator.UserId,
+                    AvatarUrl = a.Creator.AvatarUrl,
+                    NickName = a.Creator.NickName,
+                },
+                Origin = new ArtworkOrigin
+                {
+                    ImageUrl = a.Origin.ImageUrl
+                },
                 ArtworkMetaData = new ArtworkMetaData
                 {
-                    TotalFavorites = a.ArtworkMetaData.TotalFavorites,
-                    AverageStarRate = a.ArtworkMetaData.AverageStarRate,
+                    TotalStarRates = a.ArtworkMetaData.TotalStarRates,
+                    TotalUsersRated = a.ArtworkMetaData.TotalUsersRated,
                 },
-                Chapters = a.Chapters.OrderByDescending(c => c.CreatedAt).Take(2),
+                Chapters = a.Chapters
+                    .Where(chapter
+                        => !chapter.IsTemporarilyRemoved
+                        && chapter.PublicLevel == ArtworkPublicLevel.Everyone
+                        && chapter.PublishStatus == PublishStatus.Published)
+                    .Select(chapter => new ArtworkChapter
+                    {
+                        Id = chapter.Id,
+                        UploadOrder = chapter.UploadOrder,
+                        PublishedAt = chapter.PublishedAt,
+                    })
+                    .OrderByDescending(c => c.UploadOrder)
+                    .Take(NUMBER_OF_RECOMMENDED_CHAPTERS_PER_ARTWORK),
             })
             .OrderByDescending(a => a.UpdatedAt)
-            .Take(20)
+            .Take(NUMBER_OF_ARTWORKS_TO_RETURN)
             .AsNoTracking()
             .ToListAsync();
+
         return result;
     }
 }

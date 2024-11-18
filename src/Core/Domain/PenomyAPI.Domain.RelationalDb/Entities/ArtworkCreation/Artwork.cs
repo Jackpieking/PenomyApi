@@ -143,4 +143,23 @@ public sealed class Artwork
         public const int IntroductionLength = 2000;
     }
     #endregion
+
+    #region Support Methods
+    /// <summary>
+    ///     Add the latest chapter to the chapter list
+    ///     when return from the API for later display.
+    /// </summary>
+    /// <param name="latestChapter"></param>
+    public void AddLatestChapter(ArtworkChapter latestChapter)
+    {
+        if (Equals(Chapters, null))
+        {
+            Chapters = new List<ArtworkChapter>(capacity: 1);
+        }
+
+        // Add the latest chapter into the chapter
+        // list to display when return from API.
+        (Chapters as List<ArtworkChapter>).Add(latestChapter);
+    }
+    #endregion
 }

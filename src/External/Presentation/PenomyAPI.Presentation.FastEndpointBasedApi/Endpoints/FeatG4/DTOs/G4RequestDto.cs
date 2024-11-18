@@ -2,6 +2,8 @@
 {
     public class G4RequestDto
     {
-        public string CategoryId { get; set; }
+        public string AccessToken { get; set; }
+
+        public long GuestId { get; set; }
     }
 }

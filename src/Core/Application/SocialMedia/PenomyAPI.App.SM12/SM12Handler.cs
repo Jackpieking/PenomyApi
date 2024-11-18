@@ -10,25 +10,21 @@ using PenomyAPI.App.Common.Helpers;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
-using PenomyAPI.Infra.Configuration.Options;
 
 namespace PenomyAPI.App.SM12;
 
 public class SM12Handler : IFeatureHandler<SM12Request, SM12Response>
 {
     private readonly Lazy<IDefaultDistributedFileService> _fileService;
-    private readonly CloudinaryOptions _options;
     private readonly ISM12Repository _sm12Repository;
 
     public SM12Handler(
         Lazy<IUnitOfWork> unitOfWork,
-        Lazy<IDefaultDistributedFileService> fileService,
-        CloudinaryOptions options
+        Lazy<IDefaultDistributedFileService> fileService
     )
     {
         _sm12Repository = unitOfWork.Value.FeatSM12Repository;
         _fileService = fileService;
-        _options = options;
     }
 
     public async Task<SM12Response> ExecuteAsync(SM12Request request, CancellationToken ct)
