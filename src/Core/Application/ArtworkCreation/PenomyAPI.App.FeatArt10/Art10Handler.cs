@@ -64,6 +64,7 @@ public class Art10Handler : IFeatureHandler<Art10Request, Art10Response>
             return Art10Response.FILE_SERVICE_ERROR;
         }
 
+        // Set file id corresponding to the media id.
         foreach (var fileInfo in request.ChapterImageFileInfos)
         {
             fileInfo.FileId = idGenerator.Get().ToString();
@@ -92,11 +93,14 @@ public class Art10Handler : IFeatureHandler<Art10Request, Art10Response>
             return Art10Response.FILE_SERVICE_ERROR;
         }
 
-        // Remove the thumbnail image file info out of the ChapterImageFileInfos list
-        // to prevent inserting into the chapter-medias table.
-        var lastIndex = request.ChapterImageFileInfos.Count - 1;
+        // Remove the thumbnail image file info out of the ChapterImageFileInfos
+        // list to prevent inserting into the chapter-medias table.
+        if (hasThumbnailImage)
+        {
+            var lastIndex = request.ChapterImageFileInfos.Count - 1;
 
-        request.ChapterImageFileInfos.RemoveAt(lastIndex);
+            request.ChapterImageFileInfos.RemoveAt(lastIndex);
+        }
 
         // Check if the chapter is created with drafted mode.
         var newChapterUploadOrder = 0;

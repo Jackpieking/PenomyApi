@@ -18,7 +18,7 @@ public class G63Endpoint : Endpoint<G63RequestDto, G63HttpResponse>
 {
     public override void Configure()
     {
-        Get("/G63/favorite-artworks");
+        Get("/G63/follow-creator/get");
 
         AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
 

@@ -1,0 +1,18 @@
+namespace PenomyAPI.App.SM13;
+
+public enum SM13ResponseStatusCode
+{
+    SUCCESS = 1,
+
+    DATABASE_ERROR = 2,
+
+    FILE_SERVICE_ERROR = 3,
+    USER_POST_NOT_FOUND = 4,
+
+    INVALID_FILE_EXTENSION = 5,
+
+    INVALID_FILE_FORMAT = 6,
+
+    FILE_SIZE_IS_EXCEED_THE_LIMIT = 7,
+    USER_PROFILE_NOT_FOUND = 8
+}

@@ -23,11 +23,11 @@ public sealed class G2Handler : IFeatureHandler<G2Request, G2Response>
 
         try
         {
-            var result = await _g2Repository.GetTopRecommendedArtworksByTypeAsync(
+            var topArtworks = await _g2Repository.GetTopRecommendedArtworksByTypeAsync(
                 request.ArtworkType,
                 ct);
 
-            return G2Response.SUCCESS(result);
+            return G2Response.SUCCESS(topArtworks);
         }
         catch (Exception ex)
         {

@@ -70,6 +70,13 @@ public class SM12Endpoint : Endpoint<SM12RequestDto, SM12HttpResponse>
             foreach (var media in requestDto.AttachedMedia)
             {
                 var fileExtension = FormFileHelper.Instance.GetFileExtension(media);
+                if (!_formFileHelper.IsValidImageFile(media))
+                    return new SM12HttpResponse
+                    {
+                        AppCode = SM12HttpResponse.GetAppCode(SM12ResponseStatusCode.INVALID_FILE_EXTENSION),
+                        HttpCode = StatusCodes.Status400BadRequest,
+                        Errors = "Invalid file format"
+                    };
                 var result = InternalValidateImageFile(media);
                 var fileInfo = new ImageFileInfo
                 {
@@ -89,7 +96,7 @@ public class SM12Endpoint : Endpoint<SM12RequestDto, SM12HttpResponse>
             UserPostId = userPostId,
             AllowComment = requestDto.AllowComment,
             PublicLevel = requestDto.PublicLevel,
-            Title = requestDto.Title,
+            Content = requestDto.Title,
             AppFileInfos = mediaFiles
         };
         var featResponse = await FeatureExtensions.ExecuteAsync<SM12Request, SM12Response>(
