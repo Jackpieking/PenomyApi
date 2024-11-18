@@ -47,7 +47,7 @@ public class G4Handler : IFeatureHandler<G4Request, G4Response>
         {
             return new G4Response
             {
-                StatusCode = G4ResponseStatusCode.DATABASE_ERRO
+                StatusCode = G4ResponseStatusCode.DATABASE_ERROR
             };
         }
     }
