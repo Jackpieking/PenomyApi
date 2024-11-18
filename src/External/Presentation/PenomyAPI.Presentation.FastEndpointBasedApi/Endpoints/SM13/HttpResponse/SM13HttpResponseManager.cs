@@ -67,7 +67,7 @@ public class SM13HttpResponseManager
                 HttpCode = StatusCodes.Status400BadRequest
             });
         _dictionary.TryAdd(
-            SM13ResponseStatusCode.FILE_SIZE_IS_EXCEED_THE_LIMIT,
+            SM13ResponseStatusCode.USER_POST_NOT_FOUND,
             response => new SM13HttpResponse
             {
                 AppCode = SM13HttpResponse.GetAppCode(SM13ResponseStatusCode.USER_POST_NOT_FOUND),

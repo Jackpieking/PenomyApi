@@ -73,7 +73,7 @@ public class Sm13Endpoint : Endpoint<SM13RequestDto, SM13HttpResponse>
                 {
                     FileId = $"{requestDto.AttachedMedia}{media.Length}",
                     FileDataStream = media.OpenReadStream(),
-                    FileName = $"{media.FileName}.{fileExtension}",
+                    FileName = media.FileName,
                     FileExtension = fileExtension
                 };
                 if (result.IsSuccess) mediaFiles.Add(fileInfo);

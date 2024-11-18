@@ -44,15 +44,10 @@ public class SM12Handler : IFeatureHandler<SM12Request, SM12Response>
         {
             RelativePath = DirectoryPathHelper.BuildPath(
                 DirectoryPathHelper.WebPathSeparator,
-                "post",
+                "posts",
                 artworkFolderName
             )
         };
-        folderInfo.AbsolutePath = DirectoryPathHelper.BuildPath(
-            DirectoryPathHelper.WebPathSeparator,
-            _options.ComicRootFolder,
-            folderInfo.RelativePath
-        );
         var fileService = _fileService.Value;
         var folderCreateResult = await fileService.CreateFolderAsync(
             folderInfo,
@@ -68,7 +63,8 @@ public class SM12Handler : IFeatureHandler<SM12Request, SM12Response>
         if (request.AppFileInfos.Any())
             foreach (var fileInfo in request.AppFileInfos)
             {
-                fileInfo.FolderPath = folderInfo.AbsolutePath;
+                //fileInfo.FileId =
+                fileInfo.FolderPath = folderInfo.RelativePath;
                 var uploadResult = await fileService.UploadFileAsync(
                     fileInfo,
                     false,

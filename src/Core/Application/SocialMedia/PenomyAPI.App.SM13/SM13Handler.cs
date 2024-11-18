@@ -78,7 +78,7 @@ public class SM13Handler : IFeatureHandler<SM13Request, SM13Response>
         var postFolderName = request.UserPostId.ToString();
         var folderPath = DirectoryPathHelper.BuildPath(
             DirectoryPathHelper.WebPathSeparator,
-            "post",
+            "posts",
             postFolderName
         );
         var fileService = _fileService.Value;
@@ -96,7 +96,7 @@ public class SM13Handler : IFeatureHandler<SM13Request, SM13Response>
                 PostId = request.UserPostId,
                 MediaType = ConvertToUserPostAttachedMediaType(fileInfo.FileExtension),
                 FileName = fileInfo.FileName,
-                Id = long.Parse(fileInfo.FileId),
+                Id = request.UserPostId + mediaList.Count,
                 UploadOrder = mediaList.Count + 1
             };
             mediaList.Add(userPostMedia);

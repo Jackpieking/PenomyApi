@@ -82,7 +82,7 @@ public class SM12Endpoint : Endpoint<SM12RequestDto, SM12HttpResponse>
                 {
                     FileId = _idGenerator.Value.Get().ToString(),
                     FileDataStream = media.OpenReadStream(),
-                    FileName = $"{media.FileName}.{fileExtension}",
+                    FileName = media.FileName,
                     FileExtension = fileExtension
                 };
                 if (result.IsSuccess) mediaFiles.Add(fileInfo);

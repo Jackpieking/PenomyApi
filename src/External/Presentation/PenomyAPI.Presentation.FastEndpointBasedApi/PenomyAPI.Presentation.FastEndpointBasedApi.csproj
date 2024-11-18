@@ -1,5 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
     <ItemGroup>
+        <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM12\PenomyAPI.App.SM12.csproj"/>
+        <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM14\PenomyAPI.App.SM14.csproj"/>
         <ProjectReference Include="..\..\BuildingBlock\PenomyAPI.BuildingBlock.FeatRegister\PenomyAPI.BuildingBlock.FeatRegister.csproj"/>
     </ItemGroup>
     <ItemGroup>
