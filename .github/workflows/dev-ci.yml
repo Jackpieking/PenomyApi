@@ -6,7 +6,7 @@ on:
 
 jobs:
     build:
-        name: Check dotnet version
+        name: Build the project
         runs-on: self-hosted
 
         env:
