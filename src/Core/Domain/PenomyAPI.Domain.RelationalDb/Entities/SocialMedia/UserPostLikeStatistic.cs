@@ -14,13 +14,24 @@ public sealed class UserPostLikeStatistic : IEntity
     /// </summary>
     public long Total { get; set; }
 
+    public static UserPostLikeStatistic Empty(long postId)
+    {
+        return new UserPostLikeStatistic { PostId = postId, ValueId = 0, Total = 0 };
+    }
+
+    #region MetaData
+
+    public static class MetaData
+    {
+    }
+
+    #endregion
+
     #region Navigation
+
     public UserPost UserPost { get; set; }
 
     public UserLikeValue LikeValue { get; set; }
-    #endregion
 
-    #region MetaData
-    public static class MetaData { }
     #endregion
 }

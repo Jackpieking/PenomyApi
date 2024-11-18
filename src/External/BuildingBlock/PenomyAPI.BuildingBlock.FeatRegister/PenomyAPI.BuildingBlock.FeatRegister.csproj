@@ -45,13 +45,16 @@
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG13\PenomyAPI.App.FeatG13.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG20\PenomyAPI.App.FeatG20.csproj" />
     <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG14\PenomyAPI.App.FeatG14.csproj" />
-	<ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.G62\PenomyAPI.App.G62.csproj" />
-	<ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG50\PenomyAPI.App.FeatG50.csproj" />
-	<ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.SM8\PenomyAPI.App.SM8.csproj" />
+	  <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.SM8\PenomyAPI.App.SM8.csproj" />
+	  <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.SM9\PenomyAPI.App.SM9.csproj" />
+	  <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.SM5\PenomyAPI.App.SM5.csproj" />
+	  <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.G62\PenomyAPI.App.G62.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM7\PenomyAPI.App.SM7.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM12\PenomyAPI.App.SM12.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM1\PenomyAPI.App.SM1.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Common\BackgroundJob\PenomyAPI.BackgroundJob.Quartz\PenomyAPI.BackgroundJob.Quartz.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Common\FileService\PenomyAPI.FileService.CloudinaryService\PenomyAPI.FileService.CloudinaryService.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Common\Notification\Mail\PenomyAPI.Noti.Mail.GoogleGmail\PenomyAPI.Noti.Mail.GoogleGmail.csproj" />

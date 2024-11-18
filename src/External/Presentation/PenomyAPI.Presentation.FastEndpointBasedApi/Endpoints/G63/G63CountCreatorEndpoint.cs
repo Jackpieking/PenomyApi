@@ -7,7 +7,6 @@ using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Common.Middlewares;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G63.Common;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G63.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G63.HttpResponse;
 using System;
 using System.Threading;
@@ -15,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G63;
 
-public class G63CountCreatorEndpoint : Endpoint<G63CountCreatorRequestDto, G63CountArtworkHttpResponse>
+public class G63CountCreatorEndpoint : Endpoint<EmptyRequest, G63CountArtworkHttpResponse>
 {
     public override void Configure()
     {
@@ -23,7 +22,7 @@ public class G63CountCreatorEndpoint : Endpoint<G63CountCreatorRequestDto, G63Co
 
         AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
 
-        PreProcessor<AuthPreProcessor<G63CountCreatorRequestDto>>();
+        PreProcessor<AuthPreProcessor<EmptyRequest>>();
 
         Summary(endpointSummary: summary =>
         {
@@ -37,7 +36,7 @@ public class G63CountCreatorEndpoint : Endpoint<G63CountCreatorRequestDto, G63Co
     }
 
     public override async Task<G63CountArtworkHttpResponse> ExecuteAsync(
-        G63CountCreatorRequestDto requestDto,
+        EmptyRequest requestDto,
         CancellationToken ct
     )
     {

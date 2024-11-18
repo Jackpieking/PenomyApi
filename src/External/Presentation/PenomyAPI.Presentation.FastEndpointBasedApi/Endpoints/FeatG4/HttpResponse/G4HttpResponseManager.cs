@@ -1,7 +1,8 @@
-﻿using System;
-using System.Collections.Concurrent;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG4;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4.DTOs;
+using System;
+using System.Collections.Concurrent;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4.HttpResponse
 {
@@ -24,6 +25,7 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4.HttpRespo
                     {
                         AppCode = $"G4.{G4ResponseStatusCode.SUCCESS}",
                         HttpCode = StatusCodes.Status200OK,
+                        Body = G4ResponseItemDto.MapFromList(response.RecommendedArtworkByCategories)
                     }
             );
 

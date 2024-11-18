@@ -45,16 +45,6 @@ public sealed class ArtworkMetaData : IEntity
 
     public bool HasAdRevenueEnabled { get; set; }
 
-    public double GetAverageStarRate()
-    {
-        if (TotalUsersRated == 0)
-        {
-            return 0;
-        }
-
-        return Math.Round((double) TotalStarRates / TotalUsersRated, 2);
-    }
-
     #region Navigation
     public Artwork Artwork { get; set; }
     #endregion
@@ -63,7 +53,7 @@ public sealed class ArtworkMetaData : IEntity
     public static class MetaData { }
     #endregion
 
-    #region Static Methods
+    #region Support Methods
     public static ArtworkMetaData Empty(long artworkId)
     {
         return new ArtworkMetaData
@@ -79,6 +69,21 @@ public sealed class ArtworkMetaData : IEntity
             HasFanGroup = false,
             HasAdRevenueEnabled = false,
         };
+    }
+
+    public double GetAverageStarRate()
+    {
+        return GetAverageStarRate(TotalUsersRated, TotalStarRates);
+    }
+
+    public static double GetAverageStarRate(double totalUsersRated, double totalStarRates)
+    {
+        if (totalUsersRated == 0)
+        {
+            return 0;
+        }
+
+        return Math.Round(totalStarRates / totalUsersRated, 2);
     }
     #endregion
 }
