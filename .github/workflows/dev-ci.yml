@@ -8,10 +8,7 @@ on:
 jobs:
     build:
         name: Build the project
-<<<<<<< HEAD
-=======
         if: github.event.pull_request.merged == true
->>>>>>> 44cf6ca07ff8e4bfb35cde9fde673314c795dab6
         runs-on: self-hosted
 
         env:
@@ -28,10 +25,7 @@ jobs:
 
             # Compute hash values of sdk
             #
-<<<<<<< HEAD
-=======
             #
->>>>>>> 44cf6ca07ff8e4bfb35cde9fde673314c795dab6
             # Runtime hash is used to cache the dotnet installation
             # App infra dependencies hash is used to cache app infra dependencies
             - name: Compute hash values
