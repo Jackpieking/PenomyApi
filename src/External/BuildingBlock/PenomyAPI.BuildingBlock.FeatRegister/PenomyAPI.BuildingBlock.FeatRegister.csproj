@@ -1,81 +1,81 @@
 <Project Sdk="Microsoft.NET.Sdk">
-    <ItemGroup>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG2\PenomyAPI.App.FeatG2.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG35\PenomyAPI.App.FeatG35.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG50\PenomyAPI.App.FeatG50.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.G25\PenomyAPI.App.G25.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.G63\PenomyAPI.App.G63.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.G44\PenomyAPI.App.G44.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\PenomyAPI.App.Common\PenomyAPI.App.Common.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt1\PenomyAPI.App.FeatArt1.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt5\PenomyAPI.App.FeatArt5.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt6\PenomyAPI.App.FeatArt6.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt7\PenomyAPI.App.FeatArt7.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt8\PenomyAPI.App.FeatArt8.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG9\PenomyAPI.App.FeatG9.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG10\PenomyAPI.App.FeatG10.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG12\PenomyAPI.App.FeatG12.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG15\PenomyAPI.App.FeatG15.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG19\PenomyAPI.App.FeatG19.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG46\PenomyAPI.App.FeatG46.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG49\PenomyAPI.App.FeatG49.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG4\PenomyAPI.App.FeatG4.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG5\PenomyAPI.App.FeatG5.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.APP.FeatG6\PenomyAPI.APP.FeatG6.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG7\PenomyAPI.App.FeatG7.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG8\PenomyAPI.App.FeatG8.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG52\PenomyAPI.App.FeatG52.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG53\PenomyAPI.App.FeatG53.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG54\PenomyAPI.App.FeatG54.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.G43\PenomyAPI.App.G43.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.G48\PenomyAPI.App.G48.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.G61\PenomyAPI.App.G61.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.G45\PenomyAPI.App.G45.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG21\PenomyAPI.App.FeatG21.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG56\PenomyAPI.App.FeatG56.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG31\PenomyAPI.App.FeatG31.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG57\PenomyAPI.App.FeatG57.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG33\PenomyAPI.App.FeatG33.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG58\PenomyAPI.App.FeatG58.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG59\PenomyAPI.App.FeatG59.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG47\PenomyAPI.App.FeatG47.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG31A\PenomyAPI.App.FeatG31A.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG28\PenomyAPI.App.FeatG28.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG3\PenomyAPI.App.FeatG3.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG13\PenomyAPI.App.FeatG13.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG20\PenomyAPI.App.FeatG20.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG14\PenomyAPI.App.FeatG14.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.G62\PenomyAPI.App.G62.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG50\PenomyAPI.App.FeatG50.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.SM8\PenomyAPI.App.SM8.csproj"/>
-    </ItemGroup>
-    <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0"/>
-        <ProjectReference Include="..\..\..\Core\Application\PenomyAPI.App.SM12\PenomyAPI.App.SM12\PenomyAPI.App.SM12.csproj"/>
-        <ProjectReference Include="..\..\Infrastructure\Common\BackgroundJob\PenomyAPI.BackgroundJob.Quartz\PenomyAPI.BackgroundJob.Quartz.csproj"/>
-        <ProjectReference Include="..\..\Infrastructure\Common\FileService\PenomyAPI.FileService.CloudinaryService\PenomyAPI.FileService.CloudinaryService.csproj"/>
-        <ProjectReference Include="..\..\Infrastructure\Common\Notification\Mail\PenomyAPI.Noti.Mail.GoogleGmail\PenomyAPI.Noti.Mail.GoogleGmail.csproj"/>
-        <ProjectReference Include="..\..\Infrastructure\Common\Notification\Mail\PenomyAPI.Noti.Mail.MailCow\PenomyAPI.Noti.Mail.MailCow.csproj"/>
-        <ProjectReference Include="..\..\Infrastructure\Common\PenomyAPI.Infra.Configuration\PenomyAPI.Infra.Configuration.csproj"/>
-        <ProjectReference Include="..\..\Infrastructure\Common\Persistence\PenomyAPI.Persist.Postgres\PenomyAPI.Persist.Postgres.csproj"/>
-        <ProjectReference Include="..\..\Infrastructure\Common\Persistence\PenomyAPI.Persist.Redis\PenomyAPI.Persist.Redis.csproj"/>
-        <ProjectReference Include="..\..\Infrastructure\Common\Persistence\PenomyAPI.Persist.Typesense\PenomyAPI.Persist.Typesense.csproj"/>
-        <ProjectReference Include="..\..\Infrastructure\Common\SnowflakeIdGenerator\SnowflakeIdGenerator.csproj"/>
-        <ProjectReference Include="..\..\Infrastructure\Common\IdentityService\PenomyAPI.Identity.AppAuthenticator\PenomyAPI.Identity.AppAuthenticator.csproj"/>
-        <ProjectReference Include="..\..\Infrastructure\ArtworkCreation\PenomyAPI.Infra.FeatArt4\PenomyAPI.Infra.FeatArt4.csproj"/>
-        <ProjectReference Include="..\..\Infrastructure\ArtworkCreation\PenomyAPI.Infra.FeatArt10\PenomyAPI.Infra.FeatArt10.csproj"/>
-        <ProjectReference Include="..\..\Infrastructure\ArtworkCreation\PenomyAPI.Infra.FeatArt12\PenomyAPI.Infra.FeatArt12.csproj"/>
-        <ProjectReference Include="..\..\Infrastructure\Generic\PenomyAPI.Infra.FeatG1\PenomyAPI.Infra.FeatG1.csproj"/>
-        <ProjectReference Include="..\..\Infrastructure\Generic\PenomyAPI.Infra.FeatG32\PenomyAPI.Infra.FeatG32.csproj"/>
-        <ProjectReference Include="..\..\Infrastructure\Generic\PenomyAPI.Infra.FeatG34\PenomyAPI.Infra.FeatG34.csproj"/>
-        <ProjectReference Include="..\..\Infrastructure\Generic\PenomyAPI.Infra.FeatG3\PenomyAPI.Infra.FeatG3.csproj"/>
-        <ProjectReference Include="..\..\Infrastructure\Generic\PenomyAPI.Infra.G25\PenomyAPI.Infra.G25.csproj"/>
-        <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt6\PenomyAPI.App.FeatArt6.csproj"/>
-        <ProjectReference Include="..\..\Infrastructure\Common\IdentityService\PenomyAPI.Identity.GoogleAuthenticator\PenomyAPI.Identity.GoogleAuthenticator.csproj"/>
-    </ItemGroup>
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>disable</ImplicitUsings>
-        <Nullable>disable</Nullable>
-    </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG2\PenomyAPI.App.FeatG2.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG35\PenomyAPI.App.FeatG35.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG50\PenomyAPI.App.FeatG50.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.G25\PenomyAPI.App.G25.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.G63\PenomyAPI.App.G63.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.G44\PenomyAPI.App.G44.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\PenomyAPI.App.Common\PenomyAPI.App.Common.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt1\PenomyAPI.App.FeatArt1.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt5\PenomyAPI.App.FeatArt5.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt6\PenomyAPI.App.FeatArt6.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt7\PenomyAPI.App.FeatArt7.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt8\PenomyAPI.App.FeatArt8.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG9\PenomyAPI.App.FeatG9.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG10\PenomyAPI.App.FeatG10.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG12\PenomyAPI.App.FeatG12.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG15\PenomyAPI.App.FeatG15.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG19\PenomyAPI.App.FeatG19.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG46\PenomyAPI.App.FeatG46.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG49\PenomyAPI.App.FeatG49.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG4\PenomyAPI.App.FeatG4.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG5\PenomyAPI.App.FeatG5.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.APP.FeatG6\PenomyAPI.APP.FeatG6.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG7\PenomyAPI.App.FeatG7.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG8\PenomyAPI.App.FeatG8.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG52\PenomyAPI.App.FeatG52.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG53\PenomyAPI.App.FeatG53.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG54\PenomyAPI.App.FeatG54.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.G43\PenomyAPI.App.G43.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.G48\PenomyAPI.App.G48.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.G61\PenomyAPI.App.G61.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.G45\PenomyAPI.App.G45.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG21\PenomyAPI.App.FeatG21.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG56\PenomyAPI.App.FeatG56.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG31\PenomyAPI.App.FeatG31.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG57\PenomyAPI.App.FeatG57.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG33\PenomyAPI.App.FeatG33.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG58\PenomyAPI.App.FeatG58.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG59\PenomyAPI.App.FeatG59.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG47\PenomyAPI.App.FeatG47.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG31A\PenomyAPI.App.FeatG31A.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG28\PenomyAPI.App.FeatG28.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG3\PenomyAPI.App.FeatG3.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG13\PenomyAPI.App.FeatG13.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG20\PenomyAPI.App.FeatG20.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG14\PenomyAPI.App.FeatG14.csproj" />
+	  <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.G62\PenomyAPI.App.G62.csproj" />
+	  <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG50\PenomyAPI.App.FeatG50.csproj" />
+	  <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.SM8\PenomyAPI.App.SM8.csproj" />
+	  <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.SM9\PenomyAPI.App.SM9.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <ProjectReference Include="..\..\Infrastructure\Common\BackgroundJob\PenomyAPI.BackgroundJob.Quartz\PenomyAPI.BackgroundJob.Quartz.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Common\FileService\PenomyAPI.FileService.CloudinaryService\PenomyAPI.FileService.CloudinaryService.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Common\Notification\Mail\PenomyAPI.Noti.Mail.GoogleGmail\PenomyAPI.Noti.Mail.GoogleGmail.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Common\Notification\Mail\PenomyAPI.Noti.Mail.MailCow\PenomyAPI.Noti.Mail.MailCow.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Common\PenomyAPI.Infra.Configuration\PenomyAPI.Infra.Configuration.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Common\Persistence\PenomyAPI.Persist.Postgres\PenomyAPI.Persist.Postgres.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Common\Persistence\PenomyAPI.Persist.Redis\PenomyAPI.Persist.Redis.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Common\Persistence\PenomyAPI.Persist.Typesense\PenomyAPI.Persist.Typesense.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Common\SnowflakeIdGenerator\SnowflakeIdGenerator.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Common\IdentityService\PenomyAPI.Identity.AppAuthenticator\PenomyAPI.Identity.AppAuthenticator.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\ArtworkCreation\PenomyAPI.Infra.FeatArt4\PenomyAPI.Infra.FeatArt4.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\ArtworkCreation\PenomyAPI.Infra.FeatArt10\PenomyAPI.Infra.FeatArt10.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\ArtworkCreation\PenomyAPI.Infra.FeatArt12\PenomyAPI.Infra.FeatArt12.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Generic\PenomyAPI.Infra.FeatG1\PenomyAPI.Infra.FeatG1.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Generic\PenomyAPI.Infra.FeatG32\PenomyAPI.Infra.FeatG32.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Generic\PenomyAPI.Infra.FeatG34\PenomyAPI.Infra.FeatG34.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Generic\PenomyAPI.Infra.FeatG3\PenomyAPI.Infra.FeatG3.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Generic\PenomyAPI.Infra.G25\PenomyAPI.Infra.G25.csproj" />
+    <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt6\PenomyAPI.App.FeatArt6.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Common\IdentityService\PenomyAPI.Identity.GoogleAuthenticator\PenomyAPI.Identity.GoogleAuthenticator.csproj" />
+  </ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
 </Project>

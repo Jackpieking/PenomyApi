@@ -42,8 +42,8 @@ public class SM8Endpoint : Endpoint<SM8RequestDto, SM8HttpResponse>
 
         Summary(endpointSummary: summary =>
         {
-            summary.Summary = "Endpoint for creating artwork comment.";
-            summary.Description = "This endpoint is used for creating artwork comment.";
+            summary.Summary = "Endpoint for creating groups.";
+            summary.Description = "This endpoint is used for creating groups.";
             summary.Response<SM8HttpResponse>(
                 description: "Represent successful operation response.",
                 example: new() { AppCode = SM8ResponseStatusCode.SUCCESS.ToString() }
