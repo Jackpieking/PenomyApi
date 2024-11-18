@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
-using PenomyAPI.Domain.RelationalDb.Entities.UserIdentity;
 using PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG4;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using PenomyAPI.Persist.Postgres.Common.ExtensionMethods;
@@ -405,6 +404,7 @@ public class G4Repository : IG4Repository
 
         return _dbContext.Database
             .SqlQueryRaw<RecommendedCategoryReadModel>(rawQuery)
+            .AsNoTracking()
             .ToListAsync(cancellationToken);
     }
 
@@ -423,6 +423,7 @@ public class G4Repository : IG4Repository
 
             var recommendedComics = await _dbContext.Database
                 .SqlQuery<RecommendedComicReadModel>(rawQuery)
+                .AsNoTracking()
                 .ToListAsync(cancellationToken);
 
             if (recommendedComics.Any())
@@ -458,7 +459,7 @@ public class G4Repository : IG4Repository
     /// <param name="comicDetail">
     ///     The artwork that needed to get the latest chapter list.
     /// </param>
-    private Task<List<NewChapterReadModel>> InternalGetNewChapterListAsync(
+    private Task<List<G4NewChapterReadModel>> InternalGetNewChapterListAsync(
         RecommendedComicReadModel comicDetail,
         CancellationToken cancellationToken)
     {
@@ -467,7 +468,7 @@ public class G4Repository : IG4Repository
             comicDetail.LastChapterUploadOrder);
 
         return _dbContext.Database
-            .SqlQuery<NewChapterReadModel>(rawQuery)
+            .SqlQuery<G4NewChapterReadModel>(rawQuery)
             .ToListAsync(cancellationToken);
     }
 

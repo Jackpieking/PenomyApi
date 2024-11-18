@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG4;
+namespace PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG3;
 
-public sealed class NewChapterReadModel
+public sealed class G3NewChapterReadModel
 {
     public long Id { get; set; }
 

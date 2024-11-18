@@ -18,7 +18,8 @@ public class FeatG3Handler : IFeatureHandler<FeatG3Request, FeatG3Response>
     public async Task<FeatG3Response> ExecuteAsync(FeatG3Request request, CancellationToken ct)
     {
         var unitOfWork = _unitOfWork.Value;
-        var result = await unitOfWork.FeatG3Repository.GetRecentlyUpdatedComicsAsync();
+        var result = await unitOfWork.FeatG3Repository.GetRecentlyUpdatedComicsAsync(ct);
+
         return new FeatG3Response
         {
             ArtworkList = result,
