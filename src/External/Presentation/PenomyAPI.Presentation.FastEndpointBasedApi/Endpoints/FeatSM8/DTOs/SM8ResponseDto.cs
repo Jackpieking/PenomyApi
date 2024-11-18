@@ -2,5 +2,5 @@
 
 public class SM8ResponseDto
 {
-    public long GroupId { get; set; }
+    public string GroupId { get; set; }
 }

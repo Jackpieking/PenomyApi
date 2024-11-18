@@ -108,7 +108,7 @@ public class SM8Endpoint : Endpoint<SM8RequestDto, SM8HttpResponse>
 
         if (featResponse.IsSuccess)
         {
-            httpResponse.Body = new SM8ResponseDto { GroupId = featResponse.Result };
+            httpResponse.Body = new SM8ResponseDto { GroupId = featResponse.Result.ToString() };
 
             return httpResponse;
         }
