@@ -21,37 +21,44 @@ jobs:
             - name: Checkout to the source code
               uses: actions/checkout@v4
 
-            # Compute hash values of sdk and csproj
+            # Compute hash values of sdk
+            #
+            # Runtime hash is used to cache the dotnet installation
+            # App infra dependencies hash is used to cache app infra dependencies
             - name: Compute hash values
               id: compute-hashes
               run: |
-                  echo "global_hash=$(git ls-files | grep 'global.json' | xargs sha256sum | cut -d' ' -f1)" >> $GITHUB_OUTPUT
-                  echo "csproj_hash=$(git ls-files '**/*.csproj' | xargs sha256sum | sha256sum | cut -d' ' -f1)" >> $GITHUB_OUTPUT
+                  echo "runtime_hash=$(git ls-files | grep 'global.json' | xargs sha256sum | cut -d' ' -f1)" >> $GITHUB_OUTPUT
 
-            # Combined cache step for dotnet installation and nuget packages
-            - name: Cache dotnet installation and nuget packages
-              id: cache-dotnet
+                  echo "app_infra_dependencies_hash=$(find src/External/Infrastructure -type f -name "*.csproj" -exec sha256sum {} + | sha256sum | cut -d' ' -f1)" >> $GITHUB_OUTPUT
+
+            # Cache sdk and runtime
+            - name: Cache dotnet installation
+              id: cache-runtime
               uses: actions/cache@v4
               with:
-                  key: ${{ runner.os }}-dotnet--sdk-${{ steps.compute-hashes.outputs.global_hash }}--nuget-${{ steps.compute-hashes.outputs.csproj_hash }}
+                  key: ${{ runner.os }}-dotnet--sdk-${{ steps.compute-hashes.outputs.runtime_hash }}
 
-                  restore-keys: ${{ runner.os }}-dotnet--sdk-${{ steps.compute-hashes.outputs.global_hash }}--nuget-${{ steps.compute-hashes.outputs.csproj_hash }}
+                  restore-keys: ${{ runner.os }}-dotnet--sdk-${{ steps.compute-hashes.outputs.runtime_hash }}
 
-                  path: |
-                      ${{ env.DOTNET_INSTALL_DIR }}
-                      ${{ env.NUGET_PACKAGES }}
+                  path: ${{ env.DOTNET_INSTALL_DIR }}
 
-            # Setup environment variables if cache is hit for dotnet installation
-            - name: Setup path if cache is hit
-              if: steps.cache-dotnet.outputs.cache-hit == 'true'
-              run: echo "${{ env.DOTNET_INSTALL_DIR }}" >> $GITHUB_PATH
+            # Cache app infra dependencies
+            - name: Cache app infrastructure dependencies
+              id: cache-app-infra-dependencies
+              uses: actions/cache@v4
+              with:
+                  key: ${{ runner.os }}-dotnet--nuget-app-infra-${{ steps.compute-hashes.outputs.app_infra_dependencies_hash }}
+
+                  restore-keys: ${{ runner.os }}-dotnet--nuget-app-infra-${{ steps.compute-hashes.outputs.app_infra_dependencies_hash }}
+
+                  path: ${{ env.NUGET_PACKAGES }}
 
             # Install dotnet sdk
             # If dotnet sdk is not found in cache
             #
             # This step would be skipped if cache is hit
             - name: Setup dotnet installation
-              if: steps.cache-dotnet.outputs.cache-hit != 'true'
               uses: actions/setup-dotnet@v4
               with:
                   global-json-file: global.json
