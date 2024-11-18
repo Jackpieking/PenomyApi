@@ -25,6 +25,7 @@ jobs:
 
             # Compute hash values of sdk
             #
+            #
             # Runtime hash is used to cache the dotnet installation
             # App infra dependencies hash is used to cache app infra dependencies
             - name: Compute hash values
