@@ -33,6 +33,7 @@ jobs:
                   echo "app_infra_dependencies_hash=$(find src/External/Infrastructure -type f -name "*.csproj" -exec sha256sum {} + | sha256sum | cut -d' ' -f1)" >> $GITHUB_OUTPUT
 
             # Cache sdk and runtime
+            # Test cache
             - name: Cache dotnet installation
               id: cache-runtime
               uses: actions/cache@v4
