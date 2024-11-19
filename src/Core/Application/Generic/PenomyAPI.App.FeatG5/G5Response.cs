@@ -9,6 +9,8 @@ public class G5Response : IFeatureResponse
 
     public bool IsUserFavorite { get; set; }
 
+    public bool HasFollowed { get; set; }
+
     public Artwork Result { get; set; }
 
     public G5ResponseStatusCode StatusCode { get; set; }

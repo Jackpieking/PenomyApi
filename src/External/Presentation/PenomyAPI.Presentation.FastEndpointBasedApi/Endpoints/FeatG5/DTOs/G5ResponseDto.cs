@@ -1,4 +1,5 @@
 using PenomyAPI.App.FeatG5;
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,9 +9,11 @@ public class G5ResponseDto
 {
     public long Id { get; set; }
 
-    public string Name { get; set; }
+    public string Title { get; set; }
 
     public bool HasSeries { get; set; }
+
+    public string AuthorId { get; set; }
 
     public string AuthorName { get; set; }
 
@@ -18,7 +21,7 @@ public class G5ResponseDto
 
     public IEnumerable<CategoryDto> Categories { get; set; }
 
-    public string ArtworkStatus { get; set; }
+    public ArtworkStatus ArtworkStatus { get; set; }
 
     public string SeriesId { get; set; }
 
@@ -42,6 +45,8 @@ public class G5ResponseDto
 
     public bool IsUserFavorite { get; set; }
 
+    public bool HasFollowed { get; set; }
+
     public bool IsAllowComment { get; set; }
 
     public static G5ResponseDto MapFrom(G5Response featResponse)
@@ -51,13 +56,14 @@ public class G5ResponseDto
         var responseDto = new G5ResponseDto
         {
             Id = comicDetail.Id,
-            Name = comicDetail.Title,
+            Title = comicDetail.Title,
             ThumbnailUrl = comicDetail.ThumbnailUrl,
             Introduction = comicDetail.Introduction,
-            AuthorName = comicDetail.AuthorName,
+            AuthorId = comicDetail.Creator.UserId.ToString(),
+            AuthorName = comicDetail.Creator.NickName,
             CountryName = comicDetail.Origin.CountryName,
             HasSeries = comicDetail.HasSeries,
-            ArtworkStatus = comicDetail.ArtworkStatus.ToString(),
+            ArtworkStatus = comicDetail.ArtworkStatus,
             StarRates = comicDetail.ArtworkMetaData.GetAverageStarRate(),
             TotalUsersRated = comicDetail.ArtworkMetaData.TotalUsersRated,
             ViewCount = comicDetail.ArtworkMetaData.TotalViews,
@@ -66,6 +72,7 @@ public class G5ResponseDto
             FollowCount = comicDetail.ArtworkMetaData.TotalFollowers,
             IsAllowComment = comicDetail.AllowComment,
             IsUserFavorite = featResponse.IsUserFavorite,
+            HasFollowed = featResponse.HasFollowed,
         };
 
         if (comicDetail.HasSeries)
@@ -81,7 +88,7 @@ public class G5ResponseDto
         responseDto.Categories = comicDetail.ArtworkCategories
             .Select(cate => new CategoryDto
             {
-                CategoryId = cate.Category.Id,
+                CategoryId = cate.Category.Id.ToString(),
                 CategoryName = cate.Category.Name
             });
 

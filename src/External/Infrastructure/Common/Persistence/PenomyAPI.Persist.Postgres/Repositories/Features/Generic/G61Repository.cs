@@ -23,20 +23,11 @@ public class G61Repository : IG61Repository
 
     }
 
-    public async Task<bool> IsFollowedCreator(long userId, long creatorId, CancellationToken ct)
+    public Task<bool> IsFollowedCreator(long userId, long creatorId, CancellationToken ct)
     {
-        if (await _userFollowedCreators
-            .AsNoTracking()
-            .AnyAsync(
-                o => o.UserId == userId && o.CreatorId == creatorId,
-                cancellationToken: ct
-            )
-        )
-        {
-            return true;
-        }
-
-        return false;
+        return _userFollowedCreators.AnyAsync(
+            o => o.UserId == userId && o.CreatorId == creatorId,
+            cancellationToken: ct);
     }
 
     public async Task<bool> FollowCreator(long userId, long creatorId, CancellationToken ct)

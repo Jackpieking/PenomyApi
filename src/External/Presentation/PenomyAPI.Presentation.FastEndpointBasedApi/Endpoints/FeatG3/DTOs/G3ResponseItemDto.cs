@@ -1,4 +1,5 @@
 ﻿using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
+using PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG3;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -24,19 +25,19 @@ public class G3ResponseItemDto
 
     public IEnumerable<G3ChapterItemResponseDto> NewChapters { get; set; }
 
-    public static G3ResponseItemDto MapFrom(Artwork artworkDetail)
+    public static G3ResponseItemDto MapFrom(RecentlyUpdatedComicReadModel artworkDetail)
     {
         return new G3ResponseItemDto
         {
             ArtworkId = artworkDetail.Id.ToString(),
             Title = artworkDetail.Title,
             ThumbnailUrl = artworkDetail.ThumbnailUrl,
-            OriginImageUrl = artworkDetail.Origin.ImageUrl,
-            CreatorId = artworkDetail.Creator.UserId.ToString(),
-            CreatorAvatarUrl = artworkDetail.Creator.AvatarUrl,
-            CreatorName = artworkDetail.Creator.NickName,
-            AverageStarRates = artworkDetail.ArtworkMetaData.GetAverageStarRate(),
-            NewChapters = artworkDetail.Chapters.Select(G3ChapterItemResponseDto.MapFrom)
+            OriginImageUrl = artworkDetail.OriginImageUrl,
+            CreatorId = artworkDetail.CreatorId.ToString(),
+            CreatorAvatarUrl = artworkDetail.CreatorAvatarUrl,
+            CreatorName = artworkDetail.CreatorName,
+            AverageStarRates = artworkDetail.AverageStarRates,
+            NewChapters = artworkDetail.NewChapters.Select(G3ChapterItemResponseDto.MapFrom)
         };
     }
 }

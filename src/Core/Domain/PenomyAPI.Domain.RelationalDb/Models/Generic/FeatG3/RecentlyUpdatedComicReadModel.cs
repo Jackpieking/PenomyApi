@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG4;
+namespace PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG3;
 
-public sealed class RecommendedComicReadModel
+public sealed class RecentlyUpdatedComicReadModel
 {
     public long Id { get; set; }
 
@@ -32,5 +32,5 @@ public sealed class RecommendedComicReadModel
     public string CreatorAvatarUrl { get; set; }
 
     [NotMapped]
-    public List<G4NewChapterReadModel> NewChapters { get; set; }
+    public List<G3NewChapterReadModel> NewChapters { get; set; }
 }

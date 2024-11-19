@@ -17,14 +17,20 @@ public class G61Handler : IFeatureHandler<G61Request, G61Response>
     {
         try
         {
-            if (!await _g61Repository.IsCreator(request.CreatorId, ct) ||
-                await _g61Repository.IsFollowedCreator(request.UserId, request.CreatorId, ct))
+            // Check if input id is creator or not.
+            var isCreator = await _g61Repository.IsCreator(request.CreatorId, ct);
+
+            if (!isCreator)
             {
-                return new G61Response
-                {
-                    IsSuccess = false,
-                    StatusCode = G61ResponseStatusCode.INVALID_REQUEST
-                };
+                return G61Response.INVALID_REQUEST;
+            }
+
+            // Check if user has followed this creator or not.
+            var hasUserFollowed = await _g61Repository.IsFollowedCreator(request.UserId, request.CreatorId, ct);
+            
+            if (hasUserFollowed)
+            {
+                return G61Response.INVALID_REQUEST;
             }
 
             return new G61Response
