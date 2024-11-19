@@ -19,10 +19,7 @@ public class SM5Endpoint : Endpoint<SM5RequestDto, SM5HttpResponse>
         Get("/sm5/group-description/get");
         AllowAnonymous();
         PreProcessor<SM5AuthPreProcessor>();
-        Description(builder =>
-        {
-            builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest);
-        });
+        Description(builder => { builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest); });
 
         Summary(summary =>
         {
@@ -45,7 +42,7 @@ public class SM5Endpoint : Endpoint<SM5RequestDto, SM5HttpResponse>
         var SM5Req = new SM5Request
         {
             UserId = stateBag.UserId,
-            GroupId = long.Parse(requestDto.GroupId),
+            GroupId = long.Parse(requestDto.GroupId)
         };
 
         // Get FeatureHandler response.
@@ -71,7 +68,7 @@ public class SM5Endpoint : Endpoint<SM5RequestDto, SM5HttpResponse>
                 RequireApprovedWhenPost = featResponse.Group.RequireApprovedWhenPost,
                 HasJoin = featResponse.Group.GroupMembers.Count() > 0,
                 IsManager = stateBag.UserId == featResponse.Group.Creator.UserId,
-                ManagerName = featResponse.Group.Creator.NickName,
+                ManagerName = featResponse.Group.Creator.NickName
             };
 
             return httpResponse;
