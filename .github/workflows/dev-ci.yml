@@ -1,0 +1,36 @@
+name: dev-ci
+
+on:
+    pull_request:
+        branches: ["dev"]
+
+jobs:
+    build:
+        name: Build the project
+        runs-on: self-hosted
+
+        env:
+            DOTNET_CLI_TELEMETRY_OPTOUT: 1
+
+        steps:
+            # Load source code from the branch that has the new PR
+            # In this case, it is the source code of dev branch
+            - name: Checkout to the source code
+              uses: actions/checkout@v4
+
+            # Install dotnet sdk
+            # If dotnet sdk is not found in cache
+            #
+            # This step would be skipped if cache is hit
+            - name: Setup dotnet installation
+              uses: actions/setup-dotnet@v4
+              with:
+                  global-json-file: global.json
+
+            # Restore dependencies of the project
+            - name: Restore dependencies
+              run: dotnet restore
+
+            # Build the project
+            - name: Build app
+              run: dotnet build --no-restore -c Release

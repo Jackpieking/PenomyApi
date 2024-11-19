@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG1\PenomyAPI.App.FeatG1.csproj" />
+    <ProjectReference Include="..\..\Common\IdentityService\PenomyAPI.Identity.AppAuthenticator\PenomyAPI.Identity.AppAuthenticator.csproj" />
+    <ProjectReference Include="..\..\Common\PenomyAPI.Infra.Configuration\PenomyAPI.Infra.Configuration.csproj" />
+  </ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+</Project>
