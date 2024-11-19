@@ -85,4 +85,13 @@ public class G5Repository : IG5Repository
         return _dbContext.Set<Artwork>()
             .AnyAsync(x => x.Id == artworkId && x.ArtworkType == ArtworkType.Comic, ct);
     }
+
+    public Task<bool> IsComicInUserFollowedListAsync(
+        long userId,
+        long artworkId,
+        CancellationToken ct = default)
+    {
+        return _dbContext.Set<UserFollowedArtwork>()
+            .AnyAsync(x => x.UserId == userId && x.ArtworkId == artworkId, ct);
+    }
 }

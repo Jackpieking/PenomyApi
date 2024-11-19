@@ -41,15 +41,28 @@ public class G5Handler : IFeatureHandler<G5Request, G5Response>
                 request.ComicId,
                 ct);
 
-            var isInUserFavoriteList = await _IG5Repository.IsComicInUserFavoriteListAsync(
-                request.UserId,
-                request.ComicId,
-                ct);
+            // Set the default as FALSE, then check if the request is served for sigined user.
+            var isInUserFavoriteList = false;
+            var isInUserFollowedList = false;
+
+            if (request.ForSignedInUser)
+            {
+                isInUserFavoriteList = await _IG5Repository.IsComicInUserFavoriteListAsync(
+                    request.UserId,
+                    request.ComicId,
+                    ct);
+
+                isInUserFollowedList = await _IG5Repository.IsComicInUserFollowedListAsync(
+                    request.UserId,
+                    request.ComicId,
+                    ct);
+            }
 
             return new G5Response
             {
                 IsSuccess = true,
                 IsUserFavorite = isInUserFavoriteList,
+                HasFollowed = isInUserFollowedList,
                 Result = comicDetail,
                 StatusCode = G5ResponseStatusCode.SUCCESS
             };
