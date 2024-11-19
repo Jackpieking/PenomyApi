@@ -7,7 +7,7 @@ on:
 jobs:
     build:
         name: Build the project
-        runs-on: ubuntu-22.04
+        runs-on: self-hosted
 
         env:
             DOTNET_CLI_TELEMETRY_OPTOUT: 1
