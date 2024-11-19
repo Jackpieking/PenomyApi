@@ -33,6 +33,7 @@ public class SM5Repository : ISM5Repository
                     GroupMembers = g.GroupMembers.Where(m => m.MemberId == userId).ToList(),
                     Creator = g.Creator
                 })
+                .OrderByDescending(g => g.CreatedAt)
                 .AsNoTracking()
                 .AsQueryable()
                 .FirstOrDefaultAsync();
