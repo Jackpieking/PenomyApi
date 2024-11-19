@@ -11,6 +11,7 @@ jobs:
         name: Publish new change to dev server
         runs-on: self-hosted
 
+        # Test ssh
         steps:
             - name: Setup SSH with a passphrase
               uses: appleboy/ssh-action@v1.2.0
