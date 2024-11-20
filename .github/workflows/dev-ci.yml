@@ -51,6 +51,7 @@ jobs:
     Build-source:
         name: Build the project
         runs-on: ubuntu-22.04
+        needs: Analyze-source
 
         env:
             DOTNET_CLI_TELEMETRY_OPTOUT: 1
