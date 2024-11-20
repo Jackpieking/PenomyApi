@@ -9,19 +9,19 @@
 # the `language` matrix defined below to confirm you have the correct set of
 # supported CodeQL languages.
 #
-name: "CodeQL"
+name: dev-code-analysis
 
 on:
     push:
-        branches: ["main", "dev"]
+        branches: ["dev"]
     pull_request:
         branches: ["dev"]
     schedule:
         - cron: "30 17 * * *"
 
 jobs:
-    code-analyze:
-        name: Analyze (${{ matrix.language }})
+    execute:
+        name: Analyze (${{ matrix.language }}) on dev branch
         runs-on: ubuntu-22.04
         permissions:
             # required for all workflows

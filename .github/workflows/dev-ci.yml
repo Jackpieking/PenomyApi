@@ -1,12 +1,15 @@
 name: dev-ci
 
 on:
-    pull_request:
-        branches: ["dev"]
+    workflow_run:
+        workflows: [dev-code-analysis]
+        branches: [dev]
+        types: [completed]
 
 jobs:
-    build:
+    execute:
         name: Build the project
+        if: github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/dev'
         runs-on: ubuntu-22.04
 
         env:
