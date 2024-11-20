@@ -9,7 +9,7 @@ jobs:
     publish-app:
         if: ${{ github.event.pull_request.merged == true }}
         name: Publish new change to dev server
-        runs-on: self-hosted
+        runs-on: ubuntu-22.04
 
         steps:
             - name: Execute cd script
