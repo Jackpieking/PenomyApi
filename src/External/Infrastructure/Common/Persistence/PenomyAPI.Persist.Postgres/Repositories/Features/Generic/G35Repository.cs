@@ -11,12 +11,10 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
 internal sealed class G35Repository : IG35Repository
 {
     private readonly DbContext _dbContext;
-    private readonly DbSet<UserProfile> _userProfileDbSet;
 
     public G35Repository(DbContext dbContext)
     {
         _dbContext = dbContext;
-        _userProfileDbSet = dbContext.Set<UserProfile>();
     }
 
     public Task<bool> IsRefreshTokenValidAsync(
@@ -34,50 +32,38 @@ internal sealed class G35Repository : IG35Repository
                 cancellationToken);
     }
 
-    public Task<bool> IsUserRegisteredAsCreatorByIdAsync(
+    public Task<bool> IsUserIdExistedAsync(
         long userId,
         CancellationToken cancellationToken)
     {
-        return _userProfileDbSet.AnyAsync(
-            user => user.UserId == userId
-            && user.RegisterAsCreator,
-            cancellationToken);
+        return _dbContext.Set<UserProfile>()
+            .AnyAsync(
+                user => user.UserId == userId,
+                cancellationToken);
+    }
+
+    public Task<bool> IsCreatorIdExistedAsync(
+        long creatorId,
+        CancellationToken cancellationToken)
+    {
+        return _dbContext.Set<CreatorProfile>()
+            .AnyAsync(
+                user => user.CreatorId == creatorId,
+                cancellationToken);
     }
 
     public Task<UserProfile> GetUserProfileByIdAsync(
         long userId,
-        bool isCreator,
+        bool isProfileOwner,
         CancellationToken cancellationToken)
     {
-        // If the current user is creator, then also fetch their creator profile.
-        if (isCreator)
-        {
-            return _userProfileDbSet
-                .AsNoTracking()
-                .Where(profile => profile.UserId == userId)
-                .Select(profile => new UserProfile
-                {
-                    UserId = profile.UserId,
-                    NickName = profile.NickName,
-                    AvatarUrl = profile.AvatarUrl,
-                    AboutMe = profile.AboutMe,
-                    RegisterAsCreator = profile.RegisterAsCreator,
-                    TotalFollowedCreators = profile.TotalFollowedCreators,
-                    CreatorProfile = new CreatorProfile
-                    {
-                        RegisteredAt = profile.CreatorProfile.RegisteredAt,
-                        TotalArtworks = profile.CreatorProfile.TotalArtworks,
-                        TotalFollowers = profile.CreatorProfile.TotalFollowers,
-                    },
-                    RegisteredAt = profile.RegisteredAt,
-                    LastActiveAt = profile.LastActiveAt,
-                    UpdatedAt = profile.UpdatedAt,
-                })
-                .FirstOrDefaultAsync(cancellationToken);
-        }
+        var userProfileDbSet = _dbContext.Set<UserProfile>();
 
-        // Otherwise, fetch the user profile only.
-        return _userProfileDbSet
+        // If the request is served for the profile owner, then return
+        // additional information for the user.
+        if (isProfileOwner)
+        {
+            return userProfileDbSet
             .AsNoTracking()
             .Where(profile => profile.UserId == userId)
             .Select(profile => new UserProfile
@@ -90,7 +76,101 @@ internal sealed class G35Repository : IG35Repository
                 TotalFollowedCreators = profile.TotalFollowedCreators,
                 RegisteredAt = profile.RegisteredAt,
                 LastActiveAt = profile.LastActiveAt,
-                UpdatedAt = profile.UpdatedAt,
+            })
+            .FirstOrDefaultAsync(cancellationToken);
+        }
+
+        return userProfileDbSet
+            .AsNoTracking()
+            .Where(profile => profile.UserId == userId)
+            .Select(profile => new UserProfile
+            {
+                UserId = profile.UserId,
+                NickName = profile.NickName,
+                AvatarUrl = profile.AvatarUrl,
+                AboutMe = profile.AboutMe,
+                RegisterAsCreator = profile.RegisterAsCreator,
+                RegisteredAt = profile.RegisteredAt,
+            })
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public Task<UserProfile> GetUserProfileAsCreatorByIdAsync(
+        long userId,
+        bool isProfileOwner,
+        CancellationToken cancellationToken)
+    {
+        var userProfileDbSet = _dbContext.Set<UserProfile>();
+
+        // If the request is served for the profile owner, then return
+        // additional information for the user.
+        if (isProfileOwner)
+        {
+            return userProfileDbSet
+            .AsNoTracking()
+            .Where(profile => profile.UserId == userId)
+            .Select(profile => new UserProfile
+            {
+                UserId = profile.UserId,
+                NickName = profile.NickName,
+                AvatarUrl = profile.AvatarUrl,
+                RegisterAsCreator = profile.RegisterAsCreator,
+                TotalFollowedCreators = profile.TotalFollowedCreators,
+                AboutMe = profile.AboutMe,
+                RegisteredAt = profile.RegisteredAt,
+                LastActiveAt = profile.LastActiveAt,
+                // Creator detail section.
+                CreatorProfile = new CreatorProfile
+                {
+                    RegisteredAt = profile.CreatorProfile.RegisteredAt,
+                    TotalFollowers = profile.CreatorProfile.TotalFollowers,
+                    TotalArtworks = profile.CreatorProfile.TotalArtworks,
+                },
+            })
+            .FirstOrDefaultAsync(cancellationToken);
+        }
+
+        return userProfileDbSet
+            .AsNoTracking()
+            .Where(profile => profile.UserId == userId)
+            .Select(profile => new UserProfile
+            {
+                UserId = profile.UserId,
+                NickName = profile.NickName,
+                AvatarUrl = profile.AvatarUrl,
+                RegisterAsCreator = profile.RegisterAsCreator,
+                AboutMe = profile.AboutMe,
+                RegisteredAt = profile.RegisteredAt,
+                // Creator detail section.
+                CreatorProfile = new CreatorProfile
+                {
+                    RegisteredAt = profile.CreatorProfile.RegisteredAt,
+                    TotalFollowers = profile.CreatorProfile.TotalFollowers,
+                    TotalArtworks = profile.CreatorProfile.TotalArtworks,
+                },
+            })
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public Task<UserProfile> GetCreatorProfileByIdAsync(
+        long creatorId,
+        CancellationToken cancellationToken)
+    {
+        return _dbContext.Set<UserProfile>()
+            .AsNoTracking()
+            .Where(profile => profile.CreatorProfile.CreatorId == creatorId)
+            .Select(profile => new UserProfile
+            {
+                UserId = profile.UserId,
+                NickName = profile.NickName,
+                AvatarUrl = profile.AvatarUrl,
+                AboutMe = profile.AboutMe,
+                CreatorProfile = new CreatorProfile
+                {
+                    RegisteredAt = profile.CreatorProfile.RegisteredAt,
+                    TotalArtworks = profile.CreatorProfile.TotalArtworks,
+                    TotalFollowers = profile.CreatorProfile.TotalFollowers,
+                },
             })
             .FirstOrDefaultAsync(cancellationToken);
     }
