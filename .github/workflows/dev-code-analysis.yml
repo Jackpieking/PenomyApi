@@ -20,7 +20,7 @@ on:
         - cron: "30 17 * * *"
 
 jobs:
-    execute:
+    Analyze-source:
         name: Analyze (${{ matrix.language }}) on dev branch
         runs-on: ubuntu-22.04
         permissions:

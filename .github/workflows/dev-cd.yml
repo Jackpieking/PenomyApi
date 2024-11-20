@@ -6,7 +6,7 @@ on:
         types: [closed]
 
 jobs:
-    publish-app:
+    Publish-source:
         if: ${{ github.event.pull_request.merged == true }}
         name: Publish new change to dev server
         runs-on: ubuntu-22.04
