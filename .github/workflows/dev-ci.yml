@@ -1,14 +1,55 @@
 name: dev-ci
 
 on:
-    workflow_run:
-        workflows: [dev-code-analysis]
-        types: [completed]
+    push:
+        branches: ["dev"]
+    pull_request:
+        branches: ["dev"]
 
 jobs:
+    Analyze-source:
+        name: Analyze (${{ matrix.language }}) on dev branch
+        runs-on: ubuntu-22.04
+        permissions:
+            # required for all workflows
+            security-events: write
+
+            # required to fetch internal or private CodeQL packs
+            packages: read
+
+            # only required for workflows in private repositories
+            actions: read
+            contents: read
+
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    # Analyzes C# code by automatically detecting a build
+                    - language: csharp
+                      build-mode: none
+                    # CodeQL supports the following values keywords for 'language': 'c-cpp', 'csharp', 'go', 'java-kotlin', 'javascript-typescript', 'python', 'ruby', 'swift'
+
+        steps:
+            # Checkout the repository
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            # Initializes the CodeQL tools for scanning.
+            - name: Initialize CodeQL
+              uses: github/codeql-action/init@v3
+              with:
+                  languages: ${{ matrix.language }}
+                  build-mode: ${{ matrix.build-mode }}
+
+            # Analyzes the code using the CodeQL action
+            - name: Perform CodeQL Analysis
+              uses: github/codeql-action/analyze@v3
+              with:
+                  category: "/language:${{matrix.language}}"
+
     Build-source:
         name: Build the project
-        if: github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/dev'
         runs-on: ubuntu-22.04
 
         env:
