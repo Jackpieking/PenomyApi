@@ -165,6 +165,7 @@ internal sealed class G35Repository : IG35Repository
                 NickName = profile.NickName,
                 AvatarUrl = profile.AvatarUrl,
                 AboutMe = profile.AboutMe,
+                RegisteredAt = profile.RegisteredAt,
                 CreatorProfile = new CreatorProfile
                 {
                     RegisteredAt = profile.CreatorProfile.RegisteredAt,

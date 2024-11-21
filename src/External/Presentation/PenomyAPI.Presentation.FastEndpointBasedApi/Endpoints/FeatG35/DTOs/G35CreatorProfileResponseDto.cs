@@ -22,6 +22,8 @@ public sealed class G35CreatorProfileResponseDto
 
     public DateTime RegisteredAt { get; set; }
 
+    public DateTime BecomeCreatorAt { get; set; }
+
     public static G35CreatorProfileResponseDto MapFrom(G35GetCreatorProfileResponse response)
     {
         var creatorProfile = response.CreatorProfile;
@@ -32,9 +34,10 @@ public sealed class G35CreatorProfileResponseDto
             Nickname = creatorProfile.NickName,
             AboutMe = creatorProfile.AboutMe,
             AvatarUrl = creatorProfile.AvatarUrl,
-            RegisteredAt = creatorProfile.CreatorProfile.RegisteredAt,
+            RegisteredAt = creatorProfile.RegisteredAt,
             TotalArtworks = creatorProfile.CreatorProfile.TotalArtworks,
             TotalFollowers = creatorProfile.CreatorProfile.TotalFollowers,
+            BecomeCreatorAt = creatorProfile.CreatorProfile.RegisteredAt,
         };
 
         return mapResult;
