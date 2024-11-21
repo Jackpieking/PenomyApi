@@ -1,6 +1,9 @@
 name: dev-ci
 
 on:
+    push:
+        branches: ["main"]
+
     pull_request:
         branches: ["dev"]
 
