@@ -26,7 +26,6 @@ public sealed class AppGlobalExceptionHandler : IMiddleware
         catch (Exception ex)
         {
             context.Response.Clear();
-            Console.Write("An unhandled exception occurred: {0}", ex.Message);
 
             await context.Response.SendAsync(
                 CommonErrorResponseMessage,
