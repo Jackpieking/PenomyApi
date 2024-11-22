@@ -14,13 +14,15 @@ using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SocialMedia.SM15.Htt
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SocialMedia.SM15;
 
-public class Sm15Endpoint : Endpoint<SM15RequestDto, Sm15HttpResponse>
+public class Sm15Endpoint : Endpoint<EmptyRequest, Sm15HttpResponse>
 {
     public override void Configure()
     {
-        Get("/SM15/created-post/get");
+        Get("/SM15/posts/get");
+
         AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
-        PreProcessor<AuthPreProcessor<SM15RequestDto>>();
+
+        PreProcessor<AuthPreProcessor<EmptyRequest>>();
 
         Description(builder => { builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest); });
 
@@ -36,7 +38,7 @@ public class Sm15Endpoint : Endpoint<SM15RequestDto, Sm15HttpResponse>
     }
 
     public override async Task<Sm15HttpResponse> ExecuteAsync(
-        SM15RequestDto requestDto,
+        EmptyRequest requestDto,
         CancellationToken ct
     )
     {
@@ -58,23 +60,34 @@ public class Sm15Endpoint : Endpoint<SM15RequestDto, Sm15HttpResponse>
             .Invoke(featRequest, featResponse);
 
         if (featResponse.StatusCode == SM15ResponseStatusCode.SUCCESS)
-            featResponse.UserPosts.ForEach(p => httpResponse.Body.UserPosts.Add(new UserPostDto
+            foreach (var p in featResponse.UserPosts)
             {
-                Id = p.Id,
-                Content = p.Content,
-                CreatedBy = p.Creator.NickName,
-                CreatedAt = p.CreatedAt,
-                AllowComment = p.AllowComment,
-                PublicLevel = p.PublicLevel,
-                TotalLikes = p.TotalLikes,
-                AttachedMedias = p.AttachedMedias.Select(m => new AttachMediaDto
+                var userPostDto = new UserPostDto
                 {
-                    FileName = m.FileName,
-                    MediaType = m.MediaType,
-                    StorageUrl = m.StorageUrl,
-                    UploadOrder = m.UploadOrder
-                }).ToList()
-            }));
+                    Id = p.Id,
+                    Content = p.Content,
+                    CreatedBy = p.Creator.NickName,
+                    CreatedAt = p.CreatedAt,
+                    AllowComment = p.AllowComment,
+                    PublicLevel = p.PublicLevel,
+                    TotalLikes = p.TotalLikes,
+                    AttachedMedias = p.AttachedMedias.Select(m => new AttachMediaDto
+                    {
+                        FileName = m.FileName,
+                        MediaType = m.MediaType,
+                        StorageUrl = m.StorageUrl,
+                        UploadOrder = m.UploadOrder
+                    }).ToList()
+                };
+                httpResponse.Body = new SM15ResponseDto
+                {
+                    UserPosts =
+                    [
+                        userPostDto
+                    ]
+                };
+            }
+
 
         await SendAsync(httpResponse, httpResponse.HttpCode, ct);
 

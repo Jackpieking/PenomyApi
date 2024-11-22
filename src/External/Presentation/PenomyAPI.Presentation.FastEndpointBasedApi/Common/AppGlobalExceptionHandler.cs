@@ -1,16 +1,8 @@
 using System;
-using System.Net;
-using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Common;
 
@@ -31,9 +23,10 @@ public sealed class AppGlobalExceptionHandler : IMiddleware
         {
             await next(context);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             context.Response.Clear();
+            Console.Write("An unhandled exception occurred: {0}", ex.Message);
 
             await context.Response.SendAsync(
                 CommonErrorResponseMessage,

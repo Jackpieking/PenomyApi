@@ -31,6 +31,8 @@ public class SM15Handler : IFeatureHandler<SM15Request, SM15Response>
                 userPosts = await _sm15Repository.GetPersonalPostsAsync(request.UserId, ct);
                 response.UserPosts = userPosts;
             }
+
+            response.StatusCode = SM15ResponseStatusCode.SUCCESS;
         }
         catch
         {

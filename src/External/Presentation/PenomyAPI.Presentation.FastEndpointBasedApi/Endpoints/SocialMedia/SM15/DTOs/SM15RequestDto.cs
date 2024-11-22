@@ -2,5 +2,5 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SocialMedia.SM15
 
 public class SM15RequestDto
 {
-    public long id { get; set; }
+    public int id { get; set; }
 }
