@@ -1,5 +1,5 @@
 ﻿using PenomyAPI.App.Common;
-using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
+using PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG5;
 
 namespace PenomyAPI.App.FeatG5;
 
@@ -11,7 +11,7 @@ public class G5Response : IFeatureResponse
 
     public bool HasFollowed { get; set; }
 
-    public Artwork Result { get; set; }
+    public G5ComicDetailReadModel Result { get; set; }
 
     public G5ResponseStatusCode StatusCode { get; set; }
 

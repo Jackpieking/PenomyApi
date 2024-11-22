@@ -11,4 +11,6 @@ public partial interface IUnitOfWork
     IArtworkRepository ArtworkRepository { get; }
 
     IArtworkChapterRepository ChapterRepository { get; }
+
+    ICreatorRepository CreatorRepository { get; }
 }
