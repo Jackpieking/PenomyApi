@@ -1,6 +1,9 @@
 ﻿using FastEndpoints;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using PenomyAPI.App.FeatArt6;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Common.Middlewares;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.Common.Middlewares;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt6.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt6.HttpResponses;
 using System.Linq;
@@ -15,7 +18,9 @@ public class Art6Endpoint : Endpoint<Art6Request, Art6HttpResponse>
     {
         Get("art6/comic/chapters/{comicId}");
 
-        AllowAnonymous();
+        AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
+        PreProcessor<AuthPreProcessor<Art6Request>>();
+        PreProcessor<ArtworkCreationPreProcessor<Art6Request>>();
     }
 
     public override async Task<Art6HttpResponse> ExecuteAsync(Art6Request request, CancellationToken ct)

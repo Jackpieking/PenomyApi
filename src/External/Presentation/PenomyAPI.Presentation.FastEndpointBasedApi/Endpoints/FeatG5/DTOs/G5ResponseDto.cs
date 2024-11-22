@@ -13,9 +13,15 @@ public class G5ResponseDto
 
     public bool HasSeries { get; set; }
 
-    public string AuthorId { get; set; }
+    public string CreatorId { get; set; }
 
-    public string AuthorName { get; set; }
+    public string CreatorName { get; set; }
+
+    public string CreatorAvatarUrl { get; set; }
+
+    public long CreatorTotalFollowers { get; set; }
+
+    public string CountryId { get; set; }
 
     public string CountryName { get; set; }
 
@@ -59,9 +65,8 @@ public class G5ResponseDto
             Title = comicDetail.Title,
             ThumbnailUrl = comicDetail.ThumbnailUrl,
             Introduction = comicDetail.Introduction,
-            AuthorId = comicDetail.Creator.UserId.ToString(),
-            AuthorName = comicDetail.Creator.NickName,
-            CountryName = comicDetail.Origin.CountryName,
+            CountryId = comicDetail.CountryId.ToString(),
+            CountryName = comicDetail.CountryName,
             HasSeries = comicDetail.HasSeries,
             ArtworkStatus = comicDetail.ArtworkStatus,
             StarRates = comicDetail.ArtworkMetaData.GetAverageStarRate(),
@@ -73,23 +78,26 @@ public class G5ResponseDto
             IsAllowComment = comicDetail.AllowComment,
             IsUserFavorite = featResponse.IsUserFavorite,
             HasFollowed = featResponse.HasFollowed,
+            // Creator detail section.
+            CreatorId = comicDetail.CreatorId.ToString(),
+            CreatorName = comicDetail.CreatorName,
+            CreatorAvatarUrl = comicDetail.CreatorAvatarUrl,
+            CreatorTotalFollowers = comicDetail.CreatorTotalFollowers,
         };
 
-        if (comicDetail.HasSeries)
-        {
-            var comicBelongedSeries = comicDetail.ArtworkSeries
-                .Select(belongedSeries => belongedSeries.Series)
-                .FirstOrDefault();
+        //if (comicDetail.HasSeries)
+        //{
+        //    var comicBelongedSeries = comicDetail.ArtworkSeries;
 
-            responseDto.SeriesId = comicBelongedSeries.Id.ToString();
-            responseDto.SeriesName = comicBelongedSeries.Title;
-        }
+        //    responseDto.SeriesId = comicBelongedSeries.SeriesId.ToString();
+        //    responseDto.SeriesName = comicBelongedSeries.Series.Title;
+        //}
 
         responseDto.Categories = comicDetail.ArtworkCategories
-            .Select(cate => new CategoryDto
+            .Select(category => new CategoryDto
             {
-                CategoryId = cate.Category.Id.ToString(),
-                CategoryName = cate.Category.Name
+                CategoryId = category.Id.ToString(),
+                CategoryName = category.Name,
             });
 
         return responseDto;

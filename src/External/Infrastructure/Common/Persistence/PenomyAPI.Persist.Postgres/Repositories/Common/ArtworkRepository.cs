@@ -16,13 +16,12 @@ internal sealed class ArtworkRepository : IArtworkRepository
     private readonly DbSet<Artwork> _artworkDbSet;
 
     #region Compiled Queries
-    private static readonly Expression<Func<DbContext, long, long, bool>> IsArtworkAvailableToDisplayByIdExpression;
     private static readonly Func<DbContext, long, long, Task<bool>> IsArtworkAvailableToDisplayByIdCompileQuery;
     #endregion
 
     static ArtworkRepository()
     {
-        IsArtworkAvailableToDisplayByIdExpression = (DbContext dbContext, long artworkId, long userId) =>
+        Expression<Func<DbContext, long, long, bool>> IsArtworkAvailableToDisplayByIdExpression = (DbContext dbContext, long artworkId, long userId) =>
             dbContext.Set<Artwork>()
                 .Any(artwork =>
                     // Check if current artwork is public for everyone and not being removed or taken down.
