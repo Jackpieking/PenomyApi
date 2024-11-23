@@ -49,7 +49,13 @@ echo "Cd to docker compose dir..."
 cd $DOCKER_COMPOSE_DIR
 
 # Build docker compose
+echo "Building docker compose..."
 docker compose up -d --build
 
+# cd to penomy api folder
+echo "Cd to repo dir..."
+cd $REPO_DIR
+
 # Cleaning
+echo "Cleaning..."
 rm -rf ./sync_csproj/
