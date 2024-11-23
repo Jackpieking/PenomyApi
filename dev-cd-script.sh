@@ -59,3 +59,4 @@ cd $REPO_DIR
 # Cleaning
 echo "Cleaning..."
 rm -rf ./sync_csproj/
+rm -f  ./csrpoj_to_sync.txt
