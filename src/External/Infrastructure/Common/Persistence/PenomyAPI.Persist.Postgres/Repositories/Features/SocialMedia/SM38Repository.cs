@@ -75,6 +75,7 @@ public class SM38Repository : ISM38Repository
         SocialGroupStatus socialGroupStatus
     )
     {
+        int result = 0;
         try
         {
             // Check user permission
@@ -86,15 +87,27 @@ public class SM38Repository : ISM38Repository
             else if (user.RoleId != 1)
                 return 0;
 
-            return await _socialGroupDbSet
+            if (name != "")
+                result = await _socialGroupDbSet
+                    .Where(gr => gr.Id == groupId)
+                    .ExecuteUpdateAsync(record => record.SetProperty(g => g.Name, name));
+
+            if (description != "")
+                result = await _socialGroupDbSet
+                    .Where(gr => gr.Id == groupId)
+                    .ExecuteUpdateAsync(record =>
+                        record.SetProperty(g => g.Description, description)
+                    );
+
+            result = await _socialGroupDbSet
                 .Where(gr => gr.Id == groupId)
                 .ExecuteUpdateAsync(record =>
                     record
-                        .SetProperty(g => g.Name, name)
-                        .SetProperty(g => g.Description, description)
                         .SetProperty(g => g.RequireApprovedWhenPost, RequireApprovedWhenPost)
                         .SetProperty(g => g.GroupStatus, socialGroupStatus)
                 );
+
+            return result;
         }
         catch
         {
