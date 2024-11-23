@@ -32,8 +32,6 @@ RUN dotnet publish --no-restore --no-build -c Release -o publish
 # Pull aspnet core runtime
 FROM bitnami/aspnet-core:8.0.10-debian-12-r2
 
-EXPOSE 8700
-
 # Set working directory
 WORKDIR /app
 
