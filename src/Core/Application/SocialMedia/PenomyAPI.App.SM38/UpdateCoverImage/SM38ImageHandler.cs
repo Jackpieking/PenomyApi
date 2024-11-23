@@ -52,23 +52,7 @@ public class SM38ImageHandler : IFeatureHandler<SM38ImageRequest, SM38ImageRespo
 
             var fileService = _fileService.Value;
 
-            // Create the folder with provided info.
-            var folderCreateResult = await fileService.CreateFolderAsync(
-                folderInfo: folderInfo,
-                cancellationToken: ct
-            );
-
-            if (!folderCreateResult)
-            {
-                return new SM38ImageResponse
-                {
-                    IsSuccess = false,
-                    Message = ["Cannot create folder using file service"],
-                    StatusCode = SM38ResponseStatusCode.FAILED,
-                };
-            }
-
-            // Upload the thumbnail of the comic.
+            // Upload the cover image of the group.
             var coverImageFileInfo = request.CoverImageFileInfo;
             coverImageFileInfo.FolderPath = folderInfo.RelativePath;
 
