@@ -20,4 +20,6 @@ jobs:
                   key: ${{ secrets.SSH_PRIVATE_KEY }}
                   passphrase: ${{ secrets.SSH_PASSPHRASE }}
                   port: ${{ secrets.SSH_PORT }}
-                  script: whoami
+                  script_stop: true
+                  script: |
+                      sudo su -c /root/penomy/dev/Main/Server/dev-cd-script.sh
