@@ -1,6 +1,10 @@
 ﻿using FastEndpoints;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using PenomyAPI.App.FeatArt12.OtherHandlers.GetChapterDetail;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Common;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Common.Middlewares;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.Common.Middlewares;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt12.DTOs.GetChapterDetail;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt12.HttpResponseMappers;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt12.HttpResponses;
@@ -16,19 +20,26 @@ public class Art12GetChapterDetailEndpoint
     {
         Get("art12/chapter/{chapterId:long}");
 
-        AllowAnonymous();
+        AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
+        PreProcessor<AuthPreProcessor<Art12GetChapterDetailRequestDto>>();
+        PreProcessor<ArtworkCreationPreProcessor<Art12GetChapterDetailRequestDto>>();
     }
 
     public override async Task<Art12GetChapterDetailHttpResponse> ExecuteAsync(
         Art12GetChapterDetailRequestDto requestDto,
         CancellationToken ct)
     {
-        var creatorId = 123456789012345678;
+        // Get the state bag contains creatorId extracted from the access-token.
+        var stateBag = ProcessorState<StateBag>();
+
+        long creatorId = stateBag.AppRequest.UserId;
+
         var request = requestDto.MapTo(creatorId);
 
-        var featureResponse = await FeatureExtensions.ExecuteAsync<Art12GetChapterDetailRequest, Art12GetChapterDetailResponse>(
-            request,
-            ct);
+        var featureResponse = await FeatureExtensions
+            .ExecuteAsync<Art12GetChapterDetailRequest, Art12GetChapterDetailResponse>(
+                request,
+                ct);
 
         var httpResponse = Art12GetChapterDetailHttpResponseMapper.Map(featureResponse);
 

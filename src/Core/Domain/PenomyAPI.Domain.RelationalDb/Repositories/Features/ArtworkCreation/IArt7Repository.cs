@@ -15,6 +15,8 @@ namespace PenomyAPI.Domain.RelationalDb.Repositories.Features.ArtworkCreation
 
         Task<bool> IsComicExistedByIdAsync(long comicId, CancellationToken cancellationToken);
 
+        Task<bool> CheckCreatorPermissionAsync(long comicId, long creatoId, CancellationToken cancellationToken);
+
         Task<bool> UpdateComicAsync(
             Artwork comic,
             IEnumerable<ArtworkCategory> artworkCategories,

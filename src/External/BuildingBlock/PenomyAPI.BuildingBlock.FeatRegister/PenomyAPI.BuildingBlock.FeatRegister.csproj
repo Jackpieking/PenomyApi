@@ -2,6 +2,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG2\PenomyAPI.App.FeatG2.csproj" />
         <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG35\PenomyAPI.App.FeatG35.csproj" />
+        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG37\PenomyAPI.App.FeatG37.csproj" />
         <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG50\PenomyAPI.App.FeatG50.csproj" />
         <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.G25\PenomyAPI.App.G25.csproj" />
         <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.G63\PenomyAPI.App.G63.csproj" />
@@ -52,6 +53,7 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
         <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM13\PenomyAPI.App.SM13.csproj" />
         <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM14\PenomyAPI.App.SM14.csproj" />
+        <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM15\PenomyAPI.App.SM15.csproj" />
         <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM5\PenomyAPI.App.SM5.csproj" />
         <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM7\PenomyAPI.App.SM7.csproj" />
         <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM12\PenomyAPI.App.SM12.csproj" />

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Linq;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatArt7.OtherHandlers.LoadComicDetail;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt7.HttpResponse;
+using System;
+using System.Collections.Concurrent;
+using System.Linq;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt7.HttpResponseManagers;
 
@@ -59,6 +59,18 @@ public static class Art7LoadComicDetailHttpResponseManager
                         Art7LoadComicDetailResponseStatusCode.ID_NOT_FOUND
                     ),
                     HttpCode = StatusCodes.Status404NotFound,
+                }
+        );
+
+        _dictionary.TryAdd(
+            key: Art7LoadComicDetailResponseStatusCode.CREATOR_HAS_NO_PERMISSION,
+            value: (response) =>
+                new()
+                {
+                    AppCode = Art7LoadComicDetailHttpResponse.GetAppCode(
+                        Art7LoadComicDetailResponseStatusCode.CREATOR_HAS_NO_PERMISSION
+                    ),
+                    HttpCode = StatusCodes.Status403Forbidden,
                 }
         );
     }

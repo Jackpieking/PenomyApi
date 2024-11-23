@@ -9,10 +9,13 @@ public class SM13RequestDto
 {
     [Required] public long PostId { get; set; }
 
-    public string Content { get; set; }
+    [Required] public string Content { get; set; }
+
     public IEnumerable<IFormFile> AttachedMedia { get; set; }
-    public bool AllowComment { get; set; }
-    public UserPostPublicLevel PublicLevel { get; set; }
+
+    [Required] public bool AllowComment { get; set; }
+
+    [Required] public UserPostPublicLevel PublicLevel { get; set; }
 
     public bool IsAttachedMediaUpdated()
     {

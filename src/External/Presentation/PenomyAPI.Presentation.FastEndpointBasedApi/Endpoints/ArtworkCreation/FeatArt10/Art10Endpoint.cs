@@ -1,9 +1,13 @@
 ﻿using FastEndpoints;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.Common.Models.Common;
 using PenomyAPI.App.FeatArt10;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Domain.RelationalDb.Entities.Contraints.ArtworkCreation;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Common;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Common.Middlewares;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.Common.Middlewares;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt10.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt10.HttpResponseManagers;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt10.HttpResponses;
@@ -25,10 +29,34 @@ public class Art10Endpoint : Endpoint<Art10CreateChapterRequestDto, Art10HttpRes
     public override void Configure()
     {
         Post("art10/chapter/create");
-
-        AllowAnonymous();
         AllowFormData();
         AllowFileUploads();
+
+        AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
+        PreProcessor<AuthPreProcessor<Art10CreateChapterRequestDto>>();
+        PreProcessor<ArtworkCreationPreProcessor<Art10CreateChapterRequestDto>>();
+
+        Description(builder =>
+        {
+            builder.ClearDefaultProduces(StatusCodes.Status400BadRequest);
+            builder.ClearDefaultProduces(StatusCodes.Status401Unauthorized);
+            builder.ClearDefaultProduces(StatusCodes.Status403Forbidden);
+        });
+
+        Summary(summary =>
+        {
+            summary.Summary = "Endpoint for creating a new chapter of the specified comic.";
+            summary.Description = "This endpoint is used for creating a new chapter of the specified comic.";
+            summary.ExampleRequest = new() { };
+            summary.Response<Art10HttpResponse>(
+                description: "Represent successful operation response.",
+                example: new()
+                {
+                    HttpCode = StatusCodes.Status200OK,
+                    AppCode = $"ART10.{Art10ResponseAppCode.SUCCESS}"
+                }
+            );
+        });
     }
 
     public override async Task<Art10HttpResponse> ExecuteAsync(
@@ -79,9 +107,13 @@ public class Art10Endpoint : Endpoint<Art10CreateChapterRequestDto, Art10HttpRes
             return httpResponse;
         }
 
-        // Excecute the request.
-        var testId = 123456789012345678;
-        var request = requestDto.MapToRequest(testId);
+        // Get the state bag contains creatorId extracted from the access-token.
+        var stateBag = ProcessorState<StateBag>();
+
+        long creatorId = stateBag.AppRequest.UserId;
+
+        // Excecute the request to create chapter.
+        var request = requestDto.MapToRequest(creatorId);
 
         var featureResponse = await FeatureExtensions
             .ExecuteAsync<Art10Request, Art10Response>(request, ct);
@@ -99,8 +131,6 @@ public class Art10Endpoint : Endpoint<Art10CreateChapterRequestDto, Art10HttpRes
     ///     Internally validate the list of <paramref name="imageFiles"/>.
     /// </summary>
     /// <param name="imageFiles"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     private Result<Art10HttpResponse> InternalValidateMultipleImageFile(
         IFormFileCollection imageFiles)
     {
