@@ -64,15 +64,13 @@ public class SM38Repository : ISM38Repository
     /// <param name="name">The new name of the group.</param>
     /// <param name="description">The new description of the group.</param>
     /// <param name="RequireApprovedWhenPost">Indicates whether the group requires approval when posting.</param>
-    /// <param name="socialGroupStatus">The new status of the group.</param>
     /// <returns>The number of rows affected if the update was successful, otherwise <see cref="null"/>.</returns>
     public async Task<int> UpdateGroupDetailAsync(
         long userId,
         long groupId,
         string name,
         string description,
-        bool RequireApprovedWhenPost,
-        SocialGroupStatus socialGroupStatus
+        bool RequireApprovedWhenPost
     )
     {
         int result = 0;
@@ -92,19 +90,12 @@ public class SM38Repository : ISM38Repository
                     .Where(gr => gr.Id == groupId)
                     .ExecuteUpdateAsync(record => record.SetProperty(g => g.Name, name));
 
-            if (description != "")
-                result = await _socialGroupDbSet
-                    .Where(gr => gr.Id == groupId)
-                    .ExecuteUpdateAsync(record =>
-                        record.SetProperty(g => g.Description, description)
-                    );
-
             result = await _socialGroupDbSet
                 .Where(gr => gr.Id == groupId)
                 .ExecuteUpdateAsync(record =>
                     record
+                        .SetProperty(g => g.Description, description)
                         .SetProperty(g => g.RequireApprovedWhenPost, RequireApprovedWhenPost)
-                        .SetProperty(g => g.GroupStatus, socialGroupStatus)
                 );
 
             return result;

@@ -2,5 +2,5 @@
 
 public class SM38ImageResponseDto
 {
-    public bool IsSuccess { get; set; }
+    public string ImageUrl { get; set; }
 }

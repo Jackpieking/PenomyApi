@@ -53,7 +53,6 @@ public class SM38ProfileEndpoint : Endpoint<SM38ProfileRequestDto, SM38ProfileHt
             Name = req.Name,
             Description = req.Description,
             RequireApprovedWhenPost = req.RequireApprovedWhenPost,
-            SocialGroupStatus = req.SocialGroupStatus,
         };
 
         // Get FeatureHandler response.

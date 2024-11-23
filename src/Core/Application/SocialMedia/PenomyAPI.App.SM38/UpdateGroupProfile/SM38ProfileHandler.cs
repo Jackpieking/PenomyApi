@@ -26,8 +26,7 @@ public class SM38ProfileHandler : IFeatureHandler<SM38ProfileRequest, SM38Profil
             groupId: request.GroupId,
             name: request.Name,
             description: request.Description,
-            RequireApprovedWhenPost: request.RequireApprovedWhenPost,
-            socialGroupStatus: request.SocialGroupStatus
+            RequireApprovedWhenPost: request.RequireApprovedWhenPost
         );
         if (result == 0)
             return new SM38ProfileResponse

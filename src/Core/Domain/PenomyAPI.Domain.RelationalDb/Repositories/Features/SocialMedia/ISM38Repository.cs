@@ -10,8 +10,7 @@ public interface ISM38Repository
         long groupId,
         string name,
         string description,
-        bool RequireApprovedWhenPost,
-        SocialGroupStatus socialGroupStatus
+        bool RequireApprovedWhenPost
     );
 
     Task<int> UpdateGroupCoverPhotoAsync(long userId, long groupId, string coverPhotoUrl);
