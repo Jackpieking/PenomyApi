@@ -21,4 +21,5 @@ jobs:
                   passphrase: ${{ secrets.SSH_PASSPHRASE }}
                   port: ${{ secrets.SSH_PORT }}
                   script_stop: true
-                  script_path: /root/penomy/dev/Main/Server/dev-cd-script.sh
+                  script: |
+                      sudo su -c /root/penomy/dev/Main/Server/dev-cd-script.sh
