@@ -75,13 +75,13 @@ public class SM38ImageHandler : IFeatureHandler<SM38ImageRequest, SM38ImageRespo
                 return new SM38ImageResponse
                 {
                     StatusCode = SM38ResponseStatusCode.DATABSE_ERROR,
-                    Result = false,
+                    Result = "",
                     IsSuccess = false,
                 };
             return new SM38ImageResponse
             {
                 StatusCode = SM38ResponseStatusCode.SUCCESS,
-                Result = true,
+                Result = request.CoverImageFileInfo.StorageUrl,
                 IsSuccess = true,
             };
         }

@@ -106,7 +106,7 @@ public class SM38ImageEndpoint : Endpoint<SM38ImageRequestDto, SM38ImageHttpResp
 
         if (featResponse.IsSuccess)
         {
-            httpResponse.Body = new SM38ImageResponseDto { IsSuccess = featResponse.Result };
+            httpResponse.Body = new SM38ImageResponseDto { ImageUrl = featResponse.Result };
 
             return httpResponse;
         }

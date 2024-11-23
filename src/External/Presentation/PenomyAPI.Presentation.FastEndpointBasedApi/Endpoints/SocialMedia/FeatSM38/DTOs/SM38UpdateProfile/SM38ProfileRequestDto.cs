@@ -10,6 +10,4 @@ public class SM38ProfileRequestDto
     public string Description { get; set; }
 
     public bool RequireApprovedWhenPost { get; set; }
-
-    public SocialGroupStatus SocialGroupStatus { get; set; }
 }
