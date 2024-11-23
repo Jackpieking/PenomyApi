@@ -1,17 +1,21 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using FastEndpoints;
+﻿using FastEndpoints;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.Common.Models.Common;
 using PenomyAPI.App.FeatArt4;
 using PenomyAPI.App.FeatArt7;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Domain.RelationalDb.Entities.Contraints.ArtworkCreation;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Common;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Common.Middlewares;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.Common.Middlewares;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt4.HttpResponse;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt7.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt7.HttpResponse;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt7.HttpResponseManagers;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Helpers.IFormFiles;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt7;
 
@@ -26,11 +30,14 @@ public sealed class Art7Endpoint : Endpoint<Art7RequestDto, Art7HttpResponse>
 
     public override void Configure()
     {
-        Patch("art7/edit");
+        Patch("art7/comic/edit");
 
-        AllowAnonymous();
         AllowFileUploads();
         AllowFormData();
+
+        AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
+        PreProcessor<AuthPreProcessor<Art7RequestDto>>();
+        PreProcessor<ArtworkCreationPreProcessor<Art7RequestDto>>();
 
         Description(builder: builder =>
         {
@@ -82,9 +89,12 @@ public sealed class Art7Endpoint : Endpoint<Art7RequestDto, Art7HttpResponse>
             return httpResponse;
         }
 
-        var testUserId = 123456789012345678;
+        // Get the state bag contains creatorId extracted from the access-token.
+        var stateBag = ProcessorState<StateBag>();
 
-        var featArt7Request = requestDto.MapToFeatureRequest(testUserId);
+        long creatorId = stateBag.AppRequest.UserId;
+
+        var featArt7Request = requestDto.MapToFeatureRequest(creatorId);
 
         // Execute the handler and get response.
         var featResponse = await FeatureExtensions.ExecuteAsync<Art7Request, Art7Response>(

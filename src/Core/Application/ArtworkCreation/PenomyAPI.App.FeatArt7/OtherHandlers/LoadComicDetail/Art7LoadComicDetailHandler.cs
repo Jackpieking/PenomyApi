@@ -1,9 +1,9 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using PenomyAPI.App.Common;
+﻿using PenomyAPI.App.Common;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.App.FeatArt7.OtherHandlers.LoadComicDetail;
 
@@ -33,6 +33,16 @@ public sealed class Art7LoadComicDetailHandler
         if (!isComicExisted)
         {
             return Art7LoadComicDetailResponse.ComicIdNotFound;
+        }
+
+        var creatorHasPermission = await _art7Repository.CheckCreatorPermissionAsync(
+            comicId,
+            request.GetCreatorId(),
+            ct);
+
+        if (!creatorHasPermission)
+        {
+            return Art7LoadComicDetailResponse.CreatorHasNoPermission;
         }
 
         var comicDetail = await _art7Repository.GetComicDetailByIdAsync(comicId, ct);

@@ -23,6 +23,9 @@ public sealed class UserProfile : IEntity
 
     public bool RegisterAsCreator { get; set; }
 
+    /// <summary>
+    ///     The total number of creators that current user has followed.
+    /// </summary>
     public int TotalFollowedCreators { get; set; }
 
     public DateTime LastActiveAt { get; set; }

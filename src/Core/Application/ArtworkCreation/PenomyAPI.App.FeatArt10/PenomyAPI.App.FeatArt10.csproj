@@ -7,11 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\PenomyAPI.App.Common\PenomyAPI.App.Common.csproj" />
+    <Compile Remove="OtherHandlers\LastChapterUploadOrder\**" />
+    <EmbeddedResource Remove="OtherHandlers\LastChapterUploadOrder\**" />
+    <None Remove="OtherHandlers\LastChapterUploadOrder\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="OtherHandlers\LastChapterUploadOrder\" />
+    <ProjectReference Include="..\..\PenomyAPI.App.Common\PenomyAPI.App.Common.csproj" />
   </ItemGroup>
 
 </Project>

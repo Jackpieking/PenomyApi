@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using PenomyAPI.App.Common.Models.Common;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.ArtworkCreation;
 using PenomyAPI.Persist.Postgres.Repositories.Helpers;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.ArtworkCreation;
 
@@ -26,6 +26,16 @@ public sealed class Art7Repository : IArt7Repository
         _artworkDbSet = dbContext.Set<Artwork>();
         _artworkCategoryDbSet = dbContext.Set<ArtworkCategory>();
         _originDbSet = dbContext.Set<ArtworkOrigin>();
+    }
+
+    public Task<bool> CheckCreatorPermissionAsync(
+        long comicId,
+        long creatoId,
+        CancellationToken cancellationToken)
+    {
+        return _artworkDbSet.AnyAsync(
+            comic => comic.Id == comicId && comic.CreatedBy == creatoId,
+            cancellationToken);
     }
 
     public async Task<IEnumerable<Category>> GetAllCategoriesAsync(

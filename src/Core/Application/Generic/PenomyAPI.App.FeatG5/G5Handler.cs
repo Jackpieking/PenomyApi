@@ -1,5 +1,5 @@
 using PenomyAPI.App.Common;
-using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
+using PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG5;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 using System;
@@ -37,7 +37,7 @@ public class G5Handler : IFeatureHandler<G5Request, G5Response>
             }
 
             // Get the comic detail,
-            Artwork comicDetail = await _IG5Repository.GetArtWorkDetailByIdAsync(
+            G5ComicDetailReadModel comicDetail = await _IG5Repository.GetArtWorkDetailByIdAsync(
                 request.ComicId,
                 ct);
 

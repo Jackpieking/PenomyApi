@@ -1,9 +1,9 @@
 ﻿using FastEndpoints;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG35;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG35.Common;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG35.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG35.HttpResponses;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG35.PreProcessors;
 using System.Threading;
@@ -11,13 +11,14 @@ using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG35;
 
-public sealed class G35Endpoint : EndpointWithoutRequest<G35HttpResponse>
+public sealed class G35Endpoint : Endpoint<G35RequestDto, G35HttpResponse>
 {
     public override void Configure()
     {
         Get("g35/user/profile");
-        AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
-        PreProcessor<G35AuthorizationPreProcessor>();
+
+        AllowAnonymous();
+        PreProcessor<G35PreProcessor>();
 
         Description(builder =>
         {
@@ -39,32 +40,20 @@ public sealed class G35Endpoint : EndpointWithoutRequest<G35HttpResponse>
         });
     }
 
-    public override async Task<G35HttpResponse> ExecuteAsync(CancellationToken ct)
+    public override async Task<G35HttpResponse> ExecuteAsync(G35RequestDto requestDto, CancellationToken ct)
     {
         var preprocessState = ProcessorState<G35StateBag>();
 
-        // If the request is unauthorized then not processed.
-        if (!preprocessState.IsAuthorized)
-        {
-            var unauthorizedHttpResponse = G35HttpResponse.UNAUTHORIZED();
+        var isProfileOwner = requestDto.IsUserIdMatched(preprocessState.UserId);
 
-            await SendAsync(
-                unauthorizedHttpResponse,
-                unauthorizedHttpResponse.HttpCode,
-                ct);
-
-            return unauthorizedHttpResponse;
-        }
-
-        // Process the request when valid.
         var request = new G35Request()
         {
-            UserId = preprocessState.UserId
+            UserId = requestDto.UserId,
+            IsProfileOwner = isProfileOwner,
         };
 
-        var featureResponse = await FeatureExtensions.ExecuteAsync<G35Request, G35Response>(
-            request,
-            ct);
+        var featureResponse = await FeatureExtensions
+            .ExecuteAsync<G35Request, G35Response>(request, ct);
 
         var httpResponse = G35HttpResponse.MapFrom(featureResponse);
 

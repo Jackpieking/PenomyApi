@@ -1,6 +1,8 @@
 ﻿using FastEndpoints;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using PenomyAPI.App.FeatArt12.OtherHandlers.ReloadChapterMedias;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Common.Middlewares;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt12.HttpResponseMappers;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.ArtworkCreation.FeatArt12.HttpResponses;
 using System.Threading;
@@ -15,7 +17,8 @@ public sealed class Art12ReloadChapterMediaEndpoint
     {
         Get("art12/chapter/reload");
 
-        AllowAnonymous();
+        AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
+        PreProcessor<AuthPreProcessor<Art12ReloadChapterMediaRequest>>();
     }
 
     public override async Task<Art12ReloadChapterMediaHttpResponse> ExecuteAsync(
