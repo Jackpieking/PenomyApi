@@ -16,7 +16,15 @@ internal sealed class SocialGroupJoinRequestEntityConfiguration
         builder.HasKey(request => new { request.GroupId, request.CreatedBy });
 
         builder
+            .Property(request => request.RequestStatus)
+            .IsRequired();
+
+        builder
             .Property(request => request.CreatedAt)
+            .HasColumnType(DatabaseNativeTypes.TIMESTAMPTZ);
+
+        builder
+            .Property(request => request.UpdatedAt)
             .HasColumnType(DatabaseNativeTypes.TIMESTAMPTZ);
 
         #region Relationships

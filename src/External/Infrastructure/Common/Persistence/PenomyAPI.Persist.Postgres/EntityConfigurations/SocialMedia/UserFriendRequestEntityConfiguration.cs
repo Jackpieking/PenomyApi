@@ -19,7 +19,16 @@ internal sealed class UserFriendRequestEntityConfiguration : IEntityConfiguratio
         });
 
         builder
+            .Property(request => request.RequestStatus)
+            .IsRequired();
+
+        builder
             .Property(userFriendRequest => userFriendRequest.CreatedAt)
+            .HasColumnType(DatabaseNativeTypes.TIMESTAMPTZ)
+            .IsRequired();
+
+        builder
+            .Property(userFriendRequest => userFriendRequest.UpdatedAt)
             .HasColumnType(DatabaseNativeTypes.TIMESTAMPTZ)
             .IsRequired();
 

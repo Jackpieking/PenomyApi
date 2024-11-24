@@ -20,7 +20,16 @@ internal sealed class ChatGroupJoinRequestEntityConfiguration
         });
 
         builder
+            .Property(request => request.RequestStatus)
+            .IsRequired();
+
+        builder
             .Property(chatGroupJoinRequest => chatGroupJoinRequest.CreatedAt)
+            .HasColumnType(DatabaseNativeTypes.TIMESTAMPTZ)
+            .IsRequired();
+
+        builder
+            .Property(chatGroupJoinRequest => chatGroupJoinRequest.UpdatedAt)
             .HasColumnType(DatabaseNativeTypes.TIMESTAMPTZ)
             .IsRequired();
 

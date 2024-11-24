@@ -49,5 +49,10 @@ internal sealed class UserProfileEntityConfiguration : IEntityConfiguration<User
             .Property(profile => profile.UpdatedAt)
             .HasColumnType(DatabaseNativeTypes.TIMESTAMPTZ)
             .IsRequired();
+
+        builder
+            .Property(profile => profile.UpdateNickNameAt)
+            .HasColumnType(DatabaseNativeTypes.TIMESTAMPTZ)
+            .IsRequired();
     }
 }
