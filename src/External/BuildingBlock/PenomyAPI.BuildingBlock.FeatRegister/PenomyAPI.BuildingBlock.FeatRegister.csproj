@@ -48,6 +48,7 @@
         <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG14\PenomyAPI.App.FeatG14.csproj"/>
         <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.G62\PenomyAPI.App.G62.csproj"/>
         <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM30\PenomyAPI.App.SM30.csproj"/>
+        <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM31\PenomyAPI.App.SM31.csproj"/>
         <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM38\PenomyAPI.App.SM38.csproj"/>
     </ItemGroup>
     <ItemGroup>

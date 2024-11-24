@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -13,30 +14,35 @@ using PenomyAPI.Persist.Postgres.Repositories.Helpers;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia;
 
-public class SM30Repository : ISM30Repository
+public class SM31Repository : ISM31Repository
 {
     private readonly AppDbContext _dbContext;
     private readonly DbSet<UserFriend> _userFriendContext;
+    private readonly DbSet<UserFriendRequest> _userFriendRequestContext;
     private readonly Lazy<UserManager<PgUser>> _userManager;
-    private readonly DbSet<UserFriendRequest> _userPostContext;
 
-    public SM30Repository(AppDbContext context, Lazy<UserManager<PgUser>> userManager)
+    public SM31Repository(AppDbContext context, Lazy<UserManager<PgUser>> userManager)
     {
         _dbContext = context;
-        _userPostContext = context.Set<UserFriendRequest>();
+        _userFriendRequestContext = context.Set<UserFriendRequest>();
         _userFriendContext = context.Set<UserFriend>();
         _userManager = userManager;
     }
 
-    public async Task<bool> SendFriendRequest(UserFriendRequest userFriendRequest, CancellationToken token)
+    public async Task<bool> IsAlreadyFriendAsync(long userId, long friendId, CancellationToken ct)
+    {
+        return await _userFriendContext.AnyAsync(x => x.UserId == userId && x.FriendId == friendId, ct);
+    }
+
+    public async Task<bool> UnfriendAsync(UserFriend userFriend, CancellationToken ct)
     {
         var result = new Result<bool>(false);
 
         var executionStrategy = RepositoryHelper.CreateExecutionStrategy(_dbContext);
         await executionStrategy.ExecuteAsync(async () =>
-            await InternalSendFriendPostAsync(
-                userFriendRequest,
-                token,
+            await InternalUnFriendPostAsync(
+                userFriend,
+                ct,
                 result
             ));
         return result.Value;
@@ -44,16 +50,10 @@ public class SM30Repository : ISM30Repository
 
     public async Task<bool> IsUserExistAsync(long friendId, CancellationToken token)
     {
-        var user = await _userManager.Value.FindByIdAsync(friendId.ToString());
-        return user != null;
+        throw new NotImplementedException();
     }
 
-    public async Task<bool> IsAlreadyFriendAsync(long userId, long friendId, CancellationToken token)
-    {
-        return await _dbContext.Set<UserFriend>().AnyAsync(x => x.UserId == userId && x.FriendId == friendId, token);
-    }
-
-    private async Task InternalSendFriendPostAsync(UserFriendRequest friendRequest,
+    private async Task InternalUnFriendPostAsync(UserFriend friendRequest,
         CancellationToken token, Result<bool> result)
     {
         IDbContextTransaction transaction = null;
@@ -63,7 +63,13 @@ public class SM30Repository : ISM30Repository
                 _dbContext,
                 token
             );
-            await _userPostContext.AddAsync(friendRequest, token);
+            await _userFriendContext
+                .Where(x => x.UserId == friendRequest.UserId && x.FriendId == friendRequest.FriendId)
+                .ExecuteDeleteAsync(token);
+            await _userFriendRequestContext
+                .Where(x => (x.CreatedBy == friendRequest.UserId && x.FriendId == friendRequest.FriendId) ||
+                            (x.CreatedBy == friendRequest.FriendId && x.FriendId == friendRequest.UserId))
+                .ExecuteDeleteAsync(token);
             await _dbContext.SaveChangesAsync(token);
             await transaction.CommitAsync(token);
             result.Value = true;
