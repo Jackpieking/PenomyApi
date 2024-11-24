@@ -34,6 +34,8 @@ public sealed class UserProfile : IEntity
 
     public DateTime UpdatedAt { get; set; }
 
+    public DateTime UpdateNickNameAt { get; set; }
+
     #region Navigation
     // Generic domain
     public CreatorProfile CreatorProfile { get; set; }

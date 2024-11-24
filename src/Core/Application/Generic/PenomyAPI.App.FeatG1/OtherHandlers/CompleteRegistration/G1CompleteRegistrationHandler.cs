@@ -118,7 +118,8 @@ public sealed class G1CompleteRegistrationHandler
             AvatarUrl = CommonValues.Others.DefaultUserAvaterUrl,
             RegisteredAt = DateTime.UtcNow,
             LastActiveAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
+            UpdatedAt = DateTime.UtcNow,
+            UpdateNickNameAt = DateTime.UtcNow,
         };
 
         return newUserProfile;
