@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using PenomyAPI.App.Common.Models.Common;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
+using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 using PenomyAPI.Persist.Postgres.Data.DbContexts;
 using PenomyAPI.Persist.Postgres.Data.UserIdentity;
@@ -50,7 +51,8 @@ public class SM31Repository : ISM31Repository
 
     public async Task<bool> IsUserExistAsync(long friendId, CancellationToken token)
     {
-        throw new NotImplementedException();
+        var user = await _userManager.Value.FindByIdAsync(friendId.ToString());
+        return user != null;
     }
 
     private async Task InternalUnFriendPostAsync(UserFriend friendRequest,
@@ -67,8 +69,10 @@ public class SM31Repository : ISM31Repository
                 .Where(x => x.UserId == friendRequest.UserId && x.FriendId == friendRequest.FriendId)
                 .ExecuteDeleteAsync(token);
             await _userFriendRequestContext
-                .Where(x => (x.CreatedBy == friendRequest.UserId && x.FriendId == friendRequest.FriendId) ||
-                            (x.CreatedBy == friendRequest.FriendId && x.FriendId == friendRequest.UserId))
+                .Where(x => (x.CreatedBy == friendRequest.UserId && x.FriendId == friendRequest.FriendId &&
+                             x.RequestStatus == RequestStatus.Accepted) ||
+                            (x.CreatedBy == friendRequest.FriendId && x.FriendId == friendRequest.UserId &&
+                             x.RequestStatus == RequestStatus.Accepted))
                 .ExecuteDeleteAsync(token);
             await _dbContext.SaveChangesAsync(token);
             await transaction.CommitAsync(token);

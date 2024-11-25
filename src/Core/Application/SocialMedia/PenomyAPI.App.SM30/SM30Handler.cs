@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using PenomyAPI.App.Common;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
+using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 
@@ -46,7 +47,8 @@ public class SM30Handler : IFeatureHandler<SM30Request, SM30Response>
             {
                 FriendId = request.FriendId,
                 CreatedAt = DateTime.UtcNow,
-                CreatedBy = request.UserId
+                CreatedBy = request.UserId,
+                RequestStatus = RequestStatus.Accepted
             };
 
             var result = await _sm30Repository.SendFriendRequest(friendRequest, ct);
