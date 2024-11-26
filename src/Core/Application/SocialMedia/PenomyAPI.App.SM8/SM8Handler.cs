@@ -7,7 +7,7 @@ using PenomyAPI.App.Common.FileServices.Models;
 using PenomyAPI.App.Common.Helpers;
 using PenomyAPI.App.Common.IdGenerator.Snowflake;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
-using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
+using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 using PenomyAPI.Infra.Configuration.Options;
 

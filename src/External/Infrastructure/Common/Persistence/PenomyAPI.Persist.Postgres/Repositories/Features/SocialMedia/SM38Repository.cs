@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
-using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
+using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 
-namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
+namespace PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia;
 
 public class SM38Repository : ISM38Repository
 {
@@ -34,9 +33,9 @@ public class SM38Repository : ISM38Repository
         try
         {
             // Check if the user is a member of the group
-            var user = _socialGroupMemberDbSet
+            var user = await _socialGroupMemberDbSet
                 .Where(gm => gm.MemberId == userId && gm.GroupId == groupId)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             // Validate user role and permissions
             if (user == null || user.RoleId != 1)

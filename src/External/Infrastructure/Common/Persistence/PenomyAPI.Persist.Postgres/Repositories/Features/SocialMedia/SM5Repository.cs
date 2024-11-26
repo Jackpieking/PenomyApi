@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
-using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
+using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 
-namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
+namespace PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia;
 
 public class SM5Repository : ISM5Repository
 {
@@ -31,11 +31,14 @@ public class SM5Repository : ISM5Repository
                     TotalMembers = g.TotalMembers,
                     CreatedAt = g.CreatedAt,
                     GroupMembers = g.GroupMembers.Where(m => m.MemberId == userId).ToList(),
-                    Creator = g.Creator
+                    Creator = g.Creator,
+                    SocialGroupJoinRequests = g
+                        .SocialGroupJoinRequests.Where(m =>
+                            m.CreatedBy == userId && m.GroupId == groupId
+                        )
+                        .ToList(),
                 })
-                .OrderByDescending(g => g.CreatedAt)
                 .AsNoTracking()
-                .AsQueryable()
                 .FirstOrDefaultAsync();
         }
         catch

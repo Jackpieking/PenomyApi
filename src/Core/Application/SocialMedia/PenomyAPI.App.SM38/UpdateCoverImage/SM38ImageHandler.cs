@@ -5,7 +5,7 @@ using PenomyAPI.App.Common;
 using PenomyAPI.App.Common.FileServices;
 using PenomyAPI.App.Common.FileServices.Models;
 using PenomyAPI.App.Common.Helpers;
-using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
+using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 using PenomyAPI.Infra.Configuration.Options;
 

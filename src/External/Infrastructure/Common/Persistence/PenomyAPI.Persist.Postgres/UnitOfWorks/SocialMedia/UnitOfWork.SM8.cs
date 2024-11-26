@@ -1,5 +1,5 @@
-﻿using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
-using PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
+﻿using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
+using PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia;
 
 namespace PenomyAPI.Persist.Postgres.UnitOfWorks;
 
