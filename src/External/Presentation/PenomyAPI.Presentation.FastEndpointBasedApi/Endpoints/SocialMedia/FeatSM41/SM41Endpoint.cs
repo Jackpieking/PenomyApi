@@ -16,8 +16,7 @@ public class SM41Endpoint : Endpoint<SM41RequestDto, SM41HttpResponse>
 {
     public override void Configure()
     {
-        Delete("sm41/group-member/remove/{id}");
-        DontThrowIfValidationFails();
+        Delete("sm41/group-member/remove/{groupId}/{memberId}");
         AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
         PreProcessor<AuthPreProcessor<SM41RequestDto>>();
         Description(builder: builder =>
@@ -45,7 +44,12 @@ public class SM41Endpoint : Endpoint<SM41RequestDto, SM41HttpResponse>
 
         var stateBag = ProcessorState<StateBag>();
 
-        var featRequest = new SM41Request { UserId = stateBag.AppRequest.UserId };
+        var featRequest = new SM41Request
+        {
+            UserId = stateBag.AppRequest.UserId,
+            GroupId = long.Parse(req.GroupId),
+            MemberId = long.Parse(req.MemberId),
+        };
 
         // Get FeatureHandler response.
         var featResponse = await FeatureExtensions.ExecuteAsync<SM41Request, SM41Response>(
