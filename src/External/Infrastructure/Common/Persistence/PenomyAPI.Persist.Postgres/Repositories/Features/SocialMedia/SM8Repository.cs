@@ -1,12 +1,13 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using PenomyAPI.App.Common.Models.Common;
+using PenomyAPI.Domain.RelationalDb.DataSeedings.Roles;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 using PenomyAPI.Persist.Postgres.Data.UserIdentity;
 using PenomyAPI.Persist.Postgres.Repositories.Helpers;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia;
 
@@ -43,17 +44,12 @@ public class SM8Repository : ISM8Repository
         var cancellationToken = new CancellationToken();
         try
         {
-            var roles = await _pgRoleDbSet.FirstOrDefaultAsync(
-                r => r.Name == "GroupAdmin",
-                new CancellationToken()
-            );
-            
             SocialGroupMember socialGroupMember =
                 new()
                 {
                     GroupId = socialGroup.Id,
                     MemberId = socialGroup.CreatedBy,
-                    RoleId = roles.Id,
+                    RoleId = UserRoles.GroupManager.Id,
                     JoinedAt = socialGroup.CreatedAt,
                 };
 

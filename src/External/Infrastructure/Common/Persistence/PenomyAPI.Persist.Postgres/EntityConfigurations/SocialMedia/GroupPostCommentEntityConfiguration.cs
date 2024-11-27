@@ -37,6 +37,8 @@ internal sealed class GroupPostCommentEntityConfiguration : IEntityConfiguration
             .HasColumnType(DatabaseNativeTypes.TIMESTAMPTZ)
             .IsRequired();
 
+        builder.Property(comment => comment.IsRemoved).IsRequired();
+
         #region Relationships
         builder
             .HasOne(comment => comment.Creator)
