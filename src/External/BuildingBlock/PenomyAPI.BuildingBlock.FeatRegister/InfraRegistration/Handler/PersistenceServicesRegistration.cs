@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -12,6 +14,7 @@ using PenomyAPI.Persist.Postgres.Data.DbContexts;
 using PenomyAPI.Persist.Postgres.Data.UserIdentity;
 using PenomyAPI.Persist.Postgres.UnitOfWorks;
 using PenomyAPI.Persist.Redis;
+using Typesense.Setup;
 using ZiggyCreatures.Caching.Fusion;
 using ZiggyCreatures.Caching.Fusion.Serialization;
 
@@ -28,6 +31,8 @@ internal sealed class PersistenceServicesRegistration : IServiceRegistration
         AddCaching(services, configuration);
 
         AddAppDefinedServices(services);
+
+        AddTypesense(services, configuration);
     }
 
     private static void AddAppDefinedServices(IServiceCollection services)
@@ -131,5 +136,26 @@ internal sealed class PersistenceServicesRegistration : IServiceRegistration
             .AddFusionCacheProtoBufNetSerializer()
             .AddFusionCache()
             .TryWithAutoSetup();
+    }
+
+    private static void AddTypesense(IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddTypesenseClient(
+            config =>
+            {
+                var option = configuration.GetRequiredSection("Typesense").Get<TypesenseOptions>();
+
+                var listNodes = new List<Node>();
+
+                foreach (var nodeOption in option.Nodes)
+                {
+                    listNodes.Add(new(nodeOption.Host, nodeOption.Port, nodeOption.Protocol));
+                }
+
+                config.ApiKey = option.ApiKey;
+                config.Nodes = listNodes;
+            },
+            false
+        );
     }
 }
