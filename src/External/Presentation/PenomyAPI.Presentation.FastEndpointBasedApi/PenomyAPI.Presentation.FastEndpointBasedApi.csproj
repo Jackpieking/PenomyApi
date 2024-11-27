@@ -21,5 +21,6 @@
     </ItemGroup>
     <ItemGroup>
         <Folder Include="Endpoints\ArtworkCreation\FeatArt6\HttpResponseMappers\" />
+        <Folder Include="Endpoints\G25\HttpResponseMappers\" />
     </ItemGroup>
 </Project>
