@@ -2,6 +2,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Core\Application\PenomyAPI.App.Common\PenomyAPI.App.Common.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Quartz.AspNetCore" Version="3.13.1" />
+  </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>disable</ImplicitUsings>
