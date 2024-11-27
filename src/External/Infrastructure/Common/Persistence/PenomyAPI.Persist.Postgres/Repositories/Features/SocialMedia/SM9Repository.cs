@@ -3,9 +3,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
-using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
+using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 
-namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
+namespace PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia;
 
 public class SM9Repository : ISM9Repository
 {

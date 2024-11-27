@@ -21,4 +21,6 @@ public class SM5ResponseDto
     public bool IsManager { get; set; }
 
     public bool HasJoin { get; set; }
+    
+    public bool HasRequestJoin { get; set; }
 }

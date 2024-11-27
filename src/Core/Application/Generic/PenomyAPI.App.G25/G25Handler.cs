@@ -20,6 +20,16 @@ public class G25Handler : IFeatureHandler<G25Request, G25Response>
     {
         try
         {
+            var isUserViewHistoryNotEmpty = await _g25Repository.IsUserViewHistoryNotEmptyAsync(
+                request.UserId,
+                request.ArtworkType,
+                ct);
+            
+            if (!isUserViewHistoryNotEmpty)
+            {
+                return G25Response.EMPTY_VIEW_HISTORY;
+            }
+
             var artViewHist = await _g25Repository
                 .GetArtworkViewHistByUserIdAndTypeWithPaginationAsync(
                     request.UserId,

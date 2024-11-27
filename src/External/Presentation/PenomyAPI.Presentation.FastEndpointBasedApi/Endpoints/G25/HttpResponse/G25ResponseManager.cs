@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.G25;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G25.DTOs;
 using System;
 using System.Collections.Concurrent;
+using System.Linq;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G25.HttpResponse;
 
@@ -24,36 +26,17 @@ public class G25ResponseManager
                 {
                     AppCode = $"G25.{G25ResponseStatusCode.SUCCESS}",
                     HttpCode = StatusCodes.Status200OK,
+                    Body = response.Result.Select(G25ArtworkViewHistoryItemResponseDto.MapFrom)
                 }
         );
 
         _dictionary.TryAdd(
-            key: G25ResponseStatusCode.SUCCESS,
+            key: G25ResponseStatusCode.INVALID_REQUEST,
             value: (_, response) =>
                 new()
                 {
                     AppCode = $"G25.{G25ResponseStatusCode.INVALID_REQUEST}",
-                    HttpCode = StatusCodes.Status200OK,
-                }
-        );
-
-        _dictionary.TryAdd(
-            key: G25ResponseStatusCode.SUCCESS,
-            value: (_, response) =>
-                new()
-                {
-                    AppCode = $"G25.{G25ResponseStatusCode.FAILED}",
-                    HttpCode = StatusCodes.Status200OK,
-                }
-        );
-
-        _dictionary.TryAdd(
-            key: G25ResponseStatusCode.SUCCESS,
-            value: (_, response) =>
-                new()
-                {
-                    AppCode = $"G25.{G25ResponseStatusCode.UN_AUTHORIZED}",
-                    HttpCode = StatusCodes.Status200OK,
+                    HttpCode = StatusCodes.Status400BadRequest,
                 }
         );
 
@@ -62,8 +45,28 @@ public class G25ResponseManager
             value: (_, response) =>
                 new()
                 {
-                    AppCode = $"G25.{G25ResponseStatusCode.FORBIDDEN}",
+                    AppCode = $"G25.{G25ResponseStatusCode.FAILED}",
                     HttpCode = StatusCodes.Status400BadRequest,
+                }
+        );
+
+        _dictionary.TryAdd(
+            key: G25ResponseStatusCode.UN_AUTHORIZED,
+            value: (_, response) =>
+                new()
+                {
+                    AppCode = $"G25.{G25ResponseStatusCode.UN_AUTHORIZED}",
+                    HttpCode = StatusCodes.Status401Unauthorized,
+                }
+        );
+
+        _dictionary.TryAdd(
+            key: G25ResponseStatusCode.FORBIDDEN,
+            value: (_, response) =>
+                new()
+                {
+                    AppCode = $"G25.{G25ResponseStatusCode.FORBIDDEN}",
+                    HttpCode = StatusCodes.Status403Forbidden,
                 }
         );
     }

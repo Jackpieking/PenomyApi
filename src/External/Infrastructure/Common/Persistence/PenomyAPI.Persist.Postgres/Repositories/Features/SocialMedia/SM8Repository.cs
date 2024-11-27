@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using PenomyAPI.App.Common.Models.Common;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
-using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
+using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 using PenomyAPI.Persist.Postgres.Data.UserIdentity;
 using PenomyAPI.Persist.Postgres.Repositories.Helpers;
 
-namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
+namespace PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia;
 
 public class SM8Repository : ISM8Repository
 {
