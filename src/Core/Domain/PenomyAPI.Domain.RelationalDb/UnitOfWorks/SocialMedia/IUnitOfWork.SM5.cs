@@ -1,4 +1,4 @@
-﻿using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
+﻿using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 
 namespace PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 
