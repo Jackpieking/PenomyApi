@@ -1,7 +1,7 @@
-using System;
-using System.Collections.Generic;
 using PenomyAPI.Domain.RelationalDb.Entities.Base;
 using PenomyAPI.Domain.RelationalDb.Entities.Generic;
+using System;
+using System.Collections.Generic;
 
 namespace PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
 
@@ -20,6 +20,8 @@ public sealed class GroupPostComment : EntityWithId<long>, ICreatedEntity<long>
     public DateTime CreatedAt { get; set; }
 
     public DateTime UpdatedAt { get; set; }
+
+    public bool IsRemoved { get; set; }
 
     #region Navigation
     public GroupPost GroupPost { get; set; }
