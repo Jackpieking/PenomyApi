@@ -22,6 +22,7 @@ public class SM9Repository : ISM9Repository
         {
             var result = await _socialGroupDbSet
             .Where(g => g.CreatedBy == userId)
+            .OrderByDescending(g => g.CreatedAt)
             .AsQueryable()
             .AsNoTracking()
             .Take(4)

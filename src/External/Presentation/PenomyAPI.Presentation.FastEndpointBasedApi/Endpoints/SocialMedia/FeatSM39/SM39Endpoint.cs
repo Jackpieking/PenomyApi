@@ -25,8 +25,8 @@ public class SM39Endpoint : Endpoint<SM39Request, SM39HttpResponse>
 
         Summary(endpointSummary: summary =>
         {
-            summary.Summary = "Endpoint for creating group join request.";
-            summary.Description = "This endpoint is used for creating group join request.";
+            summary.Summary = "Endpoint for getting group members.";
+            summary.Description = "This endpoint is used for getting group members.";
             summary.Response<SM39HttpResponse>(
                 description: "Represent successful operation response.",
                 example: new() { AppCode = SM39ResponseStatusCode.SUCCESS.ToString() }
