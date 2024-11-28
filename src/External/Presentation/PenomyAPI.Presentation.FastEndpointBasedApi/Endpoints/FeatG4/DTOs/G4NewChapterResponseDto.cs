@@ -1,8 +1,7 @@
-﻿using PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG3;
-using PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG4;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG4;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4.DTOs
 {
@@ -25,7 +24,8 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4.DTOs
         }
 
         public static IEnumerable<G4NewChapterResponseDto> MapFromArray(
-            IEnumerable<G4NewChapterReadModel> chapters)
+            IEnumerable<G4NewChapterReadModel> chapters
+        )
         {
             return chapters.Select(MapFrom);
         }

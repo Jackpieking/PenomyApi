@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Qrtz1.HttpResponse;
 
@@ -10,7 +11,12 @@ public sealed class Qrtz1HttpResponse
             TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time")
         );
 
-    public object Body { get; init; } = new();
+    public BodyDto Body { get; init; } = new();
 
-    public object Errors { get; init; }
+    public object Errors { get; init; } = new();
+
+    public sealed class BodyDto
+    {
+        public IEnumerable<string> JobKeys { get; init; }
+    }
 }

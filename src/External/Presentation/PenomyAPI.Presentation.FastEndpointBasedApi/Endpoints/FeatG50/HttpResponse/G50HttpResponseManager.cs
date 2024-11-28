@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Concurrent;
 using Microsoft.AspNetCore.Http;
-using PenomyAPI.App.FeatG49;
 using PenomyAPI.App.FeatG50;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG50.HttpResponse;
@@ -15,7 +14,11 @@ public class G50HttpResponseManager
 
     private static void Init()
     {
-        _dictionary = new ConcurrentDictionary<G50ResponseStatusCode, Func<G50Request, G50Response, G50HttpResponse>>();
+        _dictionary =
+            new ConcurrentDictionary<
+                G50ResponseStatusCode,
+                Func<G50Request, G50Response, G50HttpResponse>
+            >();
 
         // Add each feature status code with its HttpResponse information.
         _dictionary.TryAdd(
@@ -61,7 +64,8 @@ public class G50HttpResponseManager
         G50ResponseStatusCode statusCode
     )
     {
-        if (Equals(_dictionary, default)) Init();
+        if (Equals(_dictionary, default))
+            Init();
 
         return _dictionary[statusCode];
     }

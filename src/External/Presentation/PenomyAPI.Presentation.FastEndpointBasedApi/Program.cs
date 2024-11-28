@@ -1,3 +1,6 @@
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using Microsoft.AspNetCore.Builder;
@@ -7,9 +10,6 @@ using PenomyAPI.BuildingBlock.FeatRegister;
 using PenomyAPI.BuildingBlock.FeatRegister.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.ServiceConfigurations;
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 
 // Global Configuration.
 Console.OutputEncoding = Encoding.UTF8;

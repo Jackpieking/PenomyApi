@@ -3,24 +3,24 @@ using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Qrtz1.Common;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Qrtz1.HttpRequest;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Qrtz1.HttpResponse;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Qrtz2.Common;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Qrtz2.HttpRequest;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Qrtz2.HttpResponse;
 
-namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Qrtz1.Middleware.Validation;
+namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Qrtz2.Middleware.Validation;
 
-public sealed class Qrtz1ValidationPreProcessor : PreProcessor<Qrtz1HttpRequest, Qrtz1StateBag>
+public sealed class Qrtz2ValidationPreProcessor : PreProcessor<Qrtz2HttpRequest, Qrtz2StateBag>
 {
     public override async Task PreProcessAsync(
-        IPreProcessorContext<Qrtz1HttpRequest> context,
-        Qrtz1StateBag state,
+        IPreProcessorContext<Qrtz2HttpRequest> context,
+        Qrtz2StateBag state,
         CancellationToken ct
     )
     {
         if (context.HasValidationFailures)
         {
             await context.HttpContext.Response.SendAsync(
-                new Qrtz1HttpResponse
+                new Qrtz2HttpResponse
                 {
                     Errors = context.ValidationFailures.Select(failure => new
                     {

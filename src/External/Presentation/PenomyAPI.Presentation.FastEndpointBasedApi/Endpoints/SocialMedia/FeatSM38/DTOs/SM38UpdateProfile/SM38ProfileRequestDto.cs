@@ -1,6 +1,4 @@
-﻿using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
-
-namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatSM38Profile.DTOs;
+﻿namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatSM38Profile.DTOs;
 
 public class SM38ProfileRequestDto
 {
