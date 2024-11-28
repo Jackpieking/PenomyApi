@@ -12,6 +12,8 @@ public sealed class GoogleSignInOption : AppOptions
     public sealed class InitOption
     {
         public string ResponseRedirectUrl { get; init; }
+
+        public string CookieDomain { get; init; }
     }
 
     public sealed class VerifyOption
