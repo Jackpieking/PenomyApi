@@ -1,17 +1,15 @@
-﻿using FastEndpoints;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using FastEndpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.G25;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Common.Middlewares;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G25.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G25.HttpResponse;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G48.Common;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G25;
 

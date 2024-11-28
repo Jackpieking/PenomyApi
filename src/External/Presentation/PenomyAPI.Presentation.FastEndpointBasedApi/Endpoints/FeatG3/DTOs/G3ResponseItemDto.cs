@@ -1,7 +1,6 @@
-﻿using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
-using PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG3;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG3;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3.DTOs;
 

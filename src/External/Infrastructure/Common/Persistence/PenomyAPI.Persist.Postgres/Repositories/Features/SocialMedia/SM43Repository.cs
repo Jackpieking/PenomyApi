@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using PenomyAPI.App.Common.Models.Common;
@@ -67,7 +65,7 @@ public class SM43Repository : ISM43Repository
             await _socialGroupJoinRequestDbSet
                 .Where(req => req.CreatedBy == member.MemberId && req.GroupId == member.GroupId)
                 .ExecuteDeleteAsync(cancellationToken);
-            
+
             await _dbContext.SaveChangesAsync(cancellationToken);
             await transaction.CommitAsync(cancellationToken);
             result.Value = member.MemberId;
