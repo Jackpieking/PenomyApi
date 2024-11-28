@@ -81,32 +81,6 @@ public class BackgroundJobServicesRegistration : IServiceRegistration
                 });
 
                 #region Jobs
-
-                #region HelloWorldJob
-                var helloWorldJobKey = new JobKey("HelloWorldJob");
-
-                config
-                    .AddJob<HelloWorldJob>(
-                        helloWorldJobKey,
-                        config =>
-                        {
-                            config.DisallowConcurrentExecution().StoreDurably().RequestRecovery();
-                        }
-                    )
-                    .AddTrigger(triggerConfig =>
-                        triggerConfig
-                            .ForJob(helloWorldJobKey)
-                            .WithIdentity("HelloWorldJobTrigger")
-                            .WithSimpleSchedule(scheduleConfig =>
-                            {
-                                scheduleConfig
-                                    .WithIntervalInSeconds(10)
-                                    .RepeatForever()
-                                    .WithMisfireHandlingInstructionIgnoreMisfires();
-                            })
-                    );
-                #endregion
-
                 #endregion
             })
             .AddQuartzServer(config =>
