@@ -39,6 +39,7 @@ DataSeedingResolver.Resolve(app.Services);
 if (app.Environment.IsDevelopment())
 {
     app.UseMiddleware<AppGlobalExceptionHandler>()
+        .UseHttpsRedirection()
         .UseCors()
         .UseFastEndpoints()
         .UseSwaggerGen()
