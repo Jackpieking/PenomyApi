@@ -643,6 +643,9 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Property<bool>("IsDirectlyCommented")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("IsRemoved")
+                        .HasColumnType("boolean");
+
                     b.Property<int>("TotalChildComments")
                         .HasColumnType("integer");
 
@@ -2494,6 +2497,9 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Property<bool>("IsDirectlyCommented")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("IsRemoved")
+                        .HasColumnType("boolean");
+
                     b.Property<long>("PostId")
                         .HasColumnType("bigint");
 
@@ -3105,6 +3111,9 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<bool>("IsDirectlyCommented")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsRemoved")
                         .HasColumnType("boolean");
 
                     b.Property<long>("PostId")

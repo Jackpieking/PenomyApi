@@ -18,7 +18,12 @@ public class SM41Handler : IFeatureHandler<SM41Request, SM41Response>
 
     public async Task<SM41Response> ExecuteAsync(SM41Request request, CancellationToken ct)
     {
-        var response = await _sm41Repository.KickMemberAsync(request.GroupId, request.UserId);
+        var response = await _sm41Repository.KickMemberAsync(
+            request.GroupId,
+            request.MemberId,
+            request.UserId,
+            ct
+        );
 
         if (response == -1)
             return new SM41Response

@@ -1,6 +1,3 @@
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using Microsoft.AspNetCore.Builder;
@@ -10,6 +7,9 @@ using PenomyAPI.BuildingBlock.FeatRegister;
 using PenomyAPI.BuildingBlock.FeatRegister.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.ServiceConfigurations;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 
 // Global Configuration.
 Console.OutputEncoding = Encoding.UTF8;
@@ -31,6 +31,9 @@ var app = builder.Build();
 
 // Add services provider to the FeatureHandlerResolver.
 FeatureHandlerResolver.SetProvider(app.Services);
+
+// Seeding the required data for the application to run.
+DataSeedingResolver.Resolve(app.Services);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

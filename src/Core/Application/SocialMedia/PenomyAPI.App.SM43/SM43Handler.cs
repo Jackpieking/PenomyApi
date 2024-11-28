@@ -1,11 +1,12 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using PenomyAPI.App.Common;
+﻿using PenomyAPI.App.Common;
 using PenomyAPI.App.Common.IdGenerator.Snowflake;
+using PenomyAPI.Domain.RelationalDb.DataSeedings.Roles;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.App.SM43;
 
@@ -25,7 +26,7 @@ public class SM43Handler : IFeatureHandler<SM43Request, SM43Response>
             GroupId = request.GroupId,
             MemberId = request.MemberId,
             JoinedAt = DateTime.UtcNow,
-            RoleId = 2,
+            RoleId = UserRoles.GroupMember.Id,
         };
 
         var memberId = await _sm43Repository.AcceptGroupJoinRequestAsync(
@@ -33,7 +34,9 @@ public class SM43Handler : IFeatureHandler<SM43Request, SM43Response>
             request.UserId
         );
 
-        if (memberId == -1)
+        const long FAILED_RESULT = -1;
+
+        if (memberId == FAILED_RESULT)
         {
             return new SM43Response
             {

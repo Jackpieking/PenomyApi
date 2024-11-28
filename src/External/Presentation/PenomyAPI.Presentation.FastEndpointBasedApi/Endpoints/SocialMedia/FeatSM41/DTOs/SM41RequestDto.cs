@@ -9,4 +9,6 @@ public class SM41RequestDto
     public void SetUserId(string userId) => _userId = userId;
 
     public string GroupId { get; set; }
+
+    public string MemberId { get; set; }
 }

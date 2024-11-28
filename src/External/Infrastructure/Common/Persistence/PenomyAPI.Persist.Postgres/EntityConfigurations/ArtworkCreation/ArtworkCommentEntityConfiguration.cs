@@ -41,6 +41,7 @@ internal sealed class ArtworkCommentEntityConfiguration : IEntityConfiguration<A
             .HasColumnType(DatabaseNativeTypes.TIMESTAMPTZ)
             .IsRequired();
 
+        builder.Property(comment => comment.IsRemoved).IsRequired();
         #region Relationships
         builder
             .HasOne(comment => comment.Creator)
