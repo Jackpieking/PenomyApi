@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using PenomyAPI.Domain.RelationalDb.DataSeedings.Roles;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 
@@ -38,7 +39,7 @@ public class SM38Repository : ISM38Repository
                 .FirstOrDefaultAsync();
 
             // Validate user role and permissions
-            if (user == null || user.RoleId != 1)
+            if (user == null || user.RoleId != UserRoles.GroupManager.Id)
                 return 0;
 
             // Update the cover photo URL for the group
@@ -79,9 +80,7 @@ public class SM38Repository : ISM38Repository
             var user = _socialGroupMemberDbSet
                 .Where(gm => gm.MemberId == userId && gm.GroupId == groupId)
                 .FirstOrDefault();
-            if (user == null)
-                return 0;
-            else if (user.RoleId != 1)
+            if (user == null || user.RoleId != UserRoles.GroupManager.Id)
                 return 0;
 
             if (name != "")
