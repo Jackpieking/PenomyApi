@@ -25,7 +25,6 @@ public sealed class G32Endpoint : EndpointWithoutRequest
         new()
         {
             Path = "/",
-            Domain = "localhost",
             HttpOnly = true,
             Expires = DateTime.UtcNow.AddSeconds(AuthValidDuration),
             IsEssential = true,
