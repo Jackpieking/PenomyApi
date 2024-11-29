@@ -2,6 +2,7 @@
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -83,5 +84,13 @@ public class SM6Repository : ISM6Repository
         });
 
         return true;
+    }
+
+    public async Task<ICollection<long>> GetGroupManagerByGroupIdAsync(long groupId, CancellationToken ct)
+    {
+        return await _socialGroupsMember.AsNoTracking()
+            .Where(o => o.GroupId == groupId && o.RoleId == 123)
+            .Select(o => o.MemberId)
+            .ToListAsync(ct);
     }
 }

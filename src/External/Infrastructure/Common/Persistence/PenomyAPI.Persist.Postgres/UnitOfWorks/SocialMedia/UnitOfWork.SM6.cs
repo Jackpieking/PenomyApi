@@ -3,7 +3,7 @@ using PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia;
 
 namespace PenomyAPI.Persist.Postgres.UnitOfWorks;
 
-internal partial class UnitOfWork
+public partial class UnitOfWork
 {
     private ISM6Repository _SM6Repository;
 

@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
@@ -78,6 +79,21 @@ public interface ISM6Repository
     /// </returns>
     Task<bool> AddUserToGroupByUserIdAndGroupIdAsync(
         long userId,
+        long groupId,
+        CancellationToken cancellationToken);
+
+    /// <summary>
+    ///     Get all group's manager by the specified <paramref name="groupId"/>.
+    /// </summary>
+    /// <param name="groupId">
+    ///     The id of the group.
+    /// </param>
+    /// <param name="ct"></param>
+    /// <returns>
+    ///     Return Ids of all group's manager.
+    ///     Otherwise, return null.
+    /// </returns>
+    Task<ICollection<long>> GetGroupManagerByGroupIdAsync(
         long groupId,
         CancellationToken cancellationToken);
 }

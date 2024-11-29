@@ -1,15 +1,17 @@
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.JsonWebTokens;
 using PenomyAPI.BuildingBlock.FeatRegister;
 using PenomyAPI.BuildingBlock.FeatRegister.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.ServiceConfigurations;
+using PenomyAPI.Realtime.SignalR;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 
 // Global Configuration.
 Console.OutputEncoding = Encoding.UTF8;
@@ -25,7 +27,7 @@ var configuration = builder.Configuration;
 services.AddAppDependency(configuration);
 WebApiServiceConfig.Configure(services, configuration);
 
-services.AddFastEndpoints();
+services.AddFastEndpoints().AddSignalR();
 
 var app = builder.Build();
 
@@ -52,5 +54,7 @@ if (app.Environment.IsProduction())
 {
     app.UseCors().UseFastEndpoints();
 }
+
+app.MapHub<NotificationHub>(NotificationHub.connectPath);
 
 await app.RunAsync();

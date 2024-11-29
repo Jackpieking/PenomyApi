@@ -1,4 +1,5 @@
 ﻿using PenomyAPI.App.Common;
+using PenomyAPI.App.Common.Realtime;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 
@@ -7,10 +8,12 @@ namespace PenomyAPI.App.SM6;
 public class SM6Handler : IFeatureHandler<SM6Request, SM6Response>
 {
     private readonly ISM6Repository _SM6Repository;
+    private readonly INotificationHub _notification;
 
-    public SM6Handler(Lazy<IUnitOfWork> unitOfWork)
+    public SM6Handler(Lazy<IUnitOfWork> unitOfWork, Lazy<INotificationHub> notification)
     {
         _SM6Repository = unitOfWork.Value.SM6Repository;
+        _notification = notification.Value;
     }
 
     public async Task<SM6Response> ExecuteAsync(SM6Request request, CancellationToken ct)
@@ -27,16 +30,23 @@ public class SM6Handler : IFeatureHandler<SM6Request, SM6Response>
                 };
             }
 
-            return new SM6Response
-            {
-                IsSuccess = await _SM6Repository
+            bool isAddSuccess = await _SM6Repository
                 .AddUserJoinRequestByUserIdAndGroupIdAsync(
                     request.UserId,
                     request.GroupId,
                     ct
-                    ),
-                StatusCode = SM6ResponseStatusCode.SUCCESS
-            };
+                    );
+
+            if (isAddSuccess)
+            {
+                await _notification.SendToClientAsync(request.UserId.ToString(), string.Empty);
+
+                return new SM6Response
+                {
+                    IsSuccess = isAddSuccess,
+                    StatusCode = SM6ResponseStatusCode.SUCCESS
+                };
+            }
         }
         catch
         {
@@ -46,5 +56,11 @@ public class SM6Handler : IFeatureHandler<SM6Request, SM6Response>
                 StatusCode = SM6ResponseStatusCode.FAILED
             };
         }
+
+        return new SM6Response
+        {
+            IsSuccess = false,
+            StatusCode = SM6ResponseStatusCode.FAILED
+        };
     }
 }

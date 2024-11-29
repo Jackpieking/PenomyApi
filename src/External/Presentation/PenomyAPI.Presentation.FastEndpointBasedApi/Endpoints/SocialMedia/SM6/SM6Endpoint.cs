@@ -7,10 +7,11 @@ using PenomyAPI.Presentation.FastEndpointBasedApi.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Common.Middlewares;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SM6.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SM6.HttpResponse;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SocialMedia.SM6.HttpResponse;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SM6;
+namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SocialMedia.SM6;
 
 public class SM6Endpoint : Endpoint<SM6RequestDto, SM6HttpResponse>
 {

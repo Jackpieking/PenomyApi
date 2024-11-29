@@ -11,7 +11,7 @@ using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SocialMedia.SM6.Http
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SM6;
+namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SocialMedia.SM6;
 
 public class SM6JoinGroupEndpoint : Endpoint<SM6RequestDto, SM6JoinGroupHttpResponse>
 {
@@ -58,7 +58,7 @@ public class SM6JoinGroupEndpoint : Endpoint<SM6RequestDto, SM6JoinGroupHttpResp
             ct
         );
 
-        var httpResponse = SM6ResponseManager
+        var httpResponse = SM6JoinGroupResponseManager
                 .Resolve(featResponse.StatusCode)
                 .Invoke(featRequest, featResponse);
 
