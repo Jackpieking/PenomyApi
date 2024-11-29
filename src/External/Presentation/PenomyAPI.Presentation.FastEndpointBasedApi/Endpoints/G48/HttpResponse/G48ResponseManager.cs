@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.G48;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G48.DTOs;
 using System;
 using System.Collections.Concurrent;
+using System.Linq;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G48.HttpResponse;
 
@@ -24,6 +26,7 @@ public class G48ResponseManager
                 {
                     AppCode = $"G48.{G48ResponseStatusCode.SUCCESS}",
                     HttpCode = StatusCodes.Status200OK,
+                    Body = response.Result.Select(G48FavoriteArtworkResponseDto.MapFrom)
                 }
         );
 

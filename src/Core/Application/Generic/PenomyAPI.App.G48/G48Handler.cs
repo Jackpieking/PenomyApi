@@ -1,7 +1,11 @@
 ﻿using PenomyAPI.App.Common;
-using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
+using PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG48;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.App.G48;
 
@@ -18,7 +22,7 @@ public class G48Handler : IFeatureHandler<G48Request, G48Response>
     {
         try
         {
-            ICollection<Artwork> artworks = await _g48Repository
+            List<G48FavoriteArtworkReadModel> artworks = await _g48Repository
                 .GetFavoriteArtworksByTypeAndUserIdWithPaginationAsync(
                     request.UserId,
                     request.ArtworkType,
