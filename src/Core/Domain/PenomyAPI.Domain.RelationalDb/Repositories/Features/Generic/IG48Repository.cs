@@ -1,4 +1,5 @@
 ﻿using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
+using PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG48;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -52,7 +53,7 @@ public interface IG48Repository
     ///     The user's favourited artworks.
     ///     Otherwise, empty.
     /// </returns>
-    Task<ICollection<Artwork>> GetFavoriteArtworksByTypeAndUserIdWithPaginationAsync(
+    Task<List<G48FavoriteArtworkReadModel>> GetFavoriteArtworksByTypeAndUserIdWithPaginationAsync(
         long userId,
         ArtworkType artworkType,
         int pageNum,

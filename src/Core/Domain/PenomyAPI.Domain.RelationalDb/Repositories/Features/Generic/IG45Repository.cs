@@ -1,4 +1,5 @@
 ﻿using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
+using PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG45;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -49,7 +50,7 @@ public interface IG45Repository
     ///     True if data has been committed.
     ///     Otherwise, false.
     /// </returns>
-    Task<ICollection<Artwork>> GetFollowedArtworksByTypeAndUserIdWithPaginationAsync(
+    Task<List<G45FollowedArtworkReadModel>> GetFollowedArtworksByTypeAndUserIdWithPaginationAsync(
         long userId,
         ArtworkType artworkType,
         int pageNum,

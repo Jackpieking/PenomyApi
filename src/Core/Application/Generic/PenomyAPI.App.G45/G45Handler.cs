@@ -1,5 +1,5 @@
 ﻿using PenomyAPI.App.Common;
-using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
+using PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG45;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 using System;
@@ -22,7 +22,7 @@ public class G45Handler : IFeatureHandler<G45Request, G45Response>
     {
         try
         {
-            ICollection<Artwork> artworks = await _G45Repository
+            List<G45FollowedArtworkReadModel> artworks = await _G45Repository
                     .GetFollowedArtworksByTypeAndUserIdWithPaginationAsync(
                         request.UserId,
                         request.ArtworkType,
