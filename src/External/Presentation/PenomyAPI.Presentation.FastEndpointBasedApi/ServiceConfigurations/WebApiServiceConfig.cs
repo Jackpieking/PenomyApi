@@ -153,7 +153,7 @@ public static class WebApiServiceConfig
         IConfiguration configuration
     )
     {
-        services.AddLogging(configure: config =>
+        services.AddLogging(config =>
         {
             config.ClearProviders();
             config.AddConsole();

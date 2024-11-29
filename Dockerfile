@@ -37,6 +37,7 @@ WORKDIR /app
 
 # Copy publish folder from build stage
 COPY --from=build /penomy/publish ./
+COPY penomy_api_local_https.pfx ./
 
 # Run the application.
 ENTRYPOINT ["dotnet", "PenomyAPI.Presentation.FastEndpointBasedApi.dll"]

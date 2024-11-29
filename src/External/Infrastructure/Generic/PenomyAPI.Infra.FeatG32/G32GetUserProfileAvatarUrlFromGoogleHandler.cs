@@ -1,7 +1,6 @@
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Google.Apis.PeopleService.v1;
-using Google.Apis.Services;
 using PenomyAPI.App.Common.AppConstants;
 using PenomyAPI.App.FeatG32.Infrastructures;
 using PenomyAPI.Infra.Configuration.Options;

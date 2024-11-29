@@ -1,6 +1,5 @@
 ﻿using PenomyAPI.App.Common;
 using PenomyAPI.App.Common.FileServices.Models;
-using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
 
 namespace PenomyAPI.App.SM8
 {

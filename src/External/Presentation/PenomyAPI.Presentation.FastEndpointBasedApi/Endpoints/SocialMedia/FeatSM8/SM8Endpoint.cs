@@ -1,10 +1,8 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
-using PenomyAPI.App.Common.FileServices;
 using PenomyAPI.App.Common.FileServices.Models;
 using PenomyAPI.App.Common.Models.Common;
 using PenomyAPI.App.SM8;
@@ -90,7 +88,8 @@ public class SM8Endpoint : Endpoint<SM8RequestDto, SM8HttpResponse>
             IsPublic = req.IsPublic,
             Description = req.Description,
             RequireApprovedWhenPost = req.RequireApprovedWhenPost,
-            CoverImageFileInfo = new ImageFileInfo{
+            CoverImageFileInfo = new ImageFileInfo
+            {
                 FileName = req.CoverPhoto.FileName,
                 FileDataStream = req.CoverPhoto.OpenReadStream(),
             }

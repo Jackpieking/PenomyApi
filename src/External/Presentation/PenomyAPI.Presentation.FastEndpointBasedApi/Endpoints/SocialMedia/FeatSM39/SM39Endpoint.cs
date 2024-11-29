@@ -5,6 +5,7 @@ using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.SM39;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
+using PenomyAPI.Domain.RelationalDb.DataSeedings.Roles;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatSM39.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatSM39.HttpResponse;
 
@@ -24,8 +25,8 @@ public class SM39Endpoint : Endpoint<SM39Request, SM39HttpResponse>
 
         Summary(endpointSummary: summary =>
         {
-            summary.Summary = "Endpoint for creating group join request.";
-            summary.Description = "This endpoint is used for creating group join request.";
+            summary.Summary = "Endpoint for getting group members.";
+            summary.Description = "This endpoint is used for getting group members.";
             summary.Response<SM39HttpResponse>(
                 description: "Represent successful operation response.",
                 example: new() { AppCode = SM39ResponseStatusCode.SUCCESS.ToString() }
@@ -63,7 +64,7 @@ public class SM39Endpoint : Endpoint<SM39Request, SM39HttpResponse>
                         AvatarUrl = x.Member.AvatarUrl,
                         JoinedAt = x.JoinedAt.ToString("dd/MM/yyyy"),
                         LastActiveAt = x.Member.LastActiveAt.ToString("dd/MM/yyyy"),
-                        IsManager = x.RoleId == 1,
+                        IsManager = x.RoleId == UserRoles.GroupManager.Id,
                     }),
             };
         }

@@ -25,7 +25,6 @@ public sealed class G32Endpoint : EndpointWithoutRequest
         new()
         {
             Path = "/",
-            Domain = "localhost",
             HttpOnly = true,
             Expires = DateTime.UtcNow.AddSeconds(AuthValidDuration),
             IsEssential = true,
@@ -45,6 +44,8 @@ public sealed class G32Endpoint : EndpointWithoutRequest
         _idGenerator = idGenerator;
         _accessTokenHandler = accessTokenHandler;
         _googleSignInOptions = googleSignInOptions;
+
+        AuthStateCookieOption.Domain = googleSignInOptions.Init.CookieDomain;
     }
 
     public override void Configure()

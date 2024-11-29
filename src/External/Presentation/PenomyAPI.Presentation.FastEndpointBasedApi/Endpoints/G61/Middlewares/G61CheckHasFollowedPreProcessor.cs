@@ -1,18 +1,17 @@
-using FastEndpoints;
-using Microsoft.IdentityModel.Tokens;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5.Common;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5.DTOs;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G61.Common;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G61.DTOs;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using FastEndpoints;
+using Microsoft.IdentityModel.Tokens;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G61.Common;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G61.DTOs;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G61.Middlewares;
 
-public class G61CheckHasFollowedPreProcessor : PreProcessor<G61CheckHasFollowRequestDto, G61StateBag>
+public class G61CheckHasFollowedPreProcessor
+    : PreProcessor<G61CheckHasFollowRequestDto, G61StateBag>
 {
     private readonly Lazy<SecurityTokenHandler> _securityTokenHandler;
     private readonly TokenValidationParameters _tokenValidationParameters;
@@ -33,15 +32,16 @@ public class G61CheckHasFollowedPreProcessor : PreProcessor<G61CheckHasFollowReq
     )
     {
         // Bypass if response has started.
-        if (context.HttpContext.ResponseStarted()) return;
+        if (context.HttpContext.ResponseStarted())
+            return;
 
         // Check if the request has access token or not to resolve different.
         var accessToken = context.Request.AccessToken;
 
         const int MINIMUM_TOKEN_LENGTH = 10;
 
-        var hasToken = !string.IsNullOrEmpty(accessToken)
-            && accessToken.Length > MINIMUM_TOKEN_LENGTH;
+        var hasToken =
+            !string.IsNullOrEmpty(accessToken) && accessToken.Length > MINIMUM_TOKEN_LENGTH;
 
         // If no token is passed, then resolve for guest user.
         if (!hasToken)
@@ -62,7 +62,9 @@ public class G61CheckHasFollowedPreProcessor : PreProcessor<G61CheckHasFollowReq
         }
 
         // If the token is valid, then resolve the request for the user who has this access token.
-        var userIdClaim = tokenValidationResult.ClaimsIdentity.FindFirst(JwtRegisteredClaimNames.Sub);
+        var userIdClaim = tokenValidationResult.ClaimsIdentity.FindFirst(
+            JwtRegisteredClaimNames.Sub
+        );
 
         // Check if the claim can be parsed or not. If parse failed, then resolve as guest user.
         var canParse = long.TryParse(userIdClaim.Value, out var userId);
@@ -79,7 +81,8 @@ public class G61CheckHasFollowedPreProcessor : PreProcessor<G61CheckHasFollowReq
 
     private async Task<TokenValidationResult> ValidateTokenAsync(
         string accessToken,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken
+    )
     {
         // Check if the access token is using Bearer format or not.
         const string BearerPrefix = "Bearer ";
@@ -93,7 +96,8 @@ public class G61CheckHasFollowedPreProcessor : PreProcessor<G61CheckHasFollowReq
 
         TokenValidationResult validationResult = await tokenHandler.ValidateTokenAsync(
             accessToken,
-            _tokenValidationParameters);
+            _tokenValidationParameters
+        );
 
         return validationResult;
     }

@@ -5,6 +5,7 @@ using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.SM5;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
+using PenomyAPI.Domain.RelationalDb.DataSeedings.Roles;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatSM5.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatSM5.DTOs;
@@ -71,7 +72,9 @@ public class SM5Endpoint : Endpoint<SM5RequestDto, SM5HttpResponse>
                 CreatedAt = featResponse.Group.CreatedAt.ToString("dd/MM/yyyy"),
                 RequireApprovedWhenPost = featResponse.Group.RequireApprovedWhenPost,
                 HasJoin = featResponse.Group.GroupMembers.Count() > 0,
-                IsManager = stateBag.UserId == featResponse.Group.Creator.UserId,
+                IsManager =
+                    featResponse.Group.GroupMembers.Any()
+                    && featResponse.Group.GroupMembers.First().RoleId == UserRoles.GroupManager.Id,
                 ManagerName = featResponse.Group.Creator.NickName,
                 HasRequestJoin =
                     featResponse.Group.SocialGroupJoinRequests != null
