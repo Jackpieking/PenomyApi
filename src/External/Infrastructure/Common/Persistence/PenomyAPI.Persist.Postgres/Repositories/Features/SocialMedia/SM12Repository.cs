@@ -73,7 +73,7 @@ public class SM12Repository : ISM12Repository
             await transaction.CommitAsync(token);
             result.Value = true;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             if (transaction != null)
             {
