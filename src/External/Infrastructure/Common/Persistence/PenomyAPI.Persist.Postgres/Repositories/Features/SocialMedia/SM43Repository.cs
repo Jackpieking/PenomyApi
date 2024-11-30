@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +13,7 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia;
 public class SM43Repository : ISM43Repository
 {
     private readonly DbSet<SocialGroupJoinRequest> _socialGroupJoinRequestDbSet;
+    private readonly DbSet<SocialGroup> _socialGroupDbSet;
     private readonly DbSet<SocialGroupMember> _socialGroupMemberDbSet;
     private readonly DbContext _dbContext;
 
@@ -21,6 +21,7 @@ public class SM43Repository : ISM43Repository
     {
         _socialGroupJoinRequestDbSet = dbContext.Set<SocialGroupJoinRequest>();
         _socialGroupMemberDbSet = dbContext.Set<SocialGroupMember>();
+        _socialGroupDbSet = dbContext.Set<SocialGroup>();
         _dbContext = dbContext;
     }
 
@@ -54,6 +55,13 @@ public class SM43Repository : ISM43Repository
             );
 
             await _socialGroupMemberDbSet.AddAsync(member);
+
+            await _socialGroupDbSet
+                .Where(g => g.Id == member.GroupId)
+                .ExecuteUpdateAsync(setters =>
+                    setters.SetProperty(o => o.TotalMembers, o => o.TotalMembers + 1)
+                );
+
             await _socialGroupJoinRequestDbSet
                 .Where(req => req.CreatedBy == member.MemberId && req.GroupId == member.GroupId)
                 .ExecuteDeleteAsync(cancellationToken);

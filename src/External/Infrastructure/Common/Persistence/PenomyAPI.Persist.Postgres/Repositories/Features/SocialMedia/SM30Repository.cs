@@ -68,7 +68,7 @@ public class SM30Repository : ISM30Repository
             await transaction.CommitAsync(token);
             result.Value = true;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             if (transaction != null)
             {

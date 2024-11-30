@@ -18,7 +18,7 @@ public class G25SaveArtViewHistEndpoint
 {
     public override void Configure()
     {
-        Post("/G25/profile/user/history/save");
+        Post("G25/user/add-history");
 
         AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
 
@@ -52,7 +52,6 @@ public class G25SaveArtViewHistEndpoint
             UserId = stateBag.AppRequest.UserId,
             ArtworkId = request.ArtworkId,
             ChapterId = request.ChapterId,
-            ArtworkType = request.ArtworkType
         };
 
         var featResponse = await FeatureExtensions.ExecuteAsync<

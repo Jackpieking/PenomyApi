@@ -16,13 +16,13 @@ internal sealed class ArtworkChapterRepository
     private readonly DbContext _dbContext;
 
     #region Compiled Queries
-    private static readonly Expression<Func<DbContext, long, long, bool>> IsChapterAvailableToDisplayByIdExpression;
     private static readonly Func<DbContext, long, long, Task<bool>> IsChapterAvailableToDisplayByIdCompileQuery;
+    private static readonly Func<DbContext, long, long, long, Task<bool>> IsChapterAvailableToDisplayByIdVer2CompileQuery;
     #endregion
 
     static ArtworkChapterRepository()
     {
-        IsChapterAvailableToDisplayByIdExpression = (DbContext dbContext, long chapterId, long userId) =>
+        Expression<Func<DbContext, long, long, bool>> IsChapterAvailableToDisplayByIdExpression = (DbContext dbContext, long chapterId, long userId) =>
             dbContext.Set<ArtworkChapter>()
                 .Any(chapter =>
                     // Check if current chapter is public for everyone and not being removed.
@@ -33,11 +33,27 @@ internal sealed class ArtworkChapterRepository
                         && !chapter.IsTemporarilyRemoved
                     )
                     // Or if the current chapter is published by the user with the id the same as the input.
-                    || (chapter.Id == chapterId && chapter.CreatedBy == userId)
-                );
+                    || (chapter.Id == chapterId && chapter.CreatedBy == userId));
 
         IsChapterAvailableToDisplayByIdCompileQuery = EF.CompileAsyncQuery(
             IsChapterAvailableToDisplayByIdExpression);
+
+        Expression<Func<DbContext, long, long, long, bool>> IsChapterAvailableToDisplayByIdVer2Expression = (DbContext dbContext, long artworkId, long chapterId, long userId) =>
+            dbContext.Set<ArtworkChapter>()
+                .Any(chapter =>
+                    // Check if current chapter is public for everyone and not being removed.
+                    (
+                        chapter.Id == chapterId
+                        && chapter.ArtworkId == artworkId
+                        && chapter.PublicLevel == ArtworkPublicLevel.Everyone
+                        && chapter.PublishStatus == PublishStatus.Published
+                        && !chapter.IsTemporarilyRemoved
+                    )
+                    // Or if the current chapter is published by the user with the id the same as the input.
+                    || (chapter.Id == chapterId && chapter.CreatedBy == userId));
+
+        IsChapterAvailableToDisplayByIdVer2CompileQuery = EF.CompileAsyncQuery(
+            IsChapterAvailableToDisplayByIdVer2Expression);
     }
 
     public ArtworkChapterRepository(DbContext dbContext)
@@ -50,6 +66,14 @@ internal sealed class ArtworkChapterRepository
         long userId)
     {
         return IsChapterAvailableToDisplayByIdCompileQuery.Invoke(_dbContext, chapterId, userId);
+    }
+
+    public Task<bool> IsChapterAvailableToDisplayByIdAsync(
+        long artworkId,
+        long chapterId,
+        long userId)
+    {
+        return IsChapterAvailableToDisplayByIdVer2CompileQuery.Invoke(_dbContext, artworkId, chapterId, userId);
     }
 
     public Task<bool> IsChapterExistedByIdAsync(long chapterId, CancellationToken cancellationToken)

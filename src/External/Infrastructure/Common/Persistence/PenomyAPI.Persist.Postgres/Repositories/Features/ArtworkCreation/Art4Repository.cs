@@ -1,13 +1,14 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using PenomyAPI.App.Common.Models.Common;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
+using PenomyAPI.Domain.RelationalDb.Entities.Generic;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.ArtworkCreation;
 using PenomyAPI.Persist.Postgres.Repositories.Helpers;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.ArtworkCreation;
 
@@ -102,6 +103,15 @@ public sealed class Art4Repository : IArt4Repository
             await _artworkMetaDataDbSet.AddAsync(comicMetaData, cancellationToken);
 
             await _artworkCategoryDbSet.AddRangeAsync(artworkCategories, cancellationToken);
+
+            await _dbContext.Set<CreatorProfile>()
+                .Where(creator => creator.CreatorId == comic.CreatedBy)
+                .ExecuteUpdateAsync(
+                    creatorProfile => creatorProfile
+                        .SetProperty(
+                            creatorProfile => creatorProfile.TotalArtworks,
+                            creatorProfile => creatorProfile.TotalArtworks + 1),
+                    cancellationToken);
 
             await _dbContext.SaveChangesAsync(cancellationToken);
 

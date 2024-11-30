@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using PenomyAPI.App.Common;
-using PenomyAPI.Domain.RelationalDb.Entities.Generic;
+﻿using PenomyAPI.App.Common;
 
 namespace PenomyAPI.App.SM8;
 

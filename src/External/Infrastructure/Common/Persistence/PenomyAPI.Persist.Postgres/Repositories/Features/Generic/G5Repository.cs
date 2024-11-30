@@ -1,11 +1,10 @@
-using Microsoft.EntityFrameworkCore;
-using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
-using PenomyAPI.Domain.RelationalDb.Entities.Generic;
-using PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG5;
-using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
+using PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG5;
+using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
 
@@ -57,7 +56,7 @@ public class G5Repository : IG5Repository
                 CreatorId = comic.Creator.UserId,
                 CreatorName = comic.Creator.NickName,
                 CreatorAvatarUrl = comic.Creator.AvatarUrl,
-                CreatorTotalFollowers= comic.Creator.CreatorProfile.TotalFollowers,
+                CreatorTotalFollowers = comic.Creator.CreatorProfile.TotalFollowers,
             })
             .AsNoTracking()
             .AsSplitQuery()
@@ -69,24 +68,29 @@ public class G5Repository : IG5Repository
     public Task<bool> IsComicInUserFavoriteListAsync(
         long userId,
         long artworkId,
-        CancellationToken ct = default)
+        CancellationToken ct = default
+    )
     {
-        return _dbContext.Set<UserFavoriteArtwork>()
+        return _dbContext
+            .Set<UserFavoriteArtwork>()
             .AnyAsync(x => x.UserId == userId && x.ArtworkId == artworkId, ct);
     }
 
     public Task<bool> IsArtworkExistAsync(long artworkId, CancellationToken ct = default)
     {
-        return _dbContext.Set<Artwork>()
+        return _dbContext
+            .Set<Artwork>()
             .AnyAsync(x => x.Id == artworkId && x.ArtworkType == ArtworkType.Comic, ct);
     }
 
     public Task<bool> IsComicInUserFollowedListAsync(
         long userId,
         long artworkId,
-        CancellationToken ct = default)
+        CancellationToken ct = default
+    )
     {
-        return _dbContext.Set<UserFollowedArtwork>()
+        return _dbContext
+            .Set<UserFollowedArtwork>()
             .AnyAsync(x => x.UserId == userId && x.ArtworkId == artworkId, ct);
     }
 }

@@ -1,17 +1,15 @@
-﻿using FastEndpoints;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using FastEndpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.G25;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Common.Middlewares;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G25.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G25.HttpResponse;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G48.Common;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G25;
 
@@ -19,7 +17,7 @@ public class G25Endpoint : Endpoint<G25RequestDto, G25HttpResponse>
 {
     public override void Configure()
     {
-        Get("/G25/profile/user/history");
+        Get("g25/user/view-history");
 
         AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
 
@@ -64,31 +62,6 @@ public class G25Endpoint : Endpoint<G25RequestDto, G25HttpResponse>
         G25HttpResponse httpResponse = G25ResponseManager
             .Resolve(featResponse.StatusCode)
             .Invoke(featRequest, featResponse);
-
-        if (featResponse.IsSuccess)
-        {
-            httpResponse.Body = new ArtworkCardDto
-            {
-                Artworks = featResponse.Result.Select(grp => new ArtworkDto
-                {
-                    Id = grp.First().ArtworkId.ToString(),
-                    Title = grp.First().Artwork.Title,
-                    CreatedBy = grp.First().Artwork.CreatedBy.ToString(),
-                    AuthorName = grp.First().Artwork.AuthorName,
-                    ThumbnailUrl = grp.First().Artwork.ThumbnailUrl,
-                    TotalFavorites = grp.First().Artwork.ArtworkMetaData.TotalFavorites,
-                    AverageStarRate = grp.First().Artwork.ArtworkMetaData.GetAverageStarRate(),
-                    OriginUrl = grp.First().Artwork.Origin.ImageUrl,
-                    Chapters = grp.Select(o => new ChapterDto
-                    {
-                        Id = o.Chapter.Id.ToString(),
-                        Title = o.Chapter.Title,
-                        UploadOrder = o.Chapter.UploadOrder,
-                        Time = o.ViewedAt
-                    })
-                }),
-            };
-        }
 
         await SendAsync(httpResponse, httpResponse.HttpCode, ct);
 

@@ -48,7 +48,7 @@ public class SM30Handler : IFeatureHandler<SM30Request, SM30Response>
                 FriendId = request.FriendId,
                 CreatedAt = DateTime.UtcNow,
                 CreatedBy = request.UserId,
-                RequestStatus = RequestStatus.Accepted
+                RequestStatus = RequestStatus.Pending
             };
 
             var result = await _sm30Repository.SendFriendRequest(friendRequest, ct);

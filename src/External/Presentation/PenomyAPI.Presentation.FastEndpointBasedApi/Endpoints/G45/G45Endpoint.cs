@@ -66,32 +66,6 @@ public class G45Endpoint : Endpoint<G45RequestDTO, G45HttpResponse>
                 .Resolve(featResponse.StatusCode)
                 .Invoke(featRequest, featResponse);
 
-        if (featResponse.IsSuccess)
-        {
-            httpResponse.Body = new ArtworkCardDto
-            {
-                Artworks = featResponse.Result.Select(o => new ArtworkDto
-                {
-                    Id = o.Id.ToString(),
-                    Title = o.Title,
-                    CreatedBy = o.CreatedBy.ToString(),
-                    AuthorName = o.AuthorName,
-                    ThumbnailUrl = o.ThumbnailUrl,
-                    TotalFavorites = o.ArtworkMetaData.TotalFavorites,
-                    AverageStarRate = o.ArtworkMetaData.AverageStarRate,
-                    OriginUrl = o.Origin.ImageUrl,
-                    Chapters = o.Chapters
-                        .Select(c => new ChapterDto
-                        {
-                            Id = c.Id.ToString(),
-                            Title = c.Title,
-                            UploadOrder = c.UploadOrder,
-                            Time = c.UpdatedAt
-                        }).ToList()
-                })
-            };
-        }
-
         await SendAsync(httpResponse, httpResponse.HttpCode, ct);
 
         return httpResponse;

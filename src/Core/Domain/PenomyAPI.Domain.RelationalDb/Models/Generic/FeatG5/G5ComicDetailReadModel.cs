@@ -1,7 +1,6 @@
-﻿using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
+﻿using System.Collections.Generic;
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
-using System;
-using System.Collections.Generic;
 
 namespace PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG5;
 

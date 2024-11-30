@@ -6,7 +6,6 @@ using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
-using PenomyAPI.App.FeatG49;
 using PenomyAPI.App.FeatG50;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG50.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG50.DTOs;
@@ -36,7 +35,8 @@ public class G50AuthPreProcessor : PreProcessor<G50RequestDto, G50StateBag>
     )
     {
         // Bypass if response has started.
-        if (context.HttpContext.ResponseStarted()) return;
+        if (context.HttpContext.ResponseStarted())
+            return;
 
         #region PreValidateAccessToken
 
