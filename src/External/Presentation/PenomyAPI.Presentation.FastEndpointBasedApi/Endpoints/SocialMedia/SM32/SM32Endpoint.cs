@@ -13,7 +13,7 @@ using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SocialMedia.SM32.Htt
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SocialMedia.SM32;
 
-public class SM32Endpoint : Endpoint<SM32RequestDto, SM32HttpResponse>
+public class SM32Endpoint : Endpoint<EmptyRequest, SM32HttpResponse>
 {
     public override void Configure()
     {
@@ -21,7 +21,7 @@ public class SM32Endpoint : Endpoint<SM32RequestDto, SM32HttpResponse>
 
         AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
 
-        PreProcessor<AuthPreProcessor<SM32RequestDto>>();
+        PreProcessor<AuthPreProcessor<EmptyRequest>>();
 
         Description(builder => { builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest); });
 
@@ -37,7 +37,7 @@ public class SM32Endpoint : Endpoint<SM32RequestDto, SM32HttpResponse>
     }
 
     public override async Task<SM32HttpResponse> ExecuteAsync(
-        SM32RequestDto requestDto,
+        EmptyRequest empty,
         CancellationToken ct
     )
     {
