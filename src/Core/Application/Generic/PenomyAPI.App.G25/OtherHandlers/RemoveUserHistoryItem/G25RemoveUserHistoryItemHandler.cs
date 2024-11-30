@@ -1,5 +1,4 @@
 ﻿using PenomyAPI.App.Common;
-using PenomyAPI.App.G25.OtherHandlers.RemoveGuestHistoryItem;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 using System;
@@ -9,7 +8,7 @@ using System.Threading.Tasks;
 namespace PenomyAPI.App.G25.OtherHandlers.RemoveUserHistoryItem;
 
 public class G25RemoveUserHistoryItemHandler
-    : IFeatureHandler<G25RemoveGuestHistoryItemRequest, G25RemoveGuestHistoryItemReponse>
+    : IFeatureHandler<G25RemoveUserHistoryItemRequest, G25RemoveUserHistoryItemReponse>
 {
     private readonly IG25Repository _g25Repository;
 
@@ -18,29 +17,20 @@ public class G25RemoveUserHistoryItemHandler
         _g25Repository = unitOfWork.Value.G25Repository;
     }
 
-    public async Task<G25RemoveGuestHistoryItemReponse> ExecuteAsync(
-        G25RemoveGuestHistoryItemRequest request,
+    public async Task<G25RemoveUserHistoryItemReponse> ExecuteAsync(
+        G25RemoveUserHistoryItemRequest request,
         CancellationToken ct)
     {
-        var isGuestIdExisted = await _g25Repository.IsGuestIdExistedAsync(
-            request.GuestId,
-            ct);
-
-        if (!isGuestIdExisted)
-        {
-            return G25RemoveGuestHistoryItemReponse.GUEST_ID_NOT_FOUND;
-        }
-
-        var removeSuccess = await _g25Repository.RemoveGuestViewHistoryItemAsync(
-            request.GuestId,
+        var removeSuccess = await _g25Repository.RemoveUserViewHistoryItemAsync(
+            request.UserId,
             request.ArtworkId,
             ct);
 
         if (removeSuccess)
         {
-            return G25RemoveGuestHistoryItemReponse.SUCCESS;
+            return G25RemoveUserHistoryItemReponse.SUCCESS;
         }
 
-        return G25RemoveGuestHistoryItemReponse.DATABASE_ERROR;
+        return G25RemoveUserHistoryItemReponse.DATABASE_ERROR;
     }
 }
