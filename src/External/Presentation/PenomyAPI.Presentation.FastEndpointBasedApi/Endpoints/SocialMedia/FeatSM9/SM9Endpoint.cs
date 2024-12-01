@@ -52,6 +52,7 @@ public class SM9Endpoint : Endpoint<SM9RequestDto, SM9HttpResponse>
 
         var featRequest = new SM9Request{
             UserId = stateBag.AppRequest.GetUserId(),
+            MaxRecord = req.MaxRecord
         };
 
         // Get FeatureHandler response.

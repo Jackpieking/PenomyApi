@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
@@ -16,7 +17,7 @@ public class SM9Repository : ISM9Repository
         _socialGroupDbSet = dbContext.Set<SocialGroup>();
     }
 
-    public async Task<List<SocialGroup>> GetSocialGroupsAsync(long userId)
+    public async Task<List<SocialGroup>> GetSocialGroupsAsync(long userId, int maxRecord, CancellationToken ct)
     {
         try
         {

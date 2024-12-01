@@ -18,7 +18,11 @@ public class SM9Handler : IFeatureHandler<SM9Request, SM9Response>
 
     public async Task<SM9Response> ExecuteAsync(SM9Request request, CancellationToken ct)
     {
-        var groupList = await _SM9Repository.GetSocialGroupsAsync(long.Parse(request.UserId));
+        var groupList = await _SM9Repository.GetSocialGroupsAsync(
+            long.Parse(request.UserId),
+            request.MaxRecord,
+            ct
+        );
         return new SM9Response
         {
             StatusCode = SM9ResponseStatusCode.SUCCESS,
