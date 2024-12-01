@@ -1,6 +1,8 @@
+using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
+
 namespace PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 
-public interface IUnitOfWork_SM49
+public partial interface IUnitOfWork
 {
-    
+    ISM49Repository SM49Repository { get; }
 }
