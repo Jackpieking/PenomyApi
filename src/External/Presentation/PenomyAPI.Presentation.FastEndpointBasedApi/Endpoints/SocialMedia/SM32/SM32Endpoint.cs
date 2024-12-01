@@ -13,7 +13,7 @@ using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SocialMedia.SM32.Htt
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SocialMedia.SM32;
 
-public class SM32Endpoint : Endpoint<SM32RequestDto, SM32HttpResponse>
+public class SM32Endpoint : Endpoint<EmptyRequest, SM32HttpResponse>
 {
     public override void Configure()
     {
@@ -21,9 +21,12 @@ public class SM32Endpoint : Endpoint<SM32RequestDto, SM32HttpResponse>
 
         AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
 
-        PreProcessor<AuthPreProcessor<SM32RequestDto>>();
+        PreProcessor<AuthPreProcessor<EmptyRequest>>();
 
-        Description(builder => { builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest); });
+        Description(builder =>
+        {
+            builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest);
+        });
 
         Summary(summary =>
         {
@@ -31,22 +34,22 @@ public class SM32Endpoint : Endpoint<SM32RequestDto, SM32HttpResponse>
             summary.Description = "This endpoint is used for user get users friends";
             summary.Response(
                 description: "Represent successful operation response.",
-                example: new SM32HttpResponse { AppCode = SM32ResponseStatusCode.SUCCESS.ToString() }
+                example: new SM32HttpResponse
+                {
+                    AppCode = SM32ResponseStatusCode.SUCCESS.ToString(),
+                }
             );
         });
     }
 
     public override async Task<SM32HttpResponse> ExecuteAsync(
-        SM32RequestDto requestDto,
+        EmptyRequest empty,
         CancellationToken ct
     )
     {
         var stateBag = ProcessorState<StateBag>();
 
-        var featRequest = new SM32Request
-        {
-            UserId = stateBag.AppRequest.UserId
-        };
+        var featRequest = new SM32Request { UserId = stateBag.AppRequest.UserId };
 
         // Get FeatureHandler response.
         var featResponse = await FeatureExtensions.ExecuteAsync<SM32Request, SM32Response>(
@@ -67,8 +70,8 @@ public class SM32Endpoint : Endpoint<SM32RequestDto, SM32HttpResponse>
                     NickName = x.NickName,
                     AvatarUrl = x.AvatarUrl,
                     Gender = x.Gender,
-                    AboutMe = x.AboutMe
-                })
+                    AboutMe = x.AboutMe,
+                }),
             };
 
         await SendAsync(httpResponse, httpResponse.HttpCode, ct);

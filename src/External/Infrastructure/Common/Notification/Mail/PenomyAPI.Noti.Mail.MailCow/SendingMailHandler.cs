@@ -1,18 +1,18 @@
-using System.Threading;
-using System.Threading.Tasks;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
 using PenomyAPI.App.Common.Mail;
 using PenomyAPI.Infra.Configuration.Options;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.Noti.Mail.MailCow;
 
 public sealed class SendingMailHandler : ISendingMailHandler
 {
-    private readonly MailCowNoReplyMailOptions _mailOptions;
+    private readonly PenomyNoReplyMailOptions _mailOptions;
 
-    public SendingMailHandler(MailCowNoReplyMailOptions mailOptions)
+    public SendingMailHandler(PenomyNoReplyMailOptions mailOptions)
     {
         _mailOptions = mailOptions;
     }
@@ -29,7 +29,7 @@ public sealed class SendingMailHandler : ISendingMailHandler
             await smtpClient.ConnectAsync(
                 _mailOptions.Host,
                 _mailOptions.Port,
-                SecureSocketOptions.SslOnConnect,
+                SecureSocketOptions.StartTls,
                 cancellationToken
             );
 
@@ -55,7 +55,7 @@ public sealed class SendingMailHandler : ISendingMailHandler
     }
 
     private static MimeMessage GenerateMessage(
-        MailCowNoReplyMailOptions options,
+        PenomyNoReplyMailOptions options,
         AppMailContent mailContent
     )
     {

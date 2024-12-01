@@ -5,4 +5,5 @@ using System.Collections.Generic;
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G45.HttpResponse;
 
 public class G45HttpResponse
-    : AppHttpResponse<IEnumerable<G45FollowedArtworkResponseDto>> { }
+    : AppHttpResponse<IEnumerable<G45FollowedArtworkResponseDto>>
+{ }

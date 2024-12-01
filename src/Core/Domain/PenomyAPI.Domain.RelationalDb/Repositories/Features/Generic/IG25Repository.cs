@@ -246,4 +246,9 @@ public interface IG25Repository
         long guestId,
         long artworkId,
         CancellationToken cancellationToken);
+
+    Task<bool> RemoveUserViewHistoryItemAsync(
+       long userId,
+       long artworkId,
+       CancellationToken cancellationToken);
 }
