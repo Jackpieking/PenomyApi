@@ -6,5 +6,6 @@ public enum SM30ResponseStatusCode
     FAILED = 2,
     UNAUTHORIZED = 3,
     ALREADY_FRIEND = 4,
-    USER_NOT_FOUND = 5
+    USER_NOT_FOUND = 5,
+    ALREADY_SENT_REQUEST = 6
 }

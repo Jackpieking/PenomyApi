@@ -2,6 +2,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM39\PenomyAPI.App.SM39.csproj"/>
         <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM40\PenomyAPI.App.SM40.csproj"/>
+        <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM49\PenomyAPI.App.SM49.csproj"/>
         <ProjectReference Include="..\..\BuildingBlock\PenomyAPI.BuildingBlock.FeatRegister\PenomyAPI.BuildingBlock.FeatRegister.csproj"/>
     </ItemGroup>
     <ItemGroup>

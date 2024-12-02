@@ -10,6 +10,7 @@ public sealed class AppDbContext : IdentityDbContext<PgUser, PgRole, long>
     {
     }
 
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         // Apply the configuration from the Identity.

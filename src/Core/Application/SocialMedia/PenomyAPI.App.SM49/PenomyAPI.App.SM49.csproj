@@ -6,4 +6,8 @@
         <Nullable>disable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\..\PenomyAPI.App.Common\PenomyAPI.App.Common.csproj"/>
+    </ItemGroup>
+
 </Project>
