@@ -26,7 +26,7 @@ public class SM9Repository : ISM9Repository
             .OrderByDescending(g => g.CreatedAt)
             .AsQueryable()
             .AsNoTracking()
-            .Take(4)
+            .Take(maxRecord)
             .ToListAsync();
             
         return result;

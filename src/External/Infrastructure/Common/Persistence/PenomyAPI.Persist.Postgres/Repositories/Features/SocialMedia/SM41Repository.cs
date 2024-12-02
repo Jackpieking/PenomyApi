@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using PenomyAPI.App.Common.Models.Common;
+using PenomyAPI.Domain.RelationalDb.DataSeedings.Roles;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 using PenomyAPI.Persist.Postgres.Repositories.Helpers;
@@ -76,5 +77,22 @@ public class SM41Repository : ISM41Repository
             result.Value = 0;
         }
         ;
+    }
+
+    public async Task<bool> CheckRemovableAsync(long groupId, long memberId, CancellationToken ct)
+    {
+        var numberOfAdmins = await _socialGroupMemberDbSet
+            .Where(o => o.GroupId == groupId && o.RoleId == UserRoles.GroupManager.Id)
+            .ToListAsync(ct);
+        var isCurrentAdmin = await _socialGroupMemberDbSet
+            .Where(o =>
+                o.GroupId == groupId
+                && o.MemberId == memberId
+                && o.RoleId == UserRoles.GroupManager.Id
+            )
+            .AnyAsync(ct);
+        if (isCurrentAdmin && numberOfAdmins.Count == 1)
+            return false;
+        return true;
     }
 }
