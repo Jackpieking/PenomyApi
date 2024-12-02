@@ -29,20 +29,11 @@ public class SM30ResponseManager
                 }
         );
         _dictionary.TryAdd(
-            SM30ResponseStatusCode.SUCCESS,
+            SM30ResponseStatusCode.ALREADY_SENT_REQUEST,
             (_, response) =>
                 new SM30HttpResponse
                 {
-                    AppCode = $"SM30.{SM30ResponseStatusCode.USER_NOT_FOUND}",
-                    HttpCode = StatusCodes.Status400BadRequest
-                }
-        );
-        _dictionary.TryAdd(
-            SM30ResponseStatusCode.SUCCESS,
-            (_, response) =>
-                new SM30HttpResponse
-                {
-                    AppCode = $"SM30.{SM30ResponseStatusCode.ALREADY_FRIEND}",
+                    AppCode = $"SM30.{SM30ResponseStatusCode.ALREADY_SENT_REQUEST}",
                     HttpCode = StatusCodes.Status400BadRequest
                 }
         );
@@ -72,6 +63,15 @@ public class SM30ResponseManager
                 {
                     AppCode = $"SM30.{SM30ResponseStatusCode.UNAUTHORIZED}",
                     HttpCode = StatusCodes.Status401Unauthorized
+                }
+        );
+        _dictionary.TryAdd(
+            SM30ResponseStatusCode.ALREADY_FRIEND,
+            (_, response) =>
+                new SM30HttpResponse
+                {
+                    AppCode = $"SM30.{SM30ResponseStatusCode.ALREADY_FRIEND}",
+                    HttpCode = StatusCodes.Status400BadRequest
                 }
         );
     }

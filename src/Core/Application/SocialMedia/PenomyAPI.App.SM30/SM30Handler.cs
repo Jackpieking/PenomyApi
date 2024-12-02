@@ -42,6 +42,12 @@ public class SM30Handler : IFeatureHandler<SM30Request, SM30Response>
                 return response;
             }
 
+            if (await _sm30Repository.IsAlreadySendAsync(request.UserId, request.FriendId, ct))
+            {
+                response.StatusCode = SM30ResponseStatusCode.ALREADY_SENT_REQUEST;
+                return response;
+            }
+
             // Create and send a friend request
             UserFriendRequest friendRequest = new()
             {
