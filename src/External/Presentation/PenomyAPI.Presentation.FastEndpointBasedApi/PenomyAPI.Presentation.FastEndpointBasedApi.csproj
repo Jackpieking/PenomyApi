@@ -5,6 +5,7 @@
     <ItemGroup>
         <PackageReference Include="FastEndpoints" Version="5.29.0" />
         <PackageReference Include="FastEndpoints.Security" Version="5.29.0" />
+        <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
