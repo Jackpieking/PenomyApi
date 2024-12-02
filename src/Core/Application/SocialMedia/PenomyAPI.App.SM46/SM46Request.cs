@@ -1,8 +1,8 @@
 using PenomyAPI.App.Common;
 
-namespace PenomyAPI.App.SM45;
+namespace PenomyAPI.App.SM46;
 
-public class SM45Request : IFeatureRequest<SM45Response>
+public class SM46Request : IFeatureRequest<SM46Response>
 {
     private string _userId;
 
@@ -10,5 +10,6 @@ public class SM45Request : IFeatureRequest<SM45Response>
 
     public void SetUserId(string userId) => _userId = userId;
 
+    public string MemberId { get; set; }
     public string GroupId { get; set; }
 }

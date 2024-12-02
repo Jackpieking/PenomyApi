@@ -22,7 +22,7 @@ public class SM45Handler : IFeatureHandler<SM45Request, SM45Response>
         try
         {
             response.IsSuccess = await _sm45Repository.CancelJoinGroupRequestAsync(
-                request.GroupId,
+                long.Parse(request.GroupId),
                 long.Parse(request.GetUserId()),
                 ct
             );

@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using Microsoft.AspNetCore.Http;
-using PenomyAPI.App.SM45;
+using PenomyAPI.App.SM46;
 
-namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatSM45.HttpResponse;
+namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatSM46.HttpResponse;
 
-public static class SM45HttpResponseManager
+public static class SM46HttpResponseManager
 {
     private static ConcurrentDictionary<
-        SM45ResponseStatusCode,
-        Func<SM45Response, SM45HttpResponse>
+        SM46ResponseStatusCode,
+        Func<SM46Response, SM46HttpResponse>
     > _dictionary;
 
     private static void Init()
@@ -18,37 +18,47 @@ public static class SM45HttpResponseManager
 
         // Add each feature status code with its HttpResponse information.
         _dictionary.TryAdd(
-            key: SM45ResponseStatusCode.SUCCESS,
+            key: SM46ResponseStatusCode.SUCCESS,
             value: (response) =>
                 new()
                 {
-                    AppCode = $"SM45.{SM45ResponseStatusCode.SUCCESS}",
+                    AppCode = $"SM46.{SM46ResponseStatusCode.SUCCESS}",
                     HttpCode = StatusCodes.Status200OK,
                 }
         );
 
         _dictionary.TryAdd(
-            key: SM45ResponseStatusCode.FAILED,
+            key: SM46ResponseStatusCode.FAILED,
             value: (response) =>
                 new()
                 {
-                    AppCode = $"SM45.{SM45ResponseStatusCode.FAILED}",
+                    AppCode = $"SM46.{SM46ResponseStatusCode.FAILED}",
                     HttpCode = StatusCodes.Status400BadRequest,
                 }
         );
 
         _dictionary.TryAdd(
-            key: SM45ResponseStatusCode.UNAUTHORIZED,
+            key: SM46ResponseStatusCode.FAILED,
             value: (response) =>
                 new()
                 {
-                    AppCode = $"SM45.{SM45ResponseStatusCode.UNAUTHORIZED}",
+                    AppCode = $"SM46.{SM46ResponseStatusCode.FAILED}",
                     HttpCode = StatusCodes.Status401Unauthorized,
+                }
+        );
+
+        _dictionary.TryAdd(
+            key: SM46ResponseStatusCode.FORBIDDEN,
+            value: (response) =>
+                new()
+                {
+                    AppCode = $"SM46.{SM46ResponseStatusCode.FORBIDDEN}",
+                    HttpCode = StatusCodes.Status403Forbidden,
                 }
         );
     }
 
-    internal static Func<SM45Response, SM45HttpResponse> Resolve(SM45ResponseStatusCode statusCode)
+    internal static Func<SM46Response, SM46HttpResponse> Resolve(SM46ResponseStatusCode statusCode)
     {
         if (Equals(objA: _dictionary, objB: default))
         {

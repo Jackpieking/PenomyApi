@@ -56,11 +56,12 @@ public class SM41Endpoint : Endpoint<SM41RequestDto, SM41HttpResponse>
             featRequest,
             ct
         );
-
+        
         httpResponse = SM41HttpResponseManager
             .Resolve(featResponse.StatusCode)
             .Invoke(featResponse);
 
+        httpResponse.Body = featResponse;
         return httpResponse;
     }
 }
