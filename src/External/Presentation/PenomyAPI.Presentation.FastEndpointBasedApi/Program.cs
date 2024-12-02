@@ -23,6 +23,7 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 var configuration = builder.Configuration;
 
+services.AddControllers();
 // Add services to the container.
 services.AddAppDependency(configuration);
 WebApiServiceConfig.Configure(services, configuration);
@@ -43,7 +44,10 @@ if (app.Environment.IsDevelopment())
     app.UseMiddleware<AppGlobalExceptionHandler>()
         .UseHttpsRedirection()
         .UseCors()
+        .UseAuthentication()
+        .UseAuthorization()
         .UseFastEndpoints()
+        .UseRouting()
         .UseSwaggerGen()
         .UseSwaggerUi(options =>
         {
@@ -56,8 +60,10 @@ if (app.Environment.IsStaging()) { }
 
 if (app.Environment.IsProduction())
 {
-    app.UseCors().UseFastEndpoints();
+    app.UseCors().UseAuthentication().UseAuthorization().UseFastEndpoints();
 }
+
+app.MapControllers();
 
 app.MapHub<NotificationHub>(NotificationHub.connectPath);
 

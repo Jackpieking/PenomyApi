@@ -1,44 +1,58 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 using PenomyAPI.App.Common.Realtime;
 
-namespace PenomyAPI.Realtime.SignalR
+namespace PenomyAPI.Realtime.SignalR;
+
+[Authorize]
+public class NotificationHub : Hub<INotificationClient>, INotificationHub
 {
-    public class NotificationHub : Hub<INotificationClient>, INotificationHub
+    public const string connectPath = "/signalr/notification";
+
+    public override async Task OnConnectedAsync()
     {
-        public const string connectPath = "/signalr/notification";
+        //var identity = new ClaimsIdentity(new List<Claim>
+        //{
+        //    new Claim("Sub", "11805760530993152"),
+        //    new Claim("Jti", "11805760530993152")
+        //}, "Custom");
 
-        public override async Task OnConnectedAsync()
-        {
-            await Clients.Client(Context.ConnectionId).ReceiveNotification(
-                $"{Context.User?.Identity?.Name} is connecting");
+        //Context.User.AddIdentity(identity);
 
-            await base.OnConnectedAsync();
-        }
+        await Clients.Client(Context.ConnectionId).ReceiveNotification(
+            $"{Context.User?.Identity?.Name} is connecting");
 
-        public override Task OnDisconnectedAsync(Exception exception)
-        {
-            return base.OnDisconnectedAsync(exception);
-        }
+        await base.OnConnectedAsync();
+    }
 
-        public async Task SendToClientAsync(string clientId, string message)
-        {
-            await Clients.Client(clientId).ReceiveNotification(message);
-        }
+    public override Task OnDisconnectedAsync(Exception exception)
+    {
+        return base.OnDisconnectedAsync(exception);
+    }
 
-        public async Task SendToClientsAsync(IReadOnlyList<string> clientIds, string message)
-        {
+    public async Task SendToClientAsync(string clientId, string message)
+    {
+        await Clients.Client(clientId).ReceiveNotification(message);
+    }
 
-            await Clients.Clients(clientIds).ReceiveNotification(message);
-        }
+    public async Task SendToClientsAsync(IReadOnlyList<string> clientIds, string message)
+    {
 
-        public async Task SendToGroupAsync(string groupId, string message)
-        {
-            await Clients.Group(groupId).ReceiveNotification(message);
-        }
+        await Clients.Clients(clientIds).ReceiveNotification(message);
+    }
 
-        public async Task SendToGroupsAsync(IReadOnlyList<string> groupIds, string message)
-        {
-            await Clients.Groups(groupIds).ReceiveNotification(message);
-        }
+    public async Task SendToGroupAsync(string groupId, string message)
+    {
+        await Clients.Group(groupId).ReceiveNotification(message);
+    }
+
+    public async Task SendToGroupsAsync(IReadOnlyList<string> groupIds, string message)
+    {
+        await Clients.Groups(groupIds).ReceiveNotification(message);
+    }
+
+    public async Task SendMessage(string mess)
+    {
+        await Clients.User("11805760530993152").ReceiveNotification(mess);
     }
 }

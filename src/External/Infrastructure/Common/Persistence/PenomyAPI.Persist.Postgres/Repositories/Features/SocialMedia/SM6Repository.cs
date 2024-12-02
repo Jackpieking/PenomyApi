@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PenomyAPI.Domain.RelationalDb.DataSeedings.Roles;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 using System;
@@ -89,7 +90,7 @@ public class SM6Repository : ISM6Repository
     public async Task<ICollection<long>> GetGroupManagerByGroupIdAsync(long groupId, CancellationToken ct)
     {
         return await _socialGroupsMember.AsNoTracking()
-            .Where(o => o.GroupId == groupId && o.RoleId == 123)
+            .Where(o => o.GroupId == groupId && o.RoleId == UserRoles.GroupManager.Id)
             .Select(o => o.MemberId)
             .ToListAsync(ct);
     }
