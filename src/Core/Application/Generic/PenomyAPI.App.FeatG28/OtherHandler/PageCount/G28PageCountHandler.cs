@@ -27,24 +27,21 @@ public class G28PageCountHandler : IFeatureHandler<G28PageCountRequest, G28PageC
     )
     {
         var unitOfWork = _unitOfWork.Value;
-        var result = await unitOfWork.G28Repository.GetPaginationOptionsByArtworkTypeAsync(
-            UserId: long.Parse(request.GetUserId()),
-            ArtworkType: request.ArtworkType
+
+        var totalArtworks = await unitOfWork.G28Repository.GetPaginationOptionsByArtworkTypeAsync(
+            creatorId: request.CreatorId,
+            artworkType: request.ArtworkType
         );
 
-        if (result >= 0)
+        if (totalArtworks >= 0)
         {
-            return new G28PageCountResponse
-            {
-                result = result,
-                StatusCode = G28PageCountResponseStatusCode.SUCCESS,
-            };
+            return G28PageCountResponse.CalculateAndReturn(totalArtworks);
         }
         else
         {
             return new G28PageCountResponse
             {
-                result = result,
+                TotalArtworks = totalArtworks,
                 StatusCode = G28PageCountResponseStatusCode.DATABASE_ERROR,
             };
         }

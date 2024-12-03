@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
-using PenomyAPI.Domain.RelationalDb.Models.Generic.Common;
+using PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG9;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
 
 internal sealed class G9Repository : IG9Repository
 {
+    private const int NUMBER_OF_RETURN_CHAPTERS = 100;
     private readonly DbContext _dbContext;
     private readonly DbSet<ArtworkChapter> _chapterDbSet;
 
@@ -18,6 +20,28 @@ internal sealed class G9Repository : IG9Repository
     {
         _dbContext = dbContext;
         _chapterDbSet = dbContext.Set<ArtworkChapter>();
+    }
+
+    public Task<List<G9ChapterItemReadModel>> GetAllChaptersAsyncByComicId(
+        long comicId,
+        CancellationToken cancellationToken)
+    {
+        return _chapterDbSet
+            .AsNoTracking()
+            .Where(chapter => chapter.ArtworkId == comicId
+                && chapter.PublicLevel == ArtworkPublicLevel.Everyone
+                && !chapter.IsTemporarilyRemoved
+                && chapter.PublishStatus == PublishStatus.Published)
+            .Select(chapter => new G9ChapterItemReadModel
+            {
+                Id = chapter.Id,
+                ChapterName = chapter.Title,
+                ThumbnailUrl = chapter.ThumbnailUrl,
+                UploadOrder = chapter.UploadOrder,
+            })
+            .OrderBy(chapter => chapter.UploadOrder)
+            .Take(NUMBER_OF_RETURN_CHAPTERS)
+            .ToListAsync(cancellationToken);
     }
 
     public Task<ArtworkChapter> GetComicChapterDetailByIdAsync(
@@ -55,61 +79,5 @@ internal sealed class G9Repository : IG9Repository
             })
             .AsSplitQuery()
             .FirstOrDefaultAsync(cancellationToken);
-    }
-
-    public async Task<PreviousAndNextChapter> GetPreviousAndNextChapterOfCurrentChapterAsync(
-        long comicId,
-        int currentChapterOrder,
-        CancellationToken cancellationToken)
-    {
-        var prevAndNextChapter = await _chapterDbSet
-            .AsNoTracking()
-            .Where(
-                chapter => chapter.ArtworkId == comicId
-                && chapter.PublishStatus == PublishStatus.Published
-                && (chapter.UploadOrder == currentChapterOrder - 1
-                    || chapter.UploadOrder == currentChapterOrder + 1))
-            .OrderBy(chapter => chapter.UploadOrder)
-            .Select(chapter => chapter.Id)
-            .ToArrayAsync(cancellationToken);
-
-        // If current chapter order is the first, then the array will contain only the next chapter.
-        long prevChapterId = default;
-        long nextChapterId = default;
-
-        if (currentChapterOrder == 1)
-        {
-            nextChapterId = prevAndNextChapter[0];
-
-            return new()
-            {
-                PrevChapterId = -1,
-                NextChapterId = nextChapterId,
-            };
-        }
-
-        // If the current chapter order is different than 1
-        // but the array return still has length = 1.
-        // Then the current chapter order must be the last order.
-        if (prevAndNextChapter.Length == 1)
-        {
-            prevChapterId = prevAndNextChapter[0];
-
-            return new()
-            {
-                PrevChapterId = prevChapterId,
-                NextChapterId = -1,
-            };
-        }
-
-        // Otherwise return the prev and next.
-        prevChapterId = prevAndNextChapter[0];
-        nextChapterId = prevAndNextChapter[prevAndNextChapter.Length - 1];
-
-        return new()
-        {
-            PrevChapterId = prevChapterId,
-            NextChapterId = nextChapterId,
-        };
     }
 }

@@ -57,7 +57,7 @@ public class G8Endpoint : Endpoint<G8Request, G8HttpResponse>
                 g8ResponseDtos.Add(
                     new ArtworkChapterDto
                     {
-                        Id = chapter.Id,
+                        Id = chapter.Id.ToString(),
                         ChapterName = chapter.Title,
                         UploadOrder = chapter.UploadOrder,
                         CreatedTime = chapter.CreatedAt,
