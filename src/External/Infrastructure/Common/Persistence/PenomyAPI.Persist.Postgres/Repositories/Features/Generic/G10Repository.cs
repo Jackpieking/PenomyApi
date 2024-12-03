@@ -51,7 +51,11 @@ public class G10Repository : IG10Repository
     )
     {
         comments.Value = await _artworkCommentDbSet
-            .Where(acr => acr.ArtworkId == ArtworkId && acr.IsDirectlyCommented == true)
+            .Where(acr =>
+                acr.ArtworkId == ArtworkId
+                && acr.IsDirectlyCommented == true
+                && acr.IsRemoved == false
+            )
             .GroupJoin(
                 _userLikeArtworkCommentDbSet,
                 c => c.Id,
@@ -90,7 +94,11 @@ public class G10Repository : IG10Repository
     )
     {
         comments.Value = await _artworkCommentDbSet
-            .Where(acr => acr.ArtworkId == ArtworkId && acr.IsDirectlyCommented == true)
+            .Where(acr =>
+                acr.ArtworkId == ArtworkId
+                && acr.IsDirectlyCommented == true
+                && acr.IsRemoved == false
+            )
             .GroupJoin(
                 _userLikeArtworkCommentDbSet,
                 c => c.Id,
@@ -130,7 +138,11 @@ public class G10Repository : IG10Repository
     )
     {
         comments.Value = await _artworkCommentDbSet
-            .Where(acr => acr.ArtworkId == ArtworkId && acr.IsDirectlyCommented == true)
+            .Where(acr =>
+                acr.ArtworkId == ArtworkId
+                && acr.IsDirectlyCommented == true
+                && acr.IsRemoved == false
+            )
             .GroupJoin(
                 _userLikeArtworkCommentDbSet,
                 c => c.Id,

@@ -23,23 +23,9 @@ public class G54Repository : IG54Repository
     {
         try
         {
-            var result = new ArtworkComment { Id = CommentId };
-            var ChildComment = _commentParentChildDbSet
-                .Where(x => x.ChildCommentId == CommentId)
-                .FirstOrDefault();
-
-            if (ChildComment != null)
-            {
-                await _artworkCommentDbSet
-                    .Where(x => x.Id == ChildComment.ParentCommentId)
-                    .ExecuteUpdateAsync(x =>
-                        x.SetProperty(x => x.TotalChildComments, x => x.TotalChildComments - 1)
-                    );
-                _commentParentChildDbSet.Remove(ChildComment);
-            }
-
-            _artworkCommentDbSet.Remove(result);
-            await _dbContext.SaveChangesAsync();
+            await _artworkCommentDbSet
+                .Where(c => c.Id == CommentId)
+                .ExecuteUpdateAsync(c => c.SetProperty(c => c.IsRemoved, true));
             return true;
         }
         catch
