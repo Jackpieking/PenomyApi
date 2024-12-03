@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.Generic;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
-using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia;
@@ -42,10 +38,7 @@ public class SM39Repository : ISM39Repository
                     AvatarUrl = m.Member.AvatarUrl,
                     LastActiveAt = m.Member.LastActiveAt,
                 },
-                Group = new SocialGroup
-                {
-                    CreatedBy = m.Group.CreatedBy,
-                },
+                Group = new SocialGroup { CreatedBy = m.Group.CreatedBy, },
             })
             .ToListAsync(ct);
     }

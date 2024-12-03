@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PenomyAPI.BackgroundJob.Quartz;
 using PenomyAPI.BuildingBlock.FeatRegister.InfraRegistration.Common;
+using PenomyAPI.BuildingBlock.FeatRegister.Job;
 using PenomyAPI.Infra.Configuration.Options;
 using Quartz;
 using Quartz.AspNetCore;
@@ -81,6 +82,29 @@ public class BackgroundJobServicesRegistration : IServiceRegistration
                 });
 
                 #region Jobs
+                var typs2JobKey = new JobKey(Typs2FeatureHandler.JobKey);
+
+                config
+                    .AddJob<Typs2FeatureHandler>(conf =>
+                    {
+                        conf.StoreDurably()
+                            .RequestRecovery()
+                            .DisallowConcurrentExecution()
+                            .WithIdentity(typs2JobKey);
+                    })
+                    .AddTrigger(conf =>
+                    {
+                        conf.ForJob(typs2JobKey)
+                            .WithIdentity(Typs2FeatureHandler.TriggerKey)
+                            .WithSimpleSchedule(scheduler =>
+                            {
+                                scheduler
+                                    .WithIntervalInSeconds(
+                                        Typs2FeatureHandler.RepeatAsIntervalInSeconds
+                                    )
+                                    .RepeatForever();
+                            });
+                    });
                 #endregion
             })
             .AddQuartzServer(config =>
