@@ -14,7 +14,7 @@ public class G8ResponseDto
 
 public class ArtworkChapterDto
 {
-    public long Id { get; set; }
+    public string Id { get; set; }
 
     public int UploadOrder { get; set; }
 

@@ -24,6 +24,7 @@ public static class G28PageCountHttpResponseManager
                 {
                     AppCode = $"G28.{G28PageCountResponseStatusCode.SUCCESS}",
                     HttpCode = StatusCodes.Status200OK,
+                    Body = response
                 }
         );
 

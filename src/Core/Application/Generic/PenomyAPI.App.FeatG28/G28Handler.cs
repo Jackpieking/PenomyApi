@@ -9,6 +9,7 @@ namespace PenomyAPI.App.FeatG28;
 
 public class G28Handler : IFeatureHandler<G28Request, G28Response>
 {
+    private const int DEFAULT_PAGE_SIZE = 8;
     private readonly Lazy<IUnitOfWork> _unitOfWork;
     private readonly Lazy<ISnowflakeIdGenerator> _idGenerator;
 
@@ -21,24 +22,21 @@ public class G28Handler : IFeatureHandler<G28Request, G28Response>
     public async Task<G28Response> ExecuteAsync(G28Request request, CancellationToken ct)
     {
         var unitOfWork = _unitOfWork.Value;
+
         var result = await unitOfWork.G28Repository.GetPaginationDetailAsync(
-            UserId: long.Parse(request.GetUserId()),
-            ArtworkType: request.ArtworkType,
-            PageNumber: request.PageNumber,
-            PageSize: 8
+            creatorId: request.CreatorId,
+            artworkType: request.ArtworkType,
+            pageNumber: request.PageNumber,
+            pageSize: DEFAULT_PAGE_SIZE
         );
 
         if (result != null)
         {
-            return new G28Response { result = result, StatusCode = G28ResponseStatusCode.SUCCESS };
+            return new G28Response { Result = result, StatusCode = G28ResponseStatusCode.SUCCESS };
         }
         else
         {
-            return new G28Response
-            {
-                result = result,
-                StatusCode = G28ResponseStatusCode.DATABASE_ERROR,
-            };
+            return G28Response.DATABASE_ERROR;
         }
     }
 }

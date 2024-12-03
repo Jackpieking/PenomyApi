@@ -23,7 +23,7 @@ public sealed class AppGlobalExceptionHandler : IMiddleware
         {
             await next(context);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             context.Response.Clear();
 

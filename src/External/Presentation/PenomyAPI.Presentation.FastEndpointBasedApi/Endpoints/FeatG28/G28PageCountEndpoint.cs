@@ -1,12 +1,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG28.PageCount;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG28.Common;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG28.PageCount.Middlewares;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G28.PageCount.HttpResponse;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG28.PageCount;
@@ -15,10 +12,10 @@ public class G28PageCountEndpoint : Endpoint<G28PageCountRequest, G28PageCountHt
 {
     public override void Configure()
     {
-        Get("/g28/user-profile/created-artworks/page-count");
+        Get("g28/creator/artworks/page-count");
+        AllowAnonymous();
+
         DontThrowIfValidationFails();
-        AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
-        PreProcessor<G28PageCountPreProcessor>();
         Description(builder: builder =>
         {
             builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest);
@@ -37,29 +34,21 @@ public class G28PageCountEndpoint : Endpoint<G28PageCountRequest, G28PageCountHt
     }
 
     public override async Task<G28PageCountHttpResponse> ExecuteAsync(
-        G28PageCountRequest req,
+        G28PageCountRequest request,
         CancellationToken ct
     )
     {
-        var stateBag = ProcessorState<G28PageCountStateBag>();
-
-        req.SetUserId(stateBag.PageCountRequest.GetUserId());
-
         // Get FeatureHandler response.
         var featResponse = await FeatureExtensions.ExecuteAsync<
             G28PageCountRequest,
             G28PageCountResponse
-        >(req, ct);
+        >(request, ct);
 
         var httpResponse = G28PageCountHttpResponseManager
             .Resolve(featResponse.StatusCode)
-            .Invoke(req, featResponse);
+            .Invoke(request, featResponse);
 
-        httpResponse.Body = new G28PageCountResponse
-        {
-            result = featResponse.result,
-            StatusCode = featResponse.StatusCode,
-        };
+        await SendAsync(httpResponse, httpResponse.HttpCode, ct);
 
         return httpResponse;
     }

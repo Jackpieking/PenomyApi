@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Linq;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG28;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G28.DTOs;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G28.HttpResponse;
 
@@ -24,6 +26,7 @@ public static class G28HttpResponseManager
                 {
                     AppCode = $"G28.{G28ResponseStatusCode.SUCCESS}",
                     HttpCode = StatusCodes.Status200OK,
+                    Body = response.Result.Select(G28ArtworkResponseDto.MapFrom)
                 }
         );
 

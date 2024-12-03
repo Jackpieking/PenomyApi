@@ -1,13 +1,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG28;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG28.Common;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG28.Middlewares;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G28.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G28.HttpResponse;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG28;
@@ -16,10 +12,10 @@ public class G28AuthEndpoint : Endpoint<G28Request, G28HttpResponse>
 {
     public override void Configure()
     {
-        Get("/g28/user-profile/created-artworks/");
+        Get("g28/creator/artworks");
+        AllowAnonymous();
+
         DontThrowIfValidationFails();
-        AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
-        PreProcessor<G28PreProcessor>();
         Description(builder: builder =>
         {
             builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest);
@@ -27,9 +23,9 @@ public class G28AuthEndpoint : Endpoint<G28Request, G28HttpResponse>
 
         Summary(endpointSummary: summary =>
         {
-            summary.Summary = "Endpoint for getting createdartworks for authenticated user.";
+            summary.Summary = "Endpoint for getting created artworks of the specified creator.";
             summary.Description =
-                "This endpoint is used for getting created artworks for authenticated user.";
+                "This endpoint is used for getting created artworks of the specified creator";
             summary.Response<G28HttpResponse>(
                 description: "Represent successful operation response.",
                 example: new() { AppCode = G28ResponseStatusCode.SUCCESS.ToString() }
@@ -37,33 +33,17 @@ public class G28AuthEndpoint : Endpoint<G28Request, G28HttpResponse>
         });
     }
 
-    public override async Task<G28HttpResponse> ExecuteAsync(G28Request req, CancellationToken ct)
+    public override async Task<G28HttpResponse> ExecuteAsync(
+        G28Request request,
+        CancellationToken ct)
     {
-        var stateBag = ProcessorState<G28StateBag>();
-
-        req.SetUserId(stateBag.AppRequest.GetUserId());
-
         // Get FeatureHandler response.
-        var featResponse = await FeatureExtensions.ExecuteAsync<G28Request, G28Response>(req, ct);
+        var featResponse = await FeatureExtensions
+        .ExecuteAsync<G28Request, G28Response>(request, ct);
 
         var httpResponse = G28HttpResponseManager
             .Resolve(featResponse.StatusCode)
-            .Invoke(req, featResponse);
-
-        httpResponse.Body = new G28ResponseDto
-        {
-            ArtworkList = featResponse.result.ConvertAll(x => new G28ResponseDtoObject()
-            {
-                ArtworkId = x.Id,
-                Title = x.Title,
-                Supplier = x.AuthorName,
-                Thumbnail = x.ThumbnailUrl,
-                Favorite = x.ArtworkMetaData.TotalFavorites,
-                Rating = x.ArtworkMetaData.AverageStarRate,
-                LastUpdateAt = x.UpdatedAt,
-                FlagUrl = x.Origin.ImageUrl,
-            }),
-        };
+            .Invoke(request, featResponse);
 
         return httpResponse;
     }
