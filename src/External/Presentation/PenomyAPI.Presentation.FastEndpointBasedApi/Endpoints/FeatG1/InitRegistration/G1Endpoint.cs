@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -26,7 +27,8 @@ internal sealed class G1Endpoint : Endpoint<G1HttpRequest, G1HttpResponse>
 
         var stringHandler = new DefaultInterpolatedStringHandler();
 
-        stringHandler.AppendFormatted(webHostEnvironment.WebRootPath);
+        stringHandler.AppendLiteral(webHostEnvironment.WebRootPath);
+        stringHandler.AppendFormatted(Path.DirectorySeparatorChar);
         stringHandler.AppendLiteral(_option.MailTemplateRelativePath);
 
         _registerMailTemplatePath = stringHandler.ToStringAndClear();
