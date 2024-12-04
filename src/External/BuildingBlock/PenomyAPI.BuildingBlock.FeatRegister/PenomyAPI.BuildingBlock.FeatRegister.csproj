@@ -59,6 +59,8 @@
         <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM41\PenomyAPI.App.SM41.csproj" />
         <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM45\PenomyAPI.App.SM45.csproj" />
         <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM46\PenomyAPI.App.SM46.csproj" />
+        <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM24\PenomyAPI.App.SM24.csproj" />
+        <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM23\PenomyAPI.App.SM23.csproj" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
