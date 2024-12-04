@@ -1,12 +1,9 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.DataSeedings.Roles;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
-using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common;
-using PenomyAPI.Domain.RelationalDb.Entities.UserIdentity;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia;

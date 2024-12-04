@@ -1,13 +1,13 @@
-using PenomyAPI.App.FeatG5;
-using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using System.Collections.Generic;
 using System.Linq;
+using PenomyAPI.App.FeatG5;
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5.DTOs;
 
 public class G5ResponseDto
 {
-    public long Id { get; set; }
+    public string Id { get; set; }
 
     public string Title { get; set; }
 
@@ -55,13 +55,17 @@ public class G5ResponseDto
 
     public bool IsAllowComment { get; set; }
 
+    public string FirstChapterId { get; set; }
+
+    public string LastReadChapterId { get; set; }
+
     public static G5ResponseDto MapFrom(G5Response featResponse)
     {
         var comicDetail = featResponse.Result;
 
         var responseDto = new G5ResponseDto
         {
-            Id = comicDetail.Id,
+            Id = comicDetail.Id.ToString(),
             Title = comicDetail.Title,
             ThumbnailUrl = comicDetail.ThumbnailUrl,
             Introduction = comicDetail.Introduction,
@@ -78,6 +82,9 @@ public class G5ResponseDto
             IsAllowComment = comicDetail.AllowComment,
             IsUserFavorite = featResponse.IsUserFavorite,
             HasFollowed = featResponse.HasFollowed,
+            // Chapter View History section.
+            FirstChapterId = comicDetail.FirstChapterId.ToString(),
+            LastReadChapterId = comicDetail.LastReadChapterId.ToString(),
             // Creator detail section.
             CreatorId = comicDetail.CreatorId.ToString(),
             CreatorName = comicDetail.CreatorName,
@@ -93,12 +100,11 @@ public class G5ResponseDto
         //    responseDto.SeriesName = comicBelongedSeries.Series.Title;
         //}
 
-        responseDto.Categories = comicDetail.ArtworkCategories
-            .Select(category => new CategoryDto
-            {
-                CategoryId = category.Id.ToString(),
-                CategoryName = category.Name,
-            });
+        responseDto.Categories = comicDetail.ArtworkCategories.Select(category => new CategoryDto
+        {
+            CategoryId = category.Id.ToString(),
+            CategoryName = category.Name,
+        });
 
         return responseDto;
     }

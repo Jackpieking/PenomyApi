@@ -13,7 +13,7 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
 
 public class G45Repository : IG45Repository
 {
-    private const int TOTAL_NUMBERS_OF_ARTWORKS = 64;
+    private const int MAX_VIEW_HISTORY_RETURN_RECORDS = 64;
     private readonly AppDbContext _dbContext;
     private readonly DbSet<UserFollowedArtwork> _userFolloweds;
 
@@ -27,28 +27,27 @@ public class G45Repository : IG45Repository
     {
         var followedArtworks = await _userFolloweds
             .AsNoTracking()
-            .Where(o => o.UserId == userId && o.ArtworkType == artworkType)
-            .OrderByDescending(o => o.StartedAt)
-            .Select(o => new G45FollowedArtworkReadModel
+            .Where(viewHistory => viewHistory.UserId == userId
+                && viewHistory.ArtworkType == artworkType)
+            .Select(followedArtwork => new G45FollowedArtworkReadModel
             {
-                Id = o.ArtworkId,
-                Title = o.FollowedArtwork.Title,
-                ThumbnailUrl = o.FollowedArtwork.ThumbnailUrl,
-                ArtworkStatus = o.FollowedArtwork.ArtworkStatus,
-                OriginImageUrl = o.FollowedArtwork.Origin.ImageUrl,
-                LastChapterUploadOrder = o.FollowedArtwork.LastChapterUploadOrder,
-                TotalStarRates = o.FollowedArtwork.ArtworkMetaData.TotalStarRates,
-                TotalUsersRated = o.FollowedArtwork.ArtworkMetaData.TotalUsersRated,
-                // Creator detail section.
-                CreatorId = o.FollowedArtwork.Creator.UserId,
-                CreatorName = o.FollowedArtwork.Creator.NickName,
-                CreatorAvatarUrl = o.FollowedArtwork.Creator.AvatarUrl,
+                Id = followedArtwork.ArtworkId,
+                ArtworkStatus = followedArtwork.FollowedArtwork.ArtworkStatus,
+                Title = followedArtwork.FollowedArtwork.Title,
+                LastChapterUploadOrder = followedArtwork.FollowedArtwork.LastChapterUploadOrder,
+                ThumbnailUrl = followedArtwork.FollowedArtwork.ThumbnailUrl,
+                OriginImageUrl = followedArtwork.FollowedArtwork.Origin.ImageUrl,
+                TotalStarRates = followedArtwork.FollowedArtwork.ArtworkMetaData.TotalStarRates,
+                TotalUsersRated = followedArtwork.FollowedArtwork.ArtworkMetaData.TotalUsersRated,
+                // Creator section.
+                CreatorId = followedArtwork.FollowedArtwork.Creator.UserId,
+                CreatorName = followedArtwork.FollowedArtwork.Creator.NickName,
+                CreatorAvatarUrl = followedArtwork.FollowedArtwork.Creator.AvatarUrl,
             })
-            .Take(TOTAL_NUMBERS_OF_ARTWORKS)
+            .Take(MAX_VIEW_HISTORY_RETURN_RECORDS)
             .ToListAsync(ct);
 
-
-        // Get latest chapter of each artwork.
+        // Load the lastest chapter of each artwork.
         var chapterDbSet = _dbContext.Set<ArtworkChapter>();
 
         foreach (var item in followedArtworks)
@@ -70,6 +69,11 @@ public class G45Repository : IG45Repository
                 .FirstOrDefaultAsync(ct);
 
             item.Chapter = lastestChapter;
+
+            if (!Equals(lastestChapter, null))
+            {
+                item.Chapter = lastestChapter;
+            }
         }
 
         return followedArtworks;

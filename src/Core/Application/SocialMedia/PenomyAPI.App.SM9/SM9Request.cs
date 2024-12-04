@@ -6,5 +6,6 @@ namespace PenomyAPI.App.SM9
     {
         public string UserId { get; set; }
 
+        public int MaxRecord { get; set; }
     }
 }

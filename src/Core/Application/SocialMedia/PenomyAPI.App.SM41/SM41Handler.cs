@@ -18,6 +18,19 @@ public class SM41Handler : IFeatureHandler<SM41Request, SM41Response>
 
     public async Task<SM41Response> ExecuteAsync(SM41Request request, CancellationToken ct)
     {
+        var isRemovable = await _sm41Repository.CheckRemovableAsync(
+            request.GroupId,
+            request.MemberId,
+            ct
+        );
+
+        if (!isRemovable)
+            return new SM41Response
+            {
+                IsSuccess = true,
+                StatusCode = SM41ResponseStatusCode.IS_ONLY_ADMIN,
+            };
+
         var response = await _sm41Repository.KickMemberAsync(
             request.GroupId,
             request.MemberId,

@@ -29,7 +29,8 @@ public sealed class G34Endpoint : Endpoint<G34HttpRequest, G34HttpResponse>
 
         var stringHandler = new DefaultInterpolatedStringHandler();
 
-        stringHandler.AppendFormatted(webHostEnvironment.WebRootPath);
+        stringHandler.AppendLiteral(webHostEnvironment.WebRootPath);
+        stringHandler.AppendFormatted(Path.DirectorySeparatorChar);
         stringHandler.AppendLiteral(_option.MailTemplateRelativePath);
 
         _registerMailTemplatePath = stringHandler.ToStringAndClear();

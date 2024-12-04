@@ -1,5 +1,6 @@
 ﻿using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
-using PenomyAPI.Domain.RelationalDb.Models.Generic.Common;
+using PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG9;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,20 +13,7 @@ public interface IG9Repository
         long chapterId,
         CancellationToken cancellationToken);
 
-    /// <summary>
-    ///     Get the prev and next chapter of the chapter
-    ///     with specified order in the specified comic.
-    /// </summary>
-    /// <param name="comicId">
-    ///     Id of the comic that contains the chapter.
-    /// </param>
-    /// <param name="currentChapterOrder">
-    ///     Current order of the specified chapter.
-    /// </param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    Task<PreviousAndNextChapter> GetPreviousAndNextChapterOfCurrentChapterAsync(
+    Task<List<G9ChapterItemReadModel>> GetAllChaptersAsyncByComicId(
         long comicId,
-        int currentChapterOrder,
         CancellationToken cancellationToken);
 }

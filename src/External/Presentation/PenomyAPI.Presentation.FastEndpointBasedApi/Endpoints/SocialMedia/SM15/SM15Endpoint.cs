@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -58,7 +59,8 @@ public class Sm15Endpoint : Endpoint<EmptyRequest, Sm15HttpResponse>
         var httpResponse = SM15ResponseManager
             .Resolve(featResponse.StatusCode)
             .Invoke(featRequest, featResponse);
-
+        httpResponse.Body = new SM15ResponseDto();
+        httpResponse.Body.UserPosts = new List<UserPostDto>();
         if (featResponse.StatusCode == SM15ResponseStatusCode.SUCCESS)
             foreach (var p in featResponse.UserPosts)
             {
@@ -79,13 +81,7 @@ public class Sm15Endpoint : Endpoint<EmptyRequest, Sm15HttpResponse>
                         UploadOrder = m.UploadOrder
                     }).ToList()
                 };
-                httpResponse.Body = new SM15ResponseDto
-                {
-                    UserPosts =
-                    [
-                        userPostDto
-                    ]
-                };
+                httpResponse.Body.UserPosts.Add(userPostDto);
             }
 
 

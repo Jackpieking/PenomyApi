@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using PenomyAPI.App.Common.Models.Common;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
+using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 using PenomyAPI.Persist.Postgres.Data.DbContexts;
 using PenomyAPI.Persist.Postgres.Data.UserIdentity;
@@ -16,14 +17,14 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia;
 public class SM30Repository : ISM30Repository
 {
     private readonly AppDbContext _dbContext;
+    private readonly DbSet<UserFriendRequest> _friendRequestContext;
     private readonly DbSet<UserFriend> _userFriendContext;
     private readonly Lazy<UserManager<PgUser>> _userManager;
-    private readonly DbSet<UserFriendRequest> _userPostContext;
 
     public SM30Repository(AppDbContext context, Lazy<UserManager<PgUser>> userManager)
     {
         _dbContext = context;
-        _userPostContext = context.Set<UserFriendRequest>();
+        _friendRequestContext = context.Set<UserFriendRequest>();
         _userFriendContext = context.Set<UserFriend>();
         _userManager = userManager;
     }
@@ -40,6 +41,15 @@ public class SM30Repository : ISM30Repository
                 result
             ));
         return result.Value;
+    }
+
+    public async Task<bool> IsAlreadySendAsync(long userId, long friendId, CancellationToken token)
+    {
+        return await _friendRequestContext.AnyAsync(
+            x => (x.CreatedBy == userId && x.FriendId == friendId) || (x.CreatedBy == friendId &&
+                                                                       x.FriendId == userId &&
+                                                                       x.RequestStatus == RequestStatus.Pending),
+            token);
     }
 
     public async Task<bool> IsUserExistAsync(long friendId, CancellationToken token)
@@ -63,12 +73,12 @@ public class SM30Repository : ISM30Repository
                 _dbContext,
                 token
             );
-            await _userPostContext.AddAsync(friendRequest, token);
+            await _friendRequestContext.AddAsync(friendRequest, token);
             await _dbContext.SaveChangesAsync(token);
             await transaction.CommitAsync(token);
             result.Value = true;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             if (transaction != null)
             {

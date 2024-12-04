@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
@@ -5,13 +7,9 @@ using PenomyAPI.App.G48;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Common.Middlewares;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G48.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G48.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G48.HttpResponse;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G48;
 
@@ -63,8 +61,8 @@ public class G48Endpoint : Endpoint<G48RequestDTOs, G48HttpResponse>
         );
 
         var httpResponse = G48ResponseManager
-                .Resolve(featResponse.StatusCode)
-                .Invoke(featRequest, featResponse);
+            .Resolve(featResponse.StatusCode)
+            .Invoke(featRequest, featResponse);
 
         await SendAsync(httpResponse, httpResponse.HttpCode, ct);
 

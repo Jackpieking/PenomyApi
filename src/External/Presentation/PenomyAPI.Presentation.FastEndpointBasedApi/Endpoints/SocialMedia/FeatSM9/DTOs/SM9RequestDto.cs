@@ -8,5 +8,5 @@ public class SM9RequestDto
 
     public void SetUserId(string userId) => _userId = userId;
 
-    public bool Empty { get; set; }
+    public int MaxRecord { get; set; }
 }

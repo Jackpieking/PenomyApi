@@ -36,6 +36,16 @@ public static class SM41HttpResponseManager
                     HttpCode = StatusCodes.Status400BadRequest,
                 }
         );
+
+        _dictionary.TryAdd(
+            key: SM41ResponseStatusCode.IS_ONLY_ADMIN,
+            value: (response) =>
+                new()
+                {
+                    AppCode = $"SM41.{SM41ResponseStatusCode.SUCCESS}",
+                    HttpCode = StatusCodes.Status409Conflict,
+                }
+        );
     }
 
     internal static Func<SM41Response, SM41HttpResponse> Resolve(SM41ResponseStatusCode statusCode)

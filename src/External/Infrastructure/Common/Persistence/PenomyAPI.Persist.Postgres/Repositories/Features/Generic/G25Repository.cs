@@ -200,6 +200,61 @@ internal sealed class G25Repository : IG25Repository
 
         return true;
     }
+
+    public async Task<bool> RemoveUserViewHistoryItemAsync(
+        long userId,
+        long artworkId,
+        CancellationToken cancellationToken)
+    {
+        var result = new Result<bool>(false);
+
+        var executionStrategy = RepositoryHelper.CreateExecutionStrategy(_dbContext);
+
+        await executionStrategy.ExecuteAsync(
+            operation: async () => await InternalRemoveUserViewHistoryItem(
+                userId,
+                artworkId,
+                cancellationToken,
+                result));
+
+        return result.Value;
+    }
+
+    private async Task InternalRemoveUserViewHistoryItem(
+        long userId,
+        long artworkId,
+        CancellationToken cancellationToken,
+        Result<bool> result)
+    {
+        IDbContextTransaction transaction = null;
+
+        try
+        {
+            transaction = await RepositoryHelper.CreateTransactionAsync(
+                _dbContext,
+                cancellationToken
+            );
+
+            await _dbContext.Set<UserArtworkViewHistory>()
+                .Where(
+                    viewHistory => viewHistory.UserId == userId
+                    && viewHistory.ArtworkId == artworkId)
+                .ExecuteDeleteAsync(cancellationToken);
+
+
+            await transaction.CommitAsync(cancellationToken);
+
+            result.Value = true;
+        }
+        catch
+        {
+            if (transaction != null)
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                await transaction.DisposeAsync();
+            }
+        }
+    }
     #endregion
 
     #region For Guest section.
@@ -531,9 +586,59 @@ internal sealed class G25Repository : IG25Repository
         }
     }
 
-    public Task<bool> RemoveGuestViewHistoryItemAsync(long guestId, long artworkId, CancellationToken cancellationToken)
+    public async Task<bool> RemoveGuestViewHistoryItemAsync(
+        long guestId,
+        long artworkId,
+        CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var result = new Result<bool>(false);
+
+        var executionStrategy = RepositoryHelper.CreateExecutionStrategy(_dbContext);
+
+        await executionStrategy.ExecuteAsync(
+            operation: async () => await InternalRemoveGuestViewHistoryItem(
+                guestId,
+                artworkId,
+                cancellationToken,
+                result));
+
+        return result.Value;
+    }
+
+    private async Task InternalRemoveGuestViewHistoryItem(
+        long guestId,
+        long artworkId,
+        CancellationToken cancellationToken,
+        Result<bool> result)
+    {
+        IDbContextTransaction transaction = null;
+
+        try
+        {
+            transaction = await RepositoryHelper.CreateTransactionAsync(
+                _dbContext,
+                cancellationToken
+            );
+
+            await _dbContext.Set<GuestArtworkViewHistory>()
+                .Where(
+                    viewHistory => viewHistory.GuestId == guestId
+                    && viewHistory.ArtworkId == artworkId)
+                .ExecuteDeleteAsync(cancellationToken);
+
+
+            await transaction.CommitAsync(cancellationToken);
+
+            result.Value = true;
+        }
+        catch
+        {
+            if (transaction != null)
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                await transaction.DisposeAsync();
+            }
+        }
     }
     #endregion
 }
