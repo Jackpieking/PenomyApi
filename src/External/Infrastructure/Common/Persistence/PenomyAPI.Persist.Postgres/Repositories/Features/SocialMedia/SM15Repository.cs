@@ -43,6 +43,6 @@ public class SM15Repository : ISM15Repository
                 StorageUrl = y.StorageUrl,
                 UploadOrder = y.UploadOrder
             })
-        }).ToListAsync(token);
+        }).OrderByDescending(x => x.CreatedAt).ToListAsync(token);
     }
 }

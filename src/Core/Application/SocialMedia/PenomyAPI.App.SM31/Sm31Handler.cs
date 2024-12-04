@@ -38,13 +38,22 @@ public class Sm31Handler : IFeatureHandler<SM31Request, SM31Response>
                 return response;
             }
 
-            UserFriend friendRequest = new()
+            IEnumerable<UserFriend> friends = new List<UserFriend>
             {
-                FriendId = request.FriendId,
-                UserId = request.UserId
+                new()
+                {
+                    FriendId = request.FriendId,
+                    UserId = request.UserId,
+                    StartedAt = DateTime.UtcNow
+                },
+                new()
+                {
+                    FriendId = request.UserId,
+                    UserId = request.FriendId,
+                    StartedAt = DateTime.UtcNow
+                }
             };
-
-            var result = await _sm31Repository.UnfriendAsync(friendRequest, ct);
+            var result = await _sm31Repository.UnfriendAsync(friends, ct);
             response.StatusCode = result ? SM31ResponseStatusCode.SUCCESS : SM31ResponseStatusCode.FAILED;
         }
         catch

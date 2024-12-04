@@ -17,7 +17,7 @@ public class SM30Endpoint : Endpoint<SM30RequestDto, SM30HttpResponse>
 {
     public override void Configure()
     {
-        Get("/SM30/friend/add");
+        Post("/SM30/friend/add");
 
         AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
 
