@@ -23,7 +23,7 @@ COPY . .
 RUN dotnet build --no-restore -c Release
 
 # Try to publish the project into publish folder
-RUN dotnet publish --no-restore --no-build -c Release -o publish
+RUN dotnet publish --no-restore --no-build -c Release --property:PublishDir=/penomy/publish
 
 ###################
 # Final stage

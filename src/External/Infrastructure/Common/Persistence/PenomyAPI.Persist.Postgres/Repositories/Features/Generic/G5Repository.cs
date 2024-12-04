@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
 using PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG5;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 
@@ -92,5 +93,91 @@ public class G5Repository : IG5Repository
         return _dbContext
             .Set<UserFollowedArtwork>()
             .AnyAsync(x => x.UserId == userId && x.ArtworkId == artworkId, ct);
+    }
+
+    public async Task<G5FirstAndLastReadChapterReadModel> GetFirstAndLastReadChapterOfComicForGuestAsync(
+        long comicId,
+        long guestId,
+        CancellationToken ct
+    )
+    {
+        const int FIRST_CHAPTER_UPLOAD_ORDER = 1;
+
+        var chapterDbSet = _dbContext.Set<ArtworkChapter>();
+
+        long firstComicChapterId = await chapterDbSet
+            .Where(chapter =>
+                chapter.ArtworkId == comicId
+                && !chapter.IsTemporarilyRemoved
+                && chapter.PublicLevel == ArtworkPublicLevel.Everyone
+                && chapter.UploadOrder == FIRST_CHAPTER_UPLOAD_ORDER
+            )
+            .Select(chapter => chapter.Id)
+            .FirstOrDefaultAsync(ct);
+
+        // Get last read chapter id from the guest view history.
+        var guestViewHistoryDbSet = _dbContext.Set<GuestArtworkViewHistory>();
+
+        long lastReadChapterId = await guestViewHistoryDbSet
+            .Where(
+                viewHistory => viewHistory.GuestId == guestId
+                && viewHistory.ArtworkId == comicId
+            )
+            .Select(chapter => chapter.ChapterId)
+            .FirstOrDefaultAsync(ct);
+
+        if (lastReadChapterId == default)
+        {
+            lastReadChapterId = firstComicChapterId;
+        }
+
+        return new G5FirstAndLastReadChapterReadModel
+        {
+            FirstChapterId = firstComicChapterId,
+            LastReadChapterId = lastReadChapterId
+        };
+    }
+
+    public async Task<G5FirstAndLastReadChapterReadModel> GetFirstAndLastReadChapterOfComicForUserAsync(
+        long comicId,
+        long userId,
+        CancellationToken ct
+    )
+    {
+        const int FIRST_CHAPTER_UPLOAD_ORDER = 1;
+
+        var chapterDbSet = _dbContext.Set<ArtworkChapter>();
+
+        long firstComicChapterId = await chapterDbSet
+            .Where(chapter =>
+                chapter.ArtworkId == comicId
+                && !chapter.IsTemporarilyRemoved
+                && chapter.PublicLevel == ArtworkPublicLevel.Everyone
+                && chapter.UploadOrder == FIRST_CHAPTER_UPLOAD_ORDER
+            )
+            .Select(chapter => chapter.Id)
+            .FirstOrDefaultAsync(ct);
+
+        // Get last read chapter id from the user view history.
+        var guestViewHistoryDbSet = _dbContext.Set<UserArtworkViewHistory>();
+
+        long lastReadChapterId = await guestViewHistoryDbSet
+            .Where(
+                viewHistory => viewHistory.UserId == userId
+                && viewHistory.ArtworkId == comicId
+            )
+            .Select(chapter => chapter.ChapterId)
+            .FirstOrDefaultAsync(ct);
+
+        if (lastReadChapterId == default)
+        {
+            lastReadChapterId = firstComicChapterId;
+        }
+
+        return new G5FirstAndLastReadChapterReadModel
+        {
+            FirstChapterId = firstComicChapterId,
+            LastReadChapterId = lastReadChapterId
+        };
     }
 }

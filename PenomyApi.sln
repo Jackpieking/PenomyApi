@@ -259,6 +259,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.SM24", "src\C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.SM23", "src\Core\Application\SocialMedia\PenomyAPI.App.SM23\PenomyAPI.App.SM23.csproj", "{434853CD-F3AE-40F4-BCF3-731153B79C2F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.SM32", "src\Core\Application\SocialMedia\PenomyAPI.App.SM32\PenomyAPI.App.SM32.csproj", "{335A003E-A0D5-4286-8B41-58A173085012}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -677,6 +679,10 @@ Global
 		{434853CD-F3AE-40F4-BCF3-731153B79C2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{434853CD-F3AE-40F4-BCF3-731153B79C2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{434853CD-F3AE-40F4-BCF3-731153B79C2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{335A003E-A0D5-4286-8B41-58A173085012}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{335A003E-A0D5-4286-8B41-58A173085012}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{335A003E-A0D5-4286-8B41-58A173085012}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{335A003E-A0D5-4286-8B41-58A173085012}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -809,6 +815,7 @@ Global
 		{5A01CC3C-5C7B-44BA-906D-05590A318542} = {AD061D85-C1FB-4F50-8B36-93E3D49AAEF2}
 		{7E4EC53F-941F-4AE5-A9F7-E022085E0D7C} = {AD061D85-C1FB-4F50-8B36-93E3D49AAEF2}
 		{434853CD-F3AE-40F4-BCF3-731153B79C2F} = {AD061D85-C1FB-4F50-8B36-93E3D49AAEF2}
+		{335A003E-A0D5-4286-8B41-58A173085012} = {AD061D85-C1FB-4F50-8B36-93E3D49AAEF2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D57C122E-3458-4428-82FB-FF6E7A97A032}

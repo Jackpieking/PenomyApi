@@ -46,4 +46,8 @@ public sealed class G5ComicDetailReadModel
     public long CreatorTotalFollowers { get; set; }
 
     public ArtworkSeries ArtworkSeries { get; set; }
+
+    public long FirstChapterId { get; set; }
+
+    public long LastReadChapterId { get; set; }
 }

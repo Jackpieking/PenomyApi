@@ -47,6 +47,7 @@ public class G5Endpoint : Endpoint<G5RequestDto, G5HttpResponse>
         {
             ForSignedInUser = stateBag.IsAuthenticated,
             UserId = stateBag.UserId,
+            GuestId = requestDto.GuestId,
             ComicId = requestDto.ArtworkId,
         };
 
