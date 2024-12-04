@@ -58,16 +58,22 @@
         <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM43\PenomyAPI.App.SM43.csproj" />
         <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM41\PenomyAPI.App.SM41.csproj" />
         <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM45\PenomyAPI.App.SM45.csproj" />
+<<<<<<< Updated upstream
         <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM46\PenomyAPI.App.SM46.csproj" />
         <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM24\PenomyAPI.App.SM24.csproj" />
         <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM23\PenomyAPI.App.SM23.csproj" />
+=======
+>>>>>>> Stashed changes
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
         <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM13\PenomyAPI.App.SM13.csproj" />
         <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM14\PenomyAPI.App.SM14.csproj" />
         <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM15\PenomyAPI.App.SM15.csproj" />
+<<<<<<< Updated upstream
         <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM49\PenomyAPI.App.SM49.csproj" />
+=======
+>>>>>>> Stashed changes
         <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM5\PenomyAPI.App.SM5.csproj" />
         <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM7\PenomyAPI.App.SM7.csproj" />
         <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM12\PenomyAPI.App.SM12.csproj" />
