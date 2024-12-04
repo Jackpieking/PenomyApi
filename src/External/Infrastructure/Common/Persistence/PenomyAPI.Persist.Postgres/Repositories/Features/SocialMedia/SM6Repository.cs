@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.DataSeedings.Roles;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
+using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 using System;
 using System.Collections.Generic;
@@ -47,7 +48,9 @@ public class SM6Repository : ISM6Repository
             {
                 CreatedBy = userId,
                 GroupId = groupId,
-                CreatedAt = DateTime.UtcNow
+                RequestStatus = RequestStatus.Pending,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             });
 
         _dbContext.SaveChanges();

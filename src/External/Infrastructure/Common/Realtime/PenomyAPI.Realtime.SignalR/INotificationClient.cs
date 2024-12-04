@@ -1,8 +1,8 @@
-﻿using System.Threading.Tasks;
-
-namespace PenomyAPI.Realtime.SignalR;
+﻿namespace PenomyAPI.Realtime.SignalR;
 
 public interface INotificationClient
 {
-    Task ReceiveNotification(string message);
+    Task ReceiveNotification();
+
+    Task ReceiveMessage(string message);
 }

@@ -4,23 +4,15 @@ using PenomyAPI.App.Common.Realtime;
 
 namespace PenomyAPI.Realtime.SignalR;
 
-[Authorize]
+[Authorize(AuthenticationSchemes = "Bearer")]
 public class NotificationHub : Hub<INotificationClient>, INotificationHub
 {
     public const string connectPath = "/signalr/notification";
 
     public override async Task OnConnectedAsync()
     {
-        //var identity = new ClaimsIdentity(new List<Claim>
-        //{
-        //    new Claim("Sub", "11805760530993152"),
-        //    new Claim("Jti", "11805760530993152")
-        //}, "Custom");
-
-        //Context.User.AddIdentity(identity);
-
-        await Clients.Client(Context.ConnectionId).ReceiveNotification(
-            $"{Context.User?.Identity?.Name} is connecting");
+        //await Clients.Client(Context.ConnectionId).ReceiveNotification(
+        //    $"{Context.User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value} is connecting");
 
         await base.OnConnectedAsync();
     }
@@ -29,30 +21,42 @@ public class NotificationHub : Hub<INotificationClient>, INotificationHub
     {
         return base.OnDisconnectedAsync(exception);
     }
-
-    public async Task SendToClientAsync(string clientId, string message)
+    public async Task SendNotifToClient(string userId)
     {
-        await Clients.Client(clientId).ReceiveNotification(message);
+        await Clients.User(userId).ReceiveNotification();
     }
 
-    public async Task SendToClientsAsync(IReadOnlyList<string> clientIds, string message)
+    public async Task SendMsgToClient(string userId, string message)
     {
-
-        await Clients.Clients(clientIds).ReceiveNotification(message);
+        await Clients.User(userId).ReceiveMessage(message);
     }
 
-    public async Task SendToGroupAsync(string groupId, string message)
+    public async Task SendNotifToClients(IReadOnlyList<string> userIds)
     {
-        await Clients.Group(groupId).ReceiveNotification(message);
+        await Clients.Users(userIds).ReceiveNotification();
     }
 
-    public async Task SendToGroupsAsync(IReadOnlyList<string> groupIds, string message)
+    public async Task SendMsgToClients(IReadOnlyList<string> userIds, string message)
     {
-        await Clients.Groups(groupIds).ReceiveNotification(message);
+
+        await Clients.Users(userIds).ReceiveMessage(message);
+    }
+    public async Task SendNotifToGroup(string groupId)
+    {
+        await Clients.Group(groupId).ReceiveNotification();
     }
 
-    public async Task SendMessage(string mess)
+    public async Task SendMsgToGroup(string groupId, string message)
     {
-        await Clients.User("11805760530993152").ReceiveNotification(mess);
+        await Clients.Group(groupId).ReceiveMessage(message);
+    }
+    public async Task SendNotifToGroups(IReadOnlyList<string> groupIds)
+    {
+        await Clients.Groups(groupIds).ReceiveNotification();
+    }
+
+    public async Task SendMsgToGroups(IReadOnlyList<string> groupIds, string message)
+    {
+        await Clients.Groups(groupIds).ReceiveMessage(message);
     }
 }

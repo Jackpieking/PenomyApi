@@ -7,7 +7,6 @@ using Microsoft.IdentityModel.JsonWebTokens;
 using PenomyAPI.BuildingBlock.FeatRegister;
 using PenomyAPI.BuildingBlock.FeatRegister.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Common;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Hubs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.ServiceConfigurations;
 using PenomyAPI.Realtime.SignalR;
 
@@ -46,7 +45,6 @@ if (app.Environment.IsDevelopment())
 {
     app.UseMiddleware<AppGlobalExceptionHandler>()
         .UseHttpsRedirection()
-        .UseRouting()
         .UseCors()
         .UseAuthentication()
         .UseAuthorization()
@@ -66,10 +64,6 @@ if (app.Environment.IsProduction())
     app.UseCors().UseAuthentication().UseAuthorization().UseFastEndpoints();
 }
 
-app.MapControllers();
-
-// app.MapHub<AppNotificationHub>(AppNotificationHub.connectPath);
-app.MapHub<TestNotificationHub>(TestNotificationHub.connectPath);
 app.MapHub<NotificationHub>(NotificationHub.connectPath);
 
 await app.RunAsync();

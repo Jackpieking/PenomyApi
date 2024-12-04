@@ -1,11 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using FastEndpoints.Security;
 using Microsoft.IdentityModel.Tokens;
 using PenomyAPI.App.Common.Tokens;
 using PenomyAPI.Infra.Configuration.Options;
+using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
 
 namespace PenomyAPI.Identity.AppAuthenticator;
 
@@ -33,6 +34,13 @@ public sealed class AccessTokenHandler : IAccessTokenHandler
                 item: new(
                     type: JwtRegisteredClaimNames.Iat,
                     value: DateTime.UtcNow.ToLongTimeString()
+                )
+            );
+            option.User.Claims.Add(
+                item: new(
+                    type: ClaimTypes.NameIdentifier,
+                    value: claims.Where(c => c.Type == JwtRegisteredClaimNames.Sub)
+                        .FirstOrDefault().Value
                 )
             );
         });
