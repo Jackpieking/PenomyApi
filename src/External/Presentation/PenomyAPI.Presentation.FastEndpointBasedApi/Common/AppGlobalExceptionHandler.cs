@@ -31,7 +31,6 @@ public sealed class AppGlobalExceptionHandler : IMiddleware
             var logger = scope.TryResolve<ILogger<AppGlobalExceptionHandler>>();
 
             logger.LogError(e, e.Message);
-            logger.LogError(e.InnerException, e.InnerException.Message);
 
             context.Response.Clear();
 
