@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace PenomyAPI.Persist.Postgres.Common.ExtensionMethods;
@@ -55,5 +56,36 @@ internal static class IEnumerableExtensions
         builder.Append(CLOSE_BRACKET);
 
         return builder.ToString();
+    }
+
+    public static IEnumerable<T> GetRandomElements<T>(this IEnumerable<T> source, int count)
+    {
+        if (Equals(source, null))
+        {
+            throw new ArgumentNullException(nameof(source));
+        }
+
+        if (count <= 0)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(count),
+                "Count cannot be negative or equal zero."
+            );
+        }
+
+        var sourceList = source.ToList();
+
+        if (count > sourceList.Count)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(count),
+                "Count cannot be greater than the source length."
+            );
+        }
+
+        // Shuffle the source list with OrderBy using random and return.
+        var random = new Random();
+
+        return sourceList.OrderBy(_ => random.Next()).Take(count);
     }
 }
