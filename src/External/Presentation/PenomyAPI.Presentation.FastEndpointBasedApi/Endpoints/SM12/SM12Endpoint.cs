@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
@@ -66,7 +65,7 @@ public class SM12Endpoint : Endpoint<SM12RequestDto, SM12HttpResponse>
         List<AppFileInfo> mediaFiles = [];
         var stateBag = ProcessorState<StateBag>();
         SM12HttpResponse response = new();
-        if (requestDto.AttachedMedia.Any())
+        if (requestDto.AttachedMedia != null)
             foreach (var media in requestDto.AttachedMedia)
             {
                 var fileExtension = FormFileHelper.Instance.GetFileExtension(media);
