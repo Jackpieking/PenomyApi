@@ -30,10 +30,12 @@ public class SM32Handler : IFeatureHandler<SM32Request, SM32Response>
             if (enumerable.Count > 0)
                 response.UserProfiles = await _sm32Repository.GetAllUserProfilesAsync(enumerable, ct);
             response.StatusCode = SM32ResponseStatusCode.SUCCESS;
+            response.IsSuccess = true;
         }
         catch
         {
             // Handle unexpected errors
+            response.IsSuccess = false;
             response.StatusCode = SM32ResponseStatusCode.FAILED;
         }
 
