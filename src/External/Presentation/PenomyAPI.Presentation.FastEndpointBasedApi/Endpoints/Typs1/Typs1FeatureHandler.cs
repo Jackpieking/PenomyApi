@@ -3,7 +3,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
+using PenomyAPI.Infra.Configuration.Options;
 using PenomyAPI.Persist.Postgres.Data.DbContexts;
 using PenomyAPI.Persist.Typesense;
 using PenomyAPI.Persist.Typesense.AppSchema;
@@ -28,10 +30,12 @@ public static class Typs1FeatureHandler
         _typesenseClient = typesenseClient;
     }
 
-    public static async Task ExecuteAsync(CancellationToken ct)
+    public static async Task ExecuteAsync(IConfiguration configuration, CancellationToken ct)
     {
         // Init all required collection schemas
-        var schemaInfos = TypesenseInitializer.InitCollectionSchemas();
+        var schemaInfos = TypesenseInitializer.InitCollectionSchemas(
+            configuration.GetRequiredSection("Typesense").Get<TypesenseOptions>()
+        );
 
         // Uncomment this incase you want to re init all collections.
         // var errors = await TypesenseInitializer.DeleteAllCollectionsAsync(

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
@@ -46,8 +47,12 @@ public class Typs3Endpoint : Endpoint<Typs3HttpRequest, Typs3HttpResponse>
     {
         var query = new SearchParameters(
             req.SearchText,
-            MangaSearchSchema.Metadata.FieldTitle.MangaName
+            $"{MangaSearchSchema.Metadata.FieldTitle.MangaName},{MangaSearchSchema.Metadata.FieldTitle.Embedding}"
         );
+
+        query.ExcludeFields = MangaSearchSchema.Metadata.FieldTitle.Embedding;
+        query.SortBy = "_text_match:desc";
+        query.PerPage = 5;
 
         var searchResult = await _typesenseClient.Search<MangaSearchSchema>(
             MangaSearchSchema.Metadata.SchemaName,
@@ -55,7 +60,23 @@ public class Typs3Endpoint : Endpoint<Typs3HttpRequest, Typs3HttpResponse>
             ct
         );
 
-        var response = new Typs3HttpResponse() { Body = searchResult };
+        var mangas = new List<Typs3HttpResponse.MangaSearchResult>();
+
+        foreach (var result in searchResult.Hits)
+        {
+            mangas.Add(
+                new()
+                {
+                    MangaId = result.Document.MangaId,
+                    MangaName = result.Document.MangaName,
+                    MangaAvatar = result.Document.MangaAvatar,
+                    MangaNumberOfStars = result.Document.MangaNumberOfStars,
+                    MangaNumberOfFollowers = result.Document.MangaNumberOfFollowers
+                }
+            );
+        }
+
+        var response = new Typs3HttpResponse() { Body = mangas };
 
         await SendAsync(response, StatusCodes.Status200OK, ct);
 
