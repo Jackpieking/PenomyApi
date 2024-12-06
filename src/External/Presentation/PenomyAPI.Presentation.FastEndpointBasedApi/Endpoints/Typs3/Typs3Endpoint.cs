@@ -60,14 +60,23 @@ public class Typs3Endpoint : Endpoint<Typs3HttpRequest, Typs3HttpResponse>
             ct
         );
 
-        var mangaNames = new List<string>();
+        var mangas = new List<Typs3HttpResponse.MangaSearchResult>();
 
         foreach (var result in searchResult.Hits)
         {
-            mangaNames.Add(result.Document.MangaName);
+            mangas.Add(
+                new()
+                {
+                    MangaId = result.Document.MangaId,
+                    MangaName = result.Document.MangaName,
+                    MangaAvatar = result.Document.MangaAvatar,
+                    MangaNumberOfStars = result.Document.MangaNumberOfStars,
+                    MangaNumberOfFollowers = result.Document.MangaNumberOfFollowers
+                }
+            );
         }
 
-        var response = new Typs3HttpResponse() { Body = mangaNames };
+        var response = new Typs3HttpResponse() { Body = mangas };
 
         await SendAsync(response, StatusCodes.Status200OK, ct);
 
