@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using PenomyAPI.Infra.Configuration.Options;
 using PenomyAPI.Persist.Typesense.AppSchema;
 using Typesense;
 
@@ -86,7 +87,7 @@ public static class TypesenseInitializer
         }
     }
 
-    public static FrozenDictionary<string, Schema> InitCollectionSchemas()
+    public static FrozenDictionary<string, Schema> InitCollectionSchemas(TypesenseOptions options)
     {
         // Init list of schema infos
         var schemaInfos = new Dictionary<string, Schema>
@@ -96,7 +97,6 @@ public static class TypesenseInitializer
                 new(
                     MangaSearchSchema.Metadata.SchemaName,
                     [
-                        new(MangaSearchSchema.Metadata.FieldTitle.MangaId, FieldType.String, false),
                         new(
                             MangaSearchSchema.Metadata.FieldTitle.MangaName,
                             FieldType.String,
@@ -116,6 +116,14 @@ public static class TypesenseInitializer
                             MangaSearchSchema.Metadata.FieldTitle.MangaNumberOfFollowers,
                             FieldType.Int64,
                             false
+                        ),
+                        new(
+                            MangaSearchSchema.Metadata.FieldTitle.Embedding,
+                            FieldType.FloatArray,
+                            embed: new(
+                                [MangaSearchSchema.Metadata.FieldTitle.MangaName],
+                                new(options.SearchModel)
+                            )
                         )
                     ]
                 )

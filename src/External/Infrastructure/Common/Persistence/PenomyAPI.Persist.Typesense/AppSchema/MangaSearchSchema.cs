@@ -19,6 +19,9 @@ public sealed class MangaSearchSchema
     [JsonPropertyName(Metadata.FieldTitle.MangaNumberOfFollowers)]
     public long MangaNumberOfFollowers { get; set; }
 
+    [JsonPropertyName(Metadata.FieldTitle.Embedding)]
+    public float[] Embedding { get; set; }
+
     public sealed class Metadata
     {
         public const string SchemaName = "MangaSearch";
@@ -34,6 +37,8 @@ public sealed class MangaSearchSchema
             public const string MangaNumberOfStars = "MangaNumberOfStars";
 
             public const string MangaNumberOfFollowers = "MangaNumberOfFollowers";
+
+            public const string Embedding = "embedding";
         }
     }
 }

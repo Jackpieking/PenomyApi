@@ -19,6 +19,8 @@ public class TypesenseOptions : AppOptions
         public string Protocol { get; init; }
     }
 
+    public string SearchModel { get; init; }
+
     public override void Bind(IConfiguration configuration)
     {
         configuration.GetRequiredSection("Typesense").Bind(this);
