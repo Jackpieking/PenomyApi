@@ -47,7 +47,7 @@ public class Typs3Endpoint : Endpoint<Typs3HttpRequest, Typs3HttpResponse>
     {
         var query = new SearchParameters(
             req.SearchText,
-            $"{MangaSearchSchema.Metadata.FieldTitle.MangaName},{MangaSearchSchema.Metadata.FieldTitle.Embedding}"
+            $"{MangaSearchSchema.Metadata.FieldTitle.MangaName},{MangaSearchSchema.Metadata.FieldTitle.MangaDescription},{MangaSearchSchema.Metadata.FieldTitle.Embedding}"
         );
 
         query.ExcludeFields = MangaSearchSchema.Metadata.FieldTitle.Embedding;

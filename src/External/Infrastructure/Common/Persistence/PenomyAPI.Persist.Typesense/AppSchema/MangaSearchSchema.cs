@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace PenomyAPI.Persist.Typesense.AppSchema;
@@ -9,6 +10,12 @@ public sealed class MangaSearchSchema
 
     [JsonPropertyName(Metadata.FieldTitle.MangaName)]
     public string MangaName { get; set; }
+
+    [JsonPropertyName(Metadata.FieldTitle.MangaDescription)]
+    public string MangaDescription { get; set; }
+
+    [JsonPropertyName(Metadata.FieldTitle.MangaCategories)]
+    public IEnumerable<string> MangaCategories { get; set; }
 
     [JsonPropertyName(Metadata.FieldTitle.MangaAvatar)]
     public string MangaAvatar { get; set; }
@@ -31,6 +38,10 @@ public sealed class MangaSearchSchema
             public const string MangaId = "id";
 
             public const string MangaName = "MangaName";
+
+            public const string MangaDescription = "MangaDescription";
+
+            public const string MangaCategories = "MangaCategories";
 
             public const string MangaAvatar = "MangaAvatar";
 

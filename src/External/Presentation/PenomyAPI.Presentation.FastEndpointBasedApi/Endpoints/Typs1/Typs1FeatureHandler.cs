@@ -100,6 +100,10 @@ public static class Typs1FeatureHandler
             {
                 MangaId = artWork.Id.ToString(),
                 MangaName = artWork.Title,
+                MangaDescription = artWork.Introduction,
+                MangaCategories = artWork.ArtworkCategories.Select(artworkCat =>
+                    artworkCat.Category.Name
+                ),
                 MangaAvatar = artWork.ThumbnailUrl,
                 MangaNumberOfFollowers = artWork.ArtworkMetaData.TotalFollowers,
                 MangaNumberOfStars = artWork.ArtworkMetaData.TotalStarRates
