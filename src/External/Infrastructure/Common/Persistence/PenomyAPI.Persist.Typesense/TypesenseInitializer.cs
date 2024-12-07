@@ -103,6 +103,16 @@ public static class TypesenseInitializer
                             false
                         ),
                         new(
+                            MangaSearchSchema.Metadata.FieldTitle.MangaDescription,
+                            FieldType.String,
+                            false
+                        ),
+                        new(
+                            MangaSearchSchema.Metadata.FieldTitle.MangaCategories,
+                            FieldType.StringArray,
+                            false
+                        ),
+                        new(
                             MangaSearchSchema.Metadata.FieldTitle.MangaAvatar,
                             FieldType.String,
                             false
@@ -121,7 +131,11 @@ public static class TypesenseInitializer
                             MangaSearchSchema.Metadata.FieldTitle.Embedding,
                             FieldType.FloatArray,
                             embed: new(
-                                [MangaSearchSchema.Metadata.FieldTitle.MangaName],
+                                [
+                                    MangaSearchSchema.Metadata.FieldTitle.MangaName,
+                                    MangaSearchSchema.Metadata.FieldTitle.MangaDescription,
+                                    MangaSearchSchema.Metadata.FieldTitle.MangaCategories
+                                ],
                                 new(options.SearchModel)
                             )
                         )

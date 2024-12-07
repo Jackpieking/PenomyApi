@@ -33,6 +33,10 @@ public sealed class Typs2FeatureHandler : IJob
             {
                 MangaId = artWork.Id.ToString(),
                 MangaName = artWork.Title,
+                MangaDescription = artWork.Introduction,
+                MangaCategories = artWork.ArtworkCategories.Select(artworkCat =>
+                    artworkCat.Category.Name
+                ),
                 MangaAvatar = artWork.ThumbnailUrl,
                 MangaNumberOfFollowers = artWork.ArtworkMetaData.TotalFollowers,
                 MangaNumberOfStars = artWork.ArtworkMetaData.TotalStarRates
