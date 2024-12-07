@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
 using PenomyAPI.Infra.Configuration.Options;
 using PenomyAPI.Persist.Postgres.Data.DbContexts;
 using PenomyAPI.Persist.Typesense;
@@ -96,6 +97,12 @@ public static class Typs1FeatureHandler
             .Set<Artwork>()
             .AsNoTracking()
             .AsSplitQuery()
+            .Where(artwork =>
+                // Check if current artwork is public for everyone and not being removed or taken down.
+                artwork.PublicLevel == ArtworkPublicLevel.Everyone
+                && !artwork.IsTemporarilyRemoved
+                && !artwork.IsTakenDown
+            )
             .Select(artWork => new MangaSearchSchema
             {
                 MangaId = artWork.Id.ToString(),
