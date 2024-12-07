@@ -30,7 +30,6 @@ internal sealed class ArtworkRepository : IArtworkRepository
                         && artwork.PublicLevel == ArtworkPublicLevel.Everyone
                         && !artwork.IsTemporarilyRemoved
                         && !artwork.IsTakenDown
-
                     )
                     // Or if the current artwork is published by the user with the id the same as the input.
                     || (artwork.Id == artworkId && artwork.CreatedBy == userId)

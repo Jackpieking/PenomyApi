@@ -39,9 +39,7 @@ public class G63Repository : IG63Repository
                 ProfileOwner = new UserProfile
                 {
                     NickName = o.Creator.NickName,
-                    Gender = o.Creator.Gender,
                     AvatarUrl = o.Creator.AvatarUrl,
-                    AboutMe = o.Creator.AboutMe
                 }
             })
             .ToListAsync(ct);
