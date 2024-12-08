@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
+using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia;
@@ -28,7 +29,7 @@ public class SM42Repository : ISM42Repository
             //     return null;
 
             return await _socialGroupJoinRequestDbSet
-                .Where(o => o.GroupId == groupId)
+                .Where(o => o.GroupId == groupId && o.RequestStatus == RequestStatus.Pending)
                 .Select(o => new SocialGroupJoinRequest
                 {
                     GroupId = o.GroupId,

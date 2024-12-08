@@ -26,7 +26,7 @@ public class SM23Repository : ISM23Repository
         try
         {
             return await _userPostCommentDbSet
-                .Where(o => o.PostId == PostId)
+                .Where(o => o.PostId == PostId && o.IsRemoved == false)
                 .Select(o => new UserPostComment
                 {
                     Id = o.Id,

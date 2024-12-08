@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using PenomyAPI.App.Common.Models.Common;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
+using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 using PenomyAPI.Persist.Postgres.Repositories.Helpers;
 
@@ -64,7 +65,7 @@ public class SM43Repository : ISM43Repository
 
             await _socialGroupJoinRequestDbSet
                 .Where(req => req.CreatedBy == member.MemberId && req.GroupId == member.GroupId)
-                .ExecuteDeleteAsync(cancellationToken);
+                .ExecuteUpdateAsync(setters => setters.SetProperty(o => o.RequestStatus, o => RequestStatus.Accepted));
 
             await _dbContext.SaveChangesAsync(cancellationToken);
             await transaction.CommitAsync(cancellationToken);
