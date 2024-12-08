@@ -11,6 +11,7 @@ public class Art3HttpResponse : AppHttpResponse<IEnumerable<Art3DeletedArtworkIt
 {
     public static readonly Art3HttpResponse Empty = new()
     {
+        AppCode = "ART3.GET_DELETED_ITEMS.EMPTY.2",
         Body = [],
     };
 
@@ -23,6 +24,7 @@ public class Art3HttpResponse : AppHttpResponse<IEnumerable<Art3DeletedArtworkIt
 
         return new()
         {
+            AppCode = "ART3.GET_DELETED_ITEMS.SUCCESS.1",
             HttpCode = StatusCodes.Status200OK,
             Body = response.DeletedItems.Select(Art3DeletedArtworkItemResponseDto.MapFrom)
         };

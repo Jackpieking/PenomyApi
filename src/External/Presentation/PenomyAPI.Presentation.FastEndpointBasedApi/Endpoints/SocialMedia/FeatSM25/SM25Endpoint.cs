@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.SM25;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
-using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatSM25.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatSM25.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatSM25.HttpResponse;

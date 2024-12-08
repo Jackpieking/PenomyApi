@@ -1,7 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <ItemGroup>
+        <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt14\PenomyAPI.App.FeatArt14.csproj" />
         <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG2\PenomyAPI.App.FeatG2.csproj" />
         <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG35\PenomyAPI.App.FeatG35.csproj" />
+        <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG36\PenomyAPI.App.FeatG36.csproj" />
         <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG37\PenomyAPI.App.FeatG37.csproj" />
         <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.FeatG50\PenomyAPI.App.FeatG50.csproj" />
         <ProjectReference Include="..\..\..\Core\Application\Generic\PenomyAPI.App.G25\PenomyAPI.App.G25.csproj" />
@@ -62,6 +64,7 @@
         <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM24\PenomyAPI.App.SM24.csproj" />
         <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM23\PenomyAPI.App.SM23.csproj" />
         <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM25\PenomyAPI.App.SM25.csproj" />
+        <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM27\PenomyAPI.App.SM27.csproj" />
         <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt3\PenomyAPI.App.FeatArt3.csproj" />
     </ItemGroup>
     <ItemGroup>

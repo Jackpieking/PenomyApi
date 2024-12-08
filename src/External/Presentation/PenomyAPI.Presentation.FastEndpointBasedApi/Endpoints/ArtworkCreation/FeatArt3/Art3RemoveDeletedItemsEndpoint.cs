@@ -47,6 +47,11 @@ public class Art3RemoveDeletedItemsEndpoint
         Art3RemoveDeletedItemsRequestDto requestDto,
         CancellationToken ct)
     {
+        if (requestDto.ArtworkIds.Length == 0)
+        {
+            return Art3RemoveDeletedItemsHttpResponse.CREATOR_HAS_NO_PERMISSION;
+        }
+
         var stateBag = ProcessorState<StateBag>();
 
         var request = new Art3RemoveDeletedItemsRequest

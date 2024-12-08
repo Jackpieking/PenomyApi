@@ -8,16 +8,19 @@ public class Art3RestoreDeletedItemsHttpResponse : AppHttpResponse<object>
 {
     public static readonly Art3RestoreDeletedItemsHttpResponse SUCCESS = new()
     {
+        AppCode = GetAppCode(Art3RestoreDeletedItemsResponseAppCode.SUCCESS),
         HttpCode = StatusCodes.Status200OK,
     };
 
     public static readonly Art3RestoreDeletedItemsHttpResponse CREATOR_HAS_NO_PERMISSION = new()
     {
+        AppCode = GetAppCode(Art3RestoreDeletedItemsResponseAppCode.CREATOR_HAS_NO_PERMISSION),
         HttpCode = StatusCodes.Status403Forbidden,
     };
 
     public static readonly Art3RestoreDeletedItemsHttpResponse DATABASE_ERROR = new()
     {
+        AppCode = GetAppCode(Art3RestoreDeletedItemsResponseAppCode.DATABASE_ERROR),
         HttpCode = StatusCodes.Status500InternalServerError,
     };
 
@@ -34,5 +37,10 @@ public class Art3RestoreDeletedItemsHttpResponse : AppHttpResponse<object>
         }
 
         return DATABASE_ERROR;
+    }
+
+    private static string GetAppCode(Art3RestoreDeletedItemsResponseAppCode appCode)
+    {
+        return $"ART3.RESTORE_DELETED_ITEMS.{appCode}.{(int) appCode}";
     }
 }
