@@ -3,11 +3,15 @@ using System.Threading.Tasks;
 
 namespace PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 
-public interface ISM25Repository
+public interface ISM27Repository
 {
-    Task<bool> UpdatePostCommentsAsync(
+    Task<bool> TakeDownPostCommentsAsync(
         long commentId,
-        string content,
+        CancellationToken cancellationToken
+    );
+
+    Task<bool> CheckPostOnwerAsync(
+        long postId,
         long userId,
         CancellationToken cancellationToken
     );
