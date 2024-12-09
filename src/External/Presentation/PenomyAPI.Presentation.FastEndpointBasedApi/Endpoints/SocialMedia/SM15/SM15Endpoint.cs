@@ -66,7 +66,7 @@ public class Sm15Endpoint : Endpoint<EmptyRequest, Sm15HttpResponse>
             {
                 var userPostDto = new UserPostDto
                 {
-                    Id = p.Id,
+                    Id = p.Id.ToString(),
                     Content = p.Content,
                     CreatedBy = p.Creator.NickName,
                     CreatedAt = p.CreatedAt,
