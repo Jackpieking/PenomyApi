@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\PenomyAPI.App.Common\PenomyAPI.App.Common.csproj" />
+    <ProjectReference Include="..\..\..\Domain\PenomyAPI.Domain.RelationalDb\PenomyAPI.Domain.RelationalDb.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+</Project>

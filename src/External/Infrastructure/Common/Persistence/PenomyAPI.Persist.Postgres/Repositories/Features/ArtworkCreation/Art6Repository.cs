@@ -27,14 +27,18 @@ internal sealed class Art6Repository : IArt6Repository
         PublishStatus publishStatus,
         CancellationToken cancellationToken)
     {
-        Expression<Func<ArtworkChapter, bool>> filterExpression = (ArtworkChapter chapter) => chapter.ArtworkId == comicId
+        Expression<Func<ArtworkChapter, bool>> filterExpression =
+            (ArtworkChapter chapter) => chapter.ArtworkId == comicId
+            && !chapter.IsTemporarilyRemoved
             && chapter.PublishStatus == PublishStatus.Drafted;
 
         // If publish status is not drafted, then get both published and scheduled.
         if (publishStatus != PublishStatus.Drafted)
         {
-            filterExpression = (ArtworkChapter chapter) => chapter.ArtworkId == comicId
-            && chapter.PublishStatus != PublishStatus.Drafted;
+            filterExpression =
+                (ArtworkChapter chapter) => chapter.ArtworkId == comicId
+                && !chapter.IsTemporarilyRemoved
+                && chapter.PublishStatus != PublishStatus.Drafted;
         }
 
         return await _chapters
