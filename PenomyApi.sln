@@ -229,37 +229,37 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.SM15", "src\C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatG37", "src\Core\Application\Generic\PenomyAPI.App.FeatG37\PenomyAPI.App.FeatG37.csproj", "{89A08357-E4A9-421A-8683-BF2D39B688CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.SM38", "src\Core\Application\SocialMedia\PenomyAPI.App.SM38\PenomyAPI.App.SM38.csproj", "{BFE3919E-133A-4C7B-B093-ADDC0BAF52D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.SM38", "src\Core\Application\SocialMedia\PenomyAPI.App.SM38\PenomyAPI.App.SM38.csproj", "{BFE3919E-133A-4C7B-B093-ADDC0BAF52D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.SM44", "src\Core\Application\SocialMedia\PenomyAPI.App.SM44\PenomyAPI.App.SM44.csproj", "{7C488762-C3EC-4039-AAA5-D9257763E121}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.SM44", "src\Core\Application\SocialMedia\PenomyAPI.App.SM44\PenomyAPI.App.SM44.csproj", "{7C488762-C3EC-4039-AAA5-D9257763E121}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.SM42", "src\Core\Application\SocialMedia\PenomyAPI.App.SM42\PenomyAPI.App.SM42.csproj", "{B7919932-1DEB-4EC1-A16D-CACCBD29131C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.SM42", "src\Core\Application\SocialMedia\PenomyAPI.App.SM42\PenomyAPI.App.SM42.csproj", "{B7919932-1DEB-4EC1-A16D-CACCBD29131C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.SM43", "src\Core\Application\SocialMedia\PenomyAPI.App.SM43\PenomyAPI.App.SM43.csproj", "{C1E9A470-4762-465F-9D3B-6815279A465F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.SM43", "src\Core\Application\SocialMedia\PenomyAPI.App.SM43\PenomyAPI.App.SM43.csproj", "{C1E9A470-4762-465F-9D3B-6815279A465F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.SM41", "src\Core\Application\SocialMedia\PenomyAPI.App.SM41\PenomyAPI.App.SM41.csproj", "{9BA7FA9F-6AD7-4470-A6BC-7187F96E2CB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.SM41", "src\Core\Application\SocialMedia\PenomyAPI.App.SM41\PenomyAPI.App.SM41.csproj", "{9BA7FA9F-6AD7-4470-A6BC-7187F96E2CB6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.SM30", "src\Core\Application\SocialMedia\PenomyAPI.App.SM30\PenomyAPI.App.SM30.csproj", "{DE273C5C-DD67-449C-AFB2-BC44E9C6B2D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.SM30", "src\Core\Application\SocialMedia\PenomyAPI.App.SM30\PenomyAPI.App.SM30.csproj", "{DE273C5C-DD67-449C-AFB2-BC44E9C6B2D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.SM31", "src\Core\Application\SocialMedia\PenomyAPI.App.SM31\PenomyAPI.App.SM31.csproj", "{82102817-8277-4378-97AE-EFF431EC35FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.SM31", "src\Core\Application\SocialMedia\PenomyAPI.App.SM31\PenomyAPI.App.SM31.csproj", "{82102817-8277-4378-97AE-EFF431EC35FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.Persist.Typesense", "src\External\Infrastructure\Common\Persistence\PenomyAPI.Persist.Typesense\PenomyAPI.Persist.Typesense.csproj", "{CE96553A-D463-4B5D-A95A-AB22C026200E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.Persist.Typesense", "src\External\Infrastructure\Common\Persistence\PenomyAPI.Persist.Typesense\PenomyAPI.Persist.Typesense.csproj", "{CE96553A-D463-4B5D-A95A-AB22C026200E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.SM39", "src\Core\Application\SocialMedia\PenomyAPI.App.SM39\PenomyAPI.App.SM39.csproj", "{A5EC14F3-AD2D-4FD1-AA4C-5B2EFA7A94F3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.SM39", "src\Core\Application\SocialMedia\PenomyAPI.App.SM39\PenomyAPI.App.SM39.csproj", "{A5EC14F3-AD2D-4FD1-AA4C-5B2EFA7A94F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.SM40", "src\Core\Application\SocialMedia\PenomyAPI.App.SM40\PenomyAPI.App.SM40.csproj", "{7F7EBD2C-DE4C-4BA5-9F91-615E989C0094}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.SM40", "src\Core\Application\SocialMedia\PenomyAPI.App.SM40\PenomyAPI.App.SM40.csproj", "{7F7EBD2C-DE4C-4BA5-9F91-615E989C0094}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.SM49", "src\Core\Application\SocialMedia\PenomyAPI.App.SM49\PenomyAPI.App.SM49.csproj", "{4D5FCFC9-2997-4B50-AECC-BC8F225E59D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.SM49", "src\Core\Application\SocialMedia\PenomyAPI.App.SM49\PenomyAPI.App.SM49.csproj", "{4D5FCFC9-2997-4B50-AECC-BC8F225E59D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.SM45", "src\Core\Application\SocialMedia\PenomyAPI.App.SM45\PenomyAPI.App.SM45.csproj", "{9D012E6F-88AF-4FC8-AB65-14C81B9645E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.SM45", "src\Core\Application\SocialMedia\PenomyAPI.App.SM45\PenomyAPI.App.SM45.csproj", "{9D012E6F-88AF-4FC8-AB65-14C81B9645E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.SM46", "src\Core\Application\SocialMedia\PenomyAPI.App.SM46\PenomyAPI.App.SM46.csproj", "{5A01CC3C-5C7B-44BA-906D-05590A318542}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.SM46", "src\Core\Application\SocialMedia\PenomyAPI.App.SM46\PenomyAPI.App.SM46.csproj", "{5A01CC3C-5C7B-44BA-906D-05590A318542}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.SM24", "src\Core\Application\SocialMedia\PenomyAPI.App.SM24\PenomyAPI.App.SM24.csproj", "{7E4EC53F-941F-4AE5-A9F7-E022085E0D7C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.SM24", "src\Core\Application\SocialMedia\PenomyAPI.App.SM24\PenomyAPI.App.SM24.csproj", "{7E4EC53F-941F-4AE5-A9F7-E022085E0D7C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.SM23", "src\Core\Application\SocialMedia\PenomyAPI.App.SM23\PenomyAPI.App.SM23.csproj", "{434853CD-F3AE-40F4-BCF3-731153B79C2F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.SM23", "src\Core\Application\SocialMedia\PenomyAPI.App.SM23\PenomyAPI.App.SM23.csproj", "{434853CD-F3AE-40F4-BCF3-731153B79C2F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.SM32", "src\Core\Application\SocialMedia\PenomyAPI.App.SM32\PenomyAPI.App.SM32.csproj", "{335A003E-A0D5-4286-8B41-58A173085012}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.SM32", "src\Core\Application\SocialMedia\PenomyAPI.App.SM32\PenomyAPI.App.SM32.csproj", "{335A003E-A0D5-4286-8B41-58A173085012}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.SM25", "src\Core\Application\SocialMedia\PenomyAPI.App.SM25\PenomyAPI.App.SM25.csproj", "{463EE1D9-683A-40D3-8BA4-8A4FF2E0B563}"
 EndProject

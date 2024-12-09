@@ -11,7 +11,7 @@ public class SM15ResponseDto
 
 public class UserPostDto
 {
-    public long Id { get; set; }
+    public string Id { get; set; }
     public string Content { get; set; }
     public string CreatedBy { get; set; }
     public DateTime CreatedAt { get; set; }

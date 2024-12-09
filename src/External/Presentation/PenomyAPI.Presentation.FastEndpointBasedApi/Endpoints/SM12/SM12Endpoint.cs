@@ -32,8 +32,6 @@ public class SM12Endpoint : Endpoint<SM12RequestDto, SM12HttpResponse>
     public SM12Endpoint(Lazy<ISnowflakeIdGenerator> idGenerator)
     {
         _idGenerator = idGenerator;
-
-        var id = _idGenerator.Value.Get();
     }
 
     public override void Configure()
@@ -64,7 +62,6 @@ public class SM12Endpoint : Endpoint<SM12RequestDto, SM12HttpResponse>
     {
         List<AppFileInfo> mediaFiles = [];
         var stateBag = ProcessorState<StateBag>();
-        SM12HttpResponse response = new();
         if (requestDto.AttachedMedia != null)
             foreach (var media in requestDto.AttachedMedia)
             {
