@@ -19,7 +19,7 @@ public interface IG2Repository
     /// <returns>
     ///     The list contains the top recommended artworks based on type.
     /// </returns>
-    Task<G2TopRecommendedArtworks> GetTopRecommendedArtworksByTypeAsync(
+    Task<ICollection<G2TopArtworkReadModel>> GetTopRecommendedArtworksByTypeAsync(
         ArtworkType artworkType,
         CancellationToken cancellationToken);
 }

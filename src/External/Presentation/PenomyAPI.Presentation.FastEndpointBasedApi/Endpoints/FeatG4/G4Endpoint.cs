@@ -1,12 +1,13 @@
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG4;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4.HttpResponse;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4.Middlewares;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4;
 
@@ -14,8 +15,10 @@ public class G4Endpoint : Endpoint<G4RequestDto, G4HttpResponse>
 {
     public override void Configure()
     {
-        Get("g4/ComicsByCategory/get");
+        Get("g4/recommended-comics");
+
         AllowAnonymous();
+        PreProcessor<G4AuthPreProcessor>();
 
         Description(builder: builder =>
         {
@@ -33,9 +36,16 @@ public class G4Endpoint : Endpoint<G4RequestDto, G4HttpResponse>
         });
     }
 
-    public override async Task<G4HttpResponse> ExecuteAsync(G4RequestDto req, CancellationToken ct)
+    public override async Task<G4HttpResponse> ExecuteAsync(G4RequestDto requestDto, CancellationToken ct)
     {
-        var G4Request = new G4Request { Category = long.Parse(req.CategoryId) };
+        var stateBag = ProcessorState<G4StateBag>();
+
+        var G4Request = new G4Request
+        {
+            ForSignedInUser = stateBag.IsAuthenticated,
+            GuestId = requestDto.GuestId,
+            UserId = stateBag.UserId,
+        };
 
         // Get FeatureHandler response.
         var featResponse = await FeatureExtensions.ExecuteAsync<G4Request, G4Response>(
@@ -46,24 +56,6 @@ public class G4Endpoint : Endpoint<G4RequestDto, G4HttpResponse>
         var httpResponse = G4HttpResponseManager
             .Resolve(featResponse.StatusCode)
             .Invoke(G4Request, featResponse);
-
-        httpResponse.Body = new G4ResponseDto
-        {
-            Category = featResponse.Result.First().Category.Name,
-            ArtworkList = featResponse
-                .Result.ConvertAll(x => new FeatG4ResponseDtoObject()
-                {
-                    CategoryName = x.Category.Name,
-                    ArtworkId = x.Artwork.Id,
-                    Title = x.Artwork.Title,
-                    Supplier = x.Artwork.AuthorName,
-                    Thumbnail = x.Artwork.ThumbnailUrl,
-                    Favorite = x.Artwork.ArtworkMetaData.TotalFavorites,
-                    Rating = x.Artwork.ArtworkMetaData.AverageStarRate,
-                    FlagUrl = x.Artwork.Origin.ImageUrl,
-                })
-                .ToList(),
-        };
 
         return httpResponse;
     }

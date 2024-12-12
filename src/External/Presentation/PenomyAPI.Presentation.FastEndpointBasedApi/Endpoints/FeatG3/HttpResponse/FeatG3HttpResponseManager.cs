@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG3;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3.DTOs;
 using System;
 using System.Collections.Concurrent;
+using System.Linq;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3.HttpResponse
 {
@@ -22,6 +24,7 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3.HttpRespo
                 {
                     AppCode = $"G3.{FeatG3ResponseStatusCode.SUCCESS}",
                     HttpCode = StatusCodes.Status200OK,
+                    Body = response.ArtworkList.Select(G3ResponseItemDto.MapFrom)
                 });
 
             _dictionary.TryAdd(
