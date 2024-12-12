@@ -19,10 +19,10 @@ public class SM7Handler : IFeatureHandler<SM7Request, SM7Response>
         try
         {
             ICollection<SocialGroup> artworks = await _SM7Repository
-                .GetJoinedGroupsByUserIdWithPaginationAsync(
+                .GetJoinedGroupsByUserIdAsync(
                     request.UserId,
                     request.PageNum,
-                    request.ArtNum,
+                    request.GroupNum,
                     ct
                     );
 

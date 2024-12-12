@@ -8,23 +8,8 @@ namespace PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia
     public interface ISM7Repository
     {
         /// <summary>
-        ///     Get the total numbers of joined groups by
-        ///     the specified <paramref name="userId"/>.
-        /// </summary>
-        /// <param name="userId">
-        ///     The id of the user.
-        /// </param>
-        /// <param name="ct"></param>
-        /// <returns>
-        ///     The total numbers of joined groups.
-        /// </returns>
-        Task<int> GetTotalOfArtworksByTypeAndUserIdAsync(
-            long userId,
-            CancellationToken ct);
-
-        /// <summary>
         ///     Get all joined groups by the specified
-        ///     <paramref name="userId"/> using pagination.
+        ///     <paramref name="userId"/>.
         /// </summary>
         /// <remarks>
         ///     This method uses offset-based pagination to retrieve data.
@@ -45,7 +30,7 @@ namespace PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia
         ///     The user's joined groups.
         ///     Otherwise, empty.
         /// </returns>
-        Task<ICollection<SocialGroup>> GetJoinedGroupsByUserIdWithPaginationAsync(
+        Task<ICollection<SocialGroup>> GetJoinedGroupsByUserIdAsync(
             long userId,
             int pageNum,
             int groupNum,

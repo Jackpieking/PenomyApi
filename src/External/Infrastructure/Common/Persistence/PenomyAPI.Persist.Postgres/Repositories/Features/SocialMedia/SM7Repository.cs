@@ -17,17 +17,7 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia
             _socialGroups = dbContext.Set<SocialGroup>();
         }
 
-        public async Task<int> GetTotalOfArtworksByTypeAndUserIdAsync(long userId, CancellationToken ct)
-        {
-            return await _socialGroups
-                .AsNoTracking()
-                .CountAsync(o =>
-                    o.GroupMembers.Any(gm => gm.MemberId == userId) &&
-                    o.GroupStatus == SocialGroupStatus.Active,
-                    cancellationToken: ct);
-        }
-
-        public async Task<ICollection<SocialGroup>> GetJoinedGroupsByUserIdWithPaginationAsync(
+        public async Task<ICollection<SocialGroup>> GetJoinedGroupsByUserIdAsync(
             long userId,
             int pageNum,
             int groupNum,

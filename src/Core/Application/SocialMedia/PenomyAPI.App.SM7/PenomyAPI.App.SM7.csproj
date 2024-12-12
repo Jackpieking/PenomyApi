@@ -10,4 +10,8 @@
     <ProjectReference Include="..\..\PenomyAPI.App.Common\PenomyAPI.App.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="OtherHandlers\" />
+  </ItemGroup>
+
 </Project>

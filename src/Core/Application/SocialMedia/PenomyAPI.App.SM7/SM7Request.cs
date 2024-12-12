@@ -6,6 +6,6 @@ namespace PenomyAPI.App.SM7
     {
         public long UserId { get; set; }
         public int PageNum { get; set; }
-        public int ArtNum { get; set; }
+        public int GroupNum { get; set; }
     }
 }
