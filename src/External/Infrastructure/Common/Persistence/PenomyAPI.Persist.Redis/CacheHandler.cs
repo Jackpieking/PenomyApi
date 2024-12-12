@@ -47,6 +47,38 @@ public sealed class CacheHandler : ICacheHandler
         };
     }
 
+    public async Task<TSource> GetOrSetAsync<TSource>(
+        string key,
+        Func<CancellationToken, Task<TSource>> value,
+        AppCacheOption cacheOption,
+        CancellationToken cancellationToken
+    )
+        where TSource : IAppProtobufObject
+    {
+        var result = await _fusionCache.Value.GetOrSetAsync(
+            key,
+            async ct => await _serializer.Value.SerializeAsync(await value(ct), ct),
+            options: new()
+            {
+                Duration = TimeSpan.FromSeconds(cacheOption.DurationInSeconds),
+                IsFailSafeEnabled = cacheOption.IsFailSafeEnabled,
+                FailSafeMaxDuration = TimeSpan.FromSeconds(
+                    cacheOption.FailSafeMaxDurationInSeconds
+                ),
+                FailSafeThrottleDuration = TimeSpan.FromSeconds(
+                    cacheOption.FailSafeThrottleDurationInSeconds
+                ),
+                FactorySoftTimeout = TimeSpan.FromSeconds(cacheOption.FactorySoftTimeoutInSeconds),
+                FactoryHardTimeout = TimeSpan.FromSeconds(cacheOption.FactoryHardTimeoutInSeconds),
+                AllowTimedOutFactoryBackgroundCompletion =
+                    cacheOption.AllowTimedOutFactoryBackgroundCompletion,
+            },
+            cancellationToken
+        );
+
+        return await _serializer.Value.DeserializeAsync<TSource>(result, cancellationToken);
+    }
+
     public async Task RemoveAsync(string key, CancellationToken cancellationToken)
     {
         await _fusionCache.Value.RemoveAsync(key, token: cancellationToken);
