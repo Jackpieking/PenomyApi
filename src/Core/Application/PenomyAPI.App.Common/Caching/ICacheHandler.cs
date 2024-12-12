@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using PenomyAPI.App.Common.Serializer;
@@ -75,4 +76,12 @@ public interface ICacheHandler
     ///     the request.
     /// </param>
     Task RemoveAsync(string key, CancellationToken cancellationToken);
+
+    Task<TSource> GetOrSetAsync<TSource>(
+        string key,
+        Func<CancellationToken, Task<TSource>> value,
+        AppCacheOption cacheOption,
+        CancellationToken cancellationToken
+    )
+        where TSource : IAppProtobufObject;
 }

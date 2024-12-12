@@ -44,14 +44,6 @@ public class SM12HttpResponseManager
             });
 
         _dictionary.TryAdd(
-            SM12ResponseStatusCode.INVALID_JSON_SCHEMA_FROM_INPUT_CATEGORIES,
-            response => new SM12HttpResponse
-            {
-                AppCode = SM12HttpResponse.GetAppCode(SM12ResponseStatusCode.INVALID_JSON_SCHEMA_FROM_INPUT_CATEGORIES),
-                HttpCode = StatusCodes.Status400BadRequest
-            });
-
-        _dictionary.TryAdd(
             SM12ResponseStatusCode.INVALID_FILE_EXTENSION,
             response => new SM12HttpResponse
             {

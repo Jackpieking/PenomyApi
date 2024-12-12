@@ -34,6 +34,8 @@ public sealed class ArtworkComment : EntityWithId<long>, ICreatedEntity<long>
 
     public DateTime UpdatedAt { get; set; }
 
+    public bool IsRemoved { get; set; }
+
     #region Navigation
     public UserProfile Creator { get; set; }
 

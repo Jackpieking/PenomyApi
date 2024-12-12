@@ -17,49 +17,44 @@ public sealed class G35UserProfileResponseDto
 
     public int TotalFollowedCreators { get; set; }
 
-    /// <summary>
-    ///     The total users that have followed this user account.
-    /// </summary>
-    public int TotalFollowers { get; set; }
-
-    /// <summary>
-    ///     The total created artworks of the current user as a creator.
-    /// </summary>
-    public int TotalArtworks { get; set; }
+    public DateTime RegisteredAt { get; set; }
 
     public DateTime LastActiveAt { get; set; }
 
-    public DateTime RegisteredAt { get; set; }
+    // Creator profile section.
+    public int TotalFollowers { get; set; }
+
+    public int TotalArtworks { get; set; }
 
     public DateTime BecomeCreatorAt { get; set; }
 
-    public DateTime UpdatedAt { get; set; }
-
     public static G35UserProfileResponseDto MapFrom(G35Response response)
     {
-        // Map the related information first
-        // before checking current user is creator or not.
         var userProfile = response.UserProfile;
 
         var mapResult = new G35UserProfileResponseDto
         {
             UserId = userProfile.UserId.ToString(),
+            Nickname = userProfile.NickName,
             AboutMe = userProfile.AboutMe,
             AvatarUrl = userProfile.AvatarUrl,
-            LastActiveAt = userProfile.LastActiveAt,
-            Nickname = userProfile.NickName,
             IsCreator = userProfile.RegisterAsCreator,
             RegisteredAt = userProfile.RegisteredAt,
-            TotalFollowedCreators = userProfile.TotalFollowedCreators,
-            UpdatedAt = userProfile.UpdatedAt
         };
 
-        // If the user has registered as creator, then map more information.
-        if (userProfile.RegisterAsCreator)
+        // If the request is sent by the profile owner, then map more information.
+        if (response.IsProfileOwner)
         {
-            mapResult.BecomeCreatorAt = userProfile.CreatorProfile.RegisteredAt;
+            mapResult.LastActiveAt = userProfile.LastActiveAt;
+            mapResult.TotalFollowedCreators = userProfile.TotalFollowedCreators;
+        }
+
+        // If the user has registered as creator, then map more information.
+        if (mapResult.IsCreator)
+        {
             mapResult.TotalFollowers = userProfile.CreatorProfile.TotalFollowers;
             mapResult.TotalArtworks = userProfile.CreatorProfile.TotalArtworks;
+            mapResult.BecomeCreatorAt = userProfile.CreatorProfile.RegisteredAt;
         }
 
         return mapResult;

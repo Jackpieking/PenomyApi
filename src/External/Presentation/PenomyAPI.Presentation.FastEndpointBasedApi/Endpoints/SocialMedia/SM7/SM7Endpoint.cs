@@ -1,3 +1,6 @@
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
@@ -8,9 +11,6 @@ using PenomyAPI.Presentation.FastEndpointBasedApi.Common.Middlewares;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SM7.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SM7.HttpResponse;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SocialMedia.SM7.DTOs;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SM7;
 
@@ -24,18 +24,15 @@ public class SM7Endpoint : Endpoint<SM7RequestDto, SM7HttpResponse>
 
         PreProcessor<AuthPreProcessor<SM7RequestDto>>();
 
-        Description(builder: builder =>
-        {
-            builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest);
-        });
+        Description(builder => { builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest); });
 
-        Summary(endpointSummary: summary =>
+        Summary(summary =>
         {
             summary.Summary = "Endpoint for user get joined groups";
             summary.Description = "This endpoint is used for user get joined groups";
-            summary.Response<SM7HttpResponse>(
+            summary.Response(
                 description: "Represent successful operation response.",
-                example: new() { AppCode = SM7ResponseStatusCode.SUCCESS.ToString() }
+                example: new SM7HttpResponse { AppCode = SM7ResponseStatusCode.SUCCESS.ToString() }
             );
         });
     }
@@ -61,11 +58,10 @@ public class SM7Endpoint : Endpoint<SM7RequestDto, SM7HttpResponse>
         );
 
         var httpResponse = SM7ResponseManager
-                .Resolve(featResponse.StatusCode)
-                .Invoke(featRequest, featResponse);
+            .Resolve(featResponse.StatusCode)
+            .Invoke(featRequest, featResponse);
 
         if (featResponse.IsSuccess)
-        {
             httpResponse.Body = new SM7ResponseDto
             {
                 Groups = featResponse.Result.Select(o => new GroupDto
@@ -83,7 +79,6 @@ public class SM7Endpoint : Endpoint<SM7RequestDto, SM7HttpResponse>
                     ActivityTime = o.Creator.UpdatedAt
                 })
             };
-        }
 
         await SendAsync(httpResponse, httpResponse.HttpCode, ct);
 

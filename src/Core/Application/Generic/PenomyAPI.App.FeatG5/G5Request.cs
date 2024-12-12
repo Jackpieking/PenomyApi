@@ -13,4 +13,8 @@ public class G5Request : IFeatureRequest<G5Response>
     public long ComicId { get; set; }
 
     public long UserId { get; set; }
+
+    public long GuestId { get; set; }
+
+    public bool ForSignedInUser { get; set; }
 }

@@ -8,30 +8,35 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG35.HttpResp
 public sealed class G35HttpResponse : AppHttpResponse<G35UserProfileResponseDto>
 {
     private static readonly object _lock = new object();
-    private static G35HttpResponse _unauthorizedInstance;
+    private static G35HttpResponse _notFoundInstance;
 
     public static G35HttpResponse MapFrom(G35Response response)
     {
-        return new()
+        if (response.AppCode == G35ResponseAppCode.SUCCESS)
         {
-            HttpCode = StatusCodes.Status200OK,
-            Body = G35UserProfileResponseDto.MapFrom(response)
-        };
+            return new()
+            {
+                HttpCode = StatusCodes.Status200OK,
+                Body = G35UserProfileResponseDto.MapFrom(response)
+            };
+        }
+
+        return USER_ID_NOT_FOUND();
     }
 
-    public static G35HttpResponse UNAUTHORIZED()
+    public static G35HttpResponse USER_ID_NOT_FOUND()
     {
         lock (_lock)
         {
-            if (_unauthorizedInstance == null)
+            if (_notFoundInstance == null)
             {
-                _unauthorizedInstance = new()
+                _notFoundInstance = new()
                 {
-                    HttpCode = StatusCodes.Status401Unauthorized,
+                    HttpCode = StatusCodes.Status404NotFound,
                 };
             }
         }
 
-        return _unauthorizedInstance;
+        return _notFoundInstance;
     }
 }

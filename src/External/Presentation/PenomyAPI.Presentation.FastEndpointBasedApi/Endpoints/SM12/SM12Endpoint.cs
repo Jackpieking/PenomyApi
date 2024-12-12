@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
@@ -33,8 +32,6 @@ public class SM12Endpoint : Endpoint<SM12RequestDto, SM12HttpResponse>
     public SM12Endpoint(Lazy<ISnowflakeIdGenerator> idGenerator)
     {
         _idGenerator = idGenerator;
-
-        var id = _idGenerator.Value.Get();
     }
 
     public override void Configure()
@@ -65,17 +62,23 @@ public class SM12Endpoint : Endpoint<SM12RequestDto, SM12HttpResponse>
     {
         List<AppFileInfo> mediaFiles = [];
         var stateBag = ProcessorState<StateBag>();
-        SM12HttpResponse response = new();
-        if (requestDto.AttachedMedia.Any())
+        if (requestDto.AttachedMedia != null)
             foreach (var media in requestDto.AttachedMedia)
             {
                 var fileExtension = FormFileHelper.Instance.GetFileExtension(media);
+                if (!_formFileHelper.IsValidImageFile(media))
+                    return new SM12HttpResponse
+                    {
+                        AppCode = SM12HttpResponse.GetAppCode(SM12ResponseStatusCode.INVALID_FILE_EXTENSION),
+                        HttpCode = StatusCodes.Status400BadRequest,
+                        Errors = "Invalid file format"
+                    };
                 var result = InternalValidateImageFile(media);
                 var fileInfo = new ImageFileInfo
                 {
                     FileId = _idGenerator.Value.Get().ToString(),
                     FileDataStream = media.OpenReadStream(),
-                    FileName = $"{media.FileName}.{fileExtension}",
+                    FileName = media.FileName,
                     FileExtension = fileExtension
                 };
                 if (result.IsSuccess) mediaFiles.Add(fileInfo);
@@ -89,7 +92,7 @@ public class SM12Endpoint : Endpoint<SM12RequestDto, SM12HttpResponse>
             UserPostId = userPostId,
             AllowComment = requestDto.AllowComment,
             PublicLevel = requestDto.PublicLevel,
-            Title = requestDto.Title,
+            Content = requestDto.Title,
             AppFileInfos = mediaFiles
         };
         var featResponse = await FeatureExtensions.ExecuteAsync<SM12Request, SM12Response>(

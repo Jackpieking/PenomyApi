@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
-using FastEndpoints.Security;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Http;

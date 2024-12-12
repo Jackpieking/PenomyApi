@@ -8,6 +8,7 @@ using NSwag;
 using PenomyAPI.BuildingBlock.FeatRegister.ServiceExtensions;
 using PenomyAPI.Infra.Configuration.Options;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Common;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Helpers.Cache;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.ServiceConfigurations;
 
@@ -31,7 +32,9 @@ public static class WebApiServiceConfig
         IConfiguration configuration
     )
     {
-        services.MakeSingletonLazy<IServiceScopeFactory>();
+        services
+            .MakeSingletonLazy<IServiceScopeFactory>()
+            .AddScoped<ICommonCacheHandler, CommonCacheHandler>();
     }
 
     private static void AddGlobalExceptionHandler(this IServiceCollection services)
@@ -153,7 +156,7 @@ public static class WebApiServiceConfig
         IConfiguration configuration
     )
     {
-        services.AddLogging(configure: config =>
+        services.AddLogging(config =>
         {
             config.ClearProviders();
             config.AddConsole();

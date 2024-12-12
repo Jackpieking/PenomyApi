@@ -643,6 +643,9 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Property<bool>("IsDirectlyCommented")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("IsRemoved")
+                        .HasColumnType("boolean");
+
                     b.Property<int>("TotalChildComments")
                         .HasColumnType("integer");
 
@@ -1385,6 +1388,12 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TIMESTAMPTZ");
 
+                    b.Property<int>("RequestStatus")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("TIMESTAMPTZ");
+
                     b.HasKey("ChatGroupId", "CreatedBy");
 
                     b.HasIndex("CreatedBy");
@@ -1853,6 +1862,9 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Property<int>("TotalFollowedCreators")
                         .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdateNickNameAt")
+                        .HasColumnType("TIMESTAMPTZ");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TIMESTAMPTZ");
@@ -2485,6 +2497,9 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Property<bool>("IsDirectlyCommented")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("IsRemoved")
+                        .HasColumnType("boolean");
+
                     b.Property<long>("PostId")
                         .HasColumnType("bigint");
 
@@ -2709,6 +2724,12 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TIMESTAMPTZ");
 
+                    b.Property<int>("RequestStatus")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("TIMESTAMPTZ");
+
                     b.HasKey("GroupId", "CreatedBy");
 
                     b.HasIndex("CreatedBy");
@@ -2890,6 +2911,12 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TIMESTAMPTZ");
+
+                    b.Property<int>("RequestStatus")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TIMESTAMPTZ");
 
                     b.HasKey("CreatedBy", "FriendId");
@@ -3084,6 +3111,9 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<bool>("IsDirectlyCommented")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsRemoved")
                         .HasColumnType("boolean");
 
                     b.Property<long>("PostId")
@@ -4196,6 +4226,17 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         .IsRequired();
 
                     b.Navigation("FollowedArtwork");
+                });
+
+            modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.UserLikeArtworkComment", b =>
+                {
+                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.ArtworkComment", "Comment")
+                        .WithMany("UserLikeArtworkComment")
+                        .HasForeignKey("CommentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Comment");
                 });
 
             modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.UserRatingArtwork", b =>
@@ -5459,6 +5500,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Navigation("ArtworkCommentParentChilds");
 
                     b.Navigation("ArtworkCommentReferences");
+
+                    b.Navigation("UserLikeArtworkComment");
                 });
 
             modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.ArtworkOrigin", b =>

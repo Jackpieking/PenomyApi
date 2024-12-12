@@ -1,10 +1,6 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Authentication.Google;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +10,9 @@ using PenomyAPI.BuildingBlock.FeatRegister.InfraRegistration.Common;
 using PenomyAPI.BuildingBlock.FeatRegister.ServiceExtensions;
 using PenomyAPI.Identity.AppAuthenticator;
 using PenomyAPI.Infra.Configuration.Options;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace PenomyAPI.BuildingBlock.FeatRegister.InfraRegistration.Handler;
 
@@ -70,7 +69,7 @@ internal sealed class IdentityServicesRegistration : IServiceRegistration
         // Revert back to default authentication, adandon fast endpoints.
         services
             .AddSingleton(tokenValidationParameters)
-            .AddAuthentication()
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(config => config.TokenValidationParameters = tokenValidationParameters)
             .AddGoogle(
                 GoogleDefaults.AuthenticationScheme,

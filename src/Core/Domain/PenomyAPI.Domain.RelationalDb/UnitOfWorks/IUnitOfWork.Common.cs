@@ -8,7 +8,11 @@ namespace PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 /// </summary>
 public partial interface IUnitOfWork
 {
+    IDataSeedingRepository DataSeedingRepository { get; }
+
     IArtworkRepository ArtworkRepository { get; }
 
     IArtworkChapterRepository ChapterRepository { get; }
+
+    ICreatorRepository CreatorRepository { get; }
 }

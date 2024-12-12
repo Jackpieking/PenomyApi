@@ -1,10 +1,10 @@
-using PenomyAPI.App.Common;
-using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
-using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
-using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using PenomyAPI.App.Common;
+using PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG5;
+using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
+using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 
 namespace PenomyAPI.App.FeatG5;
 
@@ -37,19 +37,56 @@ public class G5Handler : IFeatureHandler<G5Request, G5Response>
             }
 
             // Get the comic detail,
-            Artwork comicDetail = await _IG5Repository.GetArtWorkDetailByIdAsync(
+            G5ComicDetailReadModel comicDetail = await _IG5Repository.GetArtWorkDetailByIdAsync(
                 request.ComicId,
-                ct);
+                ct
+            );
 
-            var isInUserFavoriteList = await _IG5Repository.IsComicInUserFavoriteListAsync(
-                request.UserId,
-                request.ComicId,
-                ct);
+            // Set the default as FALSE, then check if the request is served for sigined user.
+            var isInUserFavoriteList = false;
+            var isInUserFollowedList = false;
+            G5FirstAndLastReadChapterReadModel firstAndLastChapterId = null;
+
+            if (request.ForSignedInUser)
+            {
+                isInUserFavoriteList = await _IG5Repository.IsComicInUserFavoriteListAsync(
+                    request.UserId,
+                    request.ComicId,
+                    ct
+                );
+
+                isInUserFollowedList = await _IG5Repository.IsComicInUserFollowedListAsync(
+                    request.UserId,
+                    request.ComicId,
+                    ct
+                );
+
+                firstAndLastChapterId =
+                    await _IG5Repository.GetFirstAndLastReadChapterOfComicForUserAsync(
+                        request.ComicId,
+                        request.UserId,
+                        ct
+                    );
+            }
+            else
+            {
+                firstAndLastChapterId =
+                    await _IG5Repository.GetFirstAndLastReadChapterOfComicForGuestAsync(
+                        request.ComicId,
+                        request.GuestId,
+                        ct
+                    );
+            }
+
+            // Set the first and last chapter id for returned comic detail.
+            comicDetail.FirstChapterId = firstAndLastChapterId.FirstChapterId;
+            comicDetail.LastReadChapterId = firstAndLastChapterId.LastReadChapterId;
 
             return new G5Response
             {
                 IsSuccess = true,
                 IsUserFavorite = isInUserFavoriteList,
+                HasFollowed = isInUserFollowedList,
                 Result = comicDetail,
                 StatusCode = G5ResponseStatusCode.SUCCESS
             };

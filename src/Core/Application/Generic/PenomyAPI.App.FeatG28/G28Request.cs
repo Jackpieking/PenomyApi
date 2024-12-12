@@ -1,16 +1,13 @@
 using PenomyAPI.App.Common;
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 
 namespace PenomyAPI.App.FeatG28;
 
 public class G28Request : IFeatureRequest<G28Response>
 {
-    private string _userId;
+    public long CreatorId { get; set; }
 
-    public string GetUserId() => _userId;
-
-    public void SetUserId(string userId) => _userId = userId;
-
-    public long ArtworkType { get; init; }
+    public ArtworkType ArtworkType { get; init; }
 
     public int PageNumber { get; init; }
 }

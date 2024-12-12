@@ -5,11 +5,9 @@ using PenomyAPI.App.G45;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Common.Middlewares;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G45.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G45.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G45.HttpResponse;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -63,34 +61,8 @@ public class G45Endpoint : Endpoint<G45RequestDTO, G45HttpResponse>
         );
 
         var httpResponse = G45ResponseManager
-                .Resolve(featResponse.StatusCode)
-                .Invoke(featRequest, featResponse);
-
-        if (featResponse.IsSuccess)
-        {
-            httpResponse.Body = new ArtworkCardDto
-            {
-                Artworks = featResponse.Result.Select(o => new ArtworkDto
-                {
-                    Id = o.Id.ToString(),
-                    Title = o.Title,
-                    CreatedBy = o.CreatedBy.ToString(),
-                    AuthorName = o.AuthorName,
-                    ThumbnailUrl = o.ThumbnailUrl,
-                    TotalFavorites = o.ArtworkMetaData.TotalFavorites,
-                    AverageStarRate = o.ArtworkMetaData.AverageStarRate,
-                    OriginUrl = o.Origin.ImageUrl,
-                    Chapters = o.Chapters
-                        .Select(c => new ChapterDto
-                        {
-                            Id = c.Id.ToString(),
-                            Title = c.Title,
-                            UploadOrder = c.UploadOrder,
-                            Time = c.UpdatedAt
-                        }).ToList()
-                })
-            };
-        }
+            .Resolve(featResponse.StatusCode)
+            .Invoke(featRequest, featResponse);
 
         await SendAsync(httpResponse, httpResponse.HttpCode, ct);
 

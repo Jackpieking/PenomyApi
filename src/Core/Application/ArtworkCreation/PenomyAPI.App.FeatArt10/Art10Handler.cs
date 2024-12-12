@@ -170,7 +170,7 @@ public class Art10Handler : IFeatureHandler<Art10Request, Art10Response>
                 Id = long.Parse(chapterMedia.FileId),
                 ChapterId = chapterId,
                 MediaType = ArtworkChapterMediaType.Image,
-                FileName = chapterMedia.FileName,
+                FileName = chapterMedia.FileId.ToString(),
                 FileSize = chapterMedia.FileSize,
                 StorageUrl = chapterMedia.StorageUrl,
                 UploadOrder = chapterMedia.UploadOrder,

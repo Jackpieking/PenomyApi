@@ -3,7 +3,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
 using PenomyAPI.Domain.RelationalDb.Entities.Generic;
+using PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG28;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
@@ -21,47 +23,83 @@ public class G28Repository : IG28Repository
         _seriesDbSet = dbContext.Set<Series>();
     }
 
-    public async Task<long> GetPaginationOptionsByArtworkTypeAsync(long artworkType, long UserId)
-    {
-        if (artworkType == 1)
-        {
-            var count = await _artworkDbSet
-                .Where(a => a.ArtworkType == ArtworkType.Comic && a.CreatedBy == UserId)
-                .CountAsync();
-            return count;
-        }
-        else if (artworkType == 2)
-        {
-            var count = await _artworkDbSet
-                .Where(a => a.ArtworkType == ArtworkType.Animation && a.CreatedBy == UserId)
-                .CountAsync();
-            return count;
-        }
-        else if (artworkType == 3)
-        {
-            var count = await _seriesDbSet.Where(a => a.CreatedBy == UserId).CountAsync();
-            return count;
-        }
-        else
-            return 0;
-    }
-
-    public async Task<List<Artwork>> GetPaginationDetailAsync(
-        long UserId,
-        long ArtworkType,
-        int PageNumber,
-        int PageSize
+    public Task<int> GetPaginationOptionsByArtworkTypeAsync(
+        ArtworkType artworkType,
+        long creatorId
     )
     {
-        List<Artwork> artworks = new List<Artwork>();
-        List<Series> series = new List<Series>();
-        if (ArtworkType == 1)
-            await GetComicPaginationDetailAsync(UserId, PageNumber, PageSize, artworks);
-        else if (ArtworkType == 2)
-            await GetAnimePaginationDetailAsync(UserId, PageNumber, PageSize, artworks);
-        else if (ArtworkType == 3)
-            await GetSeriesPaginationDetailAsync(UserId, PageNumber, PageSize, series);
-        return artworks;
+        return _artworkDbSet
+            .Where(o =>
+                o.CreatedBy == creatorId
+                && o.ArtworkType == artworkType
+                && !o.IsTemporarilyRemoved
+                && !o.IsTakenDown
+                && o.PublicLevel == ArtworkPublicLevel.Everyone
+            )
+            .CountAsync();
+    }
+
+    public async Task<List<G28ArtworkDetailReadModel>> GetPaginationDetailAsync(
+        long creatorId,
+        ArtworkType artworkType,
+        int pageNumber,
+        int pageSize
+    )
+    {
+        var followedArtworks = await _artworkDbSet
+            .AsNoTracking()
+            .Where(o =>
+                o.CreatedBy == creatorId
+                && o.ArtworkType == artworkType
+                && !o.IsTemporarilyRemoved
+                && !o.IsTakenDown
+                && o.PublicLevel == ArtworkPublicLevel.Everyone
+            )
+            .OrderByDescending(o => o.CreatedAt)
+            .Select(o => new G28ArtworkDetailReadModel
+            {
+                Id = o.Id,
+                Title = o.Title,
+                ThumbnailUrl = o.ThumbnailUrl,
+                ArtworkStatus = o.ArtworkStatus,
+                OriginImageUrl = o.Origin.ImageUrl,
+                LastChapterUploadOrder = o.LastChapterUploadOrder,
+                TotalStarRates = o.ArtworkMetaData.TotalStarRates,
+                TotalUsersRated = o.ArtworkMetaData.TotalUsersRated,
+            })
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        // Get latest chapter of each artwork.
+        var chapterDbSet = _dbContext.Set<ArtworkChapter>();
+
+        foreach (var item in followedArtworks)
+        {
+            var lastestChapter = await chapterDbSet
+                .AsNoTracking()
+                .Where(chapter =>
+                    chapter.ArtworkId == item.Id
+                    && chapter.PublicLevel == ArtworkPublicLevel.Everyone
+                    && chapter.PublishStatus == PublishStatus.Published
+                    && (
+                        chapter.UploadOrder == item.LastChapterUploadOrder
+                        || chapter.UploadOrder <= item.LastChapterUploadOrder
+                    )
+                )
+                .OrderByDescending(chapter => chapter.UploadOrder)
+                .Select(chapter => new G28ChapterReadModel
+                {
+                    Id = chapter.Id,
+                    UploadOrder = chapter.UploadOrder,
+                    PublishedAt = chapter.PublishedAt
+                })
+                .FirstOrDefaultAsync();
+
+            item.LatestChapter = lastestChapter;
+        }
+
+        return followedArtworks;
     }
 
     public async Task GetComicPaginationDetailAsync(

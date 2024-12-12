@@ -24,16 +24,23 @@ public interface IG35Repository
         CancellationToken cancellationToken);
 
     /// <summary>
-    ///     Check if the current user with specified id
-    ///     has registered as a creator or not to fetch the profile.
+    ///     Check if the user with specified id is existed or not.
     /// </summary>
     /// <param name="userId">
     ///     Id of the user to check.
     /// </param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    Task<bool> IsUserRegisteredAsCreatorByIdAsync(
+    Task<bool> IsUserIdExistedAsync(
         long userId,
+        CancellationToken cancellationToken);
+
+    /// <summary>
+    ///     Check if the creator with specified id is existed or not.
+    /// </summary>
+    /// <param name="creatorId">
+    ///     Id of the creator to check.
+    /// </param>
+    Task<bool> IsCreatorIdExistedAsync(
+        long creatorId,
         CancellationToken cancellationToken);
 
     /// <summary>
@@ -42,15 +49,49 @@ public interface IG35Repository
     /// <param name="userId">
     ///     Id of the user to get from.
     /// </param>
-    /// <param name="isCreator">
-    ///     The flag to indicate to fetch the creator profile of current user.
+    /// <param name="isProfileOwner">
+    ///     This flag to indicate the request is served for
+    ///     the owner of this user profile.
+    ///     The repository will depend on this value to fetch the data properly.
     /// </param>
-    /// <param name="cancellationToken"></param>
     /// <returns>
     ///     The <see cref="Task{UserProfile}"/> contains the user profile.
     /// </returns>
     Task<UserProfile> GetUserProfileByIdAsync(
         long userId,
-        bool isCreator,
+        bool isProfileOwner,
+        CancellationToken cancellationToken);
+
+    /// <summary>
+    ///     Get the profile of the user that has already registered
+    ///     as a creator with specified input id.
+    /// </summary>
+    /// <param name="userId">
+    ///     Id of the user to get from.
+    /// </param>
+    /// <param name="isProfileOwner">
+    ///     This flag to indicate the request is served for
+    ///     the owner of this user profile.
+    ///     The repository will depend on this value to fetch the data properly.
+    /// </param>
+    /// <returns>
+    ///     The <see cref="Task{UserProfile}"/> contains the user profile.
+    /// </returns>
+    Task<UserProfile> GetUserProfileAsCreatorByIdAsync(
+        long userId,
+        bool isProfileOwner,
+        CancellationToken cancellationToken);
+
+    /// <summary>
+    ///     Get the profile of the creator with specified input id.
+    /// </summary>
+    /// <param name="creatorId">
+    ///     Id of the user to get from.
+    /// </param>
+    /// <returns>
+    ///     The <see cref="Task{UserProfile}"/> contains the creator profile.
+    /// </returns>
+    Task<UserProfile> GetCreatorProfileByIdAsync(
+        long creatorId,
         CancellationToken cancellationToken);
 }

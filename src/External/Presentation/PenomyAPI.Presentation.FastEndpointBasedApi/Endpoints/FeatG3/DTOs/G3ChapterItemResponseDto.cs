@@ -1,4 +1,4 @@
-﻿using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
+﻿using PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG3;
 using System;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3.DTOs;
@@ -11,7 +11,7 @@ public class G3ChapterItemResponseDto
 
     public DateTime PublishedAt { get; set; }
 
-    public static G3ChapterItemResponseDto MapFrom(ArtworkChapter chapterDetail)
+    public static G3ChapterItemResponseDto MapFrom(G3NewChapterReadModel chapterDetail)
     {
         return new G3ChapterItemResponseDto
         {

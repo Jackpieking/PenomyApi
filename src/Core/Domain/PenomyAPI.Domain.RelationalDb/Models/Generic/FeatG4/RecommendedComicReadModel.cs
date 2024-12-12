@@ -32,5 +32,5 @@ public sealed class RecommendedComicReadModel
     public string CreatorAvatarUrl { get; set; }
 
     [NotMapped]
-    public List<NewChapterReadModel> NewChapters { get; set; }
+    public List<G4NewChapterReadModel> NewChapters { get; set; }
 }

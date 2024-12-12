@@ -6,10 +6,9 @@ namespace PenomyAPI.Persist.Postgres.Data.DbContexts;
 
 public sealed class AppDbContext : IdentityDbContext<PgUser, PgRole, long>
 {
-    public AppDbContext(DbContextOptions options) : base(options)
-    {
-    }
-    
+    public AppDbContext(DbContextOptions<AppDbContext> options)
+        : base(options) { }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         // Apply the configuration from the Identity.
@@ -28,11 +27,11 @@ public sealed class AppDbContext : IdentityDbContext<PgUser, PgRole, long>
         {
             var tableName = entityType.GetTableName();
 
-            if (tableName.StartsWith(value: AspNetPrefix))
+            if (tableName.StartsWith(AspNetPrefix))
             {
                 var newName = $"penomy_identity_{tableName[AspNetPrefix.Length..].ToLower()}";
 
-                entityType.SetTableName(name: newName.Substring(0, newName.Length - 1));
+                entityType.SetTableName(newName.Substring(0, newName.Length - 1));
             }
         }
     }

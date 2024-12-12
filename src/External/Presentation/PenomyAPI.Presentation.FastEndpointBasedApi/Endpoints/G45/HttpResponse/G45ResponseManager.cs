@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.G45;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G45.DTOs;
 using System;
 using System.Collections.Concurrent;
+using System.Linq;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G45.HttpResponse;
 
@@ -24,6 +26,7 @@ public class G45ResponseManager
                 {
                     AppCode = $"G45.{G45ResponseStatusCode.SUCCESS}",
                     HttpCode = StatusCodes.Status200OK,
+                    Body = response.Result.Select(G45FollowedArtworkResponseDto.MapFrom)
                 }
         );
 
