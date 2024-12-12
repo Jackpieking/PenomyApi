@@ -11,11 +11,12 @@ using PenomyAPI.Persist.Postgres.Data.DbContexts;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Typs1;
 using PenomyAPI.Presentation.FastEndpointBasedApi.ServiceConfigurations;
-using Typesense;
 using PenomyAPI.Realtime.SignalR;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using System.Threading;
+using Typesense;
 
 // Global Configuration.
 Console.OutputEncoding = Encoding.UTF8;

@@ -39,7 +39,7 @@ public class SM6Handler : IFeatureHandler<SM6Request, SM6Response>
 
             if (isAddSuccess)
             {
-                await _notification.SendNotifToClient(request.UserId.ToString());
+                await _notification.SendMsgToClient(request.UserId.ToString(), "Mess a");
 
                 return new SM6Response
                 {

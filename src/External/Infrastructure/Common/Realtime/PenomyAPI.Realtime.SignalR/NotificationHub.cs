@@ -8,6 +8,12 @@ namespace PenomyAPI.Realtime.SignalR;
 public class NotificationHub : Hub<INotificationClient>, INotificationHub
 {
     public const string connectPath = "/signalr/notification";
+    public readonly IHubContext<NotificationHub, INotificationClient> _hubContext;
+
+    public NotificationHub(IHubContext<NotificationHub, INotificationClient> hubContext)
+    {
+        _hubContext = hubContext;
+    }
 
     public override async Task OnConnectedAsync()
     {
@@ -23,40 +29,40 @@ public class NotificationHub : Hub<INotificationClient>, INotificationHub
     }
     public async Task SendNotifToClient(string userId)
     {
-        await Clients.User(userId).ReceiveNotification();
+        await _hubContext.Clients.User(userId).ReceiveNotification();
     }
 
     public async Task SendMsgToClient(string userId, string message)
     {
-        await Clients.User(userId).ReceiveMessage(message);
+        await _hubContext.Clients.User(userId).ReceiveMessage(message);
     }
 
     public async Task SendNotifToClients(IReadOnlyList<string> userIds)
     {
-        await Clients.Users(userIds).ReceiveNotification();
+        await _hubContext.Clients.Users(userIds).ReceiveNotification();
     }
 
     public async Task SendMsgToClients(IReadOnlyList<string> userIds, string message)
     {
 
-        await Clients.Users(userIds).ReceiveMessage(message);
+        await _hubContext.Clients.Users(userIds).ReceiveMessage(message);
     }
     public async Task SendNotifToGroup(string groupId)
     {
-        await Clients.Group(groupId).ReceiveNotification();
+        await _hubContext.Clients.Group(groupId).ReceiveNotification();
     }
 
     public async Task SendMsgToGroup(string groupId, string message)
     {
-        await Clients.Group(groupId).ReceiveMessage(message);
+        await _hubContext.Clients.Group(groupId).ReceiveMessage(message);
     }
     public async Task SendNotifToGroups(IReadOnlyList<string> groupIds)
     {
-        await Clients.Groups(groupIds).ReceiveNotification();
+        await _hubContext.Clients.Groups(groupIds).ReceiveNotification();
     }
 
     public async Task SendMsgToGroups(IReadOnlyList<string> groupIds, string message)
     {
-        await Clients.Groups(groupIds).ReceiveMessage(message);
+        await _hubContext.Clients.Groups(groupIds).ReceiveMessage(message);
     }
 }
