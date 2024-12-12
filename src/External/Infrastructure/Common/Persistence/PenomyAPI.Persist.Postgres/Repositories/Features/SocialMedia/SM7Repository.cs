@@ -17,17 +17,7 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia
             _socialGroups = dbContext.Set<SocialGroup>();
         }
 
-        public async Task<int> GetTotalOfArtworksByTypeAndUserIdAsync(long userId, CancellationToken ct)
-        {
-            return await _socialGroups
-                .AsNoTracking()
-                .CountAsync(o =>
-                    o.GroupMembers.Any(gm => gm.MemberId == userId) &&
-                    o.GroupStatus == SocialGroupStatus.Active,
-                    cancellationToken: ct);
-        }
-
-        public async Task<ICollection<SocialGroup>> GetJoinedGroupsByUserIdWithPaginationAsync(
+        public async Task<ICollection<SocialGroup>> GetJoinedGroupsByUserIdAsync(
             long userId,
             int pageNum,
             int groupNum,
@@ -39,7 +29,7 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia
                 .Where(o =>
                     o.GroupMembers.Any(gm => gm.MemberId == userId) &&
                     o.GroupStatus == SocialGroupStatus.Active)
-                .OrderByDescending(o => o.GroupPosts.MaxBy(gp => gp.UpdatedAt).UpdatedAt)
+                .OrderByDescending(o => o.GroupMembers.FirstOrDefault(gm => gm.MemberId == userId).JoinedAt)
                 .Skip((pageNum - 1) * groupNum)
                 .Take(groupNum)
                 .Select(o => new SocialGroup
@@ -57,7 +47,7 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia
                     // Act as group activity time
                     Creator = new Domain.RelationalDb.Entities.Generic.UserProfile
                     {
-                        UpdatedAt = o.GroupPosts.MaxBy(gp => gp.UpdatedAt).UpdatedAt
+                        UpdatedAt = o.GroupMembers.FirstOrDefault(gm => gm.MemberId == userId).JoinedAt
                     }
                 })
                 .ToListAsync(cancellationToken: ct);

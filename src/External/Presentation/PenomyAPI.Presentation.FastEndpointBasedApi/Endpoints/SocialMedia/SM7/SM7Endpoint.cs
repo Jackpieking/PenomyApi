@@ -8,7 +8,6 @@ using PenomyAPI.App.SM7;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Common.Middlewares;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SM7.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SM7.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SM7.HttpResponse;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SocialMedia.SM7.DTOs;
@@ -48,8 +47,8 @@ public class SM7Endpoint : Endpoint<SM7RequestDto, SM7HttpResponse>
         var featRequest = new SM7Request
         {
             UserId = stateBag.AppRequest.UserId,
-            ArtNum = SM7PaginationOptions.DEFAULT_PAGE_SIZE,
-            PageNum = requestDto.PageNum
+            PageNum = requestDto.PageNum,
+            GroupNum = requestDto.GroupNum
         };
 
         // Get FeatureHandler response.
