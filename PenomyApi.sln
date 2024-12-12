@@ -251,6 +251,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.SM40", "src\C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.SM49", "src\Core\Application\SocialMedia\PenomyAPI.App.SM49\PenomyAPI.App.SM49.csproj", "{4D5FCFC9-2997-4B50-AECC-BC8F225E59D5}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.SM45", "src\Core\Application\SocialMedia\PenomyAPI.App.SM45\PenomyAPI.App.SM45.csproj", "{9D012E6F-88AF-4FC8-AB65-14C81B9645E5}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Realtime", "Realtime", "{59F56FEE-1871-456F-8F01-C0FFFB241AB9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.Realtime.SignalR", "src\External\Infrastructure\Common\Realtime\PenomyAPI.Realtime.SignalR\PenomyAPI.Realtime.SignalR.csproj", "{3DDB822E-CF0A-459B-B3EA-7DA47EA4AF5C}"
