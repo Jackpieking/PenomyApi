@@ -1,3 +1,6 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG5;
@@ -6,13 +9,21 @@ using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5.HttpResponse;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5.Middlewares;
-using System.Threading;
-using System.Threading.Tasks;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Helpers.Cache;
+using ZiggyCreatures.Caching.Fusion;
+using ZiggyCreatures.Caching.Fusion.Serialization;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5;
 
 public class G5Endpoint : Endpoint<G5RequestDto, G5HttpResponse>
 {
+    private readonly ICommonCacheHandler _cacheHandler;
+
+    public G5Endpoint(ICommonCacheHandler cacheHandler)
+    {
+        _cacheHandler = cacheHandler;
+    }
+
     public override void Configure()
     {
         Get("/g5/artwork-detail");
@@ -43,20 +54,11 @@ public class G5Endpoint : Endpoint<G5RequestDto, G5HttpResponse>
     {
         var stateBag = ProcessorState<G5StateBag>();
 
-        var g5Req = new G5Request
-        {
-            ForSignedInUser = stateBag.IsAuthenticated,
-            UserId = stateBag.UserId,
-            GuestId = requestDto.GuestId,
-            ComicId = requestDto.ArtworkId,
-        };
-
-        // Get FeatureHandler response.
-        var featResponse = await FeatureExtensions.ExecuteAsync<G5Request, G5Response>(g5Req, ct);
-
-        var httpResponse = G5HttpResponseManager
-            .Resolve(featResponse.StatusCode)
-            .Invoke(g5Req, featResponse);
+        var httpResponse = await _cacheHandler.GetOrSetG5MangaDetailCacheAsync(
+            stateBag,
+            requestDto,
+            ct
+        );
 
         await SendAsync(httpResponse, httpResponse.HttpCode, ct);
 
