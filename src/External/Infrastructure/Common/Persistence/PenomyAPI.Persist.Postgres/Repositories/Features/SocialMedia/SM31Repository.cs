@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,14 +36,14 @@ public class SM31Repository : ISM31Repository
         return await _userFriendContext.AnyAsync(x => x.UserId == userId && x.FriendId == friendId, ct);
     }
 
-    public async Task<bool> UnfriendAsync(UserFriend userFriend, CancellationToken ct)
+    public async Task<bool> UnfriendAsync(IEnumerable<UserFriend> userFriends, CancellationToken ct)
     {
         var result = new Result<bool>(false);
 
         var executionStrategy = RepositoryHelper.CreateExecutionStrategy(_dbContext);
         await executionStrategy.ExecuteAsync(async () =>
             await InternalUnFriendPostAsync(
-                userFriend,
+                userFriends,
                 ct,
                 result
             ));
@@ -55,7 +56,7 @@ public class SM31Repository : ISM31Repository
         return user != null;
     }
 
-    private async Task InternalUnFriendPostAsync(UserFriend friendRequest,
+    private async Task InternalUnFriendPostAsync(IEnumerable<UserFriend> friendRequest,
         CancellationToken token, Result<bool> result)
     {
         IDbContextTransaction transaction = null;
@@ -65,15 +66,25 @@ public class SM31Repository : ISM31Repository
                 _dbContext,
                 token
             );
-            await _userFriendContext
-                .Where(x => x.UserId == friendRequest.UserId && x.FriendId == friendRequest.FriendId)
-                .ExecuteDeleteAsync(token);
-            await _userFriendRequestContext
-                .Where(x => (x.CreatedBy == friendRequest.UserId && x.FriendId == friendRequest.FriendId &&
-                             x.RequestStatus == RequestStatus.Accepted) ||
-                            (x.CreatedBy == friendRequest.FriendId && x.FriendId == friendRequest.UserId &&
-                             x.RequestStatus == RequestStatus.Accepted))
-                .ExecuteDeleteAsync(token);
+            var userFriendPairs = friendRequest
+                .Select(fr => new { fr.UserId, fr.FriendId })
+                .ToList();
+
+            foreach (var pair in userFriendPairs)
+            {
+                await _userFriendContext
+                    .Where(x =>
+                        (x.UserId == pair.UserId && x.FriendId == pair.FriendId) ||
+                        (x.UserId == pair.FriendId && x.FriendId == pair.UserId))
+                    .ExecuteDeleteAsync(
+                        token
+                    );
+                await _userFriendRequestContext.Where(x =>
+                    (x.CreatedBy == pair.UserId && x.FriendId == pair.FriendId) ||
+                    (x.CreatedBy == pair.FriendId && x.FriendId == pair.UserId &&
+                     x.RequestStatus == RequestStatus.Accepted)).ExecuteDeleteAsync(token);
+            }
+
             await _dbContext.SaveChangesAsync(token);
             await transaction.CommitAsync(token);
             result.Value = true;

@@ -50,7 +50,7 @@ await using (var scope = app.Services.CreateAsyncScope())
     var typesenseClient = scope.TryResolve<ITypesenseClient>();
 
     Typs1FeatureHandler.LoadRequiredDependencies(context, typesenseClient);
-    await Typs1FeatureHandler.ExecuteAsync(CancellationToken.None);
+    await Typs1FeatureHandler.ExecuteAsync(configuration, CancellationToken.None);
 }
 
 // Configure the HTTP request pipeline.

@@ -70,11 +70,9 @@ public class G63Endpoint : Endpoint<G63RequestDto, G63HttpResponse>
             httpResponse.Body = featResponse.Result.Select(o =>
                 new G63ResponseDto
                 {
-                    CreatorId = o.CreatorId.ToString(),
+                    Id = o.CreatorId.ToString(),
                     NickName = o.ProfileOwner.NickName,
                     AvatarUrl = o.ProfileOwner.AvatarUrl,
-                    Gender = o.ProfileOwner.Gender,
-                    AboutMe = o.ProfileOwner.AboutMe,
                     TotalArtworks = o.TotalArtworks,
                     TotalFollowers = o.TotalFollowers,
                 }).ToList();

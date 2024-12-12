@@ -18,7 +18,7 @@ public class SM31Endpoint
 {
     public override void Configure()
     {
-        Get("/SM31/friend/remove");
+        Post("/SM31/friend/remove");
 
         AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
 

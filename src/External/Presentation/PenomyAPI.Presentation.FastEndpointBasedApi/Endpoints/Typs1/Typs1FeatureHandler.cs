@@ -3,7 +3,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
+using PenomyAPI.Infra.Configuration.Options;
 using PenomyAPI.Persist.Postgres.Data.DbContexts;
 using PenomyAPI.Persist.Typesense;
 using PenomyAPI.Persist.Typesense.AppSchema;
@@ -28,10 +31,12 @@ public static class Typs1FeatureHandler
         _typesenseClient = typesenseClient;
     }
 
-    public static async Task ExecuteAsync(CancellationToken ct)
+    public static async Task ExecuteAsync(IConfiguration configuration, CancellationToken ct)
     {
         // Init all required collection schemas
-        var schemaInfos = TypesenseInitializer.InitCollectionSchemas();
+        var schemaInfos = TypesenseInitializer.InitCollectionSchemas(
+            configuration.GetRequiredSection("Typesense").Get<TypesenseOptions>()
+        );
 
         // Uncomment this incase you want to re init all collections.
         // var errors = await TypesenseInitializer.DeleteAllCollectionsAsync(
@@ -92,10 +97,20 @@ public static class Typs1FeatureHandler
             .Set<Artwork>()
             .AsNoTracking()
             .AsSplitQuery()
+            .Where(artwork =>
+                // Check if current artwork is public for everyone and not being removed or taken down.
+                artwork.PublicLevel == ArtworkPublicLevel.Everyone
+                && !artwork.IsTemporarilyRemoved
+                && !artwork.IsTakenDown
+            )
             .Select(artWork => new MangaSearchSchema
             {
                 MangaId = artWork.Id.ToString(),
                 MangaName = artWork.Title,
+                MangaDescription = artWork.Introduction,
+                MangaCategories = artWork.ArtworkCategories.Select(artworkCat =>
+                    artworkCat.Category.Name
+                ),
                 MangaAvatar = artWork.ThumbnailUrl,
                 MangaNumberOfFollowers = artWork.ArtworkMetaData.TotalFollowers,
                 MangaNumberOfStars = artWork.ArtworkMetaData.TotalStarRates
