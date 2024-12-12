@@ -1,7 +1,3 @@
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
-using System.Threading;
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using Microsoft.AspNetCore.Builder;
@@ -15,6 +11,11 @@ using PenomyAPI.Persist.Postgres.Data.DbContexts;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Typs1;
 using PenomyAPI.Presentation.FastEndpointBasedApi.ServiceConfigurations;
+using PenomyAPI.Realtime.SignalR;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using System.Threading;
 using Typesense;
 
 // Global Configuration.
@@ -27,11 +28,12 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 var configuration = builder.Configuration;
 
+services.AddControllers();
 // Add services to the container.
 services.AddAppDependency(configuration);
 WebApiServiceConfig.Configure(services, configuration);
 
-services.AddFastEndpoints();
+services.AddFastEndpoints().AddSignalR();
 
 var app = builder.Build();
 
@@ -57,6 +59,8 @@ if (app.Environment.IsDevelopment())
     app.UseMiddleware<AppGlobalExceptionHandler>()
         .UseHttpsRedirection()
         .UseCors()
+        .UseAuthentication()
+        .UseAuthorization()
         .UseFastEndpoints()
         .UseSwaggerGen()
         .UseSwaggerUi(options =>
@@ -73,7 +77,11 @@ if (app.Environment.IsProduction())
     app.UseMiddleware<AppGlobalExceptionHandler>()
         .UseHttpsRedirection()
         .UseCors()
+        .UseAuthentication()
+        .UseAuthorization()
         .UseFastEndpoints();
 }
+
+app.MapHub<NotificationHub>(NotificationHub.connectPath);
 
 await app.RunAsync();

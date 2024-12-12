@@ -17,7 +17,8 @@
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>disable</Nullable>
         <ImplicitUsings>disable</ImplicitUsings>
-    </PropertyGroup>
+      <UserSecretsId>f9790d0f-9691-4510-8895-2844fb8415bb</UserSecretsId>
+  </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="FastEndpoints.Swagger" Version="5.25.0" />
         <PackageReference Include="File.TypeChecker" Version="4.1.1" />
