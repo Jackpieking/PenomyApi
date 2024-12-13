@@ -105,6 +105,30 @@ public class BackgroundJobServicesRegistration : IServiceRegistration
                                     .RepeatForever();
                             });
                     });
+
+                // =====================
+
+                var qrtz1JobKey = new JobKey(Qrtz1Job.JobKey);
+
+                config
+                    .AddJob<Qrtz1Job>(conf =>
+                    {
+                        conf.StoreDurably()
+                            .RequestRecovery()
+                            .DisallowConcurrentExecution()
+                            .WithIdentity(qrtz1JobKey);
+                    })
+                    .AddTrigger(conf =>
+                    {
+                        conf.ForJob(qrtz1JobKey)
+                            .WithIdentity(Qrtz1Job.TriggerKey)
+                            .WithSimpleSchedule(scheduler =>
+                            {
+                                scheduler
+                                    .WithIntervalInHours(Qrtz1Job.RepeatAsIntervalInHours)
+                                    .RepeatForever();
+                            });
+                    });
                 #endregion
             })
             .AddQuartzServer(config =>
