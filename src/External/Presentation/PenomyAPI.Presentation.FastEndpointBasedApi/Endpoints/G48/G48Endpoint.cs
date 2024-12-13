@@ -51,7 +51,7 @@ public class G48Endpoint : Endpoint<G48RequestDTOs, G48HttpResponse>
             UserId = stateBag.AppRequest.UserId,
             ArtworkType = requestDto.ArtworkType,
             ArtNum = G48PaginationOptions.DEFAULT_PAGE_SIZE,
-            PageNum = requestDto.PageNum
+            PageNum = requestDto.PageNum,
         };
 
         // Get FeatureHandler response.

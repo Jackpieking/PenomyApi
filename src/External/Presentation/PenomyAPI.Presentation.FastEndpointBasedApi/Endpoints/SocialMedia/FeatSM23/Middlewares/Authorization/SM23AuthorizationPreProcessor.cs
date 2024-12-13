@@ -29,9 +29,10 @@ internal sealed class SM23AuthorizationPreProcessor : PreProcessor<SM23RequestDt
         if (userId is null)
         {
             state.AppRequest.SetUserId("0");
-        } else
-        // Save found user id to state bag.
-        state.AppRequest.SetUserId(userId);
+        }
+        else
+            // Save found user id to state bag.
+            state.AppRequest.SetUserId(userId);
         return Task.CompletedTask;
     }
 }

@@ -29,7 +29,7 @@ public class SM44Repository : ISM44Repository
                     CreatedBy = userId,
                     RequestStatus = RequestStatus.Pending,
                     CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow
+                    UpdatedAt = DateTime.UtcNow,
                 }
             );
             await _dbContext.SaveChangesAsync();

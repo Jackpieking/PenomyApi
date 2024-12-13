@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.DataSeedings.Roles;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
+using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia;
@@ -31,7 +32,10 @@ public class SM46Repository : ISM46Repository
         {
             await _socialGroupJoinRequestDbSet
                 .Where(o => o.GroupId == groupId && o.CreatedBy == userId)
-                .ExecuteDeleteAsync(ct);
+                .ExecuteUpdateAsync(
+                    setter => setter.SetProperty(o => o.RequestStatus, o => RequestStatus.Refused),
+                    ct
+                );
             await _dbContext.SaveChangesAsync();
             return true;
         }

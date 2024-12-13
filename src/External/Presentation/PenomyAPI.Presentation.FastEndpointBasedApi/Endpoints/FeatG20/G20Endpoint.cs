@@ -1,11 +1,12 @@
+using System.Threading;
+using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG20;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G20.HttpResponse;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G20.DTOs;
-using System.Threading;
-using System.Threading.Tasks;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G20.HttpResponse;
+
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3;
 
 public class G20Endpoint : Endpoint<G20Request, G20HttpResponse>
@@ -53,10 +54,9 @@ public class G20Endpoint : Endpoint<G20Request, G20HttpResponse>
                 Avatar = x.Creator.AvatarUrl,
                 TotalReplies = x.TotalChildComments,
                 LikeCount = x.TotalLikes,
-                IsAuthor = true
-            })
+                IsAuthor = true,
+            }),
         };
-
 
         return httpResponse;
     }

@@ -65,7 +65,9 @@ public class SM43Repository : ISM43Repository
 
             await _socialGroupJoinRequestDbSet
                 .Where(req => req.CreatedBy == member.MemberId && req.GroupId == member.GroupId)
-                .ExecuteUpdateAsync(setters => setters.SetProperty(o => o.RequestStatus, o => RequestStatus.Accepted));
+                .ExecuteUpdateAsync(setters =>
+                    setters.SetProperty(o => o.RequestStatus, o => RequestStatus.Accepted)
+                );
 
             await _dbContext.SaveChangesAsync(cancellationToken);
             await transaction.CommitAsync(cancellationToken);
