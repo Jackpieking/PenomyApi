@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using PenomyAPI.Domain.RelationalDb.Entities.Base;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common;
 
@@ -16,14 +17,17 @@ public sealed class UserPostLikeStatistic : IEntity
 
     public static UserPostLikeStatistic Empty(long postId)
     {
-        return new UserPostLikeStatistic { PostId = postId, ValueId = 0, Total = 0 };
+        return new UserPostLikeStatistic
+        {
+            PostId = postId,
+            ValueId = 0,
+            Total = 0
+        };
     }
 
     #region MetaData
 
-    public static class MetaData
-    {
-    }
+    public static class MetaData { }
 
     #endregion
 
@@ -31,6 +35,7 @@ public sealed class UserPostLikeStatistic : IEntity
 
     public UserPost UserPost { get; set; }
 
+    [NotMapped]
     public UserLikeValue LikeValue { get; set; }
 
     #endregion

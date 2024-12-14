@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using PenomyAPI.Domain.RelationalDb.Entities.Base;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common;
 
@@ -31,7 +32,7 @@ public sealed class ChatMessageLikeStatistic : IEntity
 
     public ChatMessage ChatMessage { get; set; }
 
-    public UserLikeValue LikeValue { get; set; }
-
+    // [NotMapped]
+    // public UserLikeValue LikeValue { get; set; }
     #endregion
 }
