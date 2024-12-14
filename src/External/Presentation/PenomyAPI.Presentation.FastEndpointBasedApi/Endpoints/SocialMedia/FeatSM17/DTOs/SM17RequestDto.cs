@@ -1,6 +1,6 @@
-namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatSM23.DTOs;
+namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatSM17.DTOs;
 
-public class SM23RequestDto
+public class SM17RequestDto
 {
     private string _userId;
 
@@ -9,4 +9,6 @@ public class SM23RequestDto
     public void SetUserId(string userId) => _userId = userId;
 
     public string PostId { get; set; }
+
+    public bool IsGroupPost { get; set; }
 }

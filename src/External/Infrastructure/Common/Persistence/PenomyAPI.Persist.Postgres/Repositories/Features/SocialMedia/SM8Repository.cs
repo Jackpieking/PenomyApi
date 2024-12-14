@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using PenomyAPI.App.Common.Models.Common;
 using PenomyAPI.Domain.RelationalDb.DataSeedings.Roles;
@@ -6,8 +8,6 @@ using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 using PenomyAPI.Persist.Postgres.Data.UserIdentity;
 using PenomyAPI.Persist.Postgres.Repositories.Helpers;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia;
 

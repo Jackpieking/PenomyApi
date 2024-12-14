@@ -1,7 +1,7 @@
+using System;
 using PenomyAPI.Domain.RelationalDb.Entities.Base;
 using PenomyAPI.Domain.RelationalDb.Entities.Generic;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common;
-using System;
 
 namespace PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
 

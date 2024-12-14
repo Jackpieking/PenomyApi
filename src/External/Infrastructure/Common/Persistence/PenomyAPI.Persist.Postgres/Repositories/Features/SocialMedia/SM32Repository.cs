@@ -23,24 +23,32 @@ public class SM32Repository : ISM32Repository
         _userProfileContext = context.Set<UserProfile>();
     }
 
-
-    public async Task<IEnumerable<long>> GetAllUserFriendsAsync(long userId, CancellationToken token)
+    public async Task<IEnumerable<long>> GetAllUserFriendsAsync(
+        long userId,
+        CancellationToken token
+    )
     {
-        return await _userFriendContext.Where(x => x.UserId == userId).Select(x =>
-            x.FriendId
-        ).ToListAsync(token);
+        return await _userFriendContext
+            .Where(x => x.UserId == userId)
+            .Select(x => x.FriendId)
+            .ToListAsync(token);
     }
 
-    public async Task<IEnumerable<UserProfile>> GetAllUserProfilesAsync(IEnumerable<long> userIds,
-        CancellationToken token)
+    public async Task<IEnumerable<UserProfile>> GetAllUserProfilesAsync(
+        IEnumerable<long> userIds,
+        CancellationToken token
+    )
     {
-        return await _userProfileContext.Where(x => userIds.Contains(x.UserId)).Select(x => new UserProfile
-        {
-            UserId = x.UserId,
-            NickName = x.NickName,
-            AvatarUrl = x.AvatarUrl,
-            Gender = x.Gender,
-            AboutMe = x.AboutMe
-        }).ToListAsync(token);
+        return await _userProfileContext
+            .Where(x => userIds.Contains(x.UserId))
+            .Select(x => new UserProfile
+            {
+                UserId = x.UserId,
+                NickName = x.NickName,
+                AvatarUrl = x.AvatarUrl,
+                Gender = x.Gender,
+                AboutMe = x.AboutMe,
+            })
+            .ToListAsync(token);
     }
 }

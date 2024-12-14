@@ -17,20 +17,35 @@ public class SM9Repository : ISM9Repository
         _socialGroupDbSet = dbContext.Set<SocialGroup>();
     }
 
-    public async Task<List<SocialGroup>> GetSocialGroupsAsync(long userId, int maxRecord, CancellationToken ct)
+    public async Task<List<SocialGroup>> GetSocialGroupsAsync(
+        long userId,
+        int maxRecord,
+        CancellationToken ct
+    )
     {
         try
         {
             var result = await _socialGroupDbSet
-            .Where(g => g.CreatedBy == userId)
-            .OrderByDescending(g => g.CreatedAt)
-            .AsQueryable()
-            .AsNoTracking()
-            .Take(maxRecord)
-            .ToListAsync();
-            
-        return result;
-        } catch{
+                .Where(g => g.CreatedBy == userId)
+                .OrderByDescending(g => g.CreatedAt)
+                .AsQueryable()
+                .AsNoTracking()
+                .Take(maxRecord)
+                .Select(g => new SocialGroup
+                {
+                    Id = g.Id,
+                    Name = g.Name,
+                    CreatedAt = g.CreatedAt,
+                    CoverPhotoUrl = g.CoverPhotoUrl,
+                    TotalMembers = g.TotalMembers,
+                    GroupPosts = g.GroupPosts.ToList(),
+                })
+                .ToListAsync();
+
+            return result;
+        }
+        catch
+        {
             return null;
         }
     }

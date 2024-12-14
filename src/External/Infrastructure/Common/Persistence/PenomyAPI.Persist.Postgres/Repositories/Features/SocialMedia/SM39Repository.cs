@@ -38,7 +38,7 @@ public class SM39Repository : ISM39Repository
                     AvatarUrl = m.Member.AvatarUrl,
                     LastActiveAt = m.Member.LastActiveAt,
                 },
-                Group = new SocialGroup { CreatedBy = m.Group.CreatedBy, },
+                Group = new SocialGroup { CreatedBy = m.Group.CreatedBy },
             })
             .ToListAsync(ct);
     }

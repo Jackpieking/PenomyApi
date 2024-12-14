@@ -1,5 +1,7 @@
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CloudinaryDotNet.Core;
 using FastEndpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
@@ -44,19 +46,26 @@ public class SM9Endpoint : Endpoint<SM9RequestDto, SM9HttpResponse>
         });
     }
 
-    public override async Task<SM9HttpResponse> ExecuteAsync(SM9RequestDto req, CancellationToken ct)
+    public override async Task<SM9HttpResponse> ExecuteAsync(
+        SM9RequestDto req,
+        CancellationToken ct
+    )
     {
         SM9HttpResponse httpResponse;
 
         var stateBag = ProcessorState<SM9StateBag>();
 
-        var featRequest = new SM9Request{
+        var featRequest = new SM9Request
+        {
             UserId = stateBag.AppRequest.GetUserId(),
-            MaxRecord = req.MaxRecord
+            MaxRecord = req.MaxRecord,
         };
 
         // Get FeatureHandler response.
-        var featResponse = await FeatureExtensions.ExecuteAsync<SM9Request, SM9Response>(featRequest, ct);
+        var featResponse = await FeatureExtensions.ExecuteAsync<SM9Request, SM9Response>(
+            featRequest,
+            ct
+        );
 
         httpResponse = SM9HttpResponseManager.Resolve(featResponse.StatusCode).Invoke(featResponse);
 
@@ -68,8 +77,10 @@ public class SM9Endpoint : Endpoint<SM9RequestDto, SM9HttpResponse>
                 {
                     Id = x.Id.ToString(),
                     Name = x.Name,
+                    TotalMembers = x.TotalMembers,
                     CoverImgUrl = x.CoverPhotoUrl,
                     CreatedAt = x.CreatedAt.ToString("dd/MM/yyyy"),
+                    TotalPosts = x.GroupPosts.Count(),
                 }),
             };
 

@@ -24,7 +24,10 @@ public class SM7Endpoint : Endpoint<SM7RequestDto, SM7HttpResponse>
 
         PreProcessor<AuthPreProcessor<SM7RequestDto>>();
 
-        Description(builder => { builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest); });
+        Description(builder =>
+        {
+            builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest);
+        });
 
         Summary(summary =>
         {
@@ -48,7 +51,7 @@ public class SM7Endpoint : Endpoint<SM7RequestDto, SM7HttpResponse>
         {
             UserId = stateBag.AppRequest.UserId,
             PageNum = requestDto.PageNum,
-            GroupNum = requestDto.GroupNum
+            GroupNum = requestDto.GroupNum,
         };
 
         // Get FeatureHandler response.
@@ -70,14 +73,15 @@ public class SM7Endpoint : Endpoint<SM7RequestDto, SM7HttpResponse>
                     Name = o.Name,
                     IsPublic = o.IsPublic,
                     Description = o.Description,
-                    CoverPhotoUrl = o.CoverPhotoUrl,
+                    CoverImgUrl = o.CoverPhotoUrl,
                     TotalMembers = o.TotalMembers,
                     RequireApprovedWhenPost = o.RequireApprovedWhenPost,
                     GroupStatus = o.GroupStatus,
                     CreatedBy = o.CreatedBy.ToString(),
-                    CreatedAt = o.CreatedAt,
-                    ActivityTime = o.Creator.UpdatedAt
-                })
+                    CreatedAt = o.CreatedAt.ToString("dd/MM/yyyy"),
+                    ActivityTime = o.Creator.UpdatedAt,
+                    TotalPosts = o.GroupPosts.Count(),
+                }),
             };
 
         await SendAsync(httpResponse, httpResponse.HttpCode, ct);
