@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using PenomyAPI.Domain.RelationalDb.Entities.Base;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common;
 
@@ -17,7 +18,8 @@ public sealed class UserPostCommentLikeStatistic : IEntity
     #region Navigation
     public UserPostComment UserPostComment { get; set; }
 
-    public UserLikeValue LikeValue { get; set; }
+    // [NotMapped]
+    // public UserLikeValue LikeValue { get; set; }
     #endregion
 
     #region MetaData
