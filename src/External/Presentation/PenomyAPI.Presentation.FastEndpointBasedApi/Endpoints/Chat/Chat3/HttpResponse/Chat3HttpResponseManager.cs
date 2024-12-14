@@ -51,6 +51,13 @@ public class Chat3HttpResponseManager
                 AppCode = Chat3HttpResponse.GetAppCode(Chat3ResponseStatusCode.GROUP_NOT_FOUND),
                 HttpCode = StatusCodes.Status400BadRequest
             });
+        _dictionary.TryAdd(
+            Chat3ResponseStatusCode.USER_NOT_MEMBER,
+            response => new Chat3HttpResponse
+            {
+                AppCode = Chat3HttpResponse.GetAppCode(Chat3ResponseStatusCode.USER_NOT_MEMBER),
+                HttpCode = StatusCodes.Status400BadRequest
+            });
     }
 
     internal static Func<Chat3Response, Chat3HttpResponse> Resolve(Chat3ResponseStatusCode statusCode)

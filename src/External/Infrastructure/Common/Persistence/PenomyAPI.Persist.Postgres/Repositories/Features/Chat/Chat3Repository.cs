@@ -15,6 +15,7 @@ public class Chat3Repository : IChat3Repository
 {
     private readonly AppDbContext _dbContext;
     private readonly DbSet<ChatGroup> _groupContext;
+    private readonly DbSet<ChatGroupMember> _groupMemberContext;
     private readonly DbSet<ChatMessageLikeStatistic> _likeStatisticsContext;
     private readonly DbSet<ChatMessageAttachedMedia> _messageAttachedContext;
     private readonly DbSet<ChatMessage> _messageContext;
@@ -27,6 +28,7 @@ public class Chat3Repository : IChat3Repository
         _messageAttachedContext = _dbContext.Set<ChatMessageAttachedMedia>();
         _likeStatisticsContext = _dbContext.Set<ChatMessageLikeStatistic>();
         _groupContext = dbContext.Set<ChatGroup>();
+        _groupMemberContext = dbContext.Set<ChatGroupMember>();
     }
 
     public async Task<bool> SaveMessageAsync(ChatMessage chat,
@@ -49,6 +51,11 @@ public class Chat3Repository : IChat3Repository
     public async Task<ChatGroup> GetChatGroupAsync(long groupId, CancellationToken token)
     {
         return await _groupContext.FirstOrDefaultAsync(g => g.Id == groupId, token);
+    }
+
+    public async Task<bool> IsMemberOfChatGroupAsync(long groupId, long userId, CancellationToken token)
+    {
+        return await _groupMemberContext.AnyAsync(x => x.MemberId == userId && x.ChatGroupId == groupId, token);
     }
 
     private async Task InternalSaveMessagePostAsync(ChatMessage chat,

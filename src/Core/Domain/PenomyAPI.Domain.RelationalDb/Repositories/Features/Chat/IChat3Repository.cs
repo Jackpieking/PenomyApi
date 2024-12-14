@@ -11,4 +11,5 @@ public interface IChat3Repository
         CancellationToken token);
 
     Task<ChatGroup> GetChatGroupAsync(long groupId, CancellationToken token);
+    Task<bool> IsMemberOfChatGroupAsync(long groupId, long userId, CancellationToken token);
 }

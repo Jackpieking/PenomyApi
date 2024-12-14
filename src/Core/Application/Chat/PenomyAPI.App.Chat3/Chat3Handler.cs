@@ -28,13 +28,20 @@ public class Chat3Handler : IFeatureHandler<Chat3Request, Chat3Response>
         Chat3Response response = new();
         try
         {
-            var userProfile = await _Chat3Repository.GetChatGroupAsync(request.ChatGroupId, ct);
-            if (request.Content == null || userProfile == null)
+            var group = await _Chat3Repository.GetChatGroupAsync(request.ChatGroupId, ct);
+            if (request.Content == null || group == null)
                 return new Chat3Response
                 {
                     IsSuccess = false,
                     ErrorMessages = ["Group not found"],
                     StatusCode = Chat3ResponseStatusCode.FAILED
+                };
+            if (!await _Chat3Repository.IsMemberOfChatGroupAsync(request.ChatGroupId, request.UserId, ct))
+                return new Chat3Response
+                {
+                    IsSuccess = false,
+                    ErrorMessages = ["Member not found in group"],
+                    StatusCode = Chat3ResponseStatusCode.USER_NOT_MEMBER
                 };
             var dateTimeNow = DateTime.UtcNow;
             var likeStatistic = ChatMessageLikeStatistic.Empty(request.MessageId);

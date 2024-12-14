@@ -7,5 +7,6 @@ public enum Chat3ResponseStatusCode
     DATABASE_ERROR = 2,
 
     GROUP_NOT_FOUND = 3,
-    FAILED = 4
+    FAILED = 4,
+    USER_NOT_MEMBER = 5
 }
