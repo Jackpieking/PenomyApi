@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
     <ItemGroup>
         <ProjectReference Include="..\..\..\Core\Application\Chat\PenomyAPI.App.FeatChat1\PenomyAPI.App.FeatChat1.csproj"/>
+        <ProjectReference Include="..\..\..\Core\Application\Chat\PenowmyAPI.APP.Chat2\PenowmyAPI.APP.Chat2.csproj"/>
         <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM39\PenomyAPI.App.SM39.csproj"/>
         <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM40\PenomyAPI.App.SM40.csproj"/>
         <ProjectReference Include="..\..\..\Core\Application\SocialMedia\PenomyAPI.App.SM49\PenomyAPI.App.SM49.csproj"/>
