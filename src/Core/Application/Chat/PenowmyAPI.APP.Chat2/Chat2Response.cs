@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using PenomyAPI.App.Common;
 using PenomyAPI.Domain.RelationalDb.Entities.Chat;
 
