@@ -13,11 +13,13 @@ public sealed class FeatChat1Repository : IFeatChat1Repository
 {
     private readonly DbContext _dbContext;
     private readonly DbSet<ChatGroup> _groupContext;
+    private readonly DbSet<ChatGroupMember> _memberContext;
 
     public FeatChat1Repository(DbContext dbContext)
     {
         _dbContext = dbContext;
         _groupContext = _dbContext.Set<ChatGroup>();
+        _memberContext = _dbContext.Set<ChatGroupMember>();
     }
 
     public async Task<bool> CreateGroupAsync(ChatGroup group, ChatGroupMember member, CancellationToken token)
@@ -47,6 +49,7 @@ public sealed class FeatChat1Repository : IFeatChat1Repository
                 token
             );
             await _groupContext.AddAsync(group, token);
+            await _memberContext.AddAsync(member, token);
             await _dbContext.SaveChangesAsync(token);
             await transaction.CommitAsync(token);
             result.Value = true;
