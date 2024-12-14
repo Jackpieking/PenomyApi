@@ -82,6 +82,7 @@ public class SM17Repository : ISM17Repository
         IDbContextTransaction transaction = null;
         try
         {
+            transaction = await RepositoryHelper.CreateTransactionAsync(_dbContext, token);
             await _userLikeGroupPostContext.AddAsync(
                 new UserLikeGroupPost
                 {
@@ -117,6 +118,7 @@ public class SM17Repository : ISM17Repository
         IDbContextTransaction transaction = null;
         try
         {
+            transaction = await RepositoryHelper.CreateTransactionAsync(_dbContext, token);
             await _userLikeUserPostContext.AddAsync(
                 new UserLikeUserPost
                 {
@@ -154,6 +156,7 @@ public class SM17Repository : ISM17Repository
         IDbContextTransaction transaction = null;
         try
         {
+            transaction = await RepositoryHelper.CreateTransactionAsync(_dbContext, token);
             await _userLikeGroupPostContext
                 .Where(p => p.UserId == userId && p.PostId == postId)
                 .ExecuteDeleteAsync(token);
@@ -184,6 +187,7 @@ public class SM17Repository : ISM17Repository
         IDbContextTransaction transaction = null;
         try
         {
+            transaction = await RepositoryHelper.CreateTransactionAsync(_dbContext, token);
             await _userLikeUserPostContext
                 .Where(p => p.UserId == userId && p.PostId == postId)
                 .ExecuteDeleteAsync(token);

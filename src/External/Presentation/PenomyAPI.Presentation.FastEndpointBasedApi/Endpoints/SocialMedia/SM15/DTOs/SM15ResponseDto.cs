@@ -12,6 +12,7 @@ public class SM15ResponseDto
 public class UserPostDto
 {
     public string Id { get; set; }
+    public string UserAvatar { get; set; }
     public string Content { get; set; }
     public string CreatedBy { get; set; }
     public DateTime CreatedAt { get; set; }

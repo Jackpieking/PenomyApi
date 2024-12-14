@@ -1,5 +1,5 @@
-﻿using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
 
 namespace PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 
