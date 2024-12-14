@@ -61,7 +61,10 @@ public class Sm15Endpoint : Endpoint<EmptyRequest, Sm15HttpResponse>
             .Invoke(featRequest, featResponse);
         httpResponse.Body = new SM15ResponseDto();
         httpResponse.Body.UserPosts = new List<UserPostDto>();
+
         if (featResponse.StatusCode == SM15ResponseStatusCode.SUCCESS)
+        {
+            var isUserLike = featResponse.IsLikePostAsync;
             foreach (var p in featResponse.UserPosts)
             {
                 var userPostDto = new UserPostDto
@@ -73,6 +76,7 @@ public class Sm15Endpoint : Endpoint<EmptyRequest, Sm15HttpResponse>
                     AllowComment = p.AllowComment,
                     PublicLevel = p.PublicLevel,
                     TotalLikes = p.TotalLikes,
+                    IsCurrentUserLike = isUserLike.FirstOrDefault(x => x.Item1 && x.Item2 == p.Id).Item1,
                     AttachedMedias = p.AttachedMedias.Select(m => new AttachMediaDto
                     {
                         FileName = m.FileName,
@@ -83,6 +87,7 @@ public class Sm15Endpoint : Endpoint<EmptyRequest, Sm15HttpResponse>
                 };
                 httpResponse.Body.UserPosts.Add(userPostDto);
             }
+        }
 
 
         await SendAsync(httpResponse, httpResponse.HttpCode, ct);

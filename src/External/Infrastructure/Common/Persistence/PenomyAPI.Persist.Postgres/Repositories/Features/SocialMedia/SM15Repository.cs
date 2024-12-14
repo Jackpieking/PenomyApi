@@ -12,11 +12,29 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia;
 
 public class SM15Repository : ISM15Repository
 {
+    private readonly DbSet<UserLikeUserPost> _likeUserPostContext;
     private readonly DbSet<UserPost> _userPostContext;
 
     public SM15Repository(AppDbContext context)
     {
+        _likeUserPostContext = context.Set<UserLikeUserPost>();
         _userPostContext = context.Set<UserPost>();
+    }
+
+    public async Task<List<(bool, long)>> IsLikePostAsync(long userId, List<string> postIds, CancellationToken token)
+    {
+        var postIdsLong = postIds.Select(long.Parse).ToList();
+
+        var likedPosts = await _likeUserPostContext
+            .Where(like => like.UserId == userId && postIdsLong.Contains(like.PostId))
+            .Select(like => like.PostId)
+            .ToListAsync(token);
+
+        var result = postIdsLong
+            .Select(postId => (likedPosts.Contains(postId), postId))
+            .ToList();
+
+        return result;
     }
 
     public async Task<List<UserPost>> GetPersonalPostsAsync(long userId, CancellationToken token)
@@ -36,15 +54,15 @@ public class SM15Repository : ISM15Repository
                 {
                     UserId = x.Creator.UserId,
                     NickName = x.Creator.NickName,
-                    AvatarUrl = x.Creator.AvatarUrl,
+                    AvatarUrl = x.Creator.AvatarUrl
                 },
                 AttachedMedias = x.AttachedMedias.Select(y => new UserPostAttachedMedia
                 {
                     FileName = y.FileName,
                     MediaType = y.MediaType,
                     StorageUrl = y.StorageUrl,
-                    UploadOrder = y.UploadOrder,
-                }),
+                    UploadOrder = y.UploadOrder
+                })
             })
             .OrderByDescending(x => x.CreatedAt)
             .ToListAsync(token);

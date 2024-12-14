@@ -7,6 +7,7 @@ namespace PenomyAPI.App.SM15;
 public class SM15Response : IFeatureResponse
 {
     public List<UserPost> UserPosts { get; set; }
+    public List<(bool, long)> IsLikePostAsync { get; set; }
     private bool IsSuccess { get; set; }
 
     public SM15ResponseStatusCode StatusCode { get; set; }

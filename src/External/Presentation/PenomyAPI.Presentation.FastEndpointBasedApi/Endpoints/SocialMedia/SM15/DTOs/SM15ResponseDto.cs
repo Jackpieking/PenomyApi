@@ -18,6 +18,7 @@ public class UserPostDto
     public bool AllowComment { get; set; }
     public UserPostPublicLevel PublicLevel { get; set; }
     public long TotalLikes { get; set; }
+    public bool IsCurrentUserLike { get; set; }
     public List<AttachMediaDto> AttachedMedias { get; set; }
 }
 

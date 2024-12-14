@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using PenomyAPI.App.Common;
@@ -24,10 +25,14 @@ public class SM15Handler : IFeatureHandler<SM15Request, SM15Response>
         try
         {
             List<UserPost> userPosts;
+            List<(bool, long)> isLikePostAsync;
             if (request.UserId != 0)
             {
                 userPosts = await _sm15Repository.GetPersonalPostsAsync(request.UserId, ct);
+                isLikePostAsync = await _sm15Repository.IsLikePostAsync(request.UserId,
+                    userPosts.Select(x => x.Id.ToString()).ToList(), ct);
                 response.UserPosts = userPosts;
+                response.IsLikePostAsync = isLikePostAsync;
             }
 
             response.StatusCode = SM15ResponseStatusCode.SUCCESS;
