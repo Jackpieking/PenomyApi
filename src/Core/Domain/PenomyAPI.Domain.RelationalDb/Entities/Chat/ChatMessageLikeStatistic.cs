@@ -14,13 +14,24 @@ public sealed class ChatMessageLikeStatistic : IEntity
     /// </summary>
     public long Total { get; set; }
 
+    public static ChatMessageLikeStatistic Empty(long chatId)
+    {
+        return new ChatMessageLikeStatistic { ChatMessageId = chatId, ValueId = 0, Total = 0 };
+    }
+
+    #region MetaData
+
+    public static class MetaData
+    {
+    }
+
+    #endregion
+
     #region Navigation
+
     public ChatMessage ChatMessage { get; set; }
 
     public UserLikeValue LikeValue { get; set; }
-    #endregion
 
-    #region MetaData
-    public static class MetaData { }
     #endregion
 }

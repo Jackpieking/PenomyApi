@@ -7,8 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\..\External\Infrastructure\Common\PenomyAPI.Infra.Configuration\PenomyAPI.Infra.Configuration.csproj"/>
-        <ProjectReference Include="..\..\..\Domain\PenomyAPI.Domain.RelationalDb\PenomyAPI.Domain.RelationalDb.csproj" />
         <ProjectReference Include="..\..\PenomyAPI.App.Common\PenomyAPI.App.Common.csproj"/>
     </ItemGroup>
 
