@@ -20,18 +20,18 @@ public class SM27Handler : IFeatureHandler<SM27Request, SM27Response>
 
     public async Task<SM27Response> ExecuteAsync(SM27Request request, CancellationToken ct)
     {
-        var isPostAuthor = await _unitOfWork.Value.SM27Repository.CheckPostOnwerAsync(
-            request.PostId,
-            request.GetUserId(),
-            ct
-        );
+        // var isPostAuthor = await _unitOfWork.Value.SM27Repository.CheckPostOnwerAsync(
+        //     request.PostId,
+        //     request.GetUserId(),
+        //     ct
+        // );
 
-        if (!isPostAuthor)
-            return new SM27Response
-            {
-                IsSuccess = false,
-                StatusCode = SM27ResponseStatusCode.DATABASE_ERROR,
-            };
+        // if (!isPostAuthor)
+        //     return new SM27Response
+        //     {
+        //         IsSuccess = false,
+        //         StatusCode = SM27ResponseStatusCode.DATABASE_ERROR,
+        //     };
 
         var result = await _unitOfWork.Value.SM27Repository.TakeDownPostCommentsAsync(
             request.CommentId,

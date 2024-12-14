@@ -42,10 +42,7 @@ public class SM27Repository : ISM27Repository
         {
             await _userPostCommentDbSet
                 .Where(c => c.Id == commentId)
-                .ExecuteUpdateAsync(
-                    c => c.SetProperty(c => c.IsRemoved, true),
-                    cancellationToken
-                );
+                .ExecuteUpdateAsync(c => c.SetProperty(c => c.IsRemoved, true), cancellationToken);
             return true;
         }
         catch

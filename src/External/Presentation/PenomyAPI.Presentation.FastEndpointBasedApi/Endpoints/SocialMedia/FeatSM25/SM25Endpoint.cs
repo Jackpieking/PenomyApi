@@ -48,6 +48,7 @@ public class SM25Endpoint : Endpoint<SM25RequestDto, SM25HttpResponse>
             CommentId = long.Parse(req.CommentId),
             NewComment = req.CommentContent,
         };
+        SM25Request.SetUserId(stateBag.AppRequest.GetUserId());
 
         // Get FeatureHandler response.
         var featResponse = await FeatureExtensions.ExecuteAsync<SM25Request, SM25Response>(

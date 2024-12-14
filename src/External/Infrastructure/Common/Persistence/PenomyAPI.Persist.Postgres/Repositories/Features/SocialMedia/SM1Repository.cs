@@ -1,9 +1,9 @@
-using Microsoft.EntityFrameworkCore;
-using PenomyAPI.Domain.RelationalDb.Entities.Generic;
-using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using PenomyAPI.Domain.RelationalDb.Entities.Generic;
+using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia;
 
@@ -29,7 +29,7 @@ public sealed class SM1Repository : ISM1Repository
                 AvatarUrl = o.AvatarUrl,
                 AboutMe = o.AboutMe,
                 TotalFollowedCreators = o.TotalFollowedCreators,
-                RegisteredAt = o.RegisteredAt
+                RegisteredAt = o.RegisteredAt,
             })
             .FirstOrDefaultAsync(ct);
     }

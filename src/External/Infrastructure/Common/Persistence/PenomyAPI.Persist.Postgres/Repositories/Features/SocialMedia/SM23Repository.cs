@@ -43,6 +43,7 @@ public class SM23Repository : ISM23Repository
                 })
                 .AsNoTracking()
                 .AsQueryable()
+                .OrderBy(o => o.CreatedAt)
                 .ToListAsync(ct);
         }
         catch

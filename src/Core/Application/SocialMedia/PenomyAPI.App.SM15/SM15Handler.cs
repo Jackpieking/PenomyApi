@@ -13,9 +13,7 @@ public class SM15Handler : IFeatureHandler<SM15Request, SM15Response>
 {
     private readonly ISM15Repository _sm15Repository;
 
-    public SM15Handler(
-        Lazy<IUnitOfWork> unitOfWork
-    )
+    public SM15Handler(Lazy<IUnitOfWork> unitOfWork)
     {
         _sm15Repository = unitOfWork.Value.FeatSM15Repository;
     }

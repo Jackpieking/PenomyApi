@@ -34,7 +34,10 @@ public class SM14Repository : ISM14Repository
         _userPostReportContext = _dbContext.Set<UserPostReport>();
     }
 
-    public async Task<List<long>> GetAttachedFileIdAsync(long userId, CancellationToken cancellationToken)
+    public async Task<List<long>> GetAttachedFileIdAsync(
+        long userId,
+        CancellationToken cancellationToken
+    )
     {
         return await _userPostContext
             .Where(x => x.CreatedBy == userId)
@@ -42,25 +45,30 @@ public class SM14Repository : ISM14Repository
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<bool> IsExistUserPostAsync(long id, long userId, CancellationToken cancellationToken)
+    public async Task<bool> IsExistUserPostAsync(
+        long id,
+        long userId,
+        CancellationToken cancellationToken
+    )
     {
-        return await _userPostContext.AnyAsync(x => x.Id == id && x.CreatedBy == userId, cancellationToken);
+        return await _userPostContext.AnyAsync(
+            x => x.Id == id && x.CreatedBy == userId,
+            cancellationToken
+        );
     }
 
-    public async Task<bool> RemoveUserPostAsync(long id, long userId, CancellationToken cancellationToken)
+    public async Task<bool> RemoveUserPostAsync(
+        long id,
+        long userId,
+        CancellationToken cancellationToken
+    )
     {
         var result = new Result<bool>(false);
 
         var executionStrategy = RepositoryHelper.CreateExecutionStrategy(_dbContext);
 
         await executionStrategy.ExecuteAsync(
-            async () =>
-                await InternalRemoveUserPostByIdAsync(
-                    id,
-                    userId,
-                    cancellationToken,
-                    result
-                )
+            async () => await InternalRemoveUserPostByIdAsync(id, userId, cancellationToken, result)
         );
 
         return result.Value;
@@ -70,7 +78,8 @@ public class SM14Repository : ISM14Repository
         long postId,
         long userId,
         CancellationToken cancellationToken,
-        Result<bool> result)
+        Result<bool> result
+    )
     {
         IDbContextTransaction transaction = null;
 
@@ -85,14 +94,21 @@ public class SM14Repository : ISM14Repository
                 .Where(media => media.PostId == postId)
                 .ExecuteDeleteAsync(cancellationToken);
 
-            await _userPostCommentContext.Where(comment => comment.PostId == postId)
+            await _userPostCommentContext
+                .Where(comment => comment.PostId == postId)
                 .ExecuteDeleteAsync(cancellationToken);
-            await _userPostReportContext.Where(rp => rp.PostId == postId).ExecuteDeleteAsync(cancellationToken);
-            await _likeStatisticsContext.Where(l => l.PostId == postId).ExecuteDeleteAsync(cancellationToken);
+            await _userPostReportContext
+                .Where(rp => rp.PostId == postId)
+                .ExecuteDeleteAsync(cancellationToken);
+            await _likeStatisticsContext
+                .Where(l => l.PostId == postId)
+                .ExecuteDeleteAsync(cancellationToken);
 
             // Set the temporarily removed flag first.
             await _userPostContext
-                .Where(updatedArtwork => updatedArtwork.Id == postId && updatedArtwork.CreatedBy == userId)
+                .Where(updatedArtwork =>
+                    updatedArtwork.Id == postId && updatedArtwork.CreatedBy == userId
+                )
                 .ExecuteDeleteAsync(cancellationToken);
 
             await transaction.CommitAsync(cancellationToken);
