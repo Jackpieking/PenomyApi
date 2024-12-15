@@ -20,7 +20,10 @@ public class SM14Endpoint : Endpoint<SM14RequestDto, SM14HttpResponse>
         Post("sm14/remove");
         AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
         PreProcessor<AuthPreProcessor<SM14RequestDto>>();
-        Description(builder => { builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest); });
+        Description(builder =>
+        {
+            builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest);
+        });
 
         Summary(summary =>
         {
@@ -28,25 +31,26 @@ public class SM14Endpoint : Endpoint<SM14RequestDto, SM14HttpResponse>
             summary.Description = "This endpoint is used for user remove created post";
             summary.Response(
                 description: "Represent successful operation response.",
-                example: new Sm15HttpResponse { AppCode = SM14ResponseStatusCode.SUCCESS.ToString() }
+                example: new Sm15HttpResponse
+                {
+                    AppCode = SM14ResponseStatusCode.SUCCESS.ToString(),
+                }
             );
         });
     }
 
     public override async Task<SM14HttpResponse> ExecuteAsync(
         SM14RequestDto requestDto,
-        CancellationToken ct)
+        CancellationToken ct
+    )
     {
         var stateBag = ProcessorState<StateBag>();
         var userId = stateBag.AppRequest.UserId;
-        var request = new SM14Request
-        {
-            UserId = userId,
-            PostId = long.Parse(requestDto.PostId)
-        };
+        var request = new SM14Request { UserId = userId, PostId = long.Parse(requestDto.PostId) };
         var featureResponse = await FeatureExtensions.ExecuteAsync<SM14Request, SM14Response>(
             request,
-            ct);
+            ct
+        );
 
         var t = HttpContext;
 

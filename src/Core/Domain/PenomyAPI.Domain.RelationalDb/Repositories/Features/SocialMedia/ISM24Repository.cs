@@ -6,8 +6,12 @@ namespace PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 
 public interface ISM24Repository
 {
-    Task<long> CreatePostCommentsAsync(
+    Task<long> CreateUserPostCommentsAsync(
         UserPostComment comment,
+        CancellationToken cancellationToken
+    );
+    Task<long> CreateGroupPostCommentsAsync(
+        GroupPostComment comment,
         CancellationToken cancellationToken
     );
 }
