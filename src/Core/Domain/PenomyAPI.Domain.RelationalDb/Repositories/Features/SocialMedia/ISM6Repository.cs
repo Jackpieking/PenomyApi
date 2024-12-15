@@ -18,9 +18,7 @@ public interface ISM6Repository
     ///     Return true if the group exists.
     ///     Otherwise, return false.
     /// </returns>
-    Task<bool> CheckGroupExists(
-        long groupId,
-        CancellationToken ct);
+    Task<bool> CheckGroupExists(long groupId, CancellationToken ct);
 
     /// <summary>
     ///     Check user joined group by the specified
@@ -40,7 +38,8 @@ public interface ISM6Repository
     Task<bool> CheckUserJoinedGroupAsync(
         long userId,
         long groupId,
-        CancellationToken cancellationToken);
+        CancellationToken cancellationToken
+    );
 
     /// <summary>
     ///     Add user's join group request by the specified
@@ -60,7 +59,8 @@ public interface ISM6Repository
     Task<bool> AddUserJoinRequestByUserIdAndGroupIdAsync(
         long userId,
         long groupId,
-        CancellationToken cancellationToken);
+        CancellationToken cancellationToken
+    );
 
     /// <summary>
     ///     Add user to group by the specified
@@ -80,7 +80,8 @@ public interface ISM6Repository
     Task<bool> AddUserToGroupByUserIdAndGroupIdAsync(
         long userId,
         long groupId,
-        CancellationToken cancellationToken);
+        CancellationToken cancellationToken
+    );
 
     /// <summary>
     ///     Get all group's manager by the specified <paramref name="groupId"/>.
@@ -95,5 +96,6 @@ public interface ISM6Repository
     /// </returns>
     Task<ICollection<long>> GetGroupManagerByGroupIdAsync(
         long groupId,
-        CancellationToken cancellationToken);
+        CancellationToken cancellationToken
+    );
 }

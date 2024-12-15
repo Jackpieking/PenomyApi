@@ -25,7 +25,10 @@ public class Sm15Endpoint : Endpoint<EmptyRequest, Sm15HttpResponse>
 
         PreProcessor<AuthPreProcessor<EmptyRequest>>();
 
-        Description(builder => { builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest); });
+        Description(builder =>
+        {
+            builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest);
+        });
 
         Summary(summary =>
         {
@@ -33,7 +36,10 @@ public class Sm15Endpoint : Endpoint<EmptyRequest, Sm15HttpResponse>
             summary.Description = "This endpoint is used for user get created post";
             summary.Response(
                 description: "Represent successful operation response.",
-                example: new Sm15HttpResponse { AppCode = SM15ResponseStatusCode.SUCCESS.ToString() }
+                example: new Sm15HttpResponse
+                {
+                    AppCode = SM15ResponseStatusCode.SUCCESS.ToString(),
+                }
             );
         });
     }
@@ -45,10 +51,7 @@ public class Sm15Endpoint : Endpoint<EmptyRequest, Sm15HttpResponse>
     {
         var stateBag = ProcessorState<StateBag>();
 
-        var featRequest = new SM15Request
-        {
-            UserId = stateBag.AppRequest.UserId
-        };
+        var featRequest = new SM15Request { UserId = stateBag.AppRequest.UserId };
 
         // Get FeatureHandler response.
         var featResponse = await FeatureExtensions.ExecuteAsync<SM15Request, SM15Response>(
@@ -73,17 +76,19 @@ public class Sm15Endpoint : Endpoint<EmptyRequest, Sm15HttpResponse>
                     AllowComment = p.AllowComment,
                     PublicLevel = p.PublicLevel,
                     TotalLikes = p.TotalLikes,
-                    AttachedMedias = p.AttachedMedias.Select(m => new AttachMediaDto
-                    {
-                        FileName = m.FileName,
-                        MediaType = m.MediaType,
-                        StorageUrl = m.StorageUrl,
-                        UploadOrder = m.UploadOrder
-                    }).ToList()
+                    UserAvatar = p.Creator.AvatarUrl,
+                    AttachedMedias = p
+                        .AttachedMedias.Select(m => new AttachMediaDto
+                        {
+                            FileName = m.FileName,
+                            MediaType = m.MediaType,
+                            StorageUrl = m.StorageUrl,
+                            UploadOrder = m.UploadOrder,
+                        })
+                        .ToList(),
                 };
                 httpResponse.Body.UserPosts.Add(userPostDto);
             }
-
 
         await SendAsync(httpResponse, httpResponse.HttpCode, ct);
 

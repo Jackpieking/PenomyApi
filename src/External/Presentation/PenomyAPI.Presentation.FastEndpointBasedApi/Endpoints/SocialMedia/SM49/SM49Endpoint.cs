@@ -22,7 +22,10 @@ public class SM49Endpoint : Endpoint<SM49RequestDto, SM49HttpResponse>
 
         PreProcessor<AuthPreProcessor<SM49RequestDto>>();
 
-        Description(builder => { builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest); });
+        Description(builder =>
+        {
+            builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest);
+        });
 
         Summary(summary =>
         {
@@ -30,7 +33,10 @@ public class SM49Endpoint : Endpoint<SM49RequestDto, SM49HttpResponse>
             summary.Description = "This endpoint is used for user get users friends";
             summary.Response(
                 description: "Represent successful operation response.",
-                example: new SM49HttpResponse { AppCode = SM49ResponseStatusCode.SUCCESS.ToString() }
+                example: new SM49HttpResponse
+                {
+                    AppCode = SM49ResponseStatusCode.SUCCESS.ToString(),
+                }
             );
         });
     }
@@ -45,7 +51,7 @@ public class SM49Endpoint : Endpoint<SM49RequestDto, SM49HttpResponse>
         var featRequest = new SM49Request
         {
             UserId = stateBag.AppRequest.UserId,
-            FriendId = requestDto.FriendId
+            FriendId = requestDto.FriendId,
         };
 
         // Get FeatureHandler response.
@@ -57,7 +63,6 @@ public class SM49Endpoint : Endpoint<SM49RequestDto, SM49HttpResponse>
         var httpResponse = SM49ResponseManager
             .Resolve(featResponse.StatusCode)
             .Invoke(featRequest, featResponse);
-
 
         await SendAsync(httpResponse, httpResponse.HttpCode, ct);
 
