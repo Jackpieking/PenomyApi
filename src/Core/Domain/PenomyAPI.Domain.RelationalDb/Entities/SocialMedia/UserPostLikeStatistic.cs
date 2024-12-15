@@ -21,7 +21,7 @@ public sealed class UserPostLikeStatistic : IEntity
         {
             PostId = postId,
             ValueId = 0,
-            Total = 0
+            Total = 0,
         };
     }
 

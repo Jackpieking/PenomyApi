@@ -11,33 +11,33 @@ using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 
-namespace PenomyAPI.App.SM12;
+namespace PenomyAPI.App.SM34;
 
-public class SM12Handler : IFeatureHandler<SM12Request, SM12Response>
+public class SM34Handler : IFeatureHandler<SM34Request, SM34Response>
 {
     private readonly Lazy<IDefaultDistributedFileService> _fileService;
-    private readonly ISM12Repository _sm12Repository;
+    private readonly ISM34Repository _sm34Repository;
 
-    public SM12Handler(
+    public SM34Handler(
         Lazy<IUnitOfWork> unitOfWork,
         Lazy<IDefaultDistributedFileService> fileService
     )
     {
-        _sm12Repository = unitOfWork.Value.FeatSM12Repository;
+        _sm34Repository = unitOfWork.Value.FeatSM34Repository;
         _fileService = fileService;
     }
 
-    public async Task<SM12Response> ExecuteAsync(SM12Request request, CancellationToken ct)
+    public async Task<SM34Response> ExecuteAsync(SM34Request request, CancellationToken ct)
     {
-        var userProfile = await _sm12Repository.GetUserProfileAsync(request.UserId, ct);
+        var userProfile = await _sm34Repository.GetUserProfileAsync(request.UserId, ct);
         if (userProfile == null)
-            return new SM12Response
+            return new SM34Response
             {
                 IsSuccess = false,
                 ErrorMessages = ["User profile not found"],
-                StatusCode = SM12ResponseStatusCode.USER_PROFILE_NOT_FOUND,
+                StatusCode = SM34ResponseStatusCode.USER_PROFILE_NOT_FOUND,
             };
-        var artworkFolderName = request.UserPostId.ToString();
+        var artworkFolderName = request.GroupPostId.ToString();
 
         // The info of folder to store the thumbnail of this comic.
         var folderInfo = new AppFolderInfo
@@ -51,79 +51,82 @@ public class SM12Handler : IFeatureHandler<SM12Request, SM12Response>
         var fileService = _fileService.Value;
         var folderCreateResult = await fileService.CreateFolderAsync(folderInfo, ct);
         if (!folderCreateResult)
-            return new SM12Response
+            return new SM34Response
             {
                 IsSuccess = false,
                 ErrorMessages = ["Cannot create folder using file service"],
-                StatusCode = SM12ResponseStatusCode.FILE_SERVICE_ERROR,
+                StatusCode = SM34ResponseStatusCode.FILE_SERVICE_ERROR,
             };
-        List<UserPostAttachedMedia> mediaList = [];
+        List<GroupPostAttachedMedia> mediaList = [];
         if (request.AppFileInfos.Any())
             foreach (var fileInfo in request.AppFileInfos)
             {
                 //fileInfo.FileId =
                 fileInfo.FolderPath = folderInfo.RelativePath;
                 var uploadResult = await fileService.UploadFileAsync(fileInfo, false, ct);
-                var userPostMedia = new UserPostAttachedMedia
+                var groupPostMedia = new GroupPostAttachedMedia
                 {
                     StorageUrl = uploadResult.Value.StorageUrl,
-                    PostId = request.UserPostId,
-                    MediaType = ConvertToUserPostAttachedMediaType(fileInfo.FileExtension),
+                    PostId = request.GroupPostId,
+                    MediaType = ConvertToGroupPostAttachedMediaType(fileInfo.FileExtension),
                     FileName = fileInfo.FileName,
                     Id = long.Parse(fileInfo.FileId),
                     UploadOrder = mediaList.Count + 1,
                 };
-                mediaList.Add(userPostMedia);
+                mediaList.Add(groupPostMedia);
                 if (!uploadResult.IsSuccess)
-                    return new SM12Response
+                    return new SM34Response
                     {
                         IsSuccess = false,
                         ErrorMessages = ["Cannot create folder using file service"],
-                        StatusCode = SM12ResponseStatusCode.FILE_SERVICE_ERROR,
+                        StatusCode = SM34ResponseStatusCode.FILE_SERVICE_ERROR,
                     };
             }
 
         var dateTimeNow = DateTime.UtcNow;
-        var userPost = new UserPost
+        var groupPost = new GroupPost
         {
-            Id = request.UserPostId,
+            Id = request.GroupPostId,
+            Content = request.Content,
+            GroupId = request.GroupId,
+            TotalLikes = 0,
             AllowComment = request.AllowComment,
+            PostStatus = GroupPostStatus.Approved,
+            ApprovedBy = request.UserId,
+            ApprovedAt = dateTimeNow,
+            CreatedBy = request.UserId,
             CreatedAt = dateTimeNow,
             UpdatedAt = dateTimeNow,
-            Content = request.Content,
-            PublicLevel = request.PublicLevel,
-            CreatedBy = request.UserId,
-            TotalLikes = 0,
         };
-        var userPostStatistic = UserPostLikeStatistic.Empty(request.UserPostId);
+        var groupPostStatistic = GroupPostLikeStatistic.Empty(request.GroupPostId);
 
-        var result = await _sm12Repository.CreateUserPostAsync(
-            userPost,
+        var result = await _sm34Repository.CreateGroupPostAsync(
+            groupPost,
             mediaList,
-            userPostStatistic,
+            groupPostStatistic,
             ct
         );
         if (!result)
-            return new SM12Response
+            return new SM34Response
             {
                 IsSuccess = false,
-                StatusCode = SM12ResponseStatusCode.DATABASE_ERROR,
+                StatusCode = SM34ResponseStatusCode.DATABASE_ERROR,
             };
 
-        return new SM12Response
+        return new SM34Response
         {
             IsSuccess = true,
-            UserPostId = userPost.Id,
-            StatusCode = SM12ResponseStatusCode.SUCCESS,
+            UserPostId = groupPost.Id,
+            StatusCode = SM34ResponseStatusCode.SUCCESS,
         };
     }
 
-    private UserPostAttachedMediaType ConvertToUserPostAttachedMediaType(string extension)
+    private GroupPostAttachedMediaType ConvertToGroupPostAttachedMediaType(string extension)
     {
         return extension.ToLower() switch
         {
-            "jpg" or "jpeg" or "png" or "gif" or "bmp" => UserPostAttachedMediaType.Image,
-            "mp4" or "mkv" => UserPostAttachedMediaType.Video,
+            "jpg" or "jpeg" or "png" or "gif" or "bmp" => GroupPostAttachedMediaType.Image,
+            "mp4" or "mkv" => GroupPostAttachedMediaType.Video,
             _ => throw new NotSupportedException($"Unsupported file extension: {extension}"),
         };
     }

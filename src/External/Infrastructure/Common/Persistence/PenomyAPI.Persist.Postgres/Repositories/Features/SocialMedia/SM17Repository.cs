@@ -95,7 +95,9 @@ public class SM17Repository : ISM17Repository
             await _groupPostContext
                 .Where(p => p.Id == postId)
                 .ExecuteUpdateAsync(
-                    p => p.SetProperty(p => p.TotalLikes, p => p.TotalLikes + 1),
+                    p =>
+                        p.SetProperty(p => p.TotalLikes, p => p.TotalLikes + 1)
+                            .SetProperty(p => p.UpdatedAt, p => DateTime.UtcNow),
                     token
                 );
             await _dbContext.SaveChangesAsync(token);

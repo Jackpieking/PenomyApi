@@ -8,37 +8,37 @@ using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.Common.FileServices.Models;
 using PenomyAPI.App.Common.IdGenerator.Snowflake;
 using PenomyAPI.App.Common.Models.Common;
-using PenomyAPI.App.SM12;
+using PenomyAPI.App.SM34;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Domain.RelationalDb.Entities.Contraints.ArtworkCreation;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Common.Middlewares;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SM12.DTOs;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SM12.HttpResponse;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SM34.DTOs;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SM34.HttpResponse;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Helpers.IFormFiles;
 
-namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SM12;
+namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SM34;
 
-public class SM12Endpoint : Endpoint<SM12RequestDto, SM12HttpResponse>
+public class SM34Endpoint : Endpoint<SM34RequestDto, SM34HttpResponse>
 {
     private static readonly IFormFileHelper _formFileHelper;
     private readonly Lazy<ISnowflakeIdGenerator> _idGenerator;
 
-    static SM12Endpoint()
+    static SM34Endpoint()
     {
         _formFileHelper = FormFileHelper.Instance;
     }
 
-    public SM12Endpoint(Lazy<ISnowflakeIdGenerator> idGenerator)
+    public SM34Endpoint(Lazy<ISnowflakeIdGenerator> idGenerator)
     {
         _idGenerator = idGenerator;
     }
 
     public override void Configure()
     {
-        Post("/SM12/post/create");
+        Post("/SM34/group-post/create");
         AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
-        PreProcessor<AuthPreProcessor<SM12RequestDto>>();
+        PreProcessor<AuthPreProcessor<SM34RequestDto>>();
         AllowFormData();
         AllowFileUploads();
 
@@ -49,20 +49,20 @@ public class SM12Endpoint : Endpoint<SM12RequestDto, SM12HttpResponse>
 
         Summary(summary =>
         {
-            summary.Summary = "Endpoint for creating a new user post";
-            summary.Description = "This endpoint is used for creating new user post.";
+            summary.Summary = "Endpoint for creating a new group post";
+            summary.Description = "This endpoint is used for creating new group post.";
             summary.Response(
                 description: "Represent successful operation response.",
-                example: new SM12HttpResponse
+                example: new SM34HttpResponse
                 {
-                    AppCode = SM12ResponseStatusCode.SUCCESS.ToString(),
+                    AppCode = SM34ResponseStatusCode.SUCCESS.ToString(),
                 }
             );
         });
     }
 
-    public override async Task<SM12HttpResponse> ExecuteAsync(
-        SM12RequestDto requestDto,
+    public override async Task<SM34HttpResponse> ExecuteAsync(
+        SM34RequestDto requestDto,
         CancellationToken ct
     )
     {
@@ -73,10 +73,10 @@ public class SM12Endpoint : Endpoint<SM12RequestDto, SM12HttpResponse>
             {
                 var fileExtension = FormFileHelper.Instance.GetFileExtension(media);
                 if (!_formFileHelper.IsValidImageFile(media))
-                    return new SM12HttpResponse
+                    return new SM34HttpResponse
                     {
-                        AppCode = SM12HttpResponse.GetAppCode(
-                            SM12ResponseStatusCode.INVALID_FILE_EXTENSION
+                        AppCode = SM34HttpResponse.GetAppCode(
+                            SM34ResponseStatusCode.INVALID_FILE_EXTENSION
                         ),
                         HttpCode = StatusCodes.Status400BadRequest,
                         Errors = "Invalid file format",
@@ -93,24 +93,24 @@ public class SM12Endpoint : Endpoint<SM12RequestDto, SM12HttpResponse>
                     mediaFiles.Add(fileInfo);
             }
 
-        var userPostId = _idGenerator.Value.Get();
+        var groupPostId = _idGenerator.Value.Get();
         var userId = stateBag.AppRequest.UserId;
-        SM12Request request =
+        SM34Request request =
             new()
             {
                 UserId = userId,
-                UserPostId = userPostId,
+                GroupPostId = groupPostId,
                 AllowComment = requestDto.AllowComment,
-                PublicLevel = requestDto.PublicLevel,
+                GroupId = long.Parse(requestDto.GroupId),
                 Content = requestDto.Title,
                 AppFileInfos = mediaFiles,
             };
-        var featResponse = await FeatureExtensions.ExecuteAsync<SM12Request, SM12Response>(
+        var featResponse = await FeatureExtensions.ExecuteAsync<SM34Request, SM34Response>(
             request,
             ct
         );
 
-        var httpResponse = SM12HttpResponseManager
+        var httpResponse = SM34HttpResponseManager
             .Resolve(featResponse.StatusCode)
             .Invoke(featResponse);
 
@@ -119,37 +119,37 @@ public class SM12Endpoint : Endpoint<SM12RequestDto, SM12HttpResponse>
         return httpResponse;
     }
 
-    private Result<SM12HttpResponse> InternalValidateImageFile(IFormFile imageFile)
+    private Result<SM34HttpResponse> InternalValidateImageFile(IFormFile imageFile)
     {
-        SM12HttpResponse httpResponse;
+        SM34HttpResponse httpResponse;
 
         // Check if the file extension is valid or not.
         if (!_formFileHelper.HasValidExtension(imageFile, ArtworkConstraints.VALID_FILE_EXTENSIONS))
         {
-            httpResponse = SM12HttpResponseManager
-                .Resolve(SM12ResponseStatusCode.INVALID_FILE_EXTENSION)
+            httpResponse = SM34HttpResponseManager
+                .Resolve(SM34ResponseStatusCode.INVALID_FILE_EXTENSION)
                 .Invoke(default);
 
-            return Result<SM12HttpResponse>.Failed(httpResponse);
+            return Result<SM34HttpResponse>.Failed(httpResponse);
         }
 
         // Check if the uploaded file is really an image file or not.
         if (!_formFileHelper.IsValidImageFile(imageFile))
         {
-            httpResponse = SM12HttpResponseManager
-                .Resolve(SM12ResponseStatusCode.INVALID_FILE_FORMAT)
+            httpResponse = SM34HttpResponseManager
+                .Resolve(SM34ResponseStatusCode.INVALID_FILE_FORMAT)
                 .Invoke(default);
 
-            return Result<SM12HttpResponse>.Failed(httpResponse);
+            return Result<SM34HttpResponse>.Failed(httpResponse);
         }
 
         // Check if the uploaded file is exceed the size limit or not.
         if (imageFile.Length <= ArtworkConstraints.MAXIMUM_IMAGE_FILE_SIZE)
-            return Result<SM12HttpResponse>.Success(default);
-        httpResponse = SM12HttpResponseManager
-            .Resolve(SM12ResponseStatusCode.FILE_SIZE_IS_EXCEED_THE_LIMIT)
+            return Result<SM34HttpResponse>.Success(default);
+        httpResponse = SM34HttpResponseManager
+            .Resolve(SM34ResponseStatusCode.FILE_SIZE_IS_EXCEED_THE_LIMIT)
             .Invoke(default);
 
-        return Result<SM12HttpResponse>.Failed(httpResponse);
+        return Result<SM34HttpResponse>.Failed(httpResponse);
     }
 }

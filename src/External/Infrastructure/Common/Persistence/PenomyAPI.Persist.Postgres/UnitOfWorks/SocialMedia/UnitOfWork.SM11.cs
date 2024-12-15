@@ -5,16 +5,16 @@ namespace PenomyAPI.Persist.Postgres.UnitOfWorks;
 
 public sealed partial class UnitOfWork
 {
-    private ISM12Repository _featSM12Repository;
+    private ISM11Repository _featSM11Repository;
 
-    public ISM12Repository FeatSM12Repository
+    public ISM11Repository FeatSM11Repository
     {
         get
         {
-            if (Equals(_featSM12Repository, null))
-                _featSM12Repository = new SM12Repository(_dbContext);
+            if (Equals(_featSM11Repository, null))
+                _featSM11Repository = new SM11Repository(_dbContext);
 
-            return _featSM12Repository;
+            return _featSM11Repository;
         }
     }
 }
