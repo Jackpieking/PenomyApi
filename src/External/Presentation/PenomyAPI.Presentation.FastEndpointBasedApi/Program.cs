@@ -83,5 +83,6 @@ if (app.Environment.IsProduction())
 }
 
 app.MapHub<NotificationHub>(NotificationHub.connectPath);
+app.MapHub<ChatHub>(ChatHub.connectPath);
 
 await app.RunAsync();

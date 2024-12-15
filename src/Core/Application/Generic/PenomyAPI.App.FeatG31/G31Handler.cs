@@ -1,6 +1,3 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using PenomyAPI.App.Common;
 using PenomyAPI.App.Common.AppConstants;
 using PenomyAPI.App.Common.IdGenerator.Snowflake;
@@ -8,6 +5,9 @@ using PenomyAPI.App.Common.Tokens;
 using PenomyAPI.Domain.RelationalDb.Entities.UserIdentity;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.App.FeatG31;
 
@@ -92,7 +92,8 @@ public sealed class G31Handler : IFeatureHandler<G31Request, G31Response>
                     CommonValues.Claims.TokenPurpose.Type,
                     CommonValues.Claims.TokenPurpose.Values.AppUserAccess
                 ),
-                new(CommonValues.Claims.UserIdClaim, userIdOfUserHasBeenValidated.ToString())
+                new(CommonValues.Claims.UserIdClaim, userIdOfUserHasBeenValidated.ToString()),
+                new("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", userIdOfUserHasBeenValidated.ToString())
             ],
             additionalSecondsFromNow: 15 * 60 // 15 minutes
         );
