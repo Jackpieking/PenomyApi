@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using PenomyAPI.App.Common;
 using PenomyAPI.App.Common.IdGenerator.Snowflake;
+using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 
 namespace PenomyAPI.App.SM24;
@@ -22,20 +23,52 @@ public class SM24Handler : IFeatureHandler<SM24Request, SM24Response>
     {
         var unitOfWork = _unitOfWork.Value;
         var idGenerator = _idGenerator.Value;
-        request.Comment.Id = idGenerator.Get();
-        request.Comment.CreatedAt = DateTime.UtcNow;
-        request.Comment.UpdatedAt = DateTime.UtcNow;
-        request.Comment.TotalChildComments = 0;
-        request.Comment.TotalLikes = 0;
-        request.Comment.IsDirectlyCommented = true;
-        request.Comment.IsRemoved = false;
-        var result = await unitOfWork.SM24Repository.CreatePostCommentsAsync(request.Comment, ct);
+        long result;
+        if (request.IsGroupPostComment)
+        {
+            var groupPostComment = new GroupPostComment
+            {
+                Id = idGenerator.Get(),
+                Content = request.Comment,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                TotalChildComments = 0,
+                IsDirectlyCommented = true,
+                IsRemoved = false,
+                PostId = request.PostId,
+                CreatedBy = request.GetUserId(),
+            };
+            result = await unitOfWork.SM24Repository.CreateGroupPostCommentsAsync(
+                groupPostComment,
+                ct
+            );
+        }
+        else
+        {
+            var userPostComment = new UserPostComment
+            {
+                Id = idGenerator.Get(),
+                Content = request.Comment,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                TotalChildComments = 0,
+                TotalLikes = 0,
+                IsDirectlyCommented = true,
+                IsRemoved = false,
+                PostId = request.PostId,
+                CreatedBy = request.GetUserId(),
+            };
+            result = await unitOfWork.SM24Repository.CreateUserPostCommentsAsync(
+                userPostComment,
+                ct
+            );
+        }
 
         if (result != -1)
         {
             return new SM24Response
             {
-                CommentId = request.Comment.Id,
+                CommentId = result,
                 IsSuccess = true,
                 StatusCode = SM24ResponseStatusCode.SUCCESS,
             };

@@ -46,13 +46,13 @@ public class SM24Endpoint : Endpoint<SM24RequestDto, SM24HttpResponse>
     {
         var stateBag = ProcessorState<SM24StateBag>();
 
-        var _postComment = new UserPostComment
+        var SM24Request = new SM24Request
         {
-            Content = req.CommentContent,
-            CreatedBy = stateBag.AppRequest.GetUserId(),
+            Comment = req.CommentContent,
             PostId = long.Parse(req.PostId),
+            IsGroupPostComment = req.IsGroupPostComment,
         };
-        var SM24Request = new SM24Request { Comment = _postComment };
+        SM24Request.SetUserId(stateBag.AppRequest.GetUserId());
 
         // Get FeatureHandler response.
         var featResponse = await FeatureExtensions.ExecuteAsync<SM24Request, SM24Response>(
