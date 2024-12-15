@@ -36,7 +36,7 @@ public class SM34Endpoint : Endpoint<SM34RequestDto, SM34HttpResponse>
 
     public override void Configure()
     {
-        Post("/SM34/post/create");
+        Post("/SM34/group-post/create");
         AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
         PreProcessor<AuthPreProcessor<SM34RequestDto>>();
         AllowFormData();
@@ -49,8 +49,8 @@ public class SM34Endpoint : Endpoint<SM34RequestDto, SM34HttpResponse>
 
         Summary(summary =>
         {
-            summary.Summary = "Endpoint for creating a new user post";
-            summary.Description = "This endpoint is used for creating new user post.";
+            summary.Summary = "Endpoint for creating a new group post";
+            summary.Description = "This endpoint is used for creating new group post.";
             summary.Response(
                 description: "Represent successful operation response.",
                 example: new SM34HttpResponse
