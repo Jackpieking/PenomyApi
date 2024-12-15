@@ -45,6 +45,7 @@ public class SM15Repository : ISM15Repository
                     StorageUrl = y.StorageUrl,
                     UploadOrder = y.UploadOrder,
                 }),
+                UserLikes = x.UserLikes.Where(l => l.UserId == userId).ToList(),
             })
             .OrderByDescending(x => x.CreatedAt)
             .ToListAsync(token);

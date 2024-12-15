@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using PenomyAPI.Domain.RelationalDb.DataSeedings.Roles;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 
@@ -29,6 +30,7 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia
                 .Where(o =>
                     o.GroupMembers.Any(gm => gm.MemberId == userId)
                     && o.GroupStatus == SocialGroupStatus.Active
+                    && o.CreatedBy != userId
                 )
                 .OrderByDescending(o =>
                     o.GroupMembers.FirstOrDefault(gm => gm.MemberId == userId).JoinedAt
