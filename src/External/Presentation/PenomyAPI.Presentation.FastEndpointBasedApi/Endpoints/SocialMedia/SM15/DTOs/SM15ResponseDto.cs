@@ -20,6 +20,7 @@ public class UserPostDto
     public UserPostPublicLevel PublicLevel { get; set; }
     public long TotalLikes { get; set; }
     public List<AttachMediaDto> AttachedMedias { get; set; }
+    public bool HasLikedPost { get; set; }
 }
 
 public class AttachMediaDto

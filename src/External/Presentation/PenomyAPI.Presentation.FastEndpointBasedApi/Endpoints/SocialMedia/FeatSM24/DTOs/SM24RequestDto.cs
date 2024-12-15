@@ -2,8 +2,9 @@
 
 public class SM24RequestDto
 {
-
     public string CommentContent { get; init; }
 
-    public string PostId {get; set;}
+    public bool IsGroupPostComment { get; init; }
+
+    public string PostId { get; set; }
 }

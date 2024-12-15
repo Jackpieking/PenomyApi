@@ -76,7 +76,7 @@ public class SM12Repository : ISM12Repository
             transaction = await RepositoryHelper.CreateTransactionAsync(_dbContext, token);
             await _userPostContext.AddAsync(createdPost, token);
             await _attachedMediaContext.AddRangeAsync(postAttachedMediae, token);
-            await _likeStatisticsContext.AddAsync(postLikeStatistic, token);
+            // await _likeStatisticsContext.AddAsync(postLikeStatistic, token);
             await _dbContext.SaveChangesAsync(token);
             await transaction.CommitAsync(token);
             result.Value = true;
