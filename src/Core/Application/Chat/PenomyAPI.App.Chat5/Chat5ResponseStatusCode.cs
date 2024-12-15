@@ -1,6 +1,9 @@
 namespace PenomyAPI.App.Chat5;
 
-public class Chat5ResponseStatusCode
+public enum Chat5ResponseStatusCode
 {
-    
+    SUCCESS,
+    FAILED,
+    UNAUTHORIZED,
+    NOT_EXIST
 }
