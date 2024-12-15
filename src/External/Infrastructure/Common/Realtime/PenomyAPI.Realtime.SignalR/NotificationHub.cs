@@ -17,8 +17,8 @@ public class NotificationHub : Hub<INotificationClient>, INotificationHub
 
     public override async Task OnConnectedAsync()
     {
-        //await Clients.Client(Context.ConnectionId).ReceiveNotification(
-        //    $"{Context.User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value} is connecting");
+        await Clients.Client(Context.ConnectionId).ReceiveMessage(
+            $"{Context.User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value} is connecting");
 
         await base.OnConnectedAsync();
     }

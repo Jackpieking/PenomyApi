@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PenomyAPI.Domain.RelationalDb.Entities.Chat;
 using PenomyAPI.Domain.RelationalDb.Entities.Generic;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using System.Collections.Generic;
@@ -12,11 +13,21 @@ public class G63Repository : IG63Repository
 {
     private readonly DbContext _dbContext;
     private readonly DbSet<UserFollowedCreator> _userFollowedCreators;
+    private readonly DbSet<ChatGroup> _chatGroup;
 
     public G63Repository(DbContext dbContext)
     {
         _dbContext = dbContext;
         _userFollowedCreators = dbContext.Set<UserFollowedCreator>();
+        _chatGroup = dbContext.Set<ChatGroup>();
+    }
+
+    public async Task<ICollection<string>> GetAllJoinedChatGroupIdStringAsync(long userId)
+    {
+        return await _chatGroup.AsNoTracking()
+            .Where(c => c.ChatGroupMembers.Any(cm => cm.MemberId == userId))
+            .Select(c => c.Id.ToString())
+            .ToListAsync();
     }
 
     public async Task<ICollection<CreatorProfile>> GetFollowedCreatorsByUserIdWithPaginationAsync(
