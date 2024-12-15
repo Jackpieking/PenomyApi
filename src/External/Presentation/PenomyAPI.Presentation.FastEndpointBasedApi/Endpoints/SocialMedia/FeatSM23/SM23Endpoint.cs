@@ -49,6 +49,7 @@ public class SM23Endpoint : Endpoint<SM23RequestDto, SM23HttpResponse>
         {
             UserId = long.Parse(stateBag.AppRequest.GetUserId()),
             PostId = long.Parse(req.PostId),
+            IsGroupPost = req.IsGroupPost,
         };
 
         // Get FeatureHandler response.
@@ -61,21 +62,47 @@ public class SM23Endpoint : Endpoint<SM23RequestDto, SM23HttpResponse>
             .Resolve(featResponse.StatusCode)
             .Invoke(featResponse);
         if (featResponse.StatusCode == SM23ResponseStatusCode.SUCCESS)
-            httpResponse.Body = new SM23ResponseDto
+            if (!req.IsGroupPost)
             {
-                Comments = featResponse.Comments.ConvertAll(x => new SM23ResponseObjectDto
+                httpResponse.Body = new SM23ResponseDto
                 {
-                    Id = x.Id.ToString(),
-                    Content = x.Content,
-                    LikeCount = x.TotalLikes,
-                    IsCommentAuthor = x.CreatedBy == long.Parse(stateBag.AppRequest.GetUserId()),
-                    Avatar = x.Creator.AvatarUrl,
-                    Username = x.Creator.NickName,
-                    PostDate = x.CreatedAt.ToString("dd/MM/yyyy"),
-                    TotalReplies = x.TotalChildComments,
-                    IsLiked = x.UserLikes.ToList().Count > 0,
-                }),
-            };
+                    Comments = featResponse.UserPostComments.ConvertAll(
+                        x => new SM23ResponseObjectDto
+                        {
+                            Id = x.Id.ToString(),
+                            Content = x.Content,
+                            LikeCount = x.TotalLikes,
+                            IsCommentAuthor =
+                                x.CreatedBy == long.Parse(stateBag.AppRequest.GetUserId()),
+                            Avatar = x.Creator.AvatarUrl,
+                            Username = x.Creator.NickName,
+                            PostDate = x.CreatedAt.ToString("dd/MM/yyyy"),
+                            TotalReplies = x.TotalChildComments,
+                            IsLiked = x.UserLikes.ToList().Count > 0,
+                        }
+                    ),
+                };
+            }
+            else
+            {
+                httpResponse.Body = new SM23ResponseDto
+                {
+                    Comments = featResponse.GroupPostComments.ConvertAll(
+                        x => new SM23ResponseObjectDto
+                        {
+                            Id = x.Id.ToString(),
+                            Content = x.Content,
+                            IsCommentAuthor =
+                                x.CreatedBy == long.Parse(stateBag.AppRequest.GetUserId()),
+                            Avatar = x.Creator.AvatarUrl,
+                            Username = x.Creator.NickName,
+                            PostDate = x.CreatedAt.ToString("dd/MM/yyyy"),
+                            TotalReplies = x.TotalChildComments,
+                            IsLiked = x.UserLikes.ToList().Count > 0,
+                        }
+                    ),
+                };
+            }
         return httpResponse;
     }
 }
