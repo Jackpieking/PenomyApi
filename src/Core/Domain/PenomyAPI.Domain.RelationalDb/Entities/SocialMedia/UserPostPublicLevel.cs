@@ -12,5 +12,5 @@ public enum UserPostPublicLevel
 
     Private = 3,
 
-    PrivateWithLimitedUsers = 4
+    PrivateWithLimitedUsers = 4,
 }

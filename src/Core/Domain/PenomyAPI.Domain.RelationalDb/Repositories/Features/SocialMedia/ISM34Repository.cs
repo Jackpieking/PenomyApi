@@ -6,12 +6,12 @@ using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
 
 namespace PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 
-public interface ISM12Repository
+public interface ISM34Repository
 {
-    Task<bool> CreateUserPostAsync(
-        UserPost createdPost,
-        IEnumerable<UserPostAttachedMedia> postAttachedMediae,
-        UserPostLikeStatistic postLikeStatistic,
+    Task<bool> CreateGroupPostAsync(
+        GroupPost createdPost,
+        IEnumerable<GroupPostAttachedMedia> postAttachedMediae,
+        GroupPostLikeStatistic postLikeStatistic,
         CancellationToken token = default
     );
 
