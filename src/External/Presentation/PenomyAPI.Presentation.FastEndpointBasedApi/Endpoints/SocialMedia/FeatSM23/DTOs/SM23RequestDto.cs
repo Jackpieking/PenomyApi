@@ -9,4 +9,6 @@ public class SM23RequestDto
     public void SetUserId(string userId) => _userId = userId;
 
     public string PostId { get; set; }
+
+    public bool IsGroupPost { get; set; }
 }

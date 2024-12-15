@@ -46,7 +46,12 @@ public class SM14Endpoint : Endpoint<SM14RequestDto, SM14HttpResponse>
     {
         var stateBag = ProcessorState<StateBag>();
         var userId = stateBag.AppRequest.UserId;
-        var request = new SM14Request { UserId = userId, PostId = long.Parse(requestDto.PostId) };
+        var request = new SM14Request
+        {
+            UserId = userId,
+            PostId = long.Parse(requestDto.PostId),
+            IsGroupPost = requestDto.IsGroupPost,
+        };
         var featureResponse = await FeatureExtensions.ExecuteAsync<SM14Request, SM14Response>(
             request,
             ct

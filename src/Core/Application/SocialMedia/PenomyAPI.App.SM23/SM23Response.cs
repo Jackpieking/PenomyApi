@@ -6,7 +6,8 @@ namespace PenomyAPI.App.SM23;
 
 public class SM23Response : IFeatureResponse
 {
-    public List<UserPostComment> Comments { get; set; }
+    public List<UserPostComment> UserPostComments { get; set; }
+    public List<GroupPostComment> GroupPostComments { get; set; }
 
     public bool IsSuccess { get; set; }
 

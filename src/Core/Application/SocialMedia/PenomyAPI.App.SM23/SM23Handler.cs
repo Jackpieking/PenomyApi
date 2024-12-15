@@ -23,19 +23,34 @@ public class SM23Handler : IFeatureHandler<SM23Request, SM23Response>
         var response = new SM23Response();
         try
         {
-            var result = await _sm23Repository.GetUserPostCommentsAsync(
-                request.PostId,
-                request.UserId,
-                ct
-            );
-            response.Comments = result;
-            response.StatusCode = SM23ResponseStatusCode.SUCCESS;
-            response.IsSuccess = true;
+            if (!request.IsGroupPost)
+            {
+                var result = await _sm23Repository.GetUserPostCommentsAsync(
+                    request.PostId,
+                    request.UserId,
+                    ct
+                );
+                response.UserPostComments = result;
+                response.StatusCode = SM23ResponseStatusCode.SUCCESS;
+                response.IsSuccess = true;
+            }
+            else
+            {
+                var result = await _sm23Repository.GetGroupPostCommentsAsync(
+                    request.PostId,
+                    request.UserId,
+                    ct
+                );
+                response.GroupPostComments = result;
+                response.StatusCode = SM23ResponseStatusCode.SUCCESS;
+                response.IsSuccess = true;
+            }
         }
         catch
         {
             response.StatusCode = SM23ResponseStatusCode.FAILED;
-            response.Comments = null;
+            response.UserPostComments = null;
+            response.GroupPostComments = null;
             response.IsSuccess = false;
         }
 

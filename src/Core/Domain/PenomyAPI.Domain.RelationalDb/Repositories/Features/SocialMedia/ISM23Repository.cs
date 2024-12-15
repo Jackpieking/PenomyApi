@@ -12,4 +12,9 @@ public interface ISM23Repository
         long UserId,
         CancellationToken cancellationToken
     );
+    Task<List<GroupPostComment>> GetGroupPostCommentsAsync(
+        long PostId,
+        long UserId,
+        CancellationToken cancellationToken
+    );
 }
