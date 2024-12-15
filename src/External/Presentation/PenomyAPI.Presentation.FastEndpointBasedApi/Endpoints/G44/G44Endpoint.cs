@@ -7,6 +7,7 @@ using PenomyAPI.Presentation.FastEndpointBasedApi.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Common.Middlewares;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G44.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G44.HttpResponse;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Helpers.Cache;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,6 +15,13 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G44;
 
 public class G44Endpoint : Endpoint<G44RequestDto, G44HttpResponse>
 {
+    private readonly ICommonCacheHandler _commonCacheHandler;
+
+    public G44Endpoint(ICommonCacheHandler commonCacheHandler)
+    {
+        _commonCacheHandler = commonCacheHandler;
+    }
+
     public override void Configure()
     {
         Post("g44/artwork/unfollow");
@@ -63,6 +71,8 @@ public class G44Endpoint : Endpoint<G44RequestDto, G44HttpResponse>
 
         if (featResponse.IsSuccess)
         {
+            // Remove cache after change detail
+            await _commonCacheHandler.ClearG5MangaDetailCacheAsync(long.Parse(requestDto.ArtworkId), ct);
             httpResponse.Body = new G44ResponseDto { Isuccess = true };
         }
 
