@@ -36,7 +36,13 @@ public class Chat3Handler : IFeatureHandler<Chat3Request, Chat3Response>
                     ErrorMessages = ["Group not found"],
                     StatusCode = Chat3ResponseStatusCode.FAILED
                 };
-            if (!await _Chat3Repository.IsMemberOfChatGroupAsync(request.ChatGroupId, request.UserId, ct))
+            if (
+                !await _Chat3Repository.IsMemberOfChatGroupAsync(
+                    request.ChatGroupId,
+                    request.UserId,
+                    ct
+                )
+            )
                 return new Chat3Response
                 {
                     IsSuccess = false,
@@ -56,7 +62,11 @@ public class Chat3Handler : IFeatureHandler<Chat3Request, Chat3Response>
                 MessageType = request.MessageType,
                 ReplyToAnotherMessage = request.IsReply
             };
-            var result = await _Chat3Repository.SaveMessageAsync(chatGroupMessage, likeStatistic, ct);
+            var result = await _Chat3Repository.SaveMessageAsync(
+                chatGroupMessage,
+                likeStatistic,
+                ct
+            );
             if (result)
             {
                 response.IsSuccess = true;
