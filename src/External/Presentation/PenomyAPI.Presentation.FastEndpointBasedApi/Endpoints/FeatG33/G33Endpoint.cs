@@ -27,7 +27,7 @@ internal sealed class G33Endpoint : Endpoint<EmptyRequest, G33HttpResponse>
         });
         Summary(summary =>
         {
-            summary.Summary = "Endpoint for logout feature";
+            summary.Summary = "Endpoint for logout feature [Test ci cd]";
             summary.Description = "This endpoint is used for logout purpose.";
             summary.ExampleRequest = new() { };
             summary.Response<G33HttpResponse>(
