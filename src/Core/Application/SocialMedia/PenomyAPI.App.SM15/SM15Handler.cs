@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using PenomyAPI.App.Common;
-using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 
@@ -23,10 +21,10 @@ public class SM15Handler : IFeatureHandler<SM15Request, SM15Response>
         var response = new SM15Response();
         try
         {
-            List<UserPost> userPosts;
             if (request.UserId != 0)
             {
-                userPosts = await _sm15Repository.GetPersonalPostsAsync(request.UserId, ct);
+                var userPosts = await _sm15Repository.GetPersonalPostsAsync(request.UserId, ct);
+                userPosts.AddRange(await _sm15Repository.GetUserPostsAsync(request.UserId, ct));
                 response.UserPosts = userPosts;
             }
 
