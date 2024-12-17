@@ -4,5 +4,6 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SocialMedia.SM31
 
 public class SM31RequestDto
 {
-    [Required] public long FriendId { get; set; }
+    [Required]
+    public string FriendId { get; set; }
 }

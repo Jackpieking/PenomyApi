@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using PenomyAPI.App.Common.Models.Common;
+using PenomyAPI.Domain.RelationalDb.Entities.Generic;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
@@ -22,6 +23,7 @@ public class SM31Repository : ISM31Repository
     private readonly DbSet<UserFriend> _userFriendContext;
     private readonly DbSet<UserFriendRequest> _userFriendRequestContext;
     private readonly Lazy<UserManager<PgUser>> _userManager;
+    private readonly DbSet<UserProfile> _userProfile;
 
     public SM31Repository(AppDbContext context, Lazy<UserManager<PgUser>> userManager)
     {
@@ -29,6 +31,7 @@ public class SM31Repository : ISM31Repository
         _userFriendRequestContext = context.Set<UserFriendRequest>();
         _userFriendContext = context.Set<UserFriend>();
         _userManager = userManager;
+        _userProfile = context.Set<UserProfile>();
     }
 
     public async Task<bool> IsAlreadyFriendAsync(long userId, long friendId, CancellationToken ct)
@@ -53,7 +56,8 @@ public class SM31Repository : ISM31Repository
     public async Task<bool> IsUserExistAsync(long friendId, CancellationToken token)
     {
         var user = await _userManager.Value.FindByIdAsync(friendId.ToString());
-        return user != null;
+        var profile = await _userProfile.FindAsync(friendId, token);
+        return user != null || profile != null;
     }
 
     private async Task InternalUnFriendPostAsync(
@@ -104,5 +108,13 @@ public class SM31Repository : ISM31Repository
 
             result.Value = false;
         }
+    }
+
+    public async Task<bool> HasFriendRequestAsync(long userId, long friendId, CancellationToken ct)
+    {
+        return await _userFriendRequestContext.AnyAsync(
+            x => x.CreatedBy == userId && x.FriendId == friendId,
+            ct
+        );
     }
 }

@@ -7,6 +7,7 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SocialMedia.SM7.
 public class SM7ResponseDto
 {
     public IEnumerable<GroupDto> Groups { get; set; }
+    public IEnumerable<GroupDto> UnjoinedGroups { get; set; }
 }
 
 public class GroupDto

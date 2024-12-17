@@ -1,4 +1,8 @@
-﻿using PenomyAPI.App.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using PenomyAPI.App.Common;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
@@ -18,28 +22,31 @@ public class SM7Handler : IFeatureHandler<SM7Request, SM7Response>
     {
         try
         {
-            ICollection<SocialGroup> artworks = await _SM7Repository
-                .GetJoinedGroupsByUserIdAsync(
+            ICollection<SocialGroup> joinedGroups =
+                await _SM7Repository.GetJoinedGroupsByUserIdAsync(
                     request.UserId,
                     request.PageNum,
                     request.GroupNum,
                     ct
-                    );
+                );
+            var unjoinedGroups = await _SM7Repository.GetUnjoinedGroupsByUserIdAsync(
+                request.UserId,
+                request.PageNum,
+                request.GroupNum,
+                ct
+            );
 
             return new SM7Response
             {
                 IsSuccess = true,
-                Result = artworks,
-                StatusCode = SM7ResponseStatusCode.SUCCESS
+                Result = joinedGroups,
+                UnjoinedGroups = unjoinedGroups,
+                StatusCode = SM7ResponseStatusCode.SUCCESS,
             };
         }
         catch
         {
-            return new SM7Response
-            {
-                IsSuccess = false,
-                StatusCode = SM7ResponseStatusCode.FAILED
-            };
+            return new SM7Response { IsSuccess = false, StatusCode = SM7ResponseStatusCode.FAILED };
         }
     }
 }

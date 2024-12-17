@@ -82,6 +82,22 @@ public class SM7Endpoint : Endpoint<SM7RequestDto, SM7HttpResponse>
                     ActivityTime = o.Creator.UpdatedAt,
                     TotalPosts = o.GroupPosts.Count(),
                 }),
+
+                UnjoinedGroups = featResponse.UnjoinedGroups.Select(o => new GroupDto
+                {
+                    Id = o.Id.ToString(),
+                    Name = o.Name,
+                    IsPublic = o.IsPublic,
+                    Description = o.Description,
+                    CoverImgUrl = o.CoverPhotoUrl,
+                    TotalMembers = o.TotalMembers,
+                    RequireApprovedWhenPost = o.RequireApprovedWhenPost,
+                    GroupStatus = o.GroupStatus,
+                    CreatedBy = o.CreatedBy.ToString(),
+                    CreatedAt = o.CreatedAt.ToString("dd/MM/yyyy"),
+                    ActivityTime = o.CreatedAt,
+                    TotalPosts = o.GroupPosts.Count(),
+                }),
             };
 
         await SendAsync(httpResponse, httpResponse.HttpCode, ct);
