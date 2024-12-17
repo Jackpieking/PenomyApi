@@ -77,7 +77,10 @@ public class Sm15Endpoint : Endpoint<EmptyRequest, Sm15HttpResponse>
                     PublicLevel = p.PublicLevel,
                     TotalLikes = p.TotalLikes,
                     UserAvatar = p.Creator.AvatarUrl,
-                    HasLikedPost = p.UserLikes.ToList().Count > 0,
+                    HasLikedPost =
+                        p.UserLikes.Where(l => l.UserId == stateBag.AppRequest.UserId)
+                            .ToList()
+                            .Count > 0,
                     AttachedMedias = p
                         .AttachedMedias.Select(m => new AttachMediaDto
                         {
