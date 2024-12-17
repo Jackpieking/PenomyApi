@@ -15,5 +15,6 @@ public interface ISM12Repository
         CancellationToken token = default
     );
 
+    Task<List<UserFriendRequest>> GetUserFriendRequestsAsync(long userId, CancellationToken token = default);
     Task<UserProfile> GetUserProfileAsync(long userId, CancellationToken token = default);
 }

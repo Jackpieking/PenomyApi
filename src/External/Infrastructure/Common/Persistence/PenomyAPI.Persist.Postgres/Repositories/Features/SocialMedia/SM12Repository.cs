@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using PenomyAPI.App.Common.Models.Common;
 using PenomyAPI.Domain.RelationalDb.Entities.Generic;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
+using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 using PenomyAPI.Persist.Postgres.Data.DbContexts;
 using PenomyAPI.Persist.Postgres.Repositories.Helpers;
@@ -17,6 +19,7 @@ public class SM12Repository : ISM12Repository
 {
     private readonly DbSet<UserPostAttachedMedia> _attachedMediaContext;
     private readonly AppDbContext _dbContext;
+    private readonly DbSet<UserFriendRequest> _friendRequests;
     private readonly DbSet<UserPostLikeStatistic> _likeStatisticsContext;
     private readonly DbSet<UserPost> _userPostContext;
     private readonly DbSet<UserPostReport> _userPostReportContext;
@@ -30,6 +33,7 @@ public class SM12Repository : ISM12Repository
         _attachedMediaContext = _dbContext.Set<UserPostAttachedMedia>();
         _likeStatisticsContext = _dbContext.Set<UserPostLikeStatistic>();
         _userProfileContext = _dbContext.Set<UserProfile>();
+        _friendRequests = _dbContext.Set<UserFriendRequest>();
     }
 
     public async Task<bool> CreateUserPostAsync(
@@ -53,6 +57,20 @@ public class SM12Repository : ISM12Repository
                 )
         );
         return result.Value;
+    }
+
+    public async Task<List<UserFriendRequest>> GetUserFriendRequestsAsync(long userId,
+        CancellationToken token = default)
+    {
+        return await _friendRequests.Where(x => x.FriendId == userId && x.RequestStatus == RequestStatus.Pending)
+            .Select(x => new UserFriendRequest
+            {
+                FriendId = x.FriendId,
+                CreatedBy = x.CreatedBy,
+                CreatedAt = x.CreatedAt,
+                UpdatedAt = x.UpdatedAt,
+                RequestStatus = x.RequestStatus
+            }).ToListAsync(token);
     }
 
     public Task<UserProfile> GetUserProfileAsync(long userId, CancellationToken token = default)
