@@ -255,9 +255,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.SM45", "src\C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Realtime", "Realtime", "{59F56FEE-1871-456F-8F01-C0FFFB241AB9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.Realtime.SignalR", "src\External\Infrastructure\Common\Realtime\PenomyAPI.Realtime.SignalR\PenomyAPI.Realtime.SignalR.csproj", "{3DDB822E-CF0A-459B-B3EA-7DA47EA4AF5C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.Realtime.SignalR", "src\External\Infrastructure\Common\Realtime\PenomyAPI.Realtime.SignalR\PenomyAPI.Realtime.SignalR.csproj", "{3DDB822E-CF0A-459B-B3EA-7DA47EA4AF5C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.SM6", "src\Core\Application\SocialMedia\PenomyAPI.App.SM6\PenomyAPI.App.SM6.csproj", "{D4DDCBCD-35DE-4848-B669-9AB8F1D5A48A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.SM6", "src\Core\Application\SocialMedia\PenomyAPI.App.SM6\PenomyAPI.App.SM6.csproj", "{D4DDCBCD-35DE-4848-B669-9AB8F1D5A48A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.SM46", "src\Core\Application\SocialMedia\PenomyAPI.App.SM46\PenomyAPI.App.SM46.csproj", "{5A01CC3C-5C7B-44BA-906D-05590A318542}"
 EndProject
@@ -289,7 +289,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatArt22", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.FeatArt3", "src\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt3\PenomyAPI.App.FeatArt3.csproj", "{DEB997F7-1B8C-424B-B60F-F298F6BD26E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.Chat3", "src\Core\Application\Chat\PenomyAPI.App.Chat3\PenomyAPI.App.Chat3.csproj", "{72911DF6-962E-4796-B29F-2842E4DC1AE3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenomyAPI.App.Chat3", "src\Core\Application\Chat\PenomyAPI.App.Chat3\PenomyAPI.App.Chat3.csproj", "{72911DF6-962E-4796-B29F-2842E4DC1AE3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PenomyAPI.App.SM17", "src\Core\Application\SocialMedia\PenomyAPI.App.SM17\PenomyAPI.App.SM17.csproj", "{5A451AB7-DFC1-49AA-B6F6-B9CC0A74B795}"
 EndProject
