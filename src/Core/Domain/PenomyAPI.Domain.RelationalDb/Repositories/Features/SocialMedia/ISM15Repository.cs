@@ -8,4 +8,5 @@ namespace PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 public interface ISM15Repository
 {
     Task<List<UserPost>> GetPersonalPostsAsync(long userId, CancellationToken token);
+    Task<List<UserPost>> GetUserPostsAsync(long userId, CancellationToken token);
 }
