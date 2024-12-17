@@ -100,9 +100,11 @@ public class SM14Repository : ISM14Repository
                     await InternalRemoveGroupPostByIdAsync(id, userId, cancellationToken, result)
             );
         }
-        await executionStrategy.ExecuteAsync(
-            async () => await InternalRemoveUserPostByIdAsync(id, userId, cancellationToken, result)
-        );
+        else
+            await executionStrategy.ExecuteAsync(
+                async () =>
+                    await InternalRemoveUserPostByIdAsync(id, userId, cancellationToken, result)
+            );
 
         return result.Value;
     }

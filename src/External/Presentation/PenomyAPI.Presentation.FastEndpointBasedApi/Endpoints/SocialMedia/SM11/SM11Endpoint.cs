@@ -80,7 +80,7 @@ public class Sm11Endpoint : Endpoint<SM11RequestDto, Sm11HttpResponse>
                     GroupName = p.Group.Name,
                     GroupAvatar = p.Group.CoverPhotoUrl,
                     Content = p.Content,
-                    CreatedBy = p.Creator.NickName,
+                    CreatedBy = p.Creator.UserId.ToString(),
                     CreatedAt = p.CreatedAt.ToString("dd/MM/yyyy"),
                     AllowComment = p.AllowComment,
                     TotalLikes = p.TotalLikes,
