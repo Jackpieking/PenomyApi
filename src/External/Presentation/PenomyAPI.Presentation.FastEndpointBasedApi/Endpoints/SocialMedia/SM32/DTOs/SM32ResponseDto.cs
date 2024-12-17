@@ -10,9 +10,11 @@ public class SM32ResponseDto
 
 public class UserResponseDto
 {
-    public long UserId { get; set; }
+    public string UserId { get; set; }
     public string NickName { get; set; }
     public string AvatarUrl { get; set; }
     public UserGender Gender { get; set; }
     public string AboutMe { get; set; }
+    public bool IsFriend { get; set; }
+    public bool HasSentFriendRequest { get; set; }
 }

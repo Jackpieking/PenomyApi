@@ -113,7 +113,7 @@ public static class Typs1FeatureHandler
                 ),
                 MangaAvatar = artWork.ThumbnailUrl,
                 MangaNumberOfFollowers = artWork.ArtworkMetaData.TotalFollowers,
-                MangaNumberOfStars = artWork.ArtworkMetaData.TotalStarRates
+                MangaNumberOfStars = artWork.ArtworkMetaData.TotalStarRates,
             });
 
         var importErrors = await TypesenseInitializer.ImportDataIntoMangaSearchCollectionAsync(

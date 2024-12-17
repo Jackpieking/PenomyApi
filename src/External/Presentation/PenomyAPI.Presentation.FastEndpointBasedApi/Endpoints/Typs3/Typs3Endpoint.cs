@@ -32,7 +32,7 @@ public class Typs3Endpoint : Endpoint<Typs3HttpRequest, Typs3HttpResponse>
         {
             summary.Summary = "Endpoint for searching manga feature";
             summary.Description = "This endpoint is used for searching manga purpose.";
-            summary.ExampleRequest = new() { SearchText = "string", };
+            summary.ExampleRequest = new() { SearchText = "string" };
             summary.Response<Typs3HttpResponse>(
                 description: "Represent successful operation response.",
                 example: new() { }
@@ -71,7 +71,7 @@ public class Typs3Endpoint : Endpoint<Typs3HttpRequest, Typs3HttpResponse>
                     MangaName = result.Document.MangaName,
                     MangaAvatar = result.Document.MangaAvatar,
                     MangaNumberOfStars = result.Document.MangaNumberOfStars,
-                    MangaNumberOfFollowers = result.Document.MangaNumberOfFollowers
+                    MangaNumberOfFollowers = result.Document.MangaNumberOfFollowers,
                 }
             );
         }

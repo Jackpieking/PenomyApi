@@ -28,6 +28,7 @@ public class SM11Repository : ISM11Repository
         return await _groupPostContext
             .Where(x => x.GroupId == groupId && x.PostStatus == GroupPostStatus.Approved)
             .OrderByDescending(x => x.UpdatedAt)
+            .ThenByDescending(x => x.TotalLikes)
             .ThenByDescending(x => x.CreatedAt)
             .Select(x => new GroupPost
             {

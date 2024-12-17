@@ -30,7 +30,7 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4.DTOs
                 CategoryName = category.Name,
                 RecommendedArtworks = recommendedComics.Select(
                     G4RecommendedComicResponseDto.MapFrom
-                )
+                ),
             };
         }
 

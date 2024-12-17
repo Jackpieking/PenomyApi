@@ -12,9 +12,7 @@ public class SM32Handler : IFeatureHandler<SM32Request, SM32Response>
 {
     private readonly ISM32Repository _sm32Repository;
 
-    public SM32Handler(
-        Lazy<IUnitOfWork> unitOfWork
-    )
+    public SM32Handler(Lazy<IUnitOfWork> unitOfWork)
     {
         _sm32Repository = unitOfWork.Value.FeatSM32Repository;
     }
@@ -25,10 +23,16 @@ public class SM32Handler : IFeatureHandler<SM32Request, SM32Response>
 
         try
         {
-            var userIds = await _sm32Repository.GetAllUserFriendsAsync(request.UserId, ct);
-            var enumerable = userIds.ToList();
-            if (enumerable.Count > 0)
-                response.UserProfiles = await _sm32Repository.GetAllUserProfilesAsync(enumerable, ct);
+            response.FriendIds = await _sm32Repository.GetAllUserFriendsAsync(request.UserId, ct);
+            response.FriendRequestIds = await _sm32Repository.GetAllUserFriendRequestAsync(
+                request.UserId,
+                ct
+            );
+            response.UserProfiles = await _sm32Repository.GetAllUserProfilesAsync(
+                request.UserId,
+                ct
+            );
+
             response.StatusCode = SM32ResponseStatusCode.SUCCESS;
             response.IsSuccess = true;
         }

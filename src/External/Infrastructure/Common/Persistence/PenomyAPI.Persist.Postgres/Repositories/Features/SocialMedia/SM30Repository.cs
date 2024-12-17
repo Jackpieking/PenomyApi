@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using PenomyAPI.App.Common.Models.Common;
+using PenomyAPI.Domain.RelationalDb.Entities.Generic;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
@@ -20,6 +21,7 @@ public class SM30Repository : ISM30Repository
     private readonly DbSet<UserFriendRequest> _friendRequestContext;
     private readonly DbSet<UserFriend> _userFriendContext;
     private readonly Lazy<UserManager<PgUser>> _userManager;
+    private readonly DbSet<UserProfile> _userProfile;
 
     public SM30Repository(AppDbContext context, Lazy<UserManager<PgUser>> userManager)
     {
@@ -27,6 +29,7 @@ public class SM30Repository : ISM30Repository
         _friendRequestContext = context.Set<UserFriendRequest>();
         _userFriendContext = context.Set<UserFriend>();
         _userManager = userManager;
+        _userProfile = context.Set<UserProfile>();
     }
 
     public async Task<bool> SendFriendRequest(
@@ -60,7 +63,8 @@ public class SM30Repository : ISM30Repository
     public async Task<bool> IsUserExistAsync(long friendId, CancellationToken token)
     {
         var user = await _userManager.Value.FindByIdAsync(friendId.ToString());
-        return user != null;
+        var profile = await _userProfile.FindAsync(friendId, token);
+        return user != null || profile != null;
     }
 
     public async Task<bool> IsAlreadyFriendAsync(
