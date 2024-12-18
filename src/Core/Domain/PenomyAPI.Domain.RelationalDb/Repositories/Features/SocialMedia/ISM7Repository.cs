@@ -35,5 +35,26 @@ namespace PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia
             int pageNum,
             int groupNum,
             CancellationToken ct);
+
+        /// <summary>
+        ///     Get all groups.
+        /// </summary>
+        /// <param name="pageNum">
+        ///     The number of current page.
+        /// </param>
+        /// <param name="groupNum">
+        ///     The number of group to show.
+        /// </param>
+        /// <param name="ct">
+        ///     The token to notify the server to cancel the operation.
+        /// </param>
+        /// <returns>
+        ///     The all groups.
+        ///     Otherwise, empty.
+        /// </returns>
+        Task<ICollection<SocialGroup>> GetAllGroupsAsync(
+            int pageNum,
+            int groupNum,
+            CancellationToken ct);
     }
 }

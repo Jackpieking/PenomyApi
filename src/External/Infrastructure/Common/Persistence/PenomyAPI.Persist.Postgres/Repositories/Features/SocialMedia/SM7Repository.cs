@@ -17,19 +17,12 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia
             _socialGroups = dbContext.Set<SocialGroup>();
         }
 
-        public async Task<ICollection<SocialGroup>> GetJoinedGroupsByUserIdAsync(
-            long userId,
-            int pageNum,
-            int groupNum,
-            CancellationToken ct
-        )
+        public async Task<ICollection<SocialGroup>> GetAllGroupsAsync(int pageNum, int groupNum, CancellationToken ct)
         {
-            return await _socialGroups
-                .AsNoTracking()
-                .Where(o =>
-                    o.GroupMembers.Any(gm => gm.MemberId == userId) &&
-                    o.GroupStatus == SocialGroupStatus.Active)
-                .OrderByDescending(o => o.GroupMembers.FirstOrDefault(gm => gm.MemberId == userId).JoinedAt)
+            return await _socialGroups.AsNoTracking()
+                .OrderByDescending(o => o.GroupPosts.Any()
+                    ? o.GroupPosts.Max(gp => gp.UpdatedAt)
+                    : o.CreatedAt)
                 .Skip((pageNum - 1) * groupNum)
                 .Take(groupNum)
                 .Select(o => new SocialGroup
@@ -47,7 +40,49 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia
                     // Act as group activity time
                     Creator = new Domain.RelationalDb.Entities.Generic.UserProfile
                     {
-                        UpdatedAt = o.GroupMembers.FirstOrDefault(gm => gm.MemberId == userId).JoinedAt
+                        UpdatedAt = o.GroupPosts.Any()
+                            ? o.GroupPosts.Max(gp => gp.UpdatedAt)
+                            : o.CreatedAt
+                    }
+                })
+                .ToListAsync(cancellationToken: ct);
+        }
+
+        public async Task<ICollection<SocialGroup>> GetJoinedGroupsByUserIdAsync(
+            long userId,
+            int pageNum,
+            int groupNum,
+            CancellationToken ct
+        )
+        {
+            return await _socialGroups
+                .AsNoTracking()
+                .Where(o =>
+                    o.GroupMembers.Any(gm => gm.MemberId == userId) &&
+                    o.GroupStatus == SocialGroupStatus.Active)
+                .OrderByDescending(o => o.GroupPosts.Any()
+                    ? o.GroupPosts.Max(gp => gp.UpdatedAt)
+                    : o.CreatedAt)
+                .Skip((pageNum - 1) * groupNum)
+                .Take(groupNum)
+                .Select(o => new SocialGroup
+                {
+                    Id = o.Id,
+                    Name = o.Name,
+                    IsPublic = o.IsPublic,
+                    Description = o.Description,
+                    CoverPhotoUrl = o.CoverPhotoUrl,
+                    TotalMembers = o.TotalMembers,
+                    RequireApprovedWhenPost = o.RequireApprovedWhenPost,
+                    GroupStatus = o.GroupStatus,
+                    CreatedBy = o.CreatedBy,
+                    CreatedAt = o.CreatedAt,
+                    // Act as group activity time
+                    Creator = new Domain.RelationalDb.Entities.Generic.UserProfile
+                    {
+                        UpdatedAt = o.GroupPosts.Any()
+                            ? o.GroupPosts.Max(gp => gp.UpdatedAt)
+                            : o.CreatedAt
                     }
                 })
                 .ToListAsync(cancellationToken: ct);
