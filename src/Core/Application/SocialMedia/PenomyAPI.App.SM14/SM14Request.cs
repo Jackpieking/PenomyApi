@@ -6,4 +6,5 @@ public class SM14Request : IFeatureRequest<SM14Response>
 {
     public long UserId { get; set; }
     public long PostId { get; set; }
+    public bool IsGroupPost { get; set; }
 }

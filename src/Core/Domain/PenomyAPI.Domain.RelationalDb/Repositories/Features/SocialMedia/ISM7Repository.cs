@@ -1,7 +1,7 @@
-﻿using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
 
 namespace PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia
 {
@@ -34,11 +34,19 @@ namespace PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia
             long userId,
             int pageNum,
             int groupNum,
-            CancellationToken ct);
+            CancellationToken ct = default
+        );
 
         /// <summary>
-        ///     Get all groups.
+        ///     Get all unjoined groups by the specified
+        ///     <paramref name="userId"/>.
         /// </summary>
+        /// <remarks>
+        ///     This method uses offset-based pagination to retrieve data.
+        /// </remarks>
+        /// <param name="userId">
+        ///     The user's ID.
+        /// </param>
         /// <param name="pageNum">
         ///     The number of current page.
         /// </param>
@@ -49,12 +57,14 @@ namespace PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia
         ///     The token to notify the server to cancel the operation.
         /// </param>
         /// <returns>
-        ///     The all groups.
+        ///     The user's unjoined groups.
         ///     Otherwise, empty.
         /// </returns>
-        Task<ICollection<SocialGroup>> GetAllGroupsAsync(
+        Task<ICollection<SocialGroup>> GetUnjoinedGroupsByUserIdAsync(
+            long userId,
             int pageNum,
             int groupNum,
-            CancellationToken ct);
+            CancellationToken ct = default
+        );
     }
 }

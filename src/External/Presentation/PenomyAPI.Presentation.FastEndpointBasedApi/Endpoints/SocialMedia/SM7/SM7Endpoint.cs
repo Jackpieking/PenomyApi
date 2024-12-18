@@ -1,6 +1,3 @@
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
@@ -11,6 +8,9 @@ using PenomyAPI.Presentation.FastEndpointBasedApi.Common.Middlewares;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SM7.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SM7.HttpResponse;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SocialMedia.SM7.DTOs;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SM7;
 
@@ -24,7 +24,10 @@ public class SM7Endpoint : Endpoint<SM7RequestDto, SM7HttpResponse>
 
         PreProcessor<AuthPreProcessor<SM7RequestDto>>();
 
-        Description(builder => { builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest); });
+        Description(builder =>
+        {
+            builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest);
+        });
 
         Summary(summary =>
         {
@@ -48,7 +51,7 @@ public class SM7Endpoint : Endpoint<SM7RequestDto, SM7HttpResponse>
         {
             UserId = stateBag.AppRequest.UserId,
             PageNum = requestDto.PageNum,
-            GroupNum = requestDto.GroupNum
+            GroupNum = requestDto.GroupNum,
         };
 
         // Get FeatureHandler response.
@@ -70,14 +73,31 @@ public class SM7Endpoint : Endpoint<SM7RequestDto, SM7HttpResponse>
                     Name = o.Name,
                     IsPublic = o.IsPublic,
                     Description = o.Description,
-                    CoverPhotoUrl = o.CoverPhotoUrl,
+                    CoverImgUrl = o.CoverPhotoUrl,
                     TotalMembers = o.TotalMembers,
                     RequireApprovedWhenPost = o.RequireApprovedWhenPost,
                     GroupStatus = o.GroupStatus,
                     CreatedBy = o.CreatedBy.ToString(),
-                    CreatedAt = o.CreatedAt,
-                    ActivityTime = o.Creator.UpdatedAt
-                })
+                    CreatedAt = o.CreatedAt.ToString("dd/MM/yyyy"),
+                    ActivityTime = o.Creator.UpdatedAt,
+                    TotalPosts = o.GroupPosts.Count(),
+                }),
+
+                UnjoinedGroups = featResponse.UnjoinedGroups.Select(o => new GroupDto
+                {
+                    Id = o.Id.ToString(),
+                    Name = o.Name,
+                    IsPublic = o.IsPublic,
+                    Description = o.Description,
+                    CoverImgUrl = o.CoverPhotoUrl,
+                    TotalMembers = o.TotalMembers,
+                    RequireApprovedWhenPost = o.RequireApprovedWhenPost,
+                    GroupStatus = o.GroupStatus,
+                    CreatedBy = o.CreatedBy.ToString(),
+                    CreatedAt = o.CreatedAt.ToString("dd/MM/yyyy"),
+                    ActivityTime = o.Creator.UpdatedAt,
+                    TotalPosts = o.GroupPosts.Count(),
+                }),
             };
 
         await SendAsync(httpResponse, httpResponse.HttpCode, ct);

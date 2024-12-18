@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5.Common;
@@ -11,7 +10,7 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Helpers.Cache;
 
 public interface ICommonCacheHandler
 {
-    ValueTask ClearG5MangaDetailCacheAsync(int mangaId, CancellationToken ct);
+    ValueTask ClearG5MangaDetailCacheAsync(long mangaId, CancellationToken ct);
 
     Task<G5HttpResponse> GetOrSetG5MangaDetailCacheAsync(
         G5StateBag stateBag,

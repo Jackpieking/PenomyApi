@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using PenomyAPI.Domain.RelationalDb.Entities.Base;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common;
 
@@ -14,13 +15,24 @@ public sealed class ChatMessageLikeStatistic : IEntity
     /// </summary>
     public long Total { get; set; }
 
-    #region Navigation
-    public ChatMessage ChatMessage { get; set; }
-
-    public UserLikeValue LikeValue { get; set; }
-    #endregion
+    public static ChatMessageLikeStatistic Empty(long chatId)
+    {
+        return new ChatMessageLikeStatistic { ChatMessageId = chatId, ValueId = 0, Total = 0 };
+    }
 
     #region MetaData
-    public static class MetaData { }
+
+    public static class MetaData
+    {
+    }
+
+    #endregion
+
+    #region Navigation
+
+    public ChatMessage ChatMessage { get; set; }
+
+    // [NotMapped]
+    // public UserLikeValue LikeValue { get; set; }
     #endregion
 }

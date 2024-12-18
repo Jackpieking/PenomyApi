@@ -10,4 +10,5 @@ public class SM23RequestDto
 
     public string PostId { get; set; }
 
+    public bool IsGroupPost { get; set; }
 }

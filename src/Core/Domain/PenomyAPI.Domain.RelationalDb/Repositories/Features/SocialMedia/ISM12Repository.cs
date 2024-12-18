@@ -8,9 +8,12 @@ namespace PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 
 public interface ISM12Repository
 {
-    Task<bool> CreateUserPostAsync(UserPost createdPost,
-        IEnumerable<UserPostAttachedMedia> postAttachedMediae, UserPostLikeStatistic postLikeStatistic,
-        CancellationToken token = default);
+    Task<bool> CreateUserPostAsync(
+        UserPost createdPost,
+        IEnumerable<UserPostAttachedMedia> postAttachedMediae,
+        UserPostLikeStatistic postLikeStatistic,
+        CancellationToken token = default
+    );
 
     Task<UserProfile> GetUserProfileAsync(long userId, CancellationToken token = default);
 }

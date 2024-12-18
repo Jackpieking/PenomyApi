@@ -21,7 +21,12 @@ public enum ResolveStatus
     InProcessing = 3,
 
     /// <summary>
+    ///     The problem is resolved by the creator and accepted by the user.
+    /// </summary>
+    Done = 4,
+
+    /// <summary>
     ///     The problem is finished and closed.
     /// </summary>
-    Closed = 4,
+    Closed = 5,
 }

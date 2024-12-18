@@ -21,7 +21,7 @@ public sealed class GroupPostAttachedMedia : EntityWithId<long>
     #region MetaData
     public static class MetaData
     {
-        public const int FileNameLength = 32;
+        public const int FileNameLength = 2000;
 
         public const int StorageUrlLength = 2000;
     }

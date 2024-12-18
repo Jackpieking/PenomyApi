@@ -1,10 +1,10 @@
-﻿using FastEndpoints;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.G25.OtherHandlers.GetGuestTracking;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G25.HttpResponse;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G25;
 
@@ -35,10 +35,13 @@ public class G25GetGuestTrackingEndpoint
 
     public override async Task<G25GetGuestTrackingHttpResponse> ExecuteAsync(
         G25GetGuestTrackingRequest request,
-        CancellationToken ct)
+        CancellationToken ct
+    )
     {
-        var featureResponse = await FeatureExtensions
-            .ExecuteAsync<G25GetGuestTrackingRequest, G25GetGuestTrackingResponse>(request, ct);
+        var featureResponse = await FeatureExtensions.ExecuteAsync<
+            G25GetGuestTrackingRequest,
+            G25GetGuestTrackingResponse
+        >(request, ct);
 
         var httpResponse = G25GetGuestTrackingHttpResponse.MapFrom(featureResponse);
 

@@ -35,7 +35,7 @@ public class SM12Handler : IFeatureHandler<SM12Request, SM12Response>
             {
                 IsSuccess = false,
                 ErrorMessages = ["User profile not found"],
-                StatusCode = SM12ResponseStatusCode.USER_PROFILE_NOT_FOUND
+                StatusCode = SM12ResponseStatusCode.USER_PROFILE_NOT_FOUND,
             };
         var artworkFolderName = request.UserPostId.ToString();
 
@@ -46,18 +46,16 @@ public class SM12Handler : IFeatureHandler<SM12Request, SM12Response>
                 DirectoryPathHelper.WebPathSeparator,
                 "posts",
                 artworkFolderName
-            )
+            ),
         };
         var fileService = _fileService.Value;
-        var folderCreateResult = await fileService.CreateFolderAsync(
-            folderInfo,
-            ct);
+        var folderCreateResult = await fileService.CreateFolderAsync(folderInfo, ct);
         if (!folderCreateResult)
             return new SM12Response
             {
                 IsSuccess = false,
                 ErrorMessages = ["Cannot create folder using file service"],
-                StatusCode = SM12ResponseStatusCode.FILE_SERVICE_ERROR
+                StatusCode = SM12ResponseStatusCode.FILE_SERVICE_ERROR,
             };
         List<UserPostAttachedMedia> mediaList = [];
         if (request.AppFileInfos.Any())
@@ -65,10 +63,7 @@ public class SM12Handler : IFeatureHandler<SM12Request, SM12Response>
             {
                 //fileInfo.FileId =
                 fileInfo.FolderPath = folderInfo.RelativePath;
-                var uploadResult = await fileService.UploadFileAsync(
-                    fileInfo,
-                    false,
-                    ct);
+                var uploadResult = await fileService.UploadFileAsync(fileInfo, false, ct);
                 var userPostMedia = new UserPostAttachedMedia
                 {
                     StorageUrl = uploadResult.Value.StorageUrl,
@@ -76,7 +71,7 @@ public class SM12Handler : IFeatureHandler<SM12Request, SM12Response>
                     MediaType = ConvertToUserPostAttachedMediaType(fileInfo.FileExtension),
                     FileName = fileInfo.FileName,
                     Id = long.Parse(fileInfo.FileId),
-                    UploadOrder = mediaList.Count + 1
+                    UploadOrder = mediaList.Count + 1,
                 };
                 mediaList.Add(userPostMedia);
                 if (!uploadResult.IsSuccess)
@@ -84,7 +79,7 @@ public class SM12Handler : IFeatureHandler<SM12Request, SM12Response>
                     {
                         IsSuccess = false,
                         ErrorMessages = ["Cannot create folder using file service"],
-                        StatusCode = SM12ResponseStatusCode.FILE_SERVICE_ERROR
+                        StatusCode = SM12ResponseStatusCode.FILE_SERVICE_ERROR,
                     };
             }
 
@@ -98,7 +93,7 @@ public class SM12Handler : IFeatureHandler<SM12Request, SM12Response>
             Content = request.Content,
             PublicLevel = request.PublicLevel,
             CreatedBy = request.UserId,
-            TotalLikes = 0
+            TotalLikes = 0,
         };
         var userPostStatistic = UserPostLikeStatistic.Empty(request.UserPostId);
 
@@ -112,14 +107,14 @@ public class SM12Handler : IFeatureHandler<SM12Request, SM12Response>
             return new SM12Response
             {
                 IsSuccess = false,
-                StatusCode = SM12ResponseStatusCode.DATABASE_ERROR
+                StatusCode = SM12ResponseStatusCode.DATABASE_ERROR,
             };
 
         return new SM12Response
         {
             IsSuccess = true,
             UserPostId = userPost.Id,
-            StatusCode = SM12ResponseStatusCode.SUCCESS
+            StatusCode = SM12ResponseStatusCode.SUCCESS,
         };
     }
 
@@ -129,7 +124,7 @@ public class SM12Handler : IFeatureHandler<SM12Request, SM12Response>
         {
             "jpg" or "jpeg" or "png" or "gif" or "bmp" => UserPostAttachedMediaType.Image,
             "mp4" or "mkv" => UserPostAttachedMediaType.Video,
-            _ => throw new NotSupportedException($"Unsupported file extension: {extension}")
+            _ => throw new NotSupportedException($"Unsupported file extension: {extension}"),
         };
     }
 }

@@ -40,21 +40,27 @@ public class SM13Repository : ISM13Repository
 
     public async Task<UserPost> GetUserPostByIdAsync(long id, CancellationToken cancellationToken)
     {
-        var userPost = await _userPostContext.Where(x => x.Id == id).Select(x => new UserPost
-        {
-            Content = x.Content,
-            AllowComment = x.AllowComment,
-            PublicLevel = x.PublicLevel,
-            CreatedAt = x.CreatedAt,
-            UpdatedAt = x.UpdatedAt,
-            Id = x.Id
-        }).FirstOrDefaultAsync(cancellationToken);
+        var userPost = await _userPostContext
+            .Where(x => x.Id == id)
+            .Select(x => new UserPost
+            {
+                Content = x.Content,
+                AllowComment = x.AllowComment,
+                PublicLevel = x.PublicLevel,
+                CreatedAt = x.CreatedAt,
+                UpdatedAt = x.UpdatedAt,
+                Id = x.Id,
+            })
+            .FirstOrDefaultAsync(cancellationToken);
         return userPost;
     }
 
-    public async Task<bool> UpdateUserPostAsync(UserPost updatePost, bool isImageUpdate,
+    public async Task<bool> UpdateUserPostAsync(
+        UserPost updatePost,
+        bool isImageUpdate,
         IEnumerable<UserPostAttachedMedia> attachedMediae,
-        CancellationToken token = default)
+        CancellationToken token = default
+    )
     {
         var result = new Result<bool>(false);
 
@@ -90,15 +96,19 @@ public class SM13Repository : ISM13Repository
                 _dbContext,
                 cancellationToken
             );
-            await _userPostContext.Where(x => x.Id == updateDetail.Id).ExecuteUpdateAsync(
-                updatePost => updatePost.SetProperty(post => post.Content, updateDetail.Content)
-                    .SetProperty(post => post.AllowComment, updateDetail.AllowComment)
-                    .SetProperty(post => post.PublicLevel, updateDetail.PublicLevel)
-                    .SetProperty(post => post.UpdatedAt, updateDetail.UpdatedAt)
-            );
+            await _userPostContext
+                .Where(x => x.Id == updateDetail.Id)
+                .ExecuteUpdateAsync(updatePost =>
+                    updatePost
+                        .SetProperty(post => post.Content, updateDetail.Content)
+                        .SetProperty(post => post.AllowComment, updateDetail.AllowComment)
+                        .SetProperty(post => post.PublicLevel, updateDetail.PublicLevel)
+                        .SetProperty(post => post.UpdatedAt, updateDetail.UpdatedAt)
+                );
             if (isMediaUpdated)
             {
-                await _attachedMediaContext.Where(x => x.PostId == updateDetail.Id)
+                await _attachedMediaContext
+                    .Where(x => x.PostId == updateDetail.Id)
                     .ExecuteDeleteAsync(cancellationToken);
                 await _attachedMediaContext.AddRangeAsync(attachedMediae, cancellationToken);
             }

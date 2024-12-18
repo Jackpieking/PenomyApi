@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Reflection.Metadata;
 using System.Threading;
 using System.Threading.Tasks;
 using PenomyAPI.App.Common;
@@ -28,20 +30,44 @@ public class SM14Handler : IFeatureHandler<SM14Request, SM14Response>
 
     public async Task<SM14Response> ExecuteAsync(SM14Request request, CancellationToken ct)
     {
-        if (!await _sm14Repository.IsExistUserPostAsync(request.PostId, request.UserId, ct))
+        bool result;
+        if (
+            !request.IsGroupPost
+            && !await _sm14Repository.IsExistUserPostAsync(request.PostId, request.UserId, ct)
+        )
             return SM14Response.NOT_FOUND;
-        var postMediaIds = await _sm14Repository.GetAttachedFileIdAsync(request.PostId, ct);
+
+        List<long> postMediaIds;
+
+        // Get media ids
+        if (request.IsGroupPost)
+            postMediaIds = await _sm14Repository.GetGroupPostAttachedFileIdAsync(
+                request.PostId,
+                ct
+            );
+        else
+            postMediaIds = await _sm14Repository.GetAttachedFileIdAsync(request.PostId, ct);
+
         if (postMediaIds.Count != 0)
         {
-            var isRemoveSuccess = true;
+            bool isRemoveSuccess;
             foreach (var fileId in postMediaIds)
             {
-                isRemoveSuccess = await _fileService.Value.DeleteFileByIdAsync($"posts/{request.PostId / fileId}", ct);
-                if (!isRemoveSuccess) return SM14Response.FILE_SERVICE_ERROR;
+                isRemoveSuccess = await _fileService.Value.DeleteFileByIdAsync(
+                    $"posts/{request.PostId / fileId}",
+                    ct
+                );
+                if (!isRemoveSuccess)
+                    return SM14Response.FILE_SERVICE_ERROR;
             }
         }
 
-        var result = await _sm14Repository.RemoveUserPostAsync(request.PostId, request.UserId, ct);
+        result = await _sm14Repository.RemoveUserPostAsync(
+            request.PostId,
+            request.UserId,
+            request.IsGroupPost,
+            ct
+        );
         return result ? SM14Response.SUCCESS : SM14Response.DATABASE_ERROR;
     }
 }

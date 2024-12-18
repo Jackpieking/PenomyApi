@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using PenomyAPI.Domain.RelationalDb.Entities.Base;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common;
 
@@ -14,9 +15,20 @@ public sealed class GroupPostLikeStatistic : IEntity
     /// </summary>
     public long Total { get; set; }
 
+    public static GroupPostLikeStatistic Empty(long postId)
+    {
+        return new GroupPostLikeStatistic
+        {
+            PostId = postId,
+            ValueId = 0,
+            Total = 0,
+        };
+    }
+
     #region Navigation
     public GroupPost GroupPost { get; set; }
 
+    [NotMapped]
     public UserLikeValue LikeValue { get; set; }
     #endregion
 

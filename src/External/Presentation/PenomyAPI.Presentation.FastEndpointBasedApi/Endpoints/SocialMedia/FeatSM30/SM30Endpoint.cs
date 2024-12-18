@@ -23,7 +23,10 @@ public class SM30Endpoint : Endpoint<SM30RequestDto, SM30HttpResponse>
 
         PreProcessor<AuthPreProcessor<SM30RequestDto>>();
 
-        Description(builder => { builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest); });
+        Description(builder =>
+        {
+            builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest);
+        });
 
         Summary(summary =>
         {
@@ -31,7 +34,10 @@ public class SM30Endpoint : Endpoint<SM30RequestDto, SM30HttpResponse>
             summary.Description = "This endpoint is used for user send friend request";
             summary.Response(
                 description: "Represent successful operation response.",
-                example: new SM30HttpResponse { AppCode = SM30ResponseStatusCode.SUCCESS.ToString() }
+                example: new SM30HttpResponse
+                {
+                    AppCode = SM30ResponseStatusCode.SUCCESS.ToString(),
+                }
             );
         });
     }
@@ -46,7 +52,7 @@ public class SM30Endpoint : Endpoint<SM30RequestDto, SM30HttpResponse>
         var featRequest = new SM30Request
         {
             UserId = stateBag.AppRequest.UserId,
-            FriendId = requestDto.FriendId
+            FriendId = requestDto.FriendId,
         };
 
         // Get FeatureHandler response.

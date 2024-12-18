@@ -9,9 +9,7 @@ public class Sm31Handler : IFeatureHandler<SM31Request, SM31Response>
 {
     private readonly ISM31Repository _sm31Repository;
 
-    public Sm31Handler(
-        Lazy<IUnitOfWork> unitOfWork
-    )
+    public Sm31Handler(Lazy<IUnitOfWork> unitOfWork)
     {
         _sm31Repository = unitOfWork.Value.FeatSM31Repository;
     }
@@ -31,8 +29,20 @@ public class Sm31Handler : IFeatureHandler<SM31Request, SM31Response>
             }
 
             // Check if they are already friends
-            var alreadyFriend = await _sm31Repository.IsAlreadyFriendAsync(request.UserId, request.FriendId, ct);
-            if (!alreadyFriend)
+            var alreadyFriend = await _sm31Repository.IsAlreadyFriendAsync(
+                request.UserId,
+                request.FriendId,
+                ct
+            );
+
+            // Check if has sent friend request
+            var hasFriendRequest = await _sm31Repository.HasFriendRequestAsync(
+                request.UserId,
+                request.FriendId,
+                ct
+            );
+
+            if (!alreadyFriend && !hasFriendRequest)
             {
                 response.StatusCode = SM31ResponseStatusCode.IS_NOT_FRIEND;
                 return response;
@@ -44,17 +54,19 @@ public class Sm31Handler : IFeatureHandler<SM31Request, SM31Response>
                 {
                     FriendId = request.FriendId,
                     UserId = request.UserId,
-                    StartedAt = DateTime.UtcNow
+                    StartedAt = DateTime.UtcNow,
                 },
                 new()
                 {
                     FriendId = request.UserId,
                     UserId = request.FriendId,
-                    StartedAt = DateTime.UtcNow
-                }
+                    StartedAt = DateTime.UtcNow,
+                },
             };
             var result = await _sm31Repository.UnfriendAsync(friends, ct);
-            response.StatusCode = result ? SM31ResponseStatusCode.SUCCESS : SM31ResponseStatusCode.FAILED;
+            response.StatusCode = result
+                ? SM31ResponseStatusCode.SUCCESS
+                : SM31ResponseStatusCode.FAILED;
         }
         catch
         {

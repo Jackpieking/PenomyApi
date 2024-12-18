@@ -15,7 +15,10 @@ public class SM49ResponseManager
     private static void Init()
     {
         _dictionary =
-            new ConcurrentDictionary<SM49ResponseStatusCode, Func<SM49Request, SM49Response, SM49HttpResponse>>();
+            new ConcurrentDictionary<
+                SM49ResponseStatusCode,
+                Func<SM49Request, SM49Response, SM49HttpResponse>
+            >();
 
         // Add each feature status code with its HttpResponse information.
         _dictionary.TryAdd(
@@ -24,7 +27,7 @@ public class SM49ResponseManager
                 new SM49HttpResponse
                 {
                     AppCode = $"SM49.{SM49ResponseStatusCode.SUCCESS}",
-                    HttpCode = StatusCodes.Status200OK
+                    HttpCode = StatusCodes.Status200OK,
                 }
         );
 
@@ -34,7 +37,7 @@ public class SM49ResponseManager
                 new SM49HttpResponse
                 {
                     AppCode = $"SM49.{SM49ResponseStatusCode.FAILED}",
-                    HttpCode = StatusCodes.Status500InternalServerError
+                    HttpCode = StatusCodes.Status500InternalServerError,
                 }
         );
         _dictionary.TryAdd(
@@ -43,7 +46,7 @@ public class SM49ResponseManager
                 new SM49HttpResponse
                 {
                     AppCode = $"SM49.{SM49ResponseStatusCode.UNAUTHORIZED}",
-                    HttpCode = StatusCodes.Status401Unauthorized
+                    HttpCode = StatusCodes.Status401Unauthorized,
                 }
         );
 
@@ -53,7 +56,7 @@ public class SM49ResponseManager
                 new SM49HttpResponse
                 {
                     AppCode = $"SM49.{SM49ResponseStatusCode.ALREADY_FRIEND}",
-                    HttpCode = StatusCodes.Status400BadRequest
+                    HttpCode = StatusCodes.Status400BadRequest,
                 }
         );
     }
@@ -62,7 +65,8 @@ public class SM49ResponseManager
         SM49ResponseStatusCode statusCode
     )
     {
-        if (Equals(_dictionary, default)) Init();
+        if (Equals(_dictionary, default))
+            Init();
 
         return _dictionary[statusCode];
     }

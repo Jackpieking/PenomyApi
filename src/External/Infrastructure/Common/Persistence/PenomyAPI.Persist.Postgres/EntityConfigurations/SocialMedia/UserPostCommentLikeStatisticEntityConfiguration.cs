@@ -24,12 +24,12 @@ internal sealed class UserPostCommentLikeStatisticEntityConfiguration
             .HasPrincipalKey(comment => comment.Id)
             .OnDelete(DeleteBehavior.NoAction);
 
-        builder
-            .HasOne(likeStatistic => likeStatistic.LikeValue)
-            .WithMany(likeValue => likeValue.UserPostCommentLikeStatistics)
-            .HasForeignKey(likeStatistic => likeStatistic.CommentId)
-            .HasPrincipalKey(likeValue => likeValue.Id)
-            .OnDelete(DeleteBehavior.NoAction);
+        // builder
+        //     .HasOne(likeStatistic => likeStatistic.LikeValue)
+        //     .WithMany(likeValue => likeValue.UserPostCommentLikeStatistics)
+        //     .HasForeignKey(likeStatistic => likeStatistic.ValueId)
+        //     .HasPrincipalKey(likeValue => likeValue.Id)
+        //     .OnDelete(DeleteBehavior.NoAction);
         #endregion
     }
 }

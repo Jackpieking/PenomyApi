@@ -18,5 +18,4 @@ public class SM23ResponseObjectDto
     public string PostDate { get; set; }
     public int TotalReplies { get; set; }
     public bool IsLiked { get; set; }
-    
 }

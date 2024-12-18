@@ -42,7 +42,10 @@ public class SM12Endpoint : Endpoint<SM12RequestDto, SM12HttpResponse>
         AllowFormData();
         AllowFileUploads();
 
-        Description(builder => { builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest); });
+        Description(builder =>
+        {
+            builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest);
+        });
 
         Summary(summary =>
         {
@@ -50,7 +53,10 @@ public class SM12Endpoint : Endpoint<SM12RequestDto, SM12HttpResponse>
             summary.Description = "This endpoint is used for creating new user post.";
             summary.Response(
                 description: "Represent successful operation response.",
-                example: new SM12HttpResponse { AppCode = SM12ResponseStatusCode.SUCCESS.ToString() }
+                example: new SM12HttpResponse
+                {
+                    AppCode = SM12ResponseStatusCode.SUCCESS.ToString(),
+                }
             );
         });
     }
@@ -69,9 +75,11 @@ public class SM12Endpoint : Endpoint<SM12RequestDto, SM12HttpResponse>
                 if (!_formFileHelper.IsValidImageFile(media))
                     return new SM12HttpResponse
                     {
-                        AppCode = SM12HttpResponse.GetAppCode(SM12ResponseStatusCode.INVALID_FILE_EXTENSION),
+                        AppCode = SM12HttpResponse.GetAppCode(
+                            SM12ResponseStatusCode.INVALID_FILE_EXTENSION
+                        ),
                         HttpCode = StatusCodes.Status400BadRequest,
-                        Errors = "Invalid file format"
+                        Errors = "Invalid file format",
                     };
                 var result = InternalValidateImageFile(media);
                 var fileInfo = new ImageFileInfo
@@ -79,22 +87,24 @@ public class SM12Endpoint : Endpoint<SM12RequestDto, SM12HttpResponse>
                     FileId = _idGenerator.Value.Get().ToString(),
                     FileDataStream = media.OpenReadStream(),
                     FileName = media.FileName,
-                    FileExtension = fileExtension
+                    FileExtension = fileExtension,
                 };
-                if (result.IsSuccess) mediaFiles.Add(fileInfo);
+                if (result.IsSuccess)
+                    mediaFiles.Add(fileInfo);
             }
 
         var userPostId = _idGenerator.Value.Get();
         var userId = stateBag.AppRequest.UserId;
-        SM12Request request = new()
-        {
-            UserId = userId,
-            UserPostId = userPostId,
-            AllowComment = requestDto.AllowComment,
-            PublicLevel = requestDto.PublicLevel,
-            Content = requestDto.Title,
-            AppFileInfos = mediaFiles
-        };
+        SM12Request request =
+            new()
+            {
+                UserId = userId,
+                UserPostId = userPostId,
+                AllowComment = requestDto.AllowComment,
+                PublicLevel = requestDto.PublicLevel,
+                Content = requestDto.Title,
+                AppFileInfos = mediaFiles,
+            };
         var featResponse = await FeatureExtensions.ExecuteAsync<SM12Request, SM12Response>(
             request,
             ct

@@ -1,7 +1,8 @@
+using System;
 using PenomyAPI.Domain.RelationalDb.Entities.Base;
 using PenomyAPI.Domain.RelationalDb.Entities.Generic;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common;
-using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
 
@@ -20,6 +21,7 @@ public sealed class UserLikeUserPost : IEntity
 
     public UserProfile User { get; set; }
 
+    [NotMapped]
     public UserLikeValue LikeValue { get; set; }
     #endregion
 

@@ -13,9 +13,7 @@ public class SM30Handler : IFeatureHandler<SM30Request, SM30Response>
 {
     private readonly ISM30Repository _sm30Repository;
 
-    public SM30Handler(
-        Lazy<IUnitOfWork> unitOfWork
-    )
+    public SM30Handler(Lazy<IUnitOfWork> unitOfWork)
     {
         _sm30Repository = unitOfWork.Value.FeatSM30Repository;
     }
@@ -35,7 +33,11 @@ public class SM30Handler : IFeatureHandler<SM30Request, SM30Response>
             }
 
             // Check if they are already friends
-            var alreadyFriend = await _sm30Repository.IsAlreadyFriendAsync(request.UserId, request.FriendId, ct);
+            var alreadyFriend = await _sm30Repository.IsAlreadyFriendAsync(
+                request.UserId,
+                request.FriendId,
+                ct
+            );
             if (alreadyFriend)
             {
                 response.StatusCode = SM30ResponseStatusCode.ALREADY_FRIEND;
@@ -49,16 +51,19 @@ public class SM30Handler : IFeatureHandler<SM30Request, SM30Response>
             }
 
             // Create and send a friend request
-            UserFriendRequest friendRequest = new()
-            {
-                FriendId = request.FriendId,
-                CreatedAt = DateTime.UtcNow,
-                CreatedBy = request.UserId,
-                RequestStatus = RequestStatus.Pending
-            };
+            UserFriendRequest friendRequest =
+                new()
+                {
+                    FriendId = request.FriendId,
+                    CreatedAt = DateTime.UtcNow,
+                    CreatedBy = request.UserId,
+                    RequestStatus = RequestStatus.Pending,
+                };
 
             var result = await _sm30Repository.SendFriendRequest(friendRequest, ct);
-            response.StatusCode = result ? SM30ResponseStatusCode.SUCCESS : SM30ResponseStatusCode.FAILED;
+            response.StatusCode = result
+                ? SM30ResponseStatusCode.SUCCESS
+                : SM30ResponseStatusCode.FAILED;
         }
         catch
         {

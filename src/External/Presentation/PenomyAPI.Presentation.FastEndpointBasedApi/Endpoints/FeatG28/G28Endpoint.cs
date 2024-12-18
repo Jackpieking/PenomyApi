@@ -35,11 +35,14 @@ public class G28AuthEndpoint : Endpoint<G28Request, G28HttpResponse>
 
     public override async Task<G28HttpResponse> ExecuteAsync(
         G28Request request,
-        CancellationToken ct)
+        CancellationToken ct
+    )
     {
         // Get FeatureHandler response.
-        var featResponse = await FeatureExtensions
-        .ExecuteAsync<G28Request, G28Response>(request, ct);
+        var featResponse = await FeatureExtensions.ExecuteAsync<G28Request, G28Response>(
+            request,
+            ct
+        );
 
         var httpResponse = G28HttpResponseManager
             .Resolve(featResponse.StatusCode)

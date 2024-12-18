@@ -11,7 +11,8 @@ public sealed partial class UnitOfWork
     {
         get
         {
-            if (Equals(_featSM15Repository, null)) _featSM15Repository = new SM15Repository(_dbContext);
+            if (Equals(_featSM15Repository, null))
+                _featSM15Repository = new SM15Repository(_dbContext);
 
             return _featSM15Repository;
         }

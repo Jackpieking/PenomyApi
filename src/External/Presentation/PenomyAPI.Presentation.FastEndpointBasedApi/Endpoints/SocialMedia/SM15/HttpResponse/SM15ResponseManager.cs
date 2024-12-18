@@ -16,7 +16,10 @@ public class SM15ResponseManager
     private static void Init()
     {
         _dictionary =
-            new ConcurrentDictionary<SM15ResponseStatusCode, Func<SM15Request, SM15Response, Sm15HttpResponse>>();
+            new ConcurrentDictionary<
+                SM15ResponseStatusCode,
+                Func<SM15Request, SM15Response, Sm15HttpResponse>
+            >();
 
         // Add each feature status code with its HttpResponse information.
         _dictionary.TryAdd(
@@ -25,7 +28,7 @@ public class SM15ResponseManager
                 new Sm15HttpResponse
                 {
                     AppCode = $"SM15.{SM15ResponseStatusCode.SUCCESS}",
-                    HttpCode = StatusCodes.Status200OK
+                    HttpCode = StatusCodes.Status200OK,
                 }
         );
 
@@ -35,7 +38,7 @@ public class SM15ResponseManager
                 new Sm15HttpResponse
                 {
                     AppCode = $"SM15.{SM15ResponseStatusCode.FAILED}",
-                    HttpCode = StatusCodes.Status400BadRequest
+                    HttpCode = StatusCodes.Status400BadRequest,
                 }
         );
         _dictionary.TryAdd(
@@ -44,7 +47,7 @@ public class SM15ResponseManager
                 new Sm15HttpResponse
                 {
                     AppCode = $"SM15.{SM15ResponseStatusCode.UNAUTHORIZED}",
-                    HttpCode = StatusCodes.Status401Unauthorized
+                    HttpCode = StatusCodes.Status401Unauthorized,
                 }
         );
     }
@@ -53,7 +56,8 @@ public class SM15ResponseManager
         SM15ResponseStatusCode statusCode
     )
     {
-        if (Equals(_dictionary, default)) Init();
+        if (Equals(_dictionary, default))
+            Init();
 
         return _dictionary[statusCode];
     }

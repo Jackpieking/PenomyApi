@@ -23,7 +23,10 @@ public class SM32Endpoint : Endpoint<EmptyRequest, SM32HttpResponse>
 
         PreProcessor<AuthPreProcessor<EmptyRequest>>();
 
-        Description(builder => { builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest); });
+        Description(builder =>
+        {
+            builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest);
+        });
 
         Summary(summary =>
         {
@@ -33,7 +36,7 @@ public class SM32Endpoint : Endpoint<EmptyRequest, SM32HttpResponse>
                 description: "Represent successful operation response.",
                 example: new SM32HttpResponse
                 {
-                    AppCode = SM32ResponseStatusCode.SUCCESS.ToString()
+                    AppCode = SM32ResponseStatusCode.SUCCESS.ToString(),
                 }
             );
         });
@@ -62,14 +65,18 @@ public class SM32Endpoint : Endpoint<EmptyRequest, SM32HttpResponse>
             if (featResponse.UserProfiles != null)
                 httpResponse.Body = new SM32ResponseDto
                 {
-                    Users = featResponse.UserProfiles.Select(x => new UserResponseDto
-                    {
-                        UserId = x.UserId,
-                        NickName = x.NickName,
-                        AvatarUrl = x.AvatarUrl,
-                        Gender = x.Gender,
-                        AboutMe = x.AboutMe
-                    })
+                    Users = featResponse
+                        .UserProfiles.Select(x => new UserResponseDto
+                        {
+                            UserId = x.UserId.ToString(),
+                            NickName = x.NickName,
+                            AvatarUrl = x.AvatarUrl,
+                            Gender = x.Gender,
+                            AboutMe = x.AboutMe,
+                            IsFriend = featResponse.FriendIds.Contains(x.UserId),
+                            HasSentFriendRequest = featResponse.FriendRequestIds.Contains(x.UserId),
+                        })
+                        .OrderByDescending(x => x.IsFriend || x.HasSentFriendRequest),
                 };
 
         await SendAsync(httpResponse, httpResponse.HttpCode, ct);

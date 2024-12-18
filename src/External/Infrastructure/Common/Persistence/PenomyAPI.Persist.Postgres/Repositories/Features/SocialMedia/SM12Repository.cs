@@ -32,43 +32,51 @@ public class SM12Repository : ISM12Repository
         _userProfileContext = _dbContext.Set<UserProfile>();
     }
 
-    public async Task<bool> CreateUserPostAsync(UserPost createdPost,
-        IEnumerable<UserPostAttachedMedia> postAttachedMediae, UserPostLikeStatistic postLikeStatistic,
-        CancellationToken token = default)
+    public async Task<bool> CreateUserPostAsync(
+        UserPost createdPost,
+        IEnumerable<UserPostAttachedMedia> postAttachedMediae,
+        UserPostLikeStatistic postLikeStatistic,
+        CancellationToken token = default
+    )
     {
         var result = new Result<bool>(false);
 
         var executionStrategy = RepositoryHelper.CreateExecutionStrategy(_dbContext);
-        await executionStrategy.ExecuteAsync(async () =>
-            await InternalCreateUserPostAsync(
-                createdPost,
-                postAttachedMediae,
-                postLikeStatistic,
-                token,
-                result
-            ));
+        await executionStrategy.ExecuteAsync(
+            async () =>
+                await InternalCreateUserPostAsync(
+                    createdPost,
+                    postAttachedMediae,
+                    postLikeStatistic,
+                    token,
+                    result
+                )
+        );
         return result.Value;
     }
 
     public Task<UserProfile> GetUserProfileAsync(long userId, CancellationToken token = default)
     {
-        return _userProfileContext.AsNoTracking().FirstOrDefaultAsync(user => user.UserId == userId, token);
+        return _userProfileContext
+            .AsNoTracking()
+            .FirstOrDefaultAsync(user => user.UserId == userId, token);
     }
 
-    private async Task InternalCreateUserPostAsync(UserPost createdPost,
-        IEnumerable<UserPostAttachedMedia> postAttachedMediae, UserPostLikeStatistic postLikeStatistic,
-        CancellationToken token, Result<bool> result)
+    private async Task InternalCreateUserPostAsync(
+        UserPost createdPost,
+        IEnumerable<UserPostAttachedMedia> postAttachedMediae,
+        UserPostLikeStatistic postLikeStatistic,
+        CancellationToken token,
+        Result<bool> result
+    )
     {
         IDbContextTransaction transaction = null;
         try
         {
-            transaction = await RepositoryHelper.CreateTransactionAsync(
-                _dbContext,
-                token
-            );
+            transaction = await RepositoryHelper.CreateTransactionAsync(_dbContext, token);
             await _userPostContext.AddAsync(createdPost, token);
             await _attachedMediaContext.AddRangeAsync(postAttachedMediae, token);
-            await _likeStatisticsContext.AddAsync(postLikeStatistic, token);
+            // await _likeStatisticsContext.AddAsync(postLikeStatistic, token);
             await _dbContext.SaveChangesAsync(token);
             await transaction.CommitAsync(token);
             result.Value = true;

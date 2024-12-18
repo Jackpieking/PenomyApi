@@ -1,4 +1,7 @@
-﻿using FastEndpoints;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using FastEndpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.G25;
@@ -9,9 +12,6 @@ using PenomyAPI.Presentation.FastEndpointBasedApi.Common.Middlewares;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G25.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G25.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G25.HttpResponse;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.G25;
 
@@ -41,7 +41,6 @@ public class G25CountArtworkEndpoint
         });
     }
 
-
     public override async Task<G25CountArtworkHttpResponse> ExecuteAsync(
         G25CountArtworkRequestDto request,
         CancellationToken ct
@@ -63,18 +62,17 @@ public class G25CountArtworkEndpoint
         var httpResponse = new G25CountArtworkHttpResponse
         {
             HttpCode = StatusCodes.Status200OK,
-            Body = new G25PaginationOptions
-            {
-                AllowPagination = false,
-                TotalPages = 0
-            }
+            Body = new G25PaginationOptions { AllowPagination = false, TotalPages = 0 }
         };
 
         if (featResponse.TotalArtwork > 0)
         {
             httpResponse.Body.AllowPagination = true;
             httpResponse.Body.TotalArtworks = featResponse.TotalArtwork;
-            httpResponse.Body.TotalPages = (int)Math.Ceiling((decimal)featResponse.TotalArtwork / G25PaginationOptions.DEFAULT_PAGE_SIZE);
+            httpResponse.Body.TotalPages = (int)
+                Math.Ceiling(
+                    (decimal)featResponse.TotalArtwork / G25PaginationOptions.DEFAULT_PAGE_SIZE
+                );
         }
 
         await SendAsync(httpResponse, httpResponse.HttpCode, ct);

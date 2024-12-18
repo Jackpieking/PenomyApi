@@ -338,8 +338,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Property<string>("FileName")
                         .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("character varying(32)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<string>("StorageUrl")
                         .IsRequired()
@@ -484,8 +484,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Property<string>("FileName")
                         .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("character varying(32)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<long>("FileSize")
                         .HasColumnType("bigint");
@@ -597,8 +597,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Property<string>("FileName")
                         .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("character varying(32)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<int>("MediaType")
                         .HasColumnType("integer");
@@ -853,8 +853,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Property<string>("FileName")
                         .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("character varying(32)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<int>("MediaType")
                         .HasColumnType("integer");
@@ -1472,8 +1472,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Property<string>("FileName")
                         .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("character varying(32)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<int>("MediaType")
                         .HasColumnType("integer");
@@ -1500,15 +1500,10 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Property<long>("ValueId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("LikeValueId")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("Total")
                         .HasColumnType("bigint");
 
                     b.HasKey("ChatMessageId", "ValueId");
-
-                    b.HasIndex("LikeValueId");
 
                     b.ToTable("penomy_chat_message_like_statistic", (string)null);
                 });
@@ -1571,9 +1566,6 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("LikeValueId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime>("LikedAt")
                         .HasColumnType("TIMESTAMPTZ");
 
@@ -1581,8 +1573,6 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("ChatMessageId", "UserId");
-
-                    b.HasIndex("LikeValueId");
 
                     b.HasIndex("UserId");
 
@@ -1686,8 +1676,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Property<string>("FileName")
                         .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("character varying(32)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<string>("StorageUrl")
                         .IsRequired()
@@ -2454,8 +2444,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Property<string>("FileName")
                         .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("character varying(32)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<int>("MediaType")
                         .HasColumnType("integer");
@@ -2528,8 +2518,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Property<string>("FileName")
                         .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("character varying(32)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<int>("MediaType")
                         .HasColumnType("integer");
@@ -2557,15 +2547,15 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Property<long>("ValueId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("LikeValueId")
+                    b.Property<long>("Total")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("Total")
+                    b.Property<long?>("UserLikeValueId")
                         .HasColumnType("bigint");
 
                     b.HasKey("CommentId", "ValueId");
 
-                    b.HasIndex("LikeValueId");
+                    b.HasIndex("UserLikeValueId");
 
                     b.ToTable("penomy_group_post_comment_like_statistic", (string)null);
                 });
@@ -2932,9 +2922,6 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("LikeValueId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime>("LikedAt")
                         .HasColumnType("TIMESTAMPTZ");
 
@@ -2942,8 +2929,6 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("PostId", "UserId");
-
-                    b.HasIndex("LikeValueId");
 
                     b.HasIndex("UserId");
 
@@ -2958,9 +2943,6 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("LikeValueId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime>("LikedAt")
                         .HasColumnType("TIMESTAMPTZ");
 
@@ -2968,8 +2950,6 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("CommentId", "UserId");
-
-                    b.HasIndex("LikeValueId");
 
                     b.HasIndex("UserId");
 
@@ -2984,9 +2964,6 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("LikeValueId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime>("LikedAt")
                         .HasColumnType("TIMESTAMPTZ");
 
@@ -2994,8 +2971,6 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("PostId", "UserId");
-
-                    b.HasIndex("LikeValueId");
 
                     b.HasIndex("UserId");
 
@@ -3010,9 +2985,6 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("LikeValueId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime>("LikedAt")
                         .HasColumnType("TIMESTAMPTZ");
 
@@ -3020,8 +2992,6 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("CommentId", "UserId");
-
-                    b.HasIndex("LikeValueId");
 
                     b.HasIndex("UserId");
 
@@ -3070,8 +3040,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Property<string>("FileName")
                         .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("character varying(32)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<int>("MediaType")
                         .HasColumnType("integer");
@@ -3147,8 +3117,8 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Property<string>("FileName")
                         .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("character varying(32)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<int>("MediaType")
                         .HasColumnType("integer");
@@ -3179,7 +3149,12 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Property<long>("Total")
                         .HasColumnType("bigint");
 
+                    b.Property<long?>("UserLikeValueId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("CommentId", "ValueId");
+
+                    b.HasIndex("UserLikeValueId");
 
                     b.ToTable("penomy_user_post_comment_like_statistics", (string)null);
                 });
@@ -3207,15 +3182,15 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                     b.Property<long>("ValueId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("LikeValueId")
+                    b.Property<long>("Total")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("Total")
+                    b.Property<long?>("UserLikeValueId")
                         .HasColumnType("bigint");
 
                     b.HasKey("PostId", "ValueId");
 
-                    b.HasIndex("LikeValueId");
+                    b.HasIndex("UserLikeValueId");
 
                     b.ToTable("penomy_user_post_like_statistics", (string)null);
                 });
@@ -4356,13 +4331,7 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common.UserLikeValue", "LikeValue")
-                        .WithMany()
-                        .HasForeignKey("LikeValueId");
-
                     b.Navigation("ChatMessage");
-
-                    b.Navigation("LikeValue");
                 });
 
             modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.Chat.SocialGroupLinkedChatGroup", b =>
@@ -4411,17 +4380,11 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common.UserLikeValue", "LikeValue")
-                        .WithMany()
-                        .HasForeignKey("LikeValueId");
-
                     b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.Generic.UserProfile", "User")
                         .WithMany("UserLikeChatMessages")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
-
-                    b.Navigation("LikeValue");
 
                     b.Navigation("LikedChatMessage");
 
@@ -4893,13 +4856,11 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common.UserLikeValue", "LikeValue")
+                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common.UserLikeValue", null)
                         .WithMany("GroupPostCommentLikeStatistics")
-                        .HasForeignKey("LikeValueId");
+                        .HasForeignKey("UserLikeValueId");
 
                     b.Navigation("GroupPostComment");
-
-                    b.Navigation("LikeValue");
                 });
 
             modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.GroupPostCommentParentChild", b =>
@@ -5114,10 +5075,6 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
             modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.UserLikeGroupPost", b =>
                 {
-                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common.UserLikeValue", "LikeValue")
-                        .WithMany()
-                        .HasForeignKey("LikeValueId");
-
                     b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.GroupPost", "GroupPost")
                         .WithMany("UserLikes")
                         .HasForeignKey("PostId")
@@ -5132,8 +5089,6 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
                     b.Navigation("GroupPost");
 
-                    b.Navigation("LikeValue");
-
                     b.Navigation("User");
                 });
 
@@ -5145,17 +5100,11 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common.UserLikeValue", "LikeValue")
-                        .WithMany()
-                        .HasForeignKey("LikeValueId");
-
                     b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.Generic.UserProfile", "User")
                         .WithMany("UserLikeGroupPostComments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
-
-                    b.Navigation("LikeValue");
 
                     b.Navigation("LikedComment");
 
@@ -5164,10 +5113,6 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
             modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.UserLikeUserPost", b =>
                 {
-                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common.UserLikeValue", "LikeValue")
-                        .WithMany()
-                        .HasForeignKey("LikeValueId");
-
                     b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.UserPost", "UserPost")
                         .WithMany("UserLikes")
                         .HasForeignKey("PostId")
@@ -5179,8 +5124,6 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
-
-                    b.Navigation("LikeValue");
 
                     b.Navigation("User");
 
@@ -5195,17 +5138,11 @@ namespace PenomyAPI.Persist.Postgres.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common.UserLikeValue", "LikeValue")
-                        .WithMany()
-                        .HasForeignKey("LikeValueId");
-
                     b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.Generic.UserProfile", "User")
                         .WithMany("UserLikeUserPostComments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
-
-                    b.Navigation("LikeValue");
 
                     b.Navigation("LikedComment");
 
@@ -5266,19 +5203,15 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
             modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.UserPostCommentLikeStatistic", b =>
                 {
-                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common.UserLikeValue", "LikeValue")
-                        .WithMany("UserPostCommentLikeStatistics")
-                        .HasForeignKey("CommentId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.UserPostComment", "UserPostComment")
                         .WithMany("LikeStatistics")
                         .HasForeignKey("CommentId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("LikeValue");
+                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common.UserLikeValue", null)
+                        .WithMany("UserPostCommentLikeStatistics")
+                        .HasForeignKey("UserLikeValueId");
 
                     b.Navigation("UserPostComment");
                 });
@@ -5305,17 +5238,15 @@ namespace PenomyAPI.Persist.Postgres.Migrations
 
             modelBuilder.Entity("PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.UserPostLikeStatistic", b =>
                 {
-                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common.UserLikeValue", "LikeValue")
-                        .WithMany("UserPostLikeStatistics")
-                        .HasForeignKey("LikeValueId");
-
                     b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.UserPost", "UserPost")
                         .WithMany("LikeStatistics")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("LikeValue");
+                    b.HasOne("PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common.UserLikeValue", null)
+                        .WithMany("UserPostLikeStatistics")
+                        .HasForeignKey("UserLikeValueId");
 
                     b.Navigation("UserPost");
                 });

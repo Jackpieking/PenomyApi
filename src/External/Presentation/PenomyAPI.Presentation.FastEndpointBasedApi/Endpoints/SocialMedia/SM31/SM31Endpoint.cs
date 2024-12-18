@@ -13,8 +13,7 @@ using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SocialMedia.SM31.Htt
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SocialMedia.SM31;
 
-public class SM31Endpoint
-    : Endpoint<SM31RequestDto, SM31HttpResponse>
+public class SM31Endpoint : Endpoint<SM31RequestDto, SM31HttpResponse>
 {
     public override void Configure()
     {
@@ -24,7 +23,10 @@ public class SM31Endpoint
 
         PreProcessor<AuthPreProcessor<SM31RequestDto>>();
 
-        Description(builder => { builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest); });
+        Description(builder =>
+        {
+            builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest);
+        });
 
         Summary(summary =>
         {
@@ -32,7 +34,10 @@ public class SM31Endpoint
             summary.Description = "This endpoint is used for user send to send unfriend request";
             summary.Response(
                 description: "Represent successful operation response.",
-                example: new SM31HttpResponse { AppCode = SM31ResponseStatusCode.SUCCESS.ToString() }
+                example: new SM31HttpResponse
+                {
+                    AppCode = SM31ResponseStatusCode.SUCCESS.ToString(),
+                }
             );
         });
     }
@@ -47,7 +52,7 @@ public class SM31Endpoint
         var featRequest = new SM31Request
         {
             UserId = stateBag.AppRequest.UserId,
-            FriendId = requestDto.FriendId
+            FriendId = long.Parse(requestDto.FriendId),
         };
 
         // Get FeatureHandler response.

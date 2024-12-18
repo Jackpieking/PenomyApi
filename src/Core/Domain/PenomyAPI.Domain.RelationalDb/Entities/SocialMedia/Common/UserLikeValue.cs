@@ -1,13 +1,11 @@
-﻿using PenomyAPI.Domain.RelationalDb.Entities.Base;
-using PenomyAPI.Domain.RelationalDb.Entities.SystemManagement;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using PenomyAPI.Domain.RelationalDb.Entities.Base;
+using PenomyAPI.Domain.RelationalDb.Entities.SystemManagement;
 
 namespace PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common;
 
-public sealed class UserLikeValue :
-    EntityWithId<long>,
-    ICreatedEntity<long>
+public sealed class UserLikeValue : EntityWithId<long>, ICreatedEntity<long>
 {
     public string Name { get; set; }
 

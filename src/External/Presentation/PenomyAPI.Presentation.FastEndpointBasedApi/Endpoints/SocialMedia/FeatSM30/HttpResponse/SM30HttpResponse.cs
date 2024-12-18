@@ -3,6 +3,4 @@ using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SocialMedia.FeatSM30
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SocialMedia.FeatSM30.HttpResponse;
 
-public class SM30HttpResponse : AppHttpResponse<SM30ResponseDto>
-{
-}
+public class SM30HttpResponse : AppHttpResponse<SM30ResponseDto> { }

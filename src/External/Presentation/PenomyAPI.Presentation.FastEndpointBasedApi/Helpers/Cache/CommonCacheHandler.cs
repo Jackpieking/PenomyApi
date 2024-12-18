@@ -1,6 +1,3 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using PenomyAPI.App.FeatG5;
 using PenomyAPI.App.FeatG9;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
@@ -10,6 +7,9 @@ using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5.HttpResponse;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG9.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG9.HttpResponseMappers;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG9.HttpResponses;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using ZiggyCreatures.Caching.Fusion;
 using ZiggyCreatures.Caching.Fusion.Serialization;
 
@@ -37,7 +37,7 @@ public class CommonCacheHandler : ICommonCacheHandler
         _serializer = serializer;
     }
 
-    public ValueTask ClearG5MangaDetailCacheAsync(int mangaId, CancellationToken ct)
+    public ValueTask ClearG5MangaDetailCacheAsync(long mangaId, CancellationToken ct)
     {
         return _fusionCache.Value.RemoveAsync($"{G5_ARTWORK_ID}{mangaId}", token: ct);
     }
