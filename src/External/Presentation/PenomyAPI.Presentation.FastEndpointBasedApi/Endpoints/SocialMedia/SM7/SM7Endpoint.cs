@@ -1,6 +1,3 @@
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
@@ -11,8 +8,11 @@ using PenomyAPI.Presentation.FastEndpointBasedApi.Common.Middlewares;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SM7.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SM7.HttpResponse;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SocialMedia.SM7.DTOs;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SM7;
+namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SocialMedia.SM7;
 
 public class SM7Endpoint : Endpoint<SM7RequestDto, SM7HttpResponse>
 {

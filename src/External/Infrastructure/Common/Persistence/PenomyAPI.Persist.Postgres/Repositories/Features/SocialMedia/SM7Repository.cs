@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore;
+using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
+using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
-using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia
 {
