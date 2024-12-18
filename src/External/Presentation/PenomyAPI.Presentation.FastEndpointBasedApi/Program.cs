@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.JsonWebTokens;
 using PenomyAPI.BuildingBlock.FeatRegister;
 using PenomyAPI.BuildingBlock.FeatRegister.Common;
+using PenomyAPI.Domain.RelationalDb.Entities.Contraints.ArtworkCreation;
 using PenomyAPI.Persist.Postgres.Data.DbContexts;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Typs1;
@@ -24,6 +25,10 @@ JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 JsonWebTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.Limits.MaxRequestBodySize = ArtworkConstraints.MAXIMUM_VIDEO_FILE_SIZE;
+});
 
 var services = builder.Services;
 var configuration = builder.Configuration;

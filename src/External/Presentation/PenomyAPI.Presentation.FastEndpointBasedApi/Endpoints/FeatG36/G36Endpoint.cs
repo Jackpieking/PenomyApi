@@ -112,7 +112,7 @@ public sealed class G36Endpoint : Endpoint<G36UpdateProfileRequestDto, G36HttpRe
     private Result<G36HttpResponse> InternalValidateImageFile(IFormFile imageFile)
     {
         // Check if the file extension is valid or not.
-        if (!_formFileHelper.HasValidExtension(imageFile, ArtworkConstraints.VALID_FILE_EXTENSIONS))
+        if (!_formFileHelper.HasValidExtension(imageFile, ArtworkConstraints.VALID_IMAGE_FILE_EXTENSIONS))
         {
             return Result<G36HttpResponse>.Failed(G36HttpResponse.INVALID_FILE_UPLOAD);
         }

@@ -1,14 +1,16 @@
-﻿using System;
-using FastEndpoints.Swagger;
+﻿using FastEndpoints.Swagger;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NSwag;
 using PenomyAPI.BuildingBlock.FeatRegister.ServiceExtensions;
+using PenomyAPI.Domain.RelationalDb.Entities.Contraints.ArtworkCreation;
 using PenomyAPI.Infra.Configuration.Options;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Helpers.Cache;
+using System;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.ServiceConfigurations;
 
@@ -25,6 +27,17 @@ public static class WebApiServiceConfig
         services.AddGlobalExceptionHandler();
 
         services.AddAppDefinedServices(configuration);
+
+        services.ConfigureRequestLimits(configuration);
+    }
+
+    private static void ConfigureRequestLimits(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<FormOptions>(options =>
+        {
+            options.ValueLengthLimit = int.MaxValue;
+            options.MultipartBodyLengthLimit = ArtworkConstraints.MAXIMUM_VIDEO_FILE_SIZE;
+        });
     }
 
     private static void AddAppDefinedServices(

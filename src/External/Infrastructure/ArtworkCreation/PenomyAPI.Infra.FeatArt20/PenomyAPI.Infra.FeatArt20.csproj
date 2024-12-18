@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt20\PenomyAPI.App.FeatArt20.csproj" />
+    <ProjectReference Include="..\..\Common\FileService\PenomyAPI.FileService.CloudinaryService\PenomyAPI.FileService.CloudinaryService.csproj" />
+    <ProjectReference Include="..\..\Common\PenomyAPI.Infra.Configuration\PenomyAPI.Infra.Configuration.csproj" />
+  </ItemGroup>
+
+</Project>

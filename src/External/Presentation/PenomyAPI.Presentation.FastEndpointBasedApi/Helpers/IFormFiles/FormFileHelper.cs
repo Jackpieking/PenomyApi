@@ -1,5 +1,6 @@
 ﻿using FileTypeChecker;
 using Microsoft.AspNetCore.Http;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Helpers.IFormFiles.VideoFileValiationExtensions;
 using System.Linq;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Helpers.IFormFiles;
@@ -52,5 +53,12 @@ public sealed class FormFileHelper : IFormFileHelper
         // Check the byte signatures of the file, preventing
         // malicious users upload file that has been modified.
         return FileTypeValidator.IsImage(formFile.OpenReadStream());
+    }
+
+    public bool IsValidVideoFile(IFormFile formFile)
+    {
+        // Check the byte signatures of the file, preventing
+        // malicious users upload file that has been modified.
+        return formFile.IsVideo();
     }
 }

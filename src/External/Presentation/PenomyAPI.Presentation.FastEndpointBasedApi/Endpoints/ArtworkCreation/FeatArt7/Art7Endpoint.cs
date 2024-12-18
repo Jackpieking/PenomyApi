@@ -125,7 +125,7 @@ public sealed class Art7Endpoint : Endpoint<Art7RequestDto, Art7HttpResponse>
         Art7HttpResponse httpResponse;
 
         // Check if the file extension is valid or not.
-        if (!_formFileHelper.HasValidExtension(imageFile, ArtworkConstraints.VALID_FILE_EXTENSIONS))
+        if (!_formFileHelper.HasValidExtension(imageFile, ArtworkConstraints.VALID_IMAGE_FILE_EXTENSIONS))
         {
             httpResponse = Art7HttpResponseManager
                 .Resolve(Art7ResponseStatusCode.INVALID_FILE_EXTENSION)
