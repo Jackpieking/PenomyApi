@@ -1,55 +1,59 @@
+using PenomyAPI.App.Common;
+using PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG15;
+using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
+using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using PenomyAPI.App.Common;
-using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
-using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
-using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 
 namespace PenomyAPI.App.FeatG15;
 
 public class G15Handler : IFeatureHandler<G15Request, G15Response>
 {
     private readonly IG15Repository _IG15Repository;
+    private readonly IUnitOfWork _unitOfWork;
 
     public G15Handler(Lazy<IUnitOfWork> unitOfWork)
     {
-        _IG15Repository = unitOfWork.Value.G15Repository;
+        _unitOfWork = unitOfWork.Value;
+        _IG15Repository = _unitOfWork.G15Repository;
     }
 
     public async Task<G15Response> ExecuteAsync(G15Request request, CancellationToken ct)
     {
-        Artwork result;
         try
         {
-            var rq = request.Id;
-            if (rq == 0)
+            var invalidId = request.Id == default;
+
+            if (invalidId)
             {
-                return new G15Response
-                {
-                    StatusCode = G15ResponseStatusCode.INVALID_REQUEST,
-                    IsSuccess = false
-                };
+                return G15Response.ID_NOT_FOUND;
             }
-            if (!await _IG15Repository.IsArtworkExistAsync(rq, ct))
+
+            // Check if the comic is existed or not.
+            const long GUEST_ID = -1;
+
+            var isComicExisted = await _unitOfWork.ArtworkRepository.IsArtworkAvailableToDisplayByIdAsync(
+                request.Id,
+                GUEST_ID,
+                ct);
+
+            if (!isComicExisted)
             {
-                return new G15Response
-                {
-                    StatusCode = G15ResponseStatusCode.NOT_FOUND,
-                    IsSuccess = false
-                };
+                return G15Response.ID_NOT_FOUND;
             }
-            result = await _IG15Repository.GetArtWorkDetailByIdAsync(rq, ct);
+
+            // Get the comic detail,
+            G15AnimeDetailReadModel animeDetail = await _IG15Repository.GetArtWorkDetailByIdAsync(
+                request.Id,
+                ct
+            );
+
+            return G15Response.SUCCESS(animeDetail);
         }
         catch
         {
-            return new G15Response { StatusCode = G15ResponseStatusCode.FAILED, IsSuccess = false };
+            return G15Response.ID_NOT_FOUND;
         }
-        return new()
-        {
-            Result = result,
-            StatusCode = G15ResponseStatusCode.SUCCESS,
-            IsSuccess = true
-        };
     }
 }

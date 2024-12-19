@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
+using PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG15;
+using PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG5;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using System.Linq;
 using System.Threading;
@@ -15,65 +17,58 @@ public class G15Repository : IG15Repository
     {
         _dbContext = dbContext;
     }
-    private static bool IsValidArtworkAsync(Artwork artwork)
-    {
-        return artwork.ArtworkType == ArtworkType.Animation && artwork.IsTemporarilyRemoved == false && artwork.IsTakenDown == false && artwork.PublicLevel != Domain.RelationalDb.Entities.ArtworkCreation.Common.ArtworkPublicLevel.Private;
-    }
-    public async Task<Artwork> GetArtWorkDetailByIdAsync(
+
+    public Task<G15AnimeDetailReadModel> GetArtWorkDetailByIdAsync(
         long artworkId,
         CancellationToken token = default
     )
     {
-        var artwork = await _dbContext
+        return _dbContext
             .Set<Artwork>()
-            .Where(x => x.Id == artworkId && IsValidArtworkAsync(x))
-            .Select(x => new Artwork
+            .Where(x => x.Id == artworkId)
+            .Select(comic => new G15AnimeDetailReadModel
             {
-                Title = x.Title,
-                AuthorName = x.AuthorName,
-                HasSeries = x.HasSeries,
-                Introduction = x.Introduction,
-                Id = x.Id,
-                Origin = new ArtworkOrigin
+                Id = comic.Id,
+                Title = comic.Title,
+                Introduction = comic.Introduction,
+                ThumbnailUrl = comic.ThumbnailUrl,
+                HasSeries = comic.HasSeries,
+                CountryId = comic.Origin.Id,
+                CountryName = comic.Origin.CountryName,
+                ArtworkCategories = comic.ArtworkCategories.Select(y => new G5CategoryReadModel
                 {
-                    Id = x.Origin.Id,
-                    CountryName = x.Origin.CountryName,
-                },
-                ArtworkCategories = x.ArtworkCategories.Select(y => new ArtworkCategory
-                {
-                    Category = new Category { Name = y.Category.Name, },
-                    ArtworkId = y.ArtworkId,
-                    CategoryId = y.CategoryId,
+                    Id = y.Category.Id,
+                    Name = y.Category.Name,
                 }),
-                ArtworkSeries = x.ArtworkSeries.Select(y => new ArtworkSeries
-                {
-                    ArtworkId = y.ArtworkId,
-                    Series = y.Series,
-                }),
-                ArtworkStatus = x.ArtworkStatus,
-                UserRatingArtworks = x.UserRatingArtworks.Select(y => new UserRatingArtwork
-                {
-                    StarRates = y.StarRates,
-                }),
+                ArtworkStatus = comic.ArtworkStatus,
                 ArtworkMetaData = new ArtworkMetaData
                 {
-                    TotalComments = x.ArtworkMetaData.TotalComments,
-                    TotalFavorites = x.ArtworkMetaData.TotalFavorites,
-                    TotalViews = x.ArtworkMetaData.TotalViews,
-                    TotalStarRates = x.ArtworkMetaData.TotalStarRates,
-                    TotalUsersRated = x.ArtworkMetaData.TotalUsersRated,
-                    AverageStarRate = x.ArtworkMetaData.AverageStarRate,
+                    TotalComments = comic.ArtworkMetaData.TotalComments,
+                    TotalFavorites = comic.ArtworkMetaData.TotalFavorites,
+                    TotalViews = comic.ArtworkMetaData.TotalViews,
+                    TotalStarRates = comic.ArtworkMetaData.TotalStarRates,
+                    TotalUsersRated = comic.ArtworkMetaData.TotalUsersRated,
+                    AverageStarRate = comic.ArtworkMetaData.AverageStarRate,
+                    TotalFollowers = comic.ArtworkMetaData.TotalFollowers
                 },
-                ThumbnailUrl = x.ThumbnailUrl,
+                AllowComment = comic.AllowComment,
+                // Creator detail section.
+                CreatorId = comic.Creator.UserId,
+                CreatorName = comic.Creator.NickName,
+                CreatorAvatarUrl = comic.Creator.AvatarUrl,
+                CreatorTotalFollowers = comic.Creator.CreatorProfile.TotalFollowers,
             })
             .AsNoTracking()
             .AsSplitQuery()
             .FirstOrDefaultAsync(token);
-        return artwork;
     }
 
-    public Task<bool> IsArtworkExistAsync(long artworkId, CancellationToken ct = default)
+    public Task<bool> IsArtworkExistAsync(
+        long artworkId,
+        CancellationToken ct = default)
     {
-        return _dbContext.Set<Artwork>().AnyAsync(x => x.Id == artworkId && x.ArtworkType == ArtworkType.Animation, ct);
+        return _dbContext
+            .Set<Artwork>()
+            .AnyAsync(x => x.Id == artworkId && x.ArtworkType == ArtworkType.Animation, ct);
     }
 }

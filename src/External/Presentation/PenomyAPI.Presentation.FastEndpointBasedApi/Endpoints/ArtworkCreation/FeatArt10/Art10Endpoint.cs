@@ -165,7 +165,7 @@ public class Art10Endpoint : Endpoint<Art10CreateChapterRequestDto, Art10HttpRes
         Art10HttpResponse httpResponse;
 
         // Check if the file extension is valid or not.
-        if (!_formFileHelper.HasValidExtension(imageFile, ArtworkConstraints.VALID_FILE_EXTENSIONS))
+        if (!_formFileHelper.HasValidExtension(imageFile, ArtworkConstraints.VALID_IMAGE_FILE_EXTENSIONS))
         {
             httpResponse = Art10HttpResponseManager
                 .Resolve(Art10ResponseAppCode.INVALID_FILE_EXTENSION)
