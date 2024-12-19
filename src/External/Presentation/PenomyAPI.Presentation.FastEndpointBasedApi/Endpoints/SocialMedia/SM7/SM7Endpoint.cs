@@ -95,7 +95,7 @@ public class SM7Endpoint : Endpoint<SM7RequestDto, SM7HttpResponse>
                     GroupStatus = o.GroupStatus,
                     CreatedBy = o.CreatedBy.ToString(),
                     CreatedAt = o.CreatedAt.ToString("dd/MM/yyyy"),
-                    ActivityTime = o.CreatedAt,
+                    ActivityTime = o.Creator.UpdatedAt,
                     TotalPosts = o.GroupPosts.Count(),
                 }),
             };

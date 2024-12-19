@@ -29,11 +29,10 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia
                 .Where(o =>
                     o.GroupMembers.Any(gm => gm.MemberId == userId)
                     && o.GroupStatus == SocialGroupStatus.Active
-                    && o.CreatedBy != userId
-                )
-                .OrderByDescending(o =>
-                    o.GroupMembers.FirstOrDefault(gm => gm.MemberId == userId).JoinedAt
-                )
+                    && o.CreatedBy != userId)
+                .OrderByDescending(o => o.GroupPosts.Any()
+                    ? o.GroupPosts.Max(gp => gp.UpdatedAt)
+                    : o.CreatedAt)
                 .Skip((pageNum - 1) * groupNum)
                 .Take(groupNum)
                 .Select(o => new SocialGroup
@@ -51,9 +50,9 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia
                     // Act as group activity time
                     Creator = new Domain.RelationalDb.Entities.Generic.UserProfile
                     {
-                        UpdatedAt = o
-                            .GroupMembers.FirstOrDefault(gm => gm.MemberId == userId)
-                            .JoinedAt,
+                        UpdatedAt = o.GroupPosts.Any()
+                            ? o.GroupPosts.Max(gp => gp.UpdatedAt)
+                            : o.CreatedAt
                     },
                     GroupPosts = o.GroupPosts.ToList(),
                     GroupMembers = o.GroupMembers.Where(gm => gm.MemberId == userId),
@@ -71,7 +70,7 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia
             return await _socialGroups
                 .AsNoTracking()
                 .Where(o =>
-                    o.GroupMembers.FirstOrDefault(gm => gm.MemberId == userId) == null
+                    !o.GroupMembers.Any(gm => gm.MemberId == userId)
                     && o.GroupStatus == SocialGroupStatus.Active
                     && o.CreatedBy != userId
                 )
@@ -90,6 +89,12 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia
                     CreatedBy = o.CreatedBy,
                     CreatedAt = o.CreatedAt,
                     // Act as group activity time
+                    Creator = new Domain.RelationalDb.Entities.Generic.UserProfile
+                    {
+                        UpdatedAt = o.GroupPosts.Any()
+                            ? o.GroupPosts.Max(gp => gp.UpdatedAt)
+                            : o.CreatedAt
+                    },
                     GroupPosts = o.GroupPosts.ToList(),
                     GroupMembers = o.GroupMembers.Where(gm => gm.MemberId == userId).ToList(),
                 })

@@ -40,6 +40,19 @@ public interface IFormFileHelper
     bool IsValidImageFile(IFormFile formFile);
 
     /// <summary>
+    ///     Check if the input <paramref name="formFile"/> is actually
+    ///     an video file or not, preventing from user to upload
+    ///     malicious file to the server.
+    /// </summary>
+    /// <param name="formFile">
+    ///     The form file to check the validity.
+    /// </param>
+    /// <returns>
+    ///     The result (<see langword="bool"/>) after checking the file.
+    /// </returns>
+    bool IsValidVideoFile(IFormFile formFile);
+
+    /// <summary>
     ///     Check if the input file has extension that
     ///     includes in the <paramref name="validExtensions"/> or not.
     /// </summary>
