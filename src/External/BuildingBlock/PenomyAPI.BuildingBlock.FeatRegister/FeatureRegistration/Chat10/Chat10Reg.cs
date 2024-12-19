@@ -4,7 +4,7 @@ using PenomyAPI.App.Chat10;
 using PenomyAPI.BuildingBlock.FeatRegister.FeatureRegistration.Common;
 using System;
 
-namespace PenomyAPI.BuildingBlock.FeatRegister.FeatureRegistration.Chat1;
+namespace PenomyAPI.BuildingBlock.FeatRegister.FeatureRegistration.Chat10;
 
 internal sealed class Chat10Reg : FeatureDefinitionRegistration
 {

@@ -50,7 +50,7 @@ public class Chat10Handler : IFeatureHandler<Chat10Request, Chat10Response>
                 // and create new list message for new user
                 if (chat10UserProfile.UserId != chat.Sender.UserId)
                 {
-                    chat10UserProfileList.Add(chat10UserProfile);
+                    if (chat10UserProfile.Messages != null) chat10UserProfileList.Add(chat10UserProfile);
                     chat10UserProfile = new();
                 }
                 // If this is new user message list add info for list
@@ -77,6 +77,8 @@ public class Chat10Handler : IFeatureHandler<Chat10Request, Chat10Response>
                     });
                 }
             }
+            // Add for end of chat message group
+            chat10UserProfileList.Add(chat10UserProfile);
 
             response.IsSuccess = true;
             response.UserChatMessages = chat10UserProfileList;

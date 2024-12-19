@@ -56,7 +56,7 @@ public class Chat10Endpoint : Endpoint<Chat10RequestDto, Chat10HttpResponse>
         {
             httpResponse.Body = new Chat10ResponseDto
             {
-                UserChats = featResponse.UserChatMessages.Select(o => new UserChat
+                UserChats = featResponse.UserChatMessages?.Select(o => new UserChat
                 {
                     UserId = o.UserId.ToString(),
                     AvatarUrl = o.AvatarUrl,
