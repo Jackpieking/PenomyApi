@@ -35,9 +35,8 @@ public class Admin1Endpoint : Endpoint<Admin1HttpRequest, Admin1HttpResponse>
         });
         Summary(summary =>
         {
-            summary.Summary = "Endpoint for get all artwork categories in admin page.";
-            summary.Description =
-                "This endpoint is used for get all artwork categories in admin page.";
+            summary.Summary = "Endpoint for get all categories in admin page.";
+            summary.Description = "This endpoint is used for get all categories in admin page.";
         });
     }
 
@@ -46,7 +45,7 @@ public class Admin1Endpoint : Endpoint<Admin1HttpRequest, Admin1HttpResponse>
         CancellationToken ct
     )
     {
-        var categories = await GetcategoryByPageAsync(
+        var categories = await GetCategoryByPageAsync(
             req.CurrentCategoryId,
             req.NumberOfCategoriesToTake,
             ct
@@ -59,13 +58,27 @@ public class Admin1Endpoint : Endpoint<Admin1HttpRequest, Admin1HttpResponse>
         return httpResponse;
     }
 
-    private Task<List<Category>> GetcategoryByPageAsync(
+    private async Task<List<Category>> GetCategoryByPageAsync(
         long currentCategoryId,
         int numberOfCategoriesToTake,
         CancellationToken ct
     )
     {
-        var categories = _context
+        if (currentCategoryId != 0)
+        {
+            var isCategoryFound = await _context
+                .Set<Category>()
+                .AsNoTracking()
+                .IgnoreAutoIncludes()
+                .AnyAsync(category => category.Id == currentCategoryId, ct);
+
+            if (!isCategoryFound)
+            {
+                return [];
+            }
+        }
+
+        var categories = await _context
             .Set<Category>()
             .AsNoTracking()
             .IgnoreAutoIncludes()
@@ -75,8 +88,8 @@ public class Admin1Endpoint : Endpoint<Admin1HttpRequest, Admin1HttpResponse>
             {
                 Id = category.Id,
                 Name = category.Name,
-                CreatedBy = category.CreatedBy,
-                CreatedAt = category.CreatedAt,
+                UpdatedAt = category.UpdatedAt,
+                UpdatedBy = category.UpdatedBy,
             })
             .Take(numberOfCategoriesToTake)
             .ToListAsync(ct);
@@ -98,9 +111,9 @@ public class Admin1Endpoint : Endpoint<Admin1HttpRequest, Admin1HttpResponse>
                     {
                         Id = category.Id.ToString(),
                         Name = category.Name,
-                        CreatedBy = category.CreatedBy.ToString(),
-                        CreatedAt = TimeZoneInfo.ConvertTimeFromUtc(
-                            category.CreatedAt,
+                        UpdatedBy = category.UpdatedBy.ToString(),
+                        UpdatedAt = TimeZoneInfo.ConvertTimeFromUtc(
+                            category.UpdatedAt,
                             localTimeZone
                         )
                     }

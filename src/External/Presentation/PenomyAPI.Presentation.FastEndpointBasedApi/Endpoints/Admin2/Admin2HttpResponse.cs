@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Admin1;
+namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Admin2;
 
-public class Admin1HttpResponse
+public class Admin2HttpResponse
 {
     public DateTime ResponseTime { get; init; } =
         TimeZoneInfo.ConvertTimeFromUtc(
@@ -17,15 +17,15 @@ public class Admin1HttpResponse
 
     public class BodyDto
     {
-        public IEnumerable<CategoryDto> Categories { get; init; } = [];
-
-        public int TotalCategories { get; init; }
+        public CategoryDto CategoryDetail { get; init; }
 
         public class CategoryDto
         {
             public string Id { get; init; }
 
             public string Name { get; init; }
+
+            public string Description { get; init; }
 
             public DateTime UpdatedAt { get; init; }
 
