@@ -34,8 +34,8 @@ public class G5Endpoint : Endpoint<G5RequestDto, G5HttpResponse>
 
         Summary(summary =>
         {
-            summary.Summary = "Endpoint for get artwork detail";
-            summary.Description = "This endpoint is used for get artwork detail";
+            summary.Summary = "Endpoint for get comic detail";
+            summary.Description = "This endpoint is used for get comic detail";
             summary.Response(
                 description: "Represent successful operation response.",
                 example: new G5HttpResponse { AppCode = G5ResponseStatusCode.SUCCESS.ToString() }

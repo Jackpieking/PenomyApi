@@ -12,6 +12,6 @@ public class G8Response : IFeatureResponse
     public int ChapterCount { get; set; }
     public G8ResponseStatusCode StatusCode { get; set; }
 
-    public static readonly G8Response COMIC_IS_NOT_FOUND =
+    public static readonly G8Response ARTWORK_IS_NOT_FOUND =
         new() { StatusCode = G8ResponseStatusCode.NOT_FOUND, };
 }

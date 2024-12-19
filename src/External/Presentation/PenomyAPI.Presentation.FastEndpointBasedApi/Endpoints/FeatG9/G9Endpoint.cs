@@ -1,4 +1,4 @@
-﻿using System.Threading;
+using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG9.DTOs;

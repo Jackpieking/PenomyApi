@@ -26,7 +26,7 @@ public sealed class Art5Handler : IFeatureHandler<Art5Request, Art5Response>
         // Check if the comic is existed or not before processing.
         _artworkRepository = _unitOfWork.ArtworkRepository;
 
-        var isComicExisted = await _artworkRepository.IsArtworkExistedByIdAsync(
+        var isComicExisted = await _artworkRepository.IsComicExistedByIdAsync(
             request.ComicId,
             cancellationToken);
 

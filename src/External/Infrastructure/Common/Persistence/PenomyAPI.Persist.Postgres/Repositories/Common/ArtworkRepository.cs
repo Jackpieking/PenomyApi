@@ -60,6 +60,22 @@ internal sealed class ArtworkRepository : IArtworkRepository
             cancellationToken);
     }
 
+    public Task<bool> IsComicExistedByIdAsync(long artworkId, CancellationToken cancellationToken)
+    {
+        return _artworkDbSet.AnyAsync(
+            artwork => artwork.Id == artworkId
+            && artwork.ArtworkType == ArtworkType.Comic,
+            cancellationToken);
+    }
+
+    public Task<bool> IsAnimeExistedByIdAsync(long artworkId, CancellationToken cancellationToken)
+    {
+        return _artworkDbSet.AnyAsync(
+            artwork => artwork.Id == artworkId
+            && artwork.ArtworkType == ArtworkType.Animation,
+            cancellationToken);
+    }
+
     public Task<string> GetChapterThumbnailDefaultUrlByArtworkIdAsync(
         long artworkId,
         CancellationToken cancellationToken)

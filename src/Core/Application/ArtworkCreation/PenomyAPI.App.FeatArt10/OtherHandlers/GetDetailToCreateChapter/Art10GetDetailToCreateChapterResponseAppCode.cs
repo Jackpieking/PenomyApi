@@ -4,7 +4,7 @@ public enum Art10GetDetailToCreateChapterResponseAppCode
 {
     SUCCESS = 0,
 
-    COMIC_ID_NOT_FOUND = 1,
+    COMIC_ID_NOT_FOUND,
 
-    DATABASE_ERROR = 2,
+    DATABASE_ERROR,
 }

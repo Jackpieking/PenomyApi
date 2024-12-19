@@ -12,7 +12,7 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
 
 internal sealed class G9Repository : IG9Repository
 {
-    private const int NUMBER_OF_RETURN_CHAPTERS = 100;
+    private const int MAX_NUMBER_OF_RETURN_CHAPTERS = 100;
     private readonly DbContext _dbContext;
     private readonly DbSet<ArtworkChapter> _chapterDbSet;
 
@@ -40,7 +40,7 @@ internal sealed class G9Repository : IG9Repository
                 UploadOrder = chapter.UploadOrder,
             })
             .OrderBy(chapter => chapter.UploadOrder)
-            .Take(NUMBER_OF_RETURN_CHAPTERS)
+            .Take(MAX_NUMBER_OF_RETURN_CHAPTERS)
             .ToListAsync(cancellationToken);
     }
 

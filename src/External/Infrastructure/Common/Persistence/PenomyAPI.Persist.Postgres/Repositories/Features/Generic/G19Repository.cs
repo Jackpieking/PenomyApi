@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
+using PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG19;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
-using PenomyAPI.Persist.Postgres.Data.DbContexts;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -11,92 +12,58 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
 
 public class G19Repository : IG19Repository
 {
-    private readonly AppDbContext _dbContext;
+    private const int MAX_NUMBER_OF_RETURN_CHAPTERS = 100;
+    private readonly DbContext _dbContext;
+    private readonly DbSet<ArtworkChapter> _chapterDbSet;
 
-    public G19Repository(AppDbContext dbContext)
+    public G19Repository(DbContext dbContext)
     {
         _dbContext = dbContext;
-    }
-    private static bool IsValidArtworkAsync(Artwork artwork)
-    {
-        return artwork.ArtworkType == ArtworkType.Animation && artwork.IsTemporarilyRemoved == false && artwork.IsTakenDown == false && artwork.PublicLevel != Domain.RelationalDb.Entities.ArtworkCreation.Common.ArtworkPublicLevel.Private;
-    }
-    public async Task<(List<ArtworkChapter>, int)> GetArtWorkChapterByIdAsync(
-        long id,
-        int startPage = 1,
-        int pageSize = 10,
-        CancellationToken cancellationToken = default
-    )
-    {
-        int count = _dbContext.Set<ArtworkChapter>().Count(x => x.ArtworkId == id);
-        List<ArtworkChapter> res = await _dbContext
-            .Set<ArtworkChapter>()
-            .Where(x => x.ArtworkId == id && IsValidArtworkAsync(x.BelongedArtwork))
-            .Select(x => new ArtworkChapter
-            {
-                Id = x.Id,
-                BelongedArtwork = new Artwork
-                {
-                    Id = x.BelongedArtwork.Id,
-                    ArtworkType = x.BelongedArtwork.ArtworkType,
-                    Origin = new ArtworkOrigin
-                    {
-                        Id = x.BelongedArtwork.Origin.Id,
-                        CountryName = x.BelongedArtwork.Origin.CountryName,
-                    },
-                    ArtworkCategories = x.BelongedArtwork.ArtworkCategories.Select(
-                        y => new ArtworkCategory
-                        {
-                            ArtworkId = y.ArtworkId,
-                            CategoryId = y.CategoryId,
-                        }
-                    ),
-                    ArtworkSeries = x.BelongedArtwork.ArtworkSeries.Select(y => new ArtworkSeries
-                    {
-                        ArtworkId = y.ArtworkId,
-                        Series = y.Series,
-                    }),
-                },
-                ArtworkId = x.ArtworkId,
-                Title = x.Title,
-                PublishedAt = x.PublishedAt,
-                CreatedAt = x.CreatedAt,
-                UploadOrder = x.UploadOrder,
-                ThumbnailUrl = x.ThumbnailUrl,
-            })
-            .AsNoTracking()
-            .Skip((startPage - 1) * pageSize)
-            .Take(pageSize)
-            .OrderBy(x => x.Id)
-            .ToListAsync(cancellationToken);
-        foreach (var chapter in res)
-        {
-            chapter.ChapterMetaData = await GetArtworkChapterMetaDataAsync(chapter.Id, cancellationToken);
-        }
-        return (res, count);
+        _chapterDbSet = dbContext.Set<ArtworkChapter>();
     }
 
-    public async Task<ArtworkChapterMetaData> GetArtworkChapterMetaDataAsync(
-        long id,
-        CancellationToken token = default
-    )
+    public Task<List<G19AnimeChapterItemReadModel>> GetAllChaptersAsyncByAnimeId(
+        long animeId,
+        CancellationToken cancellationToken)
     {
-        return await _dbContext
-            .Set<ArtworkChapterMetaData>()
-            .Where(x => x.ChapterId == id)
-            .Select(x => new ArtworkChapterMetaData
-            {
-                ChapterId = x.ChapterId,
-                TotalComments = x.TotalComments,
-                TotalFavorites = x.TotalFavorites,
-                TotalViews = x.TotalViews,
-            })
+        return _chapterDbSet
             .AsNoTracking()
-            .FirstOrDefaultAsync(token);
+            .Where(chapter => chapter.ArtworkId == animeId
+                && chapter.PublicLevel == ArtworkPublicLevel.Everyone
+                && !chapter.IsTemporarilyRemoved
+                && chapter.PublishStatus == PublishStatus.Published)
+            .Select(chapter => new G19AnimeChapterItemReadModel
+            {
+                Id = chapter.Id,
+                ChapterName = chapter.Title,
+                ThumbnailUrl = chapter.ThumbnailUrl,
+                UploadOrder = chapter.UploadOrder,
+            })
+            .OrderBy(chapter => chapter.UploadOrder)
+            .Take(MAX_NUMBER_OF_RETURN_CHAPTERS)
+            .ToListAsync(cancellationToken); ;
     }
 
-    public Task<bool> IsArtworkExistAsync(long id, CancellationToken token = default)
+    public Task<G19AnimeChapterDetailReadModel> GetChapterDetailByIdAsync(
+        long chapterId,
+        CancellationToken cancellationToken)
     {
-        return _dbContext.Set<Artwork>().AnyAsync(x => x.Id == id && x.ArtworkType == ArtworkType.Animation, token);
+        return _chapterDbSet
+            .AsNoTracking()
+            .Where(chapter => chapter.Id == chapterId)
+            .Select(chapter => new G19AnimeChapterDetailReadModel
+            {
+                Id = chapter.Id,
+                ArtworkId = chapter.ArtworkId,
+                Title = chapter.Title,
+                Description = chapter.Description,
+                UploadOrder = chapter.UploadOrder,
+                AllowComment = chapter.AllowComment,
+                CreatedBy = chapter.CreatedBy,
+                ChapterVideoUrl = chapter.ChapterMedias.FirstOrDefault().StorageUrl,
+                TotalViews = chapter.ChapterMetaData.TotalViews,
+            })
+            .AsSplitQuery()
+            .FirstOrDefaultAsync(cancellationToken);
     }
 }

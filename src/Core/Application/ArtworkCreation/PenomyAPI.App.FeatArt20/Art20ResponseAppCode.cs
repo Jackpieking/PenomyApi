@@ -1,0 +1,18 @@
+﻿namespace PenomyAPI.App.FeatArt20;
+
+public enum Art20ResponseAppCode
+{
+    SUCCESS = 0,
+
+    FILE_SERVICE_ERROR,
+
+    DATABASE_ERROR,
+
+    INVALID_FILE_EXTENSION,
+
+    INVALID_FILE_FORMAT,
+
+    FILE_SIZE_IS_EXCEED_THE_LIMIT,
+
+    CHAPTER_VIDEO_FILE_IS_MISSING,
+}

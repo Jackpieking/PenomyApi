@@ -30,8 +30,6 @@ public class Art4Endpoint : Endpoint<Art4RequestDto, Art4HttpResponse>
     public Art4Endpoint(Lazy<ISnowflakeIdGenerator> idGenerator)
     {
         _idGenerator = idGenerator;
-
-        var id = _idGenerator.Value.Get();
     }
 
     public override void Configure()
@@ -143,7 +141,7 @@ public class Art4Endpoint : Endpoint<Art4RequestDto, Art4HttpResponse>
         Art4HttpResponse httpResponse;
 
         // Check if the file extension is valid or not.
-        if (!_formFileHelper.HasValidExtension(imageFile, ArtworkConstraints.VALID_FILE_EXTENSIONS))
+        if (!_formFileHelper.HasValidExtension(imageFile, ArtworkConstraints.VALID_IMAGE_FILE_EXTENSIONS))
         {
             httpResponse = Art4HttpResponseManager
                 .Resolve(Art4ResponseStatusCode.INVALID_FILE_EXTENSION)

@@ -13,7 +13,7 @@ public class G8GetPaginationOptionsEndpoint
 {
     public override void Configure()
     {
-        Get("g8/comic/pagination-options");
+        Get("g8/artwork-chapter/pagination-options");
 
         AllowAnonymous();
     }

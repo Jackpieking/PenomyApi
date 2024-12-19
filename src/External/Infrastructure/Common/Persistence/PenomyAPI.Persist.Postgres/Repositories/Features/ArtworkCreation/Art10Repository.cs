@@ -15,18 +15,14 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.ArtworkCreation;
 internal sealed class Art10Repository : IArt10Repository
 {
     private readonly DbContext _dbContext;
-    private readonly DbSet<ArtworkChapter> _chapterDbSet;
-    private readonly DbSet<ArtworkChapterMetaData> _chapterMetaDataDbSet;
-    private readonly DbSet<ArtworkChapterMedia> _chapterMediaDbSet;
+    private DbSet<ArtworkChapter> _chapterDbSet;
+    private DbSet<ArtworkChapterMetaData> _chapterMetaDataDbSet;
+    private DbSet<ArtworkChapterMedia> _chapterMediaDbSet;
 
     public Art10Repository(DbContext dbContext)
     {
         _dbContext = dbContext;
-        _chapterDbSet = dbContext.Set<ArtworkChapter>();
-        _chapterMetaDataDbSet = dbContext.Set<ArtworkChapterMetaData>();
-        _chapterMediaDbSet = dbContext.Set<ArtworkChapterMedia>();
     }
-
 
     public Task<Artwork> GetDetailToCreateChapterByComicIdAsync(
         long comicId,
@@ -76,6 +72,10 @@ internal sealed class Art10Repository : IArt10Repository
         try
         {
             transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
+
+            _chapterDbSet = _dbContext.Set<ArtworkChapter>();
+            _chapterMetaDataDbSet = _dbContext.Set<ArtworkChapterMetaData>();
+            _chapterMediaDbSet = _dbContext.Set<ArtworkChapterMedia>();
 
             await _chapterDbSet.AddAsync(comicChapter, cancellationToken);
 

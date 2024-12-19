@@ -1,0 +1,18 @@
+﻿namespace PenomyAPI.App.FeatArt15;
+
+public enum Art15ResponseAppCode
+{
+    SUCCESS = 1,
+
+    DATABASE_ERROR,
+
+    FILE_SERVICE_ERROR,
+
+    INVALID_JSON_SCHEMA_FROM_INPUT_CATEGORIES,
+
+    INVALID_FILE_EXTENSION,
+
+    INVALID_FILE_FORMAT,
+
+    FILE_SIZE_IS_EXCEED_THE_LIMIT,
+}
