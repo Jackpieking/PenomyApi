@@ -1,17 +1,13 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG5;
-using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5.HttpResponse;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5.Middlewares;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Helpers.Cache;
-using ZiggyCreatures.Caching.Fusion;
-using ZiggyCreatures.Caching.Fusion.Serialization;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG5;
 
@@ -38,8 +34,8 @@ public class G5Endpoint : Endpoint<G5RequestDto, G5HttpResponse>
 
         Summary(summary =>
         {
-            summary.Summary = "Endpoint for get artwork detail";
-            summary.Description = "This endpoint is used for get artwork detail";
+            summary.Summary = "Endpoint for get comic detail";
+            summary.Description = "This endpoint is used for get comic detail";
             summary.Response(
                 description: "Represent successful operation response.",
                 example: new G5HttpResponse { AppCode = G5ResponseStatusCode.SUCCESS.ToString() }

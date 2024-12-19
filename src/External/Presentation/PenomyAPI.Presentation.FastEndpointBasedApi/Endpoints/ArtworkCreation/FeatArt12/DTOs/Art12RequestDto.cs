@@ -2,7 +2,6 @@
 using PenomyAPI.App.Common.FileServices.Models;
 using PenomyAPI.App.Common.Models.Common;
 using PenomyAPI.App.FeatArt12;
-using PenomyAPI.App.FeatArt12.Enums;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
 using PenomyAPI.Domain.RelationalDb.Entities.Contraints.ArtworkCreation;
@@ -34,7 +33,7 @@ public sealed class Art12RequestDto
 
     public bool AllowComment { get; set; }
 
-    public ChapterUpdateMode UpdateMode { get; set; }
+    public App.FeatArt12.Enums.ChapterUpdateMode UpdateMode { get; set; }
 
     public DateTime ScheduledAt { get; set; }
 
@@ -207,7 +206,7 @@ public sealed class Art12RequestDto
         // Variables to verify if the input chapter media id is valid to parse as long or not.
         bool canParse = true;
         long chapterMediaId = default;
-        
+
         foreach (var infoItem in chapterMediaUpdatedInfoItems)
         {
             // Resolve the item that has change in upload order and 

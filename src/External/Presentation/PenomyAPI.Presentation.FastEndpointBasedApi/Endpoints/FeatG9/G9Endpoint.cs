@@ -1,12 +1,9 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using FastEndpoints;
-using PenomyAPI.App.FeatG9;
-using PenomyAPI.BuildingBlock.FeatRegister.Features;
+﻿using FastEndpoints;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG9.DTOs;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG9.HttpResponseMappers;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG9.HttpResponses;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Helpers.Cache;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG9;
 

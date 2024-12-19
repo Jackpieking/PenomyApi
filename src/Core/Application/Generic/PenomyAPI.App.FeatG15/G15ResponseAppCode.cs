@@ -1,6 +1,6 @@
 namespace PenomyAPI.App.FeatG15;
 
-public enum G15ResponseStatusCode
+public enum G15ResponseAppCode
 {
     SUCCESS = 1,
     FAILED = 2,

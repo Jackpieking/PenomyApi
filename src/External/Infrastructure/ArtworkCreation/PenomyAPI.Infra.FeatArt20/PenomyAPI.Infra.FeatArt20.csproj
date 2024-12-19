@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt20\PenomyAPI.App.FeatArt20.csproj" />
+    <ProjectReference Include="..\..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt22\PenomyAPI.App.FeatArt22.csproj" />
     <ProjectReference Include="..\..\Common\FileService\PenomyAPI.FileService.CloudinaryService\PenomyAPI.FileService.CloudinaryService.csproj" />
     <ProjectReference Include="..\..\Common\PenomyAPI.Infra.Configuration\PenomyAPI.Infra.Configuration.csproj" />
   </ItemGroup>

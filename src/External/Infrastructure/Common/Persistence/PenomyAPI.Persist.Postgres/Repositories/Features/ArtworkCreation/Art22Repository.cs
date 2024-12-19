@@ -273,7 +273,7 @@ internal class Art22Repository : IArt22Repository
                 await _chapterDbSet
                     .Where(chapter => chapter.Id == updatedDetail.Id)
                     .ExecuteUpdateAsync(
-                        chapter =>
+                        chapter => 
                             chapter.SetProperty(
                                 chapter => chapter.ThumbnailUrl,
                                 chapter => updatedDetail.ThumbnailUrl
@@ -295,8 +295,10 @@ internal class Art22Repository : IArt22Repository
                         media => media
                             .SetProperty(
                                 media => media.StorageUrl,
-                                media => chapterVideoMedia.StorageUrl
-                            ),
+                                media => chapterVideoMedia.StorageUrl)
+                            .SetProperty(
+                                chapter => chapter.FileSize,
+                                chapter => chapterVideoMedia.FileSize),
                         cancellationToken);
             }
 

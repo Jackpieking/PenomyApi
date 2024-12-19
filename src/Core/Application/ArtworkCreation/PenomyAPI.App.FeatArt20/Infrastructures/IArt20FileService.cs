@@ -38,7 +38,7 @@ public interface IArt20FileService
     ///     of the file after creating by the service.
     /// </returns>
     Task<Result<AppFileInfo>> UploadImageFileAsync(
-        AppFileInfo fileInfo,
+        ImageFileInfo fileInfo,
         bool overwrite,
         CancellationToken cancellationToken
     );
@@ -59,7 +59,7 @@ public interface IArt20FileService
     ///     of the file after creating by the service.
     /// </returns>
     Task<Result<AppFileInfo>> UploadVideoFileAsync(
-        AppFileInfo fileInfo,
+        VideoFileInfo fileInfo,
         bool overwrite,
         CancellationToken cancellationToken
     );

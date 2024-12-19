@@ -4,13 +4,14 @@ using PenomyAPI.App.Common.FileServices.Models;
 using PenomyAPI.App.Common.Helpers;
 using PenomyAPI.App.Common.Models.Common;
 using PenomyAPI.App.FeatArt20.Infrastructures;
+using PenomyAPI.App.FeatArt22.Infrastructures;
 using PenomyAPI.Infra.Configuration.Options;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace PenomyAPI.Infra.FeatArt20;
 
-public class Art20FileService : IArt20FileService
+public class Art20FileService : IArt20FileService, IArt22FileService
 {
     private static Cloudinary _cloudinaryInstance;
     private static readonly object _lock = new object();
@@ -46,7 +47,7 @@ public class Art20FileService : IArt20FileService
     }
 
     public async Task<Result<AppFileInfo>> UploadImageFileAsync(
-        AppFileInfo fileInfo,
+        ImageFileInfo fileInfo,
         bool overwrite,
         CancellationToken cancellationToken)
     {
@@ -95,7 +96,7 @@ public class Art20FileService : IArt20FileService
     }
 
     public async Task<Result<AppFileInfo>> UploadVideoFileAsync(
-        AppFileInfo fileInfo,
+        VideoFileInfo fileInfo,
         bool overwrite,
         CancellationToken cancellationToken)
     {

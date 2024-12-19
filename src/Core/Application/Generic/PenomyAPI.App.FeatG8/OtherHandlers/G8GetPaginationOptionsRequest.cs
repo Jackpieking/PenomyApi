@@ -5,5 +5,5 @@ namespace PenomyAPI.App.FeatG8.OtherHandlers;
 public sealed class G8GetPaginationOptionsRequest
     : IFeatureRequest<G8GetPaginationOptionsResponse>
 {
-    public long ComicId { get; set; }
+    public long ArtworkId { get; set; }
 }

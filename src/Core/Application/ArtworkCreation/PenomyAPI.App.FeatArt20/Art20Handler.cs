@@ -161,7 +161,7 @@ public class Art20Handler : IFeatureHandler<Art20Request, Art20Response>
         {
             Id = videoMediaId,
             ChapterId = chapterId,
-            FileName = request.ChapterVideoFileInfo.FileName,
+            FileName = $"{chapterId}.{request.ChapterVideoFileInfo.FileExtension}",
             FileSize = request.ChapterVideoFileInfo.FileSize,
             StorageUrl = request.ChapterVideoFileInfo.StorageUrl,
             MediaType = ArtworkChapterMediaType.Video,

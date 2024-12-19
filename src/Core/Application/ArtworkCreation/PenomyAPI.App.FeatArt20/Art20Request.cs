@@ -13,7 +13,7 @@ public class Art20Request : IFeatureRequest<Art20Response>
 
     public string Description { get; set; }
 
-    public AppFileInfo ThumbnailFileInfo { get; set; }
+    public ImageFileInfo ThumbnailFileInfo { get; set; }
 
     public ArtworkPublicLevel PublicLevel { get; set; }
 
@@ -23,7 +23,7 @@ public class Art20Request : IFeatureRequest<Art20Response>
 
     public DateTime PublishedAt { get; set; }
 
-    public AppFileInfo ChapterVideoFileInfo { get; set; }
+    public VideoFileInfo ChapterVideoFileInfo { get; set; }
 
     public long CreatedBy { get; set; }
 
