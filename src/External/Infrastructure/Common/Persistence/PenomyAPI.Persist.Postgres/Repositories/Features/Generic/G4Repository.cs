@@ -24,7 +24,7 @@ public class G4Repository : IG4Repository
     ///     The number of recommend categories to return.
     /// </summary>
     private const int NUMBER_OF_RECOMMENDED_CATEGORIES = 4;
-    private const int NUMBER_OF_RECOMMENED_COMIC_PER_CATEGORY = 12;
+    private const int NUMBER_OF_RECOMMENED_ARTWORK_PER_CATEGORY = 12;
     private const int NUMBER_OF_RECOMMENDED_NEW_CHAPTERS_PER_ARTWORK = 2;
 
     private readonly DbContext _dbContext;
@@ -63,7 +63,7 @@ public class G4Repository : IG4Repository
         return rawQuery;
     }
 
-    private static FormattableString GetTopRecommendedArtworkIdsRawQuery()
+    private static FormattableString GetTopRecommendedArtworkIdsRawQuery(ArtworkType artworkType)
     {
         FormattableString rawQuery = $@"
             SELECT artwork.""Id""
@@ -71,7 +71,7 @@ public class G4Repository : IG4Repository
             INNER JOIN penomy_artwork_metadata AS metadata 
                 ON artwork.""Id"" = metadata.""ArtworkId""
             WHERE 
-                artwork.""ArtworkType"" = {ArtworkType.Comic}
+                artwork.""ArtworkType"" = {(int) artworkType}
                 AND artwork.""PublicLevel"" = {ArtworkPublicLevel.Everyone}
                 AND NOT (artwork.""IsTakenDown"")
                 AND NOT (artwork.""IsTemporarilyRemoved"")
@@ -98,7 +98,9 @@ public class G4Repository : IG4Repository
         return rawQuery;
     }
 
-    private static FormattableString GetRecommendedComicsByCategoryIdRawQuery(long categoryId)
+    private static FormattableString GetRecommendedArtworksByCategoryIdRawQuery(
+        long categoryId,
+        ArtworkType artworkType)
     {
         // The below comment is the original version EF Query, un-comment this when 
         // you want to debug or explore the operation, otherwise keep the raw query version.
@@ -157,12 +159,13 @@ public class G4Repository : IG4Repository
                 INNER JOIN penomy_artwork AS p0 ON p.""ArtworkId"" = p0.""Id""
                 INNER JOIN penomy_artwork_metadata AS p1 ON p0.""Id"" = p1.""ArtworkId""
                 WHERE p.""CategoryId"" = {categoryId}
+                     AND p0.""ArtworkType"" = {(int) artworkType}
                      AND p0.""LastChapterUploadOrder"" > 0
                      AND NOT (p0.""IsTakenDown"")
                      AND NOT (p0.""IsTemporarilyRemoved"")
                      AND p0.""PublicLevel"" = {ArtworkPublicLevel.Everyone}
                 ORDER BY p1.""TotalFollowers"" DESC
-                LIMIT {NUMBER_OF_RECOMMENED_COMIC_PER_CATEGORY}) AS filtered_artwork
+                LIMIT {NUMBER_OF_RECOMMENED_ARTWORK_PER_CATEGORY}) AS filtered_artwork
             INNER JOIN penomy_artwork_origin AS origin ON filtered_artwork.""ArtworkOriginId"" = origin.""Id""
             INNER JOIN penomy_user_profile AS creator ON filtered_artwork.""CreatedBy"" = creator.""UserId"";";
 
@@ -230,12 +233,14 @@ public class G4Repository : IG4Repository
     }
 
     #region For New Guest
-    public async Task<List<RecommendedComicByCategory>> GetRecommendedComicsForNewGuestAsync(
+    public async Task<List<RecommendedArtworkByCategory>> GetRecommendedArtworksForNewGuestAsync(
+        ArtworkType artworkType,
         CancellationToken cancellationToken)
     {
         // To recommend for the new guest, the platform will base on the top 4 recommended artworks.
         // Take the categories of these artwork and return the artworks that fall in these categories.
         List<long> topRecommendedArtworkIds = await InternalGetTopRecommendedArtworkIdsAsync(
+            artworkType,
             cancellationToken);
 
         // Get significant categories in the view history artwork list
@@ -246,8 +251,9 @@ public class G4Repository : IG4Repository
                 NUMBER_OF_RECOMMENDED_CATEGORIES,
                 cancellationToken);
 
-        var resultList = await InternalGetRecommendedComicsByCategoriesAsync(
+        var resultList = await InternalGetRecommendedArtworksByCategoriesAsync(
             recommendedCategories,
+            artworkType,
             cancellationToken);
 
         return resultList;
@@ -255,8 +261,9 @@ public class G4Repository : IG4Repository
     #endregion
 
     #region For Signed-In User
-    public async Task<List<RecommendedComicByCategory>> GetRecommendedComicsForUserAsync(
+    public async Task<List<RecommendedArtworkByCategory>> GetRecommendedArtworksForUserAsync(
         long userId,
+        ArtworkType artworkType,
         CancellationToken cancellationToken)
     {
         var userViewHistoryDbSet = _dbContext.Set<UserArtworkViewHistory>();
@@ -269,7 +276,7 @@ public class G4Repository : IG4Repository
         // If current user has not viewed any artwork yet, then recommend using default algoritm.
         if (!userHasViewHistory)
         {
-            return await GetRecommendedComicsForNewGuestAsync(cancellationToken);
+            return await GetRecommendedArtworksForNewGuestAsync(artworkType, cancellationToken);
         }
 
         // Get the artworkId list from the view history, based from that to recommend for this user.
@@ -277,7 +284,7 @@ public class G4Repository : IG4Repository
             .AsNoTracking()
             .Where(viewHistory
                 => viewHistory.UserId == userId
-                && viewHistory.ArtworkType == ArtworkType.Comic)
+                && viewHistory.ArtworkType == artworkType)
             .Select(viewHistory => viewHistory.ArtworkId)
             .Take(NUMBER_OF_TOP_ARTWORKS_TO_TAKE_FOR_FILTERING)
             .ToListAsync(cancellationToken);
@@ -310,8 +317,9 @@ public class G4Repository : IG4Repository
             recommendedCategories.AddRange(categoryToTakeMore);
         }
 
-        var resultList = await InternalGetRecommendedComicsByCategoriesAsync(
+        var resultList = await InternalGetRecommendedArtworksByCategoriesAsync(
             recommendedCategories,
+            artworkType,
             cancellationToken);
 
         return resultList;
@@ -319,8 +327,9 @@ public class G4Repository : IG4Repository
     #endregion
 
     #region For Already-Visited Guest
-    public async Task<List<RecommendedComicByCategory>> GetRecommendedComicsForGuestAsync(
+    public async Task<List<RecommendedArtworkByCategory>> GetRecommendedArtworksForGuestAsync(
         long guestId,
+        ArtworkType artworkType,
         CancellationToken cancellationToken)
     {
         var guestViewHistoryDbSet = _dbContext.Set<GuestArtworkViewHistory>();
@@ -333,7 +342,7 @@ public class G4Repository : IG4Repository
         // If current guest has not viewed any artwork yet, then recommend using default algoritm.
         if (!userHasViewHistory)
         {
-            return await GetRecommendedComicsForNewGuestAsync(cancellationToken);
+            return await GetRecommendedArtworksForNewGuestAsync(artworkType, cancellationToken);
         }
 
         // Get the artworkId list from the view history, based from that to recommend for this user.
@@ -341,7 +350,7 @@ public class G4Repository : IG4Repository
         .AsNoTracking()
             .Where(viewHistory
                 => viewHistory.GuestId == guestId
-                && viewHistory.ArtworkType == ArtworkType.Comic)
+                && viewHistory.ArtworkType == artworkType)
             .Select(viewHistory => viewHistory.ArtworkId)
             .Take(NUMBER_OF_TOP_ARTWORKS_TO_TAKE_FOR_FILTERING)
             .ToListAsync(cancellationToken);
@@ -374,8 +383,9 @@ public class G4Repository : IG4Repository
             recommendedCategories.AddRange(categoryToTakeMore);
         }
 
-        var resultList = await InternalGetRecommendedComicsByCategoriesAsync(
+        var resultList = await InternalGetRecommendedArtworksByCategoriesAsync(
             recommendedCategories,
+            artworkType,
             cancellationToken);
 
         return resultList;
@@ -408,33 +418,34 @@ public class G4Repository : IG4Repository
             .ToListAsync(cancellationToken);
     }
 
-    private async Task<List<RecommendedComicByCategory>> InternalGetRecommendedComicsByCategoriesAsync(
+    private async Task<List<RecommendedArtworkByCategory>> InternalGetRecommendedArtworksByCategoriesAsync(
         List<RecommendedCategoryReadModel> recommendedCategories,
+        ArtworkType artworkType,
         CancellationToken cancellationToken)
     {
-        var resultList = new List<RecommendedComicByCategory>();
+        var resultList = new List<RecommendedArtworkByCategory>();
         // This recommended comic list will be used for later retrieving its new chapters.
-        var recommendedComicList = new List<RecommendedComicReadModel>();
+        var recommendedComicList = new List<RecommendedArtworkReadModel>();
 
         // Get the recommended comics that belonged to each category.
         foreach (var category in recommendedCategories)
         {
-            var rawQuery = GetRecommendedComicsByCategoryIdRawQuery(category.Id);
+            var rawQuery = GetRecommendedArtworksByCategoryIdRawQuery(category.Id, artworkType);
 
-            var recommendedComics = await _dbContext.Database
-                .SqlQuery<RecommendedComicReadModel>(rawQuery)
+            var recommendedArtworks = await _dbContext.Database
+                .SqlQuery<RecommendedArtworkReadModel>(rawQuery)
                 .AsNoTracking()
                 .ToListAsync(cancellationToken);
 
-            if (recommendedComics.Any())
+            if (recommendedArtworks.Any())
             {
-                resultList.Add(new RecommendedComicByCategory
+                resultList.Add(new RecommendedArtworkByCategory
                 {
                     Category = category,
-                    RecommendedComics = recommendedComics
+                    RecommendedArtworks = recommendedArtworks
                 });
 
-                recommendedComicList.AddRange(recommendedComics);
+                recommendedComicList.AddRange(recommendedArtworks);
             }
         }
 
@@ -460,7 +471,7 @@ public class G4Repository : IG4Repository
     ///     The artwork that needed to get the latest chapter list.
     /// </param>
     private Task<List<G4NewChapterReadModel>> InternalGetNewChapterListAsync(
-        RecommendedComicReadModel comicDetail,
+        RecommendedArtworkReadModel comicDetail,
         CancellationToken cancellationToken)
     {
         var rawQuery = GetLatestChaptersRawQuery(
@@ -473,9 +484,10 @@ public class G4Repository : IG4Repository
     }
 
     private Task<List<long>> InternalGetTopRecommendedArtworkIdsAsync(
+        ArtworkType artworkType,
         CancellationToken cancellationToken)
     {
-        var rawQuery = GetTopRecommendedArtworkIdsRawQuery();
+        var rawQuery = GetTopRecommendedArtworkIdsRawQuery(artworkType);
 
         return _dbContext.Database
             .SqlQuery<long>(rawQuery)

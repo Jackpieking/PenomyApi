@@ -1,3 +1,4 @@
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG4;
 using System.Collections.Generic;
 using System.Threading;
@@ -26,8 +27,9 @@ public interface IG4Repository
     /// <returns>
     ///     The list of recommended artworks.
     /// </returns>
-    Task<List<RecommendedComicByCategory>> GetRecommendedComicsForUserAsync(
+    Task<List<RecommendedArtworkByCategory>> GetRecommendedArtworksForUserAsync(
         long userId,
+        ArtworkType artworkType,
         CancellationToken cancellationToken);
 
     /// <summary>
@@ -39,8 +41,9 @@ public interface IG4Repository
     /// <returns>
     ///     The list of recommended artworks.
     /// </returns>
-    Task<List<RecommendedComicByCategory>> GetRecommendedComicsForGuestAsync(
+    Task<List<RecommendedArtworkByCategory>> GetRecommendedArtworksForGuestAsync(
         long guestId,
+        ArtworkType artworkType,
         CancellationToken cancellationToken);
 
     /// <summary>
@@ -50,6 +53,7 @@ public interface IG4Repository
     /// <returns>
     ///     The list of recommended artworks.
     /// </returns>
-    Task<List<RecommendedComicByCategory>> GetRecommendedComicsForNewGuestAsync(
+    Task<List<RecommendedArtworkByCategory>> GetRecommendedArtworksForNewGuestAsync(
+        ArtworkType artworkType,
         CancellationToken cancellationToken);
 }

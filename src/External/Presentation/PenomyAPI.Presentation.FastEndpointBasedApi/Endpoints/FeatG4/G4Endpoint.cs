@@ -27,7 +27,7 @@ public class G4Endpoint : Endpoint<G4RequestDto, G4HttpResponse>
 
     public override void Configure()
     {
-        Get("g4/recommended-comics");
+        Get("g4/recommended/artworks");
 
         AllowAnonymous();
         PreProcessor<G4AuthPreProcessor>();
@@ -39,8 +39,8 @@ public class G4Endpoint : Endpoint<G4RequestDto, G4HttpResponse>
 
         Summary(endpointSummary: summary =>
         {
-            summary.Summary = "Endpoint for getting comics by category.";
-            summary.Description = "This endpoint is used for getting comics by category.";
+            summary.Summary = "Endpoint for getting recommended artworks by category.";
+            summary.Description = "This endpoint is used for getting recommended artworks by category.";
             summary.Response<G4HttpResponse>(
                 description: "Represent successful operation response.",
                 example: new() { AppCode = G4ResponseStatusCode.SUCCESS.ToString() }
@@ -96,6 +96,7 @@ public class G4Endpoint : Endpoint<G4RequestDto, G4HttpResponse>
             ForSignedInUser = stateBag.IsAuthenticated,
             GuestId = requestDto.GuestId,
             UserId = stateBag.UserId,
+            ArtworkType  = requestDto.ArtworkType,
         };
 
         var featResponse = await FeatureExtensions.ExecuteAsync<G4Request, G4Response>(

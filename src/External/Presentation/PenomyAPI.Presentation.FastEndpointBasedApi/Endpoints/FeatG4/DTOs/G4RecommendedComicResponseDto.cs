@@ -37,7 +37,7 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4.DTOs
         [ProtoMember(9)]
         public IEnumerable<G4NewChapterResponseDto> NewChapters { get; set; }
 
-        public static G4RecommendedComicResponseDto MapFrom(RecommendedComicReadModel artworkDetail)
+        public static G4RecommendedComicResponseDto MapFrom(RecommendedArtworkReadModel artworkDetail)
         {
             return new()
             {
