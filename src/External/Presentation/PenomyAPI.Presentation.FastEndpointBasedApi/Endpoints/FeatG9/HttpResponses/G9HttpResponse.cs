@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using PenomyAPI.App.FeatG9;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG9.DTOs;
 using ProtoBuf;
 

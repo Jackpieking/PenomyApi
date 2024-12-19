@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG9;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG9.DTOs;
