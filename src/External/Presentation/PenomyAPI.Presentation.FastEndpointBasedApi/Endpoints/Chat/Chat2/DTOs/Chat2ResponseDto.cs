@@ -24,4 +24,5 @@ public class ChatGroupMemberResponseDto
     public string MemberName { get; set; }
     public long RoleId { get; set; }
     public DateTime JoinedAt { get; set; }
+    public string AvatarUrl { get; set; }
 }
