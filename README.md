@@ -1,3 +1,5 @@
+[![dev-ci](https://github.com/Jackpieking/PenomyApi/actions/workflows/dev-ci.yml/badge.svg?event=pull_request)](https://github.com/Jackpieking/PenomyApi/actions/workflows/dev-ci.yml)
+
 # What is PenomyApi ?
 
 An API for Penomy platform, which is a platform that allows users not only to watch their favorite comic and animated content but also can upload the works they create to the platform. Through researching existing platforms, our group also came up with more effective and flexible monetization solutions to help creators be more motivated to upload their content to the platform, contributing to the development of the domestic comic industry.

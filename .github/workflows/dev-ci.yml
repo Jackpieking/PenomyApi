@@ -1,0 +1,81 @@
+name: dev-ci
+
+on:
+    push:
+        branches: ["main"]
+
+    pull_request:
+        branches: ["dev"]
+
+jobs:
+    Analyze-source:
+        name: Analyze (${{ matrix.language }}) on dev branch
+        runs-on: ubuntu-22.04
+        permissions:
+            # required for all workflows
+            security-events: write
+
+            # required to fetch internal or private CodeQL packs
+            packages: read
+
+            # only required for workflows in private repositories
+            actions: read
+            contents: read
+
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    # Analyzes C# code by automatically detecting a build
+                    - language: csharp
+                      build-mode: autobuild
+                    # CodeQL supports the following values keywords for 'language': 'c-cpp', 'csharp', 'go', 'java-kotlin', 'javascript-typescript', 'python', 'ruby', 'swift'
+
+        steps:
+            # Checkout the repository
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            # Initializes the CodeQL tools for scanning.
+            - name: Initialize CodeQL
+              uses: github/codeql-action/init@v3
+              with:
+                  languages: ${{ matrix.language }}
+                  build-mode: ${{ matrix.build-mode }}
+
+            # Analyzes the code using the CodeQL action
+            - name: Perform CodeQL Analysis
+              uses: github/codeql-action/analyze@v3
+              with:
+                  category: "/language:${{matrix.language}}"
+
+    Build-source:
+        name: Build the project
+        runs-on: ubuntu-22.04
+        needs: Analyze-source
+
+        env:
+            DOTNET_CLI_TELEMETRY_OPTOUT: 1
+
+        steps:
+            # Load source code from the branch that has the new PR
+            # In this case, it is the source code of dev branch
+            - name: Checkout to the source code
+              uses: actions/checkout@v4
+
+            # Install dotnet sdk
+            # If dotnet sdk is not found in cache
+            #
+            # This step would be skipped if cache is hit
+            - name: Setup dotnet installation
+              uses: actions/setup-dotnet@v4
+              with:
+                  global-json-file: global.json
+
+            # Restore dependencies of the project
+            - name: Restore dependencies
+              run: dotnet restore
+
+            # Build the project
+            - name: Build app
+              run: dotnet build --no-restore -c Release

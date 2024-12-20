@@ -1,0 +1,25 @@
+name: dev-cd
+
+on:
+    pull_request:
+        branches: ["dev"]
+        types: [closed]
+
+jobs:
+    Publish-source:
+        if: ${{ github.event.pull_request.merged == true }}
+        name: Publish new change to dev server
+        runs-on: ubuntu-22.04
+
+        steps:
+            - name: Execute cd script
+              uses: appleboy/ssh-action@v1.2.0
+              with:
+                  host: ${{ secrets.SSH_HOST }}
+                  username: ${{ secrets.SSH_USERNAME }}
+                  key: ${{ secrets.SSH_PRIVATE_KEY }}
+                  passphrase: ${{ secrets.SSH_PASSPHRASE }}
+                  port: ${{ secrets.SSH_PORT }}
+                  script_stop: true
+                  script: |
+                      sudo su -c /root/penomy/dev/Main/Server/dev-cd-script.sh

@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="IdGen" Version="3.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Core\Application\PenomyAPI.App.Common\PenomyAPI.App.Common.csproj" />
+    <ProjectReference Include="..\PenomyAPI.Infra.Configuration\PenomyAPI.Infra.Configuration.csproj" />
+  </ItemGroup>
+
+</Project>

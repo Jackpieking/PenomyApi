@@ -1,0 +1,17 @@
+namespace PenomyAPI.App.SM34;
+
+public enum SM34ResponseStatusCode
+{
+    SUCCESS = 1,
+
+    DATABASE_ERROR = 2,
+
+    FILE_SERVICE_ERROR = 3,
+
+    INVALID_FILE_EXTENSION = 4,
+
+    INVALID_FILE_FORMAT = 5,
+
+    FILE_SIZE_IS_EXCEED_THE_LIMIT = 6,
+    USER_PROFILE_NOT_FOUND = 7,
+}
