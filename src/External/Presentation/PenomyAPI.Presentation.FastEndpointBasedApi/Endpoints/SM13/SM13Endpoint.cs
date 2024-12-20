@@ -109,7 +109,7 @@ public class Sm13Endpoint : Endpoint<SM13RequestDto, SM13HttpResponse>
         SM13HttpResponse httpResponse;
 
         // Check if the file extension is valid or not.
-        if (!FormFileHelper.HasValidExtension(imageFile, ArtworkConstraints.VALID_FILE_EXTENSIONS))
+        if (!FormFileHelper.HasValidExtension(imageFile, ArtworkConstraints.VALID_IMAGE_FILE_EXTENSIONS))
         {
             httpResponse = SM13HttpResponseManager
                 .Resolve(SM13ResponseStatusCode.INVALID_FILE_EXTENSION)

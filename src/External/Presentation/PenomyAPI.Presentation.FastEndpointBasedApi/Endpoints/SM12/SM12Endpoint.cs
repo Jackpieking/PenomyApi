@@ -124,7 +124,7 @@ public class SM12Endpoint : Endpoint<SM12RequestDto, SM12HttpResponse>
         SM12HttpResponse httpResponse;
 
         // Check if the file extension is valid or not.
-        if (!_formFileHelper.HasValidExtension(imageFile, ArtworkConstraints.VALID_FILE_EXTENSIONS))
+        if (!_formFileHelper.HasValidExtension(imageFile, ArtworkConstraints.VALID_IMAGE_FILE_EXTENSIONS))
         {
             httpResponse = SM12HttpResponseManager
                 .Resolve(SM12ResponseStatusCode.INVALID_FILE_EXTENSION)

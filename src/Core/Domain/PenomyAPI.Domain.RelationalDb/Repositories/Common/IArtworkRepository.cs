@@ -30,6 +30,14 @@ public interface IArtworkRepository : IEntityRepository<Artwork>
         long artworkId,
         CancellationToken cancellationToken);
 
+    Task<bool> IsComicExistedByIdAsync(
+        long artworkId,
+        CancellationToken cancellationToken);
+
+    Task<bool> IsAnimeExistedByIdAsync(
+        long artworkId,
+        CancellationToken cancellationToken);
+
     /// <summary>
     ///     Check if the artwork with specified <paramref name="artworkId"/>
     ///     is available to display to the users.

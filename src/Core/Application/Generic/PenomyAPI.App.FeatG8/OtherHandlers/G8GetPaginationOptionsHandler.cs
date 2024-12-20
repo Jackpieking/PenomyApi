@@ -22,7 +22,7 @@ public sealed class G8GetPaginationOptionsHandler
         CancellationToken ct)
     {
         var isComicExisted = await _g8Repository.IsArtworkExistAsync(
-            request.ComicId,
+            request.ArtworkId,
             ct);
 
         if (!isComicExisted)
@@ -31,7 +31,7 @@ public sealed class G8GetPaginationOptionsHandler
         }
 
         var totalChapters = await _g8Repository.GetTotalChaptersByComicIdAsync(
-            request.ComicId,
+            request.ArtworkId,
             ct);
 
         return G8GetPaginationOptionsResponse.CalculateAndReturn(totalChapters);

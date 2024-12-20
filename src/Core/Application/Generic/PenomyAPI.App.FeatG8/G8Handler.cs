@@ -1,9 +1,9 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using PenomyAPI.App.Common;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.App.FeatG8;
 
@@ -20,7 +20,7 @@ public class G8Handler : IFeatureHandler<G8Request, G8Response>
     {
         if (!await _g8Repository.IsArtworkExistAsync(request.Id, ct))
         {
-            return G8Response.COMIC_IS_NOT_FOUND;
+            return G8Response.ARTWORK_IS_NOT_FOUND;
         }
 
         var chapters = await _g8Repository.GetChapterByComicIdWithPaginationAsync(

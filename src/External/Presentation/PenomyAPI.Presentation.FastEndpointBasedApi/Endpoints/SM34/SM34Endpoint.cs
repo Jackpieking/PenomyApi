@@ -124,7 +124,7 @@ public class SM34Endpoint : Endpoint<SM34RequestDto, SM34HttpResponse>
         SM34HttpResponse httpResponse;
 
         // Check if the file extension is valid or not.
-        if (!_formFileHelper.HasValidExtension(imageFile, ArtworkConstraints.VALID_FILE_EXTENSIONS))
+        if (!_formFileHelper.HasValidExtension(imageFile, ArtworkConstraints.VALID_IMAGE_FILE_EXTENSIONS))
         {
             httpResponse = SM34HttpResponseManager
                 .Resolve(SM34ResponseStatusCode.INVALID_FILE_EXTENSION)

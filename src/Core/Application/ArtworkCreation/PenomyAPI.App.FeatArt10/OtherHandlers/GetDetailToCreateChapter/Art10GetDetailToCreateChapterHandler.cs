@@ -26,7 +26,7 @@ public sealed class Art10GetDetailToCreateChapterHandler
     {
         _artworkRepository = _unitOfWork.ArtworkRepository;
 
-        var isComicExisted = await _artworkRepository.IsArtworkExistedByIdAsync(
+        var isComicExisted = await _artworkRepository.IsComicExistedByIdAsync(
             request.ComicId,
             cancellationToken);
 
