@@ -1,4 +1,6 @@
-﻿namespace PenomyAPI.Realtime.SignalR;
+﻿using System.Threading.Tasks;
+
+namespace PenomyAPI.Realtime.SignalR;
 
 public interface INotificationClient
 {

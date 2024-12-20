@@ -15,6 +15,7 @@ using PenomyAPI.Presentation.FastEndpointBasedApi.ServiceConfigurations;
 using PenomyAPI.Realtime.SignalR;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading;
 using Typesense;
@@ -52,6 +53,7 @@ await using (var scope = app.Services.CreateAsyncScope())
 {
     // Init typesense
     var context = scope.TryResolve<AppDbContext>();
+
     var typesenseClient = scope.TryResolve<ITypesenseClient>();
 
     Typs1FeatureHandler.LoadRequiredDependencies(context, typesenseClient);

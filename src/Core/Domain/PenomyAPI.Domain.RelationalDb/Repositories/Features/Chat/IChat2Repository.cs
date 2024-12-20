@@ -1,4 +1,5 @@
 using PenomyAPI.Domain.RelationalDb.Entities.Chat;
+using PenomyAPI.Domain.RelationalDb.Entities.Generic;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,6 +8,8 @@ namespace PenomyAPI.Domain.RelationalDb.Repositories.Features.Chat;
 
 public interface IChat2Repository
 {
+    Task<UserProfile> GetUserProfileByIdAsync(long userId);
+
     Task<List<ChatGroup>> GetChatGroupsAsync(long userId, CancellationToken token);
 
     /// <summary>

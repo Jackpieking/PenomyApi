@@ -9,6 +9,8 @@ public sealed class ChatGroupMember : IEntity
     public long MemberId { get; set; }
 
     public long ChatGroupId { get; set; }
+    
+    //public ChatGroupType ChatGroupType { get; set; }
 
     public long RoleId { get; set; }
 
