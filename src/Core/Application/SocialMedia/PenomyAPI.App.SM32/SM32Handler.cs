@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using PenomyAPI.App.Common;
@@ -24,7 +23,11 @@ public class SM32Handler : IFeatureHandler<SM32Request, SM32Response>
         try
         {
             response.FriendIds = await _sm32Repository.GetAllUserFriendsAsync(request.UserId, ct);
-            response.FriendRequestIds = await _sm32Repository.GetAllUserFriendRequestAsync(
+            response.SendToMeFriendRequestIds = await _sm32Repository.GetUserFriendRequestAsync(
+                request.UserId,
+                ct
+            );
+            response.SendByMeFriendRequestIds = await _sm32Repository.GetAllUserFriendRequestAsync(
                 request.UserId,
                 ct
             );
