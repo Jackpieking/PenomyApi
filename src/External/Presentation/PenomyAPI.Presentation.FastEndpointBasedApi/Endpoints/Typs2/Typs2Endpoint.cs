@@ -4,44 +4,40 @@ using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.Persist.Typesense.AppSchema;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Typs3.Middlewares.Validation;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Typs2.Middlewares.Validation;
 using Typesense;
 
-namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Typs3;
+namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Typs2;
 
-public class Typs3Endpoint : Endpoint<Typs3HttpRequest, Typs3HttpResponse>
+public class Typs2Endpoint : Endpoint<Typs2HttpRequest, Typs2HttpResponse>
 {
     private readonly ITypesenseClient _typesenseClient;
 
-    public Typs3Endpoint(ITypesenseClient typesenseClient)
+    public Typs2Endpoint(ITypesenseClient typesenseClient)
     {
         _typesenseClient = typesenseClient;
     }
 
     public override void Configure()
     {
-        Get("/typs3");
+        Get("/typs2");
         AllowAnonymous();
         DontThrowIfValidationFails();
-        PreProcessor<Typs3ValidationPreProcessor>();
+        PreProcessor<Typs2ValidationPreProcessor>();
         Description(builder =>
         {
             builder.ClearDefaultProduces(StatusCodes.Status400BadRequest);
         });
         Summary(summary =>
         {
-            summary.Summary = "Endpoint for searching manga feature";
-            summary.Description = "This endpoint is used for searching manga purpose.";
+            summary.Summary = "Endpoint for searching manga with detail feature";
+            summary.Description = "This endpoint is used for searching manga with detail purpose.";
             summary.ExampleRequest = new() { SearchText = "string" };
-            summary.Response<Typs3HttpResponse>(
-                description: "Represent successful operation response.",
-                example: new() { }
-            );
         });
     }
 
-    public override async Task<Typs3HttpResponse> ExecuteAsync(
-        Typs3HttpRequest req,
+    public override async Task<Typs2HttpResponse> ExecuteAsync(
+        Typs2HttpRequest req,
         CancellationToken ct
     )
     {
@@ -52,7 +48,7 @@ public class Typs3Endpoint : Endpoint<Typs3HttpRequest, Typs3HttpResponse>
 
         query.ExcludeFields = MangaSearchSchema.Metadata.FieldTitle.Embedding;
         query.SortBy = "_text_match:desc";
-        query.PerPage = 8;
+        query.PerPage = 10;
 
         var searchResult = await _typesenseClient.Search<MangaSearchSchema>(
             MangaSearchSchema.Metadata.SchemaName,
@@ -60,7 +56,7 @@ public class Typs3Endpoint : Endpoint<Typs3HttpRequest, Typs3HttpResponse>
             ct
         );
 
-        var mangas = new List<Typs3HttpResponse.MangaSearchResult>();
+        var mangas = new List<Typs2HttpResponse.MangaSearchResult>();
 
         foreach (var result in searchResult.Hits)
         {
@@ -70,13 +66,14 @@ public class Typs3Endpoint : Endpoint<Typs3HttpRequest, Typs3HttpResponse>
                     MangaId = result.Document.MangaId,
                     MangaName = result.Document.MangaName,
                     MangaAvatar = result.Document.MangaAvatar,
+                    MangaDescription = result.Document.MangaDescription,
                     MangaNumberOfStars = result.Document.MangaNumberOfStars,
                     MangaNumberOfFollowers = result.Document.MangaNumberOfFollowers,
                 }
             );
         }
 
-        var response = new Typs3HttpResponse() { Body = mangas };
+        var response = new Typs2HttpResponse() { Body = mangas };
 
         await SendAsync(response, StatusCodes.Status200OK, ct);
 
