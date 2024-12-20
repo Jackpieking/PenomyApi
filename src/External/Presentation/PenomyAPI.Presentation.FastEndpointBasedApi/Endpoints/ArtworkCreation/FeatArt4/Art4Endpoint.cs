@@ -34,7 +34,7 @@ public class Art4Endpoint : Endpoint<Art4RequestDto, Art4HttpResponse>
 
     public override void Configure()
     {
-        Post("/art4/comic/create");
+        Post("art4/comic/create");
 
         AllowFormData();
         AllowFileUploads();

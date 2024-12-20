@@ -7,12 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="OtherHandlers\**" />
-    <EmbeddedResource Remove="OtherHandlers\**" />
-    <None Remove="OtherHandlers\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\PenomyAPI.App.Common\PenomyAPI.App.Common.csproj" />
   </ItemGroup>
 

@@ -26,7 +26,7 @@ public static class ArtworkConstraints
     // Init the valid file extensions array when this class is first visited.
     static ArtworkConstraints()
     {
-        VALID_IMAGE_FILE_EXTENSIONS = ["jpg", "png", "jpeg"];
+        VALID_IMAGE_FILE_EXTENSIONS = ["jpg", "png", "jpeg", "webp"];
         VALID_VIDEO_FILE_EXTENSIONS = ["mp4", "mkv", "x-matroska"];
     }
 }

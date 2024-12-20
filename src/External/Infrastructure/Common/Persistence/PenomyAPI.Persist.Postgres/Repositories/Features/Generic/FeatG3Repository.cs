@@ -27,7 +27,7 @@ public class FeatG3Repository : IFeatG3Repository
     }
 
     #region Raw Queries section
-    private static FormattableString GetRecentlyUpdatedComicsRawQuery()
+    private static FormattableString GetRecentlyUpdatedComicsRawQuery(ArtworkType artworkType)
     {
         FormattableString rawQuery = $@"
             SELECT 
@@ -52,7 +52,7 @@ public class FeatG3Repository : IFeatG3Repository
             INNER JOIN penomy_artwork_origin AS p1 ON t.""ArtworkOriginId"" = p1.""Id""
             INNER JOIN penomy_artwork_metadata AS p2 ON t.""Id"" = p2.""ArtworkId""
             WHERE 
-                t.""ArtworkType"" = {ArtworkType.Comic}
+                t.""ArtworkType"" = {(int) artworkType}
                 AND t.""PublicLevel"" = {ArtworkPublicLevel.Everyone}
                 AND NOT (t.""IsTakenDown"")
                 AND NOT (t.""IsTemporarilyRemoved"")
@@ -94,10 +94,11 @@ public class FeatG3Repository : IFeatG3Repository
     }
     #endregion
 
-    public async Task<List<RecentlyUpdatedComicReadModel>> GetRecentlyUpdatedComicsAsync(
+    public async Task<List<RecentlyUpdatedComicReadModel>> GetRecentlyUpdatedArtworksAsync(
+        ArtworkType artworkType,
         CancellationToken cancellationToken)
     {
-        var rawQuery = GetRecentlyUpdatedComicsRawQuery();
+        var rawQuery = GetRecentlyUpdatedComicsRawQuery(artworkType);
 
         var resultList = await _dbContext.Database
             .SqlQuery<RecentlyUpdatedComicReadModel>(rawQuery)

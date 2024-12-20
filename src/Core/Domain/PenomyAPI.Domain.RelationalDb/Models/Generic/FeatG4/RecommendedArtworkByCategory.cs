@@ -2,7 +2,7 @@
 
 namespace PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG4;
 
-public class RecommendedComicByCategory
+public class RecommendedArtworkByCategory
 {
     /// <summary>
     ///     The recommended category for the user.
@@ -12,5 +12,5 @@ public class RecommendedComicByCategory
     /// <summary>
     ///     The list of comics that belonged to the recommended category.
     /// </summary>
-    public IEnumerable<RecommendedComicReadModel> RecommendedComics { get; set; }
+    public IEnumerable<RecommendedArtworkReadModel> RecommendedArtworks { get; set; }
 }

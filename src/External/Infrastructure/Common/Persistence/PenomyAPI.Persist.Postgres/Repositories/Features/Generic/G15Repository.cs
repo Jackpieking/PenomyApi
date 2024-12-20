@@ -26,37 +26,25 @@ public class G15Repository : IG15Repository
         return _dbContext
             .Set<Artwork>()
             .Where(x => x.Id == artworkId)
-            .Select(comic => new G15AnimeDetailReadModel
+            .Select(anime => new G15AnimeDetailReadModel
             {
-                Id = comic.Id,
-                Title = comic.Title,
-                Introduction = comic.Introduction,
-                ThumbnailUrl = comic.ThumbnailUrl,
-                HasSeries = comic.HasSeries,
-                CountryId = comic.Origin.Id,
-                CountryName = comic.Origin.CountryName,
-                ArtworkCategories = comic.ArtworkCategories.Select(y => new G5CategoryReadModel
+                Id = anime.Id,
+                Title = anime.Title,
+                Introduction = anime.Introduction,
+                ThumbnailUrl = anime.ThumbnailUrl,
+                HasSeries = anime.HasSeries,
+                CountryId = anime.Origin.Id,
+                CountryName = anime.Origin.CountryName,
+                ArtworkCategories = anime.ArtworkCategories.Select(y => new G5CategoryReadModel
                 {
                     Id = y.Category.Id,
                     Name = y.Category.Name,
                 }),
-                ArtworkStatus = comic.ArtworkStatus,
-                ArtworkMetaData = new ArtworkMetaData
-                {
-                    TotalComments = comic.ArtworkMetaData.TotalComments,
-                    TotalFavorites = comic.ArtworkMetaData.TotalFavorites,
-                    TotalViews = comic.ArtworkMetaData.TotalViews,
-                    TotalStarRates = comic.ArtworkMetaData.TotalStarRates,
-                    TotalUsersRated = comic.ArtworkMetaData.TotalUsersRated,
-                    AverageStarRate = comic.ArtworkMetaData.AverageStarRate,
-                    TotalFollowers = comic.ArtworkMetaData.TotalFollowers
-                },
-                AllowComment = comic.AllowComment,
+                ArtworkStatus = anime.ArtworkStatus,
+                AllowComment = anime.AllowComment,
                 // Creator detail section.
-                CreatorId = comic.Creator.UserId,
-                CreatorName = comic.Creator.NickName,
-                CreatorAvatarUrl = comic.Creator.AvatarUrl,
-                CreatorTotalFollowers = comic.Creator.CreatorProfile.TotalFollowers,
+                CreatorId = anime.Creator.UserId,
+                TotalChapters = anime.LastChapterUploadOrder,
             })
             .AsNoTracking()
             .AsSplitQuery()
