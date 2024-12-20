@@ -24,7 +24,8 @@ public class SM15Repository : ISM15Repository
     public async Task<List<UserPost>> GetPersonalPostsAsync(long userId, CancellationToken token)
     {
         return await _userPostContext
-            .Where(x => x.PublicLevel == UserPostPublicLevel.Everyone)
+            .Where(x => x.PublicLevel == UserPostPublicLevel.Everyone ||
+                        (x.CreatedBy == userId && x.PublicLevel == UserPostPublicLevel.Private))
             .OrderByDescending(x => x.UpdatedAt)
             .Select(x => new UserPost
             {
@@ -39,16 +40,16 @@ public class SM15Repository : ISM15Repository
                 {
                     UserId = x.Creator.UserId,
                     NickName = x.Creator.NickName,
-                    AvatarUrl = x.Creator.AvatarUrl,
+                    AvatarUrl = x.Creator.AvatarUrl
                 },
                 AttachedMedias = x.AttachedMedias.Select(y => new UserPostAttachedMedia
                 {
                     FileName = y.FileName,
                     MediaType = y.MediaType,
                     StorageUrl = y.StorageUrl,
-                    UploadOrder = y.UploadOrder,
+                    UploadOrder = y.UploadOrder
                 }),
-                UserLikes = x.UserLikes.ToList(),
+                UserLikes = x.UserLikes.ToList()
             })
             .ToListAsync(token);
     }
@@ -91,16 +92,16 @@ public class SM15Repository : ISM15Repository
                 {
                     UserId = x.Creator.UserId,
                     NickName = x.Creator.NickName,
-                    AvatarUrl = x.Creator.AvatarUrl,
+                    AvatarUrl = x.Creator.AvatarUrl
                 },
                 AttachedMedias = x.AttachedMedias.Select(y => new UserPostAttachedMedia
                 {
                     FileName = y.FileName,
                     MediaType = y.MediaType,
                     StorageUrl = y.StorageUrl,
-                    UploadOrder = y.UploadOrder,
+                    UploadOrder = y.UploadOrder
                 }),
-                UserLikes = x.UserLikes.ToList(),
+                UserLikes = x.UserLikes.ToList()
             })
             .ToListAsync(token);
     }

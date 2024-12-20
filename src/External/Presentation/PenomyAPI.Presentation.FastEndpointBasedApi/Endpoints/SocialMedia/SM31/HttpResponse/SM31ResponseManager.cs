@@ -29,7 +29,7 @@ public class SM31ResponseManager
                 }
         );
         _dictionary.TryAdd(
-            SM31ResponseStatusCode.SUCCESS,
+            SM31ResponseStatusCode.USER_NOT_FOUND,
             (_, response) =>
                 new SM31HttpResponse
                 {
@@ -38,7 +38,7 @@ public class SM31ResponseManager
                 }
         );
         _dictionary.TryAdd(
-            SM31ResponseStatusCode.SUCCESS,
+            SM31ResponseStatusCode.IS_NOT_FRIEND,
             (_, response) =>
                 new SM31HttpResponse
                 {

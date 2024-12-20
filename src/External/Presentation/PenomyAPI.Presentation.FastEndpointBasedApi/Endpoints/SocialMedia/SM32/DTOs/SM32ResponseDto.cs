@@ -6,6 +6,7 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SocialMedia.SM32
 public class SM32ResponseDto
 {
     public IEnumerable<UserResponseDto> Users { get; set; }
+    public IEnumerable<UserResponseDto> FriendLists { get; set; }
 }
 
 public class UserResponseDto
@@ -16,5 +17,6 @@ public class UserResponseDto
     public UserGender Gender { get; set; }
     public string AboutMe { get; set; }
     public bool IsFriend { get; set; }
-    public bool HasSentFriendRequest { get; set; }
+    public bool HasSentToMeFriendRequest { get; set; }
+    public bool HasSentByMeFriendRequest { get; set; }
 }

@@ -30,7 +30,7 @@ public class SM49Repository : ISM49Repository
     public async Task<bool> IsFriendRequestExistsAsync(long userId, long friendId, CancellationToken token)
     {
         return await _userFriendRequestContext.AnyAsync(
-            x => (x.CreatedBy == userId && x.FriendId == friendId) || (x.CreatedBy == friendId && x.FriendId == userId),
+            x => x.CreatedBy == userId && x.FriendId == friendId && x.RequestStatus == RequestStatus.Pending,
             token);
     }
 
@@ -79,15 +79,13 @@ public class SM49Repository : ISM49Repository
                 .ToList();
 
             // Update the friend request status
-            foreach (var pair in userFriendPairs)
-                await _userFriendRequestContext
-                    .Where(x =>
-                        (x.CreatedBy == pair.UserId && x.FriendId == pair.FriendId) ||
-                        (x.CreatedBy == pair.FriendId && x.FriendId == pair.UserId))
-                    .ExecuteUpdateAsync(
-                        x => x.SetProperty(y => y.RequestStatus, RequestStatus.Accepted),
-                        token
-                    );
+            await _userFriendRequestContext
+                .Where(x =>
+                    x.CreatedBy == userFriendPairs.First().UserId && x.FriendId == userFriendPairs.First().FriendId)
+                .ExecuteUpdateAsync(
+                    x => x.SetProperty(y => y.RequestStatus, RequestStatus.Accepted),
+                    token
+                );
 
             // Save changes and commit transaction
             await _dbContext.SaveChangesAsync(token);
