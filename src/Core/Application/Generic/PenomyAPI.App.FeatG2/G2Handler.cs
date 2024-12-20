@@ -1,9 +1,9 @@
-﻿using PenomyAPI.App.Common;
-using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
-using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using PenomyAPI.App.Common;
+using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
+using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 
 namespace PenomyAPI.App.FeatG2;
 
@@ -25,11 +25,12 @@ public sealed class G2Handler : IFeatureHandler<G2Request, G2Response>
         {
             var topArtworks = await _g2Repository.GetTopRecommendedArtworksByTypeAsync(
                 request.ArtworkType,
-                ct);
+                ct
+            );
 
             return G2Response.SUCCESS(topArtworks);
         }
-        catch (Exception ex)
+        catch
         {
             return G2Response.DATABASE_ERROR;
         }

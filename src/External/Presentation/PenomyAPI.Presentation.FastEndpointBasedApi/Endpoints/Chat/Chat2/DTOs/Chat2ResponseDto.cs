@@ -10,7 +10,7 @@ public class Chat2ResponseDto
 
 public class ChatGroupResponseDto
 {
-    public long Id { get; set; }
+    public string Id { get; set; }
     public string GroupName { get; set; }
     public bool IsPublic { get; set; }
     public string CoverPhotoUrl { get; set; }
@@ -20,9 +20,9 @@ public class ChatGroupResponseDto
 
 public class ChatGroupMemberResponseDto
 {
-    public long MemberId { get; set; }
+    public string MemberId { get; set; }
     public string MemberName { get; set; }
-    public long RoleId { get; set; }
+    public string RoleId { get; set; }
     public DateTime JoinedAt { get; set; }
     public string AvatarUrl { get; set; }
 }

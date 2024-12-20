@@ -1,4 +1,6 @@
-﻿using CloudinaryDotNet;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using PenomyAPI.App.Common.FileServices.Models;
 using PenomyAPI.App.Common.Helpers;
@@ -6,8 +8,6 @@ using PenomyAPI.App.Common.Models.Common;
 using PenomyAPI.App.FeatArt20.Infrastructures;
 using PenomyAPI.App.FeatArt22.Infrastructures;
 using PenomyAPI.Infra.Configuration.Options;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace PenomyAPI.Infra.FeatArt20;
 
@@ -24,7 +24,8 @@ public class Art20FileService : IArt20FileService, IArt22FileService
 
     public async Task<bool> CreateFolderAsync(
         AppFolderInfo folderInfo,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken
+    )
     {
         var cloudinary = CreateCloudinary();
 
@@ -49,7 +50,8 @@ public class Art20FileService : IArt20FileService, IArt22FileService
     public async Task<Result<AppFileInfo>> UploadImageFileAsync(
         ImageFileInfo fileInfo,
         bool overwrite,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken
+    )
     {
         var cloudinary = CreateCloudinary();
 
@@ -98,17 +100,15 @@ public class Art20FileService : IArt20FileService, IArt22FileService
     public async Task<Result<AppFileInfo>> UploadVideoFileAsync(
         VideoFileInfo fileInfo,
         bool overwrite,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken
+    )
     {
         var videoUploadParams = new VideoUploadParams
         {
             PublicId = fileInfo.FileId,
             Folder = fileInfo.FolderPath,
             AssetFolder = fileInfo.FolderPath,
-            File = new FileDescription(
-                name: fileInfo.FileName,
-                stream: fileInfo.FileDataStream
-            ),
+            File = new FileDescription(name: fileInfo.FileName, stream: fileInfo.FileDataStream),
             DisplayName = fileInfo.FileName,
             Overwrite = overwrite,
             Invalidate = overwrite,
@@ -134,10 +134,11 @@ public class Art20FileService : IArt20FileService, IArt22FileService
             }
             else
             {
-                const int BUFFER_SIZE = 5 * 1024 * 1024;
+                // const int BUFFER_SIZE = 5 * 1024 * 1024;
 
                 uploadResult = cloudinary.UploadLarge<VideoUploadResult>(
-                    parameters: videoUploadParams);
+                    parameters: videoUploadParams
+                );
 
                 if (uploadResult.StatusCode != System.Net.HttpStatusCode.OK)
                 {
@@ -151,11 +152,10 @@ public class Art20FileService : IArt20FileService, IArt22FileService
 
             return Result<AppFileInfo>.Success(fileInfo);
         }
-        catch (System.Exception ex)
+        catch
         {
             return Result<AppFileInfo>.Failed();
         }
-
     }
 
     #region Private Methods
