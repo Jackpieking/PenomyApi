@@ -17,6 +17,7 @@ public class UserResponseDto
     public UserGender Gender { get; set; }
     public string AboutMe { get; set; }
     public bool IsFriend { get; set; }
+    public string ChatGroupId { get; set; }
     public bool HasSentToMeFriendRequest { get; set; }
     public bool HasSentByMeFriendRequest { get; set; }
 }

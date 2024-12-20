@@ -68,7 +68,7 @@ public class Chat2Endpoint : Endpoint<EmptyRequest, Chat2HttpResponse>
             {
                 var groupDto = new ChatGroupResponseDto
                 {
-                    Id = p.Id,
+                    Id = p.Id.ToString(),
                     GroupName = p.GroupName,
                     IsPublic = p.IsPublic,
                     CoverPhotoUrl = p.CoverPhotoUrl,
@@ -77,17 +77,17 @@ public class Chat2Endpoint : Endpoint<EmptyRequest, Chat2HttpResponse>
                         .ChatGroupMembers.ToList()
                         .Select(x => new ChatGroupMemberResponseDto
                         {
-                            MemberId = x.MemberId,
-                            RoleId = x.RoleId,
+                            MemberId = x.MemberId.ToString(),
+                            RoleId = x.RoleId.ToString(),
                             JoinedAt = x.JoinedAt,
                             MemberName = x.Member.NickName,
                             AvatarUrl = x.Member.AvatarUrl,
                         }),
                 };
                 httpResponse.Body.Groups.Add(groupDto);
-                await SendAsync(httpResponse, httpResponse.HttpCode, ct);
             }
 
+        await SendAsync(httpResponse, httpResponse.HttpCode, ct);
         return httpResponse;
     }
 }

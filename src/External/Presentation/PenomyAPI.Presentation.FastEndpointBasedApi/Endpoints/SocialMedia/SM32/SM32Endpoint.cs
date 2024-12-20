@@ -23,7 +23,10 @@ public class SM32Endpoint : Endpoint<EmptyRequest, SM32HttpResponse>
 
         PreProcessor<AuthPreProcessor<EmptyRequest>>();
 
-        Description(builder => { builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest); });
+        Description(builder =>
+        {
+            builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest);
+        });
 
         Summary(summary =>
         {
@@ -33,7 +36,7 @@ public class SM32Endpoint : Endpoint<EmptyRequest, SM32HttpResponse>
                 description: "Represent successful operation response.",
                 example: new SM32HttpResponse
                 {
-                    AppCode = SM32ResponseStatusCode.SUCCESS.ToString()
+                    AppCode = SM32ResponseStatusCode.SUCCESS.ToString(),
                 }
             );
         });
@@ -70,9 +73,13 @@ public class SM32Endpoint : Endpoint<EmptyRequest, SM32HttpResponse>
                             AvatarUrl = x.AvatarUrl,
                             Gender = x.Gender,
                             AboutMe = x.AboutMe,
-                            IsFriend = featResponse.FriendIds.FirstOrDefault(y => y.UserId == x.UserId) != null,
-                            HasSentByMeFriendRequest = featResponse.SendByMeFriendRequestIds.Contains(x.UserId),
-                            HasSentToMeFriendRequest = featResponse.SendToMeFriendRequestIds.Contains(x.UserId)
+                            IsFriend =
+                                featResponse.FriendIds.FirstOrDefault(y => y.UserId == x.UserId)
+                                != null,
+                            HasSentByMeFriendRequest =
+                                featResponse.SendByMeFriendRequestIds.Contains(x.UserId),
+                            HasSentToMeFriendRequest =
+                                featResponse.SendToMeFriendRequestIds.Contains(x.UserId),
                         })
                         .OrderByDescending(x => x.IsFriend),
                     FriendLists = featResponse.FriendIds.Select(x => new UserResponseDto
@@ -82,8 +89,11 @@ public class SM32Endpoint : Endpoint<EmptyRequest, SM32HttpResponse>
                         AvatarUrl = x.AvatarUrl,
                         Gender = x.Gender,
                         AboutMe = x.AboutMe,
-                        IsFriend = true
-                    })
+                        IsFriend = true,
+                        ChatGroupId = x
+                            .JoinedChatGroupMembers.FirstOrDefault()
+                            ?.ChatGroupId.ToString(),
+                    }),
                 };
 
         await SendAsync(httpResponse, httpResponse.HttpCode, ct);

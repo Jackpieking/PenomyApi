@@ -17,8 +17,11 @@ public class NotificationHub : Hub<INotificationClient>, INotificationHub
 
     public override async Task OnConnectedAsync()
     {
-        await Clients.Client(Context.ConnectionId).ReceiveMessage(
-            $"{Context.User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value} is connecting");
+        await Clients
+            .Client(Context.ConnectionId)
+            .ReceiveMessage(
+                $"{Context.User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value} is connecting"
+            );
 
         await base.OnConnectedAsync();
     }
@@ -27,6 +30,7 @@ public class NotificationHub : Hub<INotificationClient>, INotificationHub
     {
         return base.OnDisconnectedAsync(exception);
     }
+
     public async Task SendNotifToClient(string userId)
     {
         await _hubContext.Clients.User(userId).ReceiveNotification();
@@ -44,9 +48,9 @@ public class NotificationHub : Hub<INotificationClient>, INotificationHub
 
     public async Task SendMsgToClients(IReadOnlyList<string> userIds, string message)
     {
-
         await _hubContext.Clients.Users(userIds).ReceiveMessage(message);
     }
+
     public async Task SendNotifToGroup(string groupId)
     {
         await _hubContext.Clients.Group(groupId).ReceiveNotification();
@@ -56,6 +60,7 @@ public class NotificationHub : Hub<INotificationClient>, INotificationHub
     {
         await _hubContext.Clients.Group(groupId).ReceiveMessage(message);
     }
+
     public async Task SendNotifToGroups(IReadOnlyList<string> groupIds)
     {
         await _hubContext.Clients.Groups(groupIds).ReceiveNotification();
