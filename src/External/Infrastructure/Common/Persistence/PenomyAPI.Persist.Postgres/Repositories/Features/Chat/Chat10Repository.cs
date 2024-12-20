@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PenomyAPI.Domain.RelationalDb.Entities.Chat;
-using PenomyAPI.Domain.RelationalDb.Entities.Generic;
-using PenomyAPI.Domain.RelationalDb.Repositories.Features.Chat;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using PenomyAPI.Domain.RelationalDb.Entities.Chat;
+using PenomyAPI.Domain.RelationalDb.Entities.Generic;
+using PenomyAPI.Domain.RelationalDb.Repositories.Features.Chat;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.Chat;
 
@@ -24,13 +24,20 @@ public class Chat10Repository : IChat10Repository
 
     public async Task<bool> CheckGroupExistAsync(long chatGroupId, CancellationToken ct = default)
     {
-        return await _chatGroup.AsNoTracking()
+        return await _chatGroup
+            .AsNoTracking()
             .AnyAsync(o => o.Id == chatGroupId, cancellationToken: ct);
     }
 
-    public async Task<ICollection<ChatMessage>> GetChatGroupByGroupIdAsync(long chatGroupId, int pageNum, int chatNum, CancellationToken ct = default)
+    public async Task<ICollection<ChatMessage>> GetChatGroupByGroupIdAsync(
+        long chatGroupId,
+        int pageNum,
+        int chatNum,
+        CancellationToken ct = default
+    )
     {
-        return await _chatMessage.AsNoTracking()
+        return await _chatMessage
+            .AsNoTracking()
             .Where(o => o.ChatGroupId == chatGroupId)
             .OrderByDescending(o => o.CreatedAt)
             .Skip((pageNum - 1) * chatNum)
@@ -42,18 +49,22 @@ public class Chat10Repository : IChat10Repository
                 {
                     UserId = o.Sender.UserId,
                     AvatarUrl = o.Sender.AvatarUrl,
-                    NickName = o.Sender.NickName
+                    NickName = o.Sender.NickName,
                 },
                 Content = o.Content,
                 CreatedAt = o.CreatedAt,
-                ReplyToAnotherMessage = o.ReplyToAnotherMessage
+                ReplyToAnotherMessage = o.ReplyToAnotherMessage,
             })
             .ToListAsync(cancellationToken: ct);
     }
 
-    public async Task<long> GetMessageReplyByChatIdAsync(long chatId, CancellationToken ct = default)
+    public async Task<long> GetMessageReplyByChatIdAsync(
+        long chatId,
+        CancellationToken ct = default
+    )
     {
-        return await _chatMessageReplies.AsNoTracking()
+        return await _chatMessageReplies
+            .AsNoTracking()
             .Where(o => o.RepliedMessageId == chatId)
             .Select(o => o.RootChatMessageId)
             .FirstOrDefaultAsync(cancellationToken: ct);

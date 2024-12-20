@@ -19,7 +19,7 @@ public class UserChat
 public class Message
 {
     public string Content { get; set; }
-    public DateTime Time { get; set; }
+    public string Time { get; set; }
     public bool IsReply { get; set; }
     public string ReplyMessageId { get; set; }
 }

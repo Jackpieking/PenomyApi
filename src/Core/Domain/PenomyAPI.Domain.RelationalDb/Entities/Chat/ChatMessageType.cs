@@ -21,5 +21,5 @@ public enum ChatMessageType
     ///     send by the system when the users do some
     ///     special events in the chat group.
     /// </summary>
-    NotificationMessage = 2
+    NotificationMessage = 2,
 }

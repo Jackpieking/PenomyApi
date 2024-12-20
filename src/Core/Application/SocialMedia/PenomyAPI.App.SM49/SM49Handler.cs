@@ -31,7 +31,9 @@ public class SM49Handler : IFeatureHandler<SM49Request, SM49Response>
         var response = new SM49Response();
         try
         {
-            if (await _sm49Repository.IsFriendRequestExistsAsync(request.UserId, request.UserId, ct))
+            if (
+                await _sm49Repository.IsFriendRequestExistsAsync(request.UserId, request.UserId, ct)
+            )
             {
                 response.StatusCode = SM49ResponseStatusCode.REQUEST_NOT_FOUND;
                 return response;
@@ -49,8 +51,8 @@ public class SM49Handler : IFeatureHandler<SM49Request, SM49Response>
                 {
                     FriendId = request.UserId,
                     UserId = request.FriendId,
-                    StartedAt = DateTime.UtcNow
-                }
+                    StartedAt = DateTime.UtcNow,
+                },
             };
             var result = await _sm49Repository.AcceptFriendRequestAsync(friends, ct);
             response.IsSuccess = result;
@@ -66,24 +68,27 @@ public class SM49Handler : IFeatureHandler<SM49Request, SM49Response>
                     CreatedAt = DateTime.UtcNow,
                     CreatedBy = request.UserId,
                     ChatGroupType = ChatGroupType.Friend,
-                    TotalMembers = 2
+                    TotalMembers = 2,
                 };
                 var chatOwner = new ChatGroupMember
                 {
                     MemberId = request.UserId,
                     ChatGroupId = socialGroup.Id,
-                    RoleId = UserRoles.GroupManager.Id
+                    RoleId = UserRoles.GroupManager.Id,
                 };
                 var chatMember = new ChatGroupMember
                 {
                     MemberId = request.FriendId,
                     ChatGroupId = socialGroup.Id,
-                    RoleId = UserRoles.GroupManager.Id
+                    RoleId = UserRoles.GroupManager.Id,
                 };
                 success = await _Chat1Repository.CreateGroupAsync(socialGroup, chatOwner, ct);
+                success = await _Chat1Repository.CreateGroupAsync(socialGroup, chatMember, ct);
             }
 
-            response.StatusCode = success ? SM49ResponseStatusCode.SUCCESS : SM49ResponseStatusCode.FAILED;
+            response.StatusCode = success
+                ? SM49ResponseStatusCode.SUCCESS
+                : SM49ResponseStatusCode.FAILED;
         }
         catch (Exception)
         {

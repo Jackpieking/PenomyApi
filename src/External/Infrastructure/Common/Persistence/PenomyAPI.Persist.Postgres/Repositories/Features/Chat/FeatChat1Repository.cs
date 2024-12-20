@@ -22,33 +22,34 @@ public sealed class FeatChat1Repository : IFeatChat1Repository
         _memberContext = _dbContext.Set<ChatGroupMember>();
     }
 
-    public async Task<bool> CreateGroupAsync(ChatGroup group, ChatGroupMember member, CancellationToken token)
+    public async Task<bool> CreateGroupAsync(
+        ChatGroup group,
+        ChatGroupMember member,
+        CancellationToken token
+    )
     {
         var result = new Result<bool>(false);
 
         var executionStrategy = RepositoryHelper.CreateExecutionStrategy(_dbContext);
-        await executionStrategy.ExecuteAsync(async () =>
-            await InternalCreateGroupAsync(
-                group,
-                member,
-                token,
-                result
-            ));
+        await executionStrategy.ExecuteAsync(
+            async () => await InternalCreateGroupAsync(group, member, token, result)
+        );
         return result.Value;
     }
 
-    private async Task InternalCreateGroupAsync(ChatGroup group,
+    private async Task InternalCreateGroupAsync(
+        ChatGroup group,
         ChatGroupMember member,
-        CancellationToken token, Result<bool> result)
+        CancellationToken token,
+        Result<bool> result
+    )
     {
         IDbContextTransaction transaction = null;
         try
         {
-            transaction = await RepositoryHelper.CreateTransactionAsync(
-                _dbContext,
-                token
-            );
-            await _groupContext.AddAsync(group, token);
+            transaction = await RepositoryHelper.CreateTransactionAsync(_dbContext, token);
+            if (!await _groupContext.AnyAsync(x => x.Id == group.Id, token))
+                await _groupContext.AddAsync(group, token);
             await _memberContext.AddAsync(member, token);
             await _dbContext.SaveChangesAsync(token);
             await transaction.CommitAsync(token);

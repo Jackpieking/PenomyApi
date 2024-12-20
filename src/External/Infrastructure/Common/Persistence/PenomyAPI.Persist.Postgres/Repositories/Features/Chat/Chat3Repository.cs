@@ -22,7 +22,6 @@ public class Chat3Repository : IChat3Repository
     private readonly DbSet<ChatMessageAttachedMedia> _messageAttachedContext;
     private readonly DbSet<ChatMessage> _messageContext;
 
-
     public Chat3Repository(AppDbContext dbContext)
     {
         _dbContext = dbContext;
@@ -33,20 +32,18 @@ public class Chat3Repository : IChat3Repository
         _groupMemberContext = dbContext.Set<ChatGroupMember>();
     }
 
-    public async Task<bool> SaveMessageAsync(ChatMessage chat,
+    public async Task<bool> SaveMessageAsync(
+        ChatMessage chat,
         ChatMessageLikeStatistic statistic,
-        CancellationToken token)
+        CancellationToken token
+    )
     {
         var result = new Result<bool>(false);
 
         var executionStrategy = RepositoryHelper.CreateExecutionStrategy(_dbContext);
-        await executionStrategy.ExecuteAsync(async () =>
-            await InternalSaveMessagePostAsync(
-                chat,
-                statistic,
-                token,
-                result
-            ));
+        await executionStrategy.ExecuteAsync(
+            async () => await InternalSaveMessagePostAsync(chat, statistic, token, result)
+        );
         return result.Value;
     }
 
@@ -55,22 +52,29 @@ public class Chat3Repository : IChat3Repository
         return await _groupContext.FirstOrDefaultAsync(g => g.Id == groupId, token);
     }
 
-    public async Task<bool> IsMemberOfChatGroupAsync(long groupId, long userId, CancellationToken token)
+    public async Task<bool> IsMemberOfChatGroupAsync(
+        long groupId,
+        long userId,
+        CancellationToken token
+    )
     {
-        return await _groupMemberContext.AnyAsync(x => x.MemberId == userId && x.ChatGroupId == groupId, token);
+        return await _groupMemberContext.AnyAsync(
+            x => x.MemberId == userId && x.ChatGroupId == groupId,
+            token
+        );
     }
 
-    private async Task InternalSaveMessagePostAsync(ChatMessage chat,
+    private async Task InternalSaveMessagePostAsync(
+        ChatMessage chat,
         ChatMessageLikeStatistic statistic,
-        CancellationToken token, Result<bool> result)
+        CancellationToken token,
+        Result<bool> result
+    )
     {
         IDbContextTransaction transaction = null;
         try
         {
-            transaction = await RepositoryHelper.CreateTransactionAsync(
-                _dbContext,
-                token
-            );
+            transaction = await RepositoryHelper.CreateTransactionAsync(_dbContext, token);
             await _messageContext.AddAsync(chat, token);
             await _likeStatisticsContext.AddAsync(statistic, token);
             await _dbContext.SaveChangesAsync(token);
