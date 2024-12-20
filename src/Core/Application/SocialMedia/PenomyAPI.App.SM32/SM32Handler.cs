@@ -19,36 +19,23 @@ public class SM32Handler : IFeatureHandler<SM32Request, SM32Response>
     public async Task<SM32Response> ExecuteAsync(SM32Request request, CancellationToken ct)
     {
         var response = new SM32Response();
+        response.FriendIds = await _sm32Repository.GetAllUserFriendsAsync(
+            request.UserId,
+            request.FriendId,
+            ct
+        );
+        response.SendToMeFriendRequestIds = await _sm32Repository.GetUserFriendRequestAsync(
+            request.UserId,
+            ct
+        );
+        response.SendByMeFriendRequestIds = await _sm32Repository.GetAllUserFriendRequestAsync(
+            request.UserId,
+            ct
+        );
+        response.UserProfiles = await _sm32Repository.GetAllUserProfilesAsync(request.UserId, ct);
 
-        try
-        {
-            response.FriendIds = await _sm32Repository.GetAllUserFriendsAsync(
-                request.UserId,
-                request.FriendId,
-                ct
-            );
-            response.SendToMeFriendRequestIds = await _sm32Repository.GetUserFriendRequestAsync(
-                request.UserId,
-                ct
-            );
-            response.SendByMeFriendRequestIds = await _sm32Repository.GetAllUserFriendRequestAsync(
-                request.UserId,
-                ct
-            );
-            response.UserProfiles = await _sm32Repository.GetAllUserProfilesAsync(
-                request.UserId,
-                ct
-            );
-
-            response.StatusCode = SM32ResponseStatusCode.SUCCESS;
-            response.IsSuccess = true;
-        }
-        catch
-        {
-            // Handle unexpected errors
-            response.IsSuccess = false;
-            response.StatusCode = SM32ResponseStatusCode.FAILED;
-        }
+        response.StatusCode = SM32ResponseStatusCode.SUCCESS;
+        response.IsSuccess = true;
 
         return response;
     }
