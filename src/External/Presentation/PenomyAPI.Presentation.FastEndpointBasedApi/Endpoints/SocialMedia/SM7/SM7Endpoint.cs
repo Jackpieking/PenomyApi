@@ -12,7 +12,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SM7;
+namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SocialMedia.SM7;
 
 public class SM7Endpoint : Endpoint<SM7RequestDto, SM7HttpResponse>
 {

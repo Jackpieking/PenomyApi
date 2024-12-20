@@ -1,4 +1,5 @@
 ﻿using PenomyAPI.App.Common;
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG4;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
@@ -26,7 +27,7 @@ public class G4Handler : IFeatureHandler<G4Request, G4Response>
         {
             if (request.ForSignedInUser)
             {
-                return await GetRecommendedComicsForUserAsync(request.UserId, ct);
+                return await GetRecommendedArtworksForUserAsync(request.UserId, request.ArtworkType, ct);
             }
 
             // Check if the guest with specified id has viewed
@@ -37,11 +38,11 @@ public class G4Handler : IFeatureHandler<G4Request, G4Response>
 
             if (isCurrentGuestHasViewHistory)
             {
-                return await GetRecommendedComicsForGuestAsync(request.GuestId, ct);
+                return await GetRecommendedArtworksForGuestAsync(request.GuestId, request.ArtworkType, ct);
             }
 
             // Otherwise, serve this client as a first time visit guest.
-            return await GetRecommendedComicsForNewGuestAsync(ct);
+            return await GetRecommendedArtworksForNewGuestAsync(request.ArtworkType, ct);
         }
         catch
         {
@@ -53,13 +54,15 @@ public class G4Handler : IFeatureHandler<G4Request, G4Response>
     }
 
     #region Private Methods
-    private async Task<G4Response> GetRecommendedComicsForUserAsync(
+    private async Task<G4Response> GetRecommendedArtworksForUserAsync(
         long userId,
+        ArtworkType artworkType,
         CancellationToken cancellationToken)
     {
-        List<RecommendedComicByCategory> recommendedArtworkByCategory = await _g4Repository
-            .GetRecommendedComicsForUserAsync(
+        List<RecommendedArtworkByCategory> recommendedArtworkByCategory = await _g4Repository
+            .GetRecommendedArtworksForUserAsync(
                 userId,
+                artworkType,
                 cancellationToken);
 
         return new()
@@ -69,13 +72,15 @@ public class G4Handler : IFeatureHandler<G4Request, G4Response>
         };
     }
 
-    private async Task<G4Response> GetRecommendedComicsForGuestAsync(
+    private async Task<G4Response> GetRecommendedArtworksForGuestAsync(
         long guestId,
+        ArtworkType artworkType,
         CancellationToken cancellationToken)
     {
-        List<RecommendedComicByCategory> recommendedArtworkByCategory = await _g4Repository
-            .GetRecommendedComicsForGuestAsync(
+        List<RecommendedArtworkByCategory> recommendedArtworkByCategory = await _g4Repository
+            .GetRecommendedArtworksForGuestAsync(
                 guestId,
+                artworkType,
                 cancellationToken);
 
         return new()
@@ -85,11 +90,12 @@ public class G4Handler : IFeatureHandler<G4Request, G4Response>
         };
     }
 
-    private async Task<G4Response> GetRecommendedComicsForNewGuestAsync(
+    private async Task<G4Response> GetRecommendedArtworksForNewGuestAsync(
+        ArtworkType artworkType,
         CancellationToken cancellationToken)
     {
-        List<RecommendedComicByCategory> recommendedArtworkByCategory = await _g4Repository
-            .GetRecommendedComicsForNewGuestAsync(cancellationToken);
+        List<RecommendedArtworkByCategory> recommendedArtworkByCategory = await _g4Repository
+            .GetRecommendedArtworksForNewGuestAsync(artworkType, cancellationToken);
 
         return new()
         {

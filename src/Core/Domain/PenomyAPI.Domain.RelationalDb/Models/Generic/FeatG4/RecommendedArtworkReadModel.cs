@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG4;
 
-public sealed class RecommendedComicReadModel
+public sealed class RecommendedArtworkReadModel
 {
     public long Id { get; set; }
 

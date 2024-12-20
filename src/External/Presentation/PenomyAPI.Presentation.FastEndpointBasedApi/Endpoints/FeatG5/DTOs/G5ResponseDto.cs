@@ -22,70 +22,31 @@ public class G5ResponseDto
     public string CreatorId { get; set; }
 
     [ProtoMember(5)]
-    public string CreatorName { get; set; }
-
-    [ProtoMember(6)]
-    public string CreatorAvatarUrl { get; set; }
-
-    [ProtoMember(7)]
-    public long CreatorTotalFollowers { get; set; }
-
-    [ProtoMember(8)]
     public string CountryId { get; set; }
 
-    [ProtoMember(9)]
+    [ProtoMember(6)]
     public string CountryName { get; set; }
 
-    [ProtoMember(10)]
+    [ProtoMember(7)]
     public IEnumerable<CategoryDto> Categories { get; set; }
 
-    [ProtoMember(11)]
+    [ProtoMember(8)]
     public ArtworkStatus ArtworkStatus { get; set; }
 
-    [ProtoMember(12)]
+    [ProtoMember(9)]
     public string SeriesId { get; set; }
 
-    [ProtoMember(13)]
+    [ProtoMember(10)]
     public string SeriesName { get; set; }
 
-    [ProtoMember(14)]
-    public long ViewCount { get; set; }
-
-    [ProtoMember(15)]
-    public long FavoriteCount { get; set; }
-
-    [ProtoMember(16)]
-    public double StarRates { get; set; }
-
-    [ProtoMember(17)]
-    public long TotalUsersRated { get; set; }
-
-    [ProtoMember(18)]
+    [ProtoMember(11)]
     public string ThumbnailUrl { get; set; }
 
-    [ProtoMember(19)]
+    [ProtoMember(12)]
     public string Introduction { get; set; }
 
-    [ProtoMember(20)]
-    public long CommentCount { get; set; }
-
-    [ProtoMember(21)]
-    public long FollowCount { get; set; }
-
-    [ProtoMember(22)]
-    public bool IsUserFavorite { get; set; }
-
-    [ProtoMember(23)]
-    public bool HasFollowed { get; set; }
-
-    [ProtoMember(24)]
+    [ProtoMember(13)]
     public bool IsAllowComment { get; set; }
-
-    [ProtoMember(25)]
-    public string FirstChapterId { get; set; }
-
-    [ProtoMember(26)]
-    public string LastReadChapterId { get; set; }
 
     public static G5ResponseDto MapFrom(G5Response featResponse)
     {
@@ -101,23 +62,9 @@ public class G5ResponseDto
             CountryName = comicDetail.CountryName,
             HasSeries = comicDetail.HasSeries,
             ArtworkStatus = comicDetail.ArtworkStatus,
-            StarRates = comicDetail.ArtworkMetaData.GetAverageStarRate(),
-            TotalUsersRated = comicDetail.ArtworkMetaData.TotalUsersRated,
-            ViewCount = comicDetail.ArtworkMetaData.TotalViews,
-            FavoriteCount = comicDetail.ArtworkMetaData.TotalFavorites,
-            CommentCount = comicDetail.ArtworkMetaData.TotalComments,
-            FollowCount = comicDetail.ArtworkMetaData.TotalFollowers,
             IsAllowComment = comicDetail.AllowComment,
-            IsUserFavorite = featResponse.IsUserFavorite,
-            HasFollowed = featResponse.HasFollowed,
-            // Chapter View History section.
-            FirstChapterId = comicDetail.FirstChapterId.ToString(),
-            LastReadChapterId = comicDetail.LastReadChapterId.ToString(),
             // Creator detail section.
             CreatorId = comicDetail.CreatorId.ToString(),
-            CreatorName = comicDetail.CreatorName,
-            CreatorAvatarUrl = comicDetail.CreatorAvatarUrl,
-            CreatorTotalFollowers = comicDetail.CreatorTotalFollowers,
         };
 
         //if (comicDetail.HasSeries)

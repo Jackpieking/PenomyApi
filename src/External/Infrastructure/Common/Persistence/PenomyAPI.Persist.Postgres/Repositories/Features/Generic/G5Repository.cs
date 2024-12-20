@@ -1,11 +1,12 @@
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation.Common;
+using PenomyAPI.Domain.RelationalDb.Entities.Generic;
 using PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG5;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.Generic;
 
@@ -77,13 +78,6 @@ public class G5Repository : IG5Repository
             .AnyAsync(x => x.UserId == userId && x.ArtworkId == artworkId, ct);
     }
 
-    public Task<bool> IsArtworkExistAsync(long artworkId, CancellationToken ct = default)
-    {
-        return _dbContext
-            .Set<Artwork>()
-            .AnyAsync(x => x.Id == artworkId && x.ArtworkType == ArtworkType.Comic, ct);
-    }
-
     public Task<bool> IsComicInUserFollowedListAsync(
         long userId,
         long artworkId,
@@ -95,9 +89,9 @@ public class G5Repository : IG5Repository
             .AnyAsync(x => x.UserId == userId && x.ArtworkId == artworkId, ct);
     }
 
-    public async Task<G5FirstAndLastReadChapterReadModel> GetFirstAndLastReadChapterOfComicForGuestAsync(
-        long comicId,
+    public async Task<G5FirstAndLastReadChapterReadModel> GetFirstAndLastReadChapterOfArtworkForGuestAsync(
         long guestId,
+        long artworkId,
         CancellationToken ct
     )
     {
@@ -107,7 +101,7 @@ public class G5Repository : IG5Repository
 
         long firstComicChapterId = await chapterDbSet
             .Where(chapter =>
-                chapter.ArtworkId == comicId
+                chapter.ArtworkId == artworkId
                 && !chapter.IsTemporarilyRemoved
                 && chapter.PublicLevel == ArtworkPublicLevel.Everyone
                 && chapter.UploadOrder == FIRST_CHAPTER_UPLOAD_ORDER
@@ -121,7 +115,7 @@ public class G5Repository : IG5Repository
         long lastReadChapterId = await guestViewHistoryDbSet
             .Where(
                 viewHistory => viewHistory.GuestId == guestId
-                && viewHistory.ArtworkId == comicId
+                && viewHistory.ArtworkId == artworkId
             )
             .Select(chapter => chapter.ChapterId)
             .FirstOrDefaultAsync(ct);
@@ -138,9 +132,9 @@ public class G5Repository : IG5Repository
         };
     }
 
-    public async Task<G5FirstAndLastReadChapterReadModel> GetFirstAndLastReadChapterOfComicForUserAsync(
-        long comicId,
+    public async Task<G5FirstAndLastReadChapterReadModel> GetFirstAndLastReadChapterOfArtworkForUserAsync(
         long userId,
+        long artworkId,
         CancellationToken ct
     )
     {
@@ -150,7 +144,7 @@ public class G5Repository : IG5Repository
 
         long firstComicChapterId = await chapterDbSet
             .Where(chapter =>
-                chapter.ArtworkId == comicId
+                chapter.ArtworkId == artworkId
                 && !chapter.IsTemporarilyRemoved
                 && chapter.PublicLevel == ArtworkPublicLevel.Everyone
                 && chapter.UploadOrder == FIRST_CHAPTER_UPLOAD_ORDER
@@ -164,7 +158,7 @@ public class G5Repository : IG5Repository
         long lastReadChapterId = await guestViewHistoryDbSet
             .Where(
                 viewHistory => viewHistory.UserId == userId
-                && viewHistory.ArtworkId == comicId
+                && viewHistory.ArtworkId == artworkId
             )
             .Select(chapter => chapter.ChapterId)
             .FirstOrDefaultAsync(ct);
@@ -179,5 +173,100 @@ public class G5Repository : IG5Repository
             FirstChapterId = firstComicChapterId,
             LastReadChapterId = lastReadChapterId
         };
+    }
+
+    public async Task<G5UserArtworkPreferenceReadModel> GetUserArtworkPreferenceAsync(
+        long userId,
+        long artworkId,
+        CancellationToken cancellationToken)
+    {
+        var isInFavoriteList = await IsComicInUserFavoriteListAsync(
+            userId: userId,
+            artworkId: artworkId,
+            ct: cancellationToken);
+
+        var isInFollowedList = await IsComicInUserFollowedListAsync(
+            userId: userId,
+            artworkId: artworkId,
+            ct: cancellationToken);
+
+        var firstAndLastReadChapter = await GetFirstAndLastReadChapterOfArtworkForUserAsync(
+            userId: userId,
+            artworkId: artworkId,
+            ct: cancellationToken);
+
+        return new()
+        {
+            HasFollowed = isInFollowedList,
+            IsUserFavorite = isInFavoriteList,
+            FirstChapterId = firstAndLastReadChapter.FirstChapterId,
+            LastReadChapterId = firstAndLastReadChapter.LastReadChapterId,
+        };
+    }
+
+    public async Task<G5UserArtworkPreferenceReadModel> GetGuestArtworkPreferenceAsync(
+        long guestId,
+        long artworkId,
+        CancellationToken cancellationToken)
+    {
+        var firstAndLastReadChapter = await GetFirstAndLastReadChapterOfArtworkForGuestAsync(
+            guestId: guestId,
+            artworkId: artworkId,
+            ct: cancellationToken);
+
+        return new()
+        {
+            HasFollowed = false,
+            IsUserFavorite = false,
+            FirstChapterId = firstAndLastReadChapter.FirstChapterId,
+            LastReadChapterId = firstAndLastReadChapter.LastReadChapterId,
+        };
+    }
+
+    public Task<G5CreatorProfileReadModel> GetCreatorProfileBasedOnUserIdAsync(
+        long userId,
+        long creatorId,
+        CancellationToken cancellationToken)
+    {
+        return _dbContext.Set<UserProfile>()
+            .AsNoTracking()
+            .Where(profile => profile.UserId == creatorId)
+            .Select(profile => new G5CreatorProfileReadModel
+            {
+                CreatorId = creatorId,
+                CreatorAvatarUrl = profile.AvatarUrl,
+                CreatorName = profile.NickName,
+                CreatorTotalFollowers = profile.CreatorProfile.TotalFollowers,
+            })
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public Task<bool> IsCreatorProfileExistedAsync(
+        long creatorId,
+        CancellationToken cancellationToken)
+    {
+        return _dbContext.Set<CreatorProfile>().AnyAsync(
+            profile => profile.CreatorId == creatorId,
+            cancellationToken);
+    }
+
+    public Task<ArtworkMetaData> GetArtworkMetaDataByIdAsync(
+        long artworkId,
+        CancellationToken cancellationToken)
+    {
+        return _dbContext.Set<ArtworkMetaData>()
+            .AsNoTracking()
+            .Where(artwork => artwork.ArtworkId == artworkId)
+            .Select(metadata => new ArtworkMetaData
+            {
+                ArtworkId = artworkId,
+                TotalViews = metadata.TotalViews,
+                TotalComments = metadata.TotalComments,
+                TotalFavorites = metadata.TotalFavorites,
+                TotalStarRates = metadata.TotalStarRates,
+                TotalFollowers = metadata.TotalFollowers,
+                TotalUsersRated = metadata.TotalUsersRated,
+            })
+            .FirstOrDefaultAsync(cancellationToken);
     }
 }
