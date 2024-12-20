@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.Generic;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
+using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 using PenomyAPI.Persist.Postgres.Data.DbContexts;
 
@@ -30,20 +31,19 @@ public class SM32Repository : ISM32Repository
         CancellationToken token
     )
     {
-        return await _userFriendRequestContext
-            .Where(x => x.CreatedBy == userId)
+        var result = await _userFriendRequestContext
+            .Where(x => x.CreatedBy == userId && x.RequestStatus == RequestStatus.Pending)
             .Select(x => x.FriendId)
             .ToListAsync(token);
+
+        return result.Distinct();
     }
 
-    public async Task<IEnumerable<long>> GetAllUserFriendsAsync(
-        long userId,
-        CancellationToken token
-    )
+    public async Task<IEnumerable<long>> GetUserFriendRequestAsync(long userId, CancellationToken token)
     {
-        return await _userFriendContext
-            .Where(x => x.UserId == userId)
-            .Select(x => x.FriendId)
+        return await _userFriendRequestContext
+            .Where(x => x.FriendId == userId && x.RequestStatus == RequestStatus.Pending)
+            .Select(x => x.CreatedBy)
             .ToListAsync(token);
     }
 
@@ -60,7 +60,34 @@ public class SM32Repository : ISM32Repository
                 NickName = x.NickName,
                 AvatarUrl = x.AvatarUrl,
                 Gender = x.Gender,
-                AboutMe = x.AboutMe,
+                AboutMe = x.AboutMe
+            })
+            .ToListAsync(token);
+    }
+
+    public async Task<IEnumerable<UserProfile>> GetAllUserFriendsAsync(
+        long userId,
+        CancellationToken token
+    )
+    {
+        var friendIds = await _userFriendContext
+            .Where(x => x.UserId == userId)
+            .Select(x => x.FriendId)
+            .ToListAsync(token);
+        var friendIds1 = await _userFriendContext
+            .Where(x => x.FriendId == userId)
+            .Select(x => x.UserId)
+            .ToListAsync(token);
+        var listFriends = friendIds.Union(friendIds1).Where(x => x != userId).ToList();
+        return await _userProfileContext
+            .Where(x => listFriends.Contains(x.UserId))
+            .Select(x => new UserProfile
+            {
+                UserId = x.UserId,
+                NickName = x.NickName,
+                AvatarUrl = x.AvatarUrl,
+                Gender = x.Gender,
+                AboutMe = x.AboutMe
             })
             .ToListAsync(token);
     }
