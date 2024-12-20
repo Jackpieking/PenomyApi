@@ -44,7 +44,7 @@ public class Chat10Handler : IFeatureHandler<Chat10Request, Chat10Response>
             ICollection<Chat10UserProfileReadModel> chat10UserProfileList = [];
 
             // Create message list for user
-            foreach (var chat in chatMessages)
+            foreach (var chat in chatMessages.Reverse())
             {
                 // If next user is other user, add old user to list
                 // and create new list message for new user
