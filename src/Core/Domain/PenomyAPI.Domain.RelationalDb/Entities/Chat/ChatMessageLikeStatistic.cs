@@ -1,6 +1,4 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using PenomyAPI.Domain.RelationalDb.Entities.Base;
-using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common;
 
 namespace PenomyAPI.Domain.RelationalDb.Entities.Chat;
 
@@ -17,14 +15,17 @@ public sealed class ChatMessageLikeStatistic : IEntity
 
     public static ChatMessageLikeStatistic Empty(long chatId)
     {
-        return new ChatMessageLikeStatistic { ChatMessageId = chatId, ValueId = 0, Total = 0 };
+        return new ChatMessageLikeStatistic
+        {
+            ChatMessageId = chatId,
+            ValueId = 0,
+            Total = 0
+        };
     }
 
     #region MetaData
 
-    public static class MetaData
-    {
-    }
+    public static class MetaData { }
 
     #endregion
 

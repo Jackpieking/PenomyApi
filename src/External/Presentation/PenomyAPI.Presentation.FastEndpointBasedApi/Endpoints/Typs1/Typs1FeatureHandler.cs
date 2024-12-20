@@ -108,6 +108,7 @@ public static class Typs1FeatureHandler
                 MangaId = artWork.Id.ToString(),
                 MangaName = artWork.Title,
                 MangaDescription = artWork.Introduction,
+                ArtworkType = (int)artWork.ArtworkType,
                 MangaCategories = artWork.ArtworkCategories.Select(artworkCat =>
                     artworkCat.Category.Name
                 ),

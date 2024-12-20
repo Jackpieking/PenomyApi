@@ -1,18 +1,18 @@
-using System.Threading;
-using System.Threading.Tasks;
 using FastEndpoints;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.FeatG3;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3.HttpResponse;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG3;
 
-public class G3Endpoint : EndpointWithoutRequest<FeatG3HttpResponse>
+public class G3Endpoint : Endpoint<FeatG3Request, FeatG3HttpResponse>
 {
     public override void Configure()
     {
-        Get("g3/recently-updated/comics");
+        Get("g3/recently-updated/artworks");
         AllowAnonymous();
 
         Description(builder: builder =>
@@ -31,19 +31,17 @@ public class G3Endpoint : EndpointWithoutRequest<FeatG3HttpResponse>
         });
     }
 
-    public override async Task<FeatG3HttpResponse> ExecuteAsync(CancellationToken ct)
+    public override async Task<FeatG3HttpResponse> ExecuteAsync(FeatG3Request request, CancellationToken ct)
     {
-        var featG3Request = new FeatG3Request();
-
         // Get FeatureHandler response.
         var featResponse = await FeatureExtensions.ExecuteAsync<FeatG3Request, FeatG3Response>(
-            featG3Request,
+            request,
             ct
         );
 
         var httpResponse = G3HttpResponseManager
             .Resolve(featResponse.StatusCode)
-            .Invoke(featG3Request, featResponse);
+            .Invoke(request, featResponse);
 
         return httpResponse;
     }

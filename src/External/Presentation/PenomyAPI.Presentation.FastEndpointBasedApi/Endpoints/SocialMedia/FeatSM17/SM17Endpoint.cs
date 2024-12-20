@@ -1,7 +1,5 @@
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using CloudinaryDotNet.Core;
 using FastEndpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;

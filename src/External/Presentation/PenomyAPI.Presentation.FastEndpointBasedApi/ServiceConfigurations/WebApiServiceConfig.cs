@@ -1,4 +1,5 @@
-﻿using FastEndpoints.Swagger;
+﻿using System;
+using FastEndpoints.Swagger;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Configuration;
@@ -10,7 +11,7 @@ using PenomyAPI.Domain.RelationalDb.Entities.Contraints.ArtworkCreation;
 using PenomyAPI.Infra.Configuration.Options;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Helpers.Cache;
-using System;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Helpers.Password;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.ServiceConfigurations;
 
@@ -31,7 +32,10 @@ public static class WebApiServiceConfig
         services.ConfigureRequestLimits(configuration);
     }
 
-    private static void ConfigureRequestLimits(this IServiceCollection services, IConfiguration configuration)
+    private static void ConfigureRequestLimits(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
     {
         services.Configure<FormOptions>(options =>
         {
@@ -47,7 +51,9 @@ public static class WebApiServiceConfig
     {
         services
             .MakeSingletonLazy<IServiceScopeFactory>()
-            .AddScoped<ICommonCacheHandler, CommonCacheHandler>();
+            .AddScoped<ICommonCacheHandler, CommonCacheHandler>()
+            .AddSingleton<IAppPasswordHasher, AppPasswordHasher>()
+            .MakeSingletonLazy<IAppPasswordHasher>();
     }
 
     private static void AddGlobalExceptionHandler(this IServiceCollection services)

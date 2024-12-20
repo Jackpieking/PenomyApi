@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
 

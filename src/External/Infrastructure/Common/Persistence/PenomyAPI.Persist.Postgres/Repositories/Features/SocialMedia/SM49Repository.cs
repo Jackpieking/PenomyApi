@@ -27,36 +27,52 @@ public class SM49Repository : ISM49Repository
         _userFriendContext = context.Set<UserFriend>();
     }
 
-    public async Task<bool> IsFriendRequestExistsAsync(long userId, long friendId, CancellationToken token)
+    public async Task<bool> IsFriendRequestExistsAsync(
+        long userId,
+        long friendId,
+        CancellationToken token
+    )
     {
         return await _userFriendRequestContext.AnyAsync(
-            x => x.CreatedBy == userId && x.FriendId == friendId && x.RequestStatus == RequestStatus.Pending,
-            token);
+            x =>
+                x.CreatedBy == userId
+                && x.FriendId == friendId
+                && x.RequestStatus == RequestStatus.Pending,
+            token
+        );
     }
 
-    public async Task<bool> IsUserFriendExistsAsync(long userId, long friendId, CancellationToken token)
+    public async Task<bool> IsUserFriendExistsAsync(
+        long userId,
+        long friendId,
+        CancellationToken token
+    )
     {
-        return await _userFriendContext.AnyAsync(x => x.UserId == userId && x.FriendId == friendId, token);
+        return await _userFriendContext.AnyAsync(
+            x => x.UserId == userId && x.FriendId == friendId,
+            token
+        );
     }
 
-    public async Task<bool> AcceptFriendRequestAsync(IEnumerable<UserFriend> userFriend, CancellationToken token)
+    public async Task<bool> AcceptFriendRequestAsync(
+        IEnumerable<UserFriend> userFriend,
+        CancellationToken token
+    )
     {
         var result = new Result<bool>(false);
 
         var executionStrategy = RepositoryHelper.CreateExecutionStrategy(_dbContext);
-        await executionStrategy.ExecuteAsync(async () =>
-            await InternalAcceptFriendAsync(
-                userFriend.ToList(),
-                token,
-                result
-            ));
+        await executionStrategy.ExecuteAsync(
+            async () => await InternalAcceptFriendAsync(userFriend.ToList(), token, result)
+        );
         return result.Value;
     }
 
     private async Task InternalAcceptFriendAsync(
         List<UserFriend> friendRequests,
         CancellationToken token,
-        Result<bool> result)
+        Result<bool> result
+    )
     {
         if (friendRequests == null || friendRequests.Count == 0)
         {
@@ -81,7 +97,9 @@ public class SM49Repository : ISM49Repository
             // Update the friend request status
             await _userFriendRequestContext
                 .Where(x =>
-                    x.CreatedBy == userFriendPairs.First().UserId && x.FriendId == userFriendPairs.First().FriendId)
+                    x.CreatedBy == userFriendPairs.First().UserId
+                    && x.FriendId == userFriendPairs.First().FriendId
+                )
                 .ExecuteUpdateAsync(
                     x => x.SetProperty(y => y.RequestStatus, RequestStatus.Accepted),
                     token
@@ -107,7 +125,8 @@ public class SM49Repository : ISM49Repository
         finally
         {
             // Ensure transaction is properly disposed in any scenario
-            if (transaction != null) await transaction.DisposeAsync();
+            if (transaction != null)
+                await transaction.DisposeAsync();
         }
     }
 }

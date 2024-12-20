@@ -12,6 +12,8 @@ public class G15ResponseDto
 
     public string Title { get; set; }
 
+    public string ThumbnailUrl { get; set; }
+
     public bool HasSeries { get; set; }
 
     public string AuthorName { get; set; }
@@ -22,17 +24,7 @@ public class G15ResponseDto
 
     public string SeriesName { get; set; }
 
-    public long ViewCount { get; set; }
-
-    public long FavoriteCount { get; set; }
-
-    public double StarRates { get; set; }
-
-    public string ThumbnailUrl { get; set; }
-
     public string Introduction { get; set; }
-
-    public long CommentCount { get; set; }
 
     public string CreatorId { get; set; }
 
@@ -42,11 +34,9 @@ public class G15ResponseDto
 
     public string SeriesId { get; set; }
 
-    public long TotalUsersRated { get; set; }
-
-    public long FollowCount { get; set; }
-
     public bool IsAllowComment { get; set; }
+
+    public long TotalChapters { get; set; }
 
     public static G15ResponseDto MapFrom(G15Response response)
     {
@@ -62,15 +52,10 @@ public class G15ResponseDto
             CountryName = animeDetail.CountryName,
             HasSeries = animeDetail.HasSeries,
             ArtworkStatus = animeDetail.ArtworkStatus,
-            StarRates = animeDetail.ArtworkMetaData.GetAverageStarRate(),
-            TotalUsersRated = animeDetail.ArtworkMetaData.TotalUsersRated,
-            ViewCount = animeDetail.ArtworkMetaData.TotalViews,
-            FavoriteCount = animeDetail.ArtworkMetaData.TotalFavorites,
-            CommentCount = animeDetail.ArtworkMetaData.TotalComments,
-            FollowCount = animeDetail.ArtworkMetaData.TotalFollowers,
             IsAllowComment = animeDetail.AllowComment,
             // Creator detail section.
             CreatorId = animeDetail.CreatorId.ToString(),
+            TotalChapters = animeDetail.TotalChapters,
         };
 
         responseDto.Categories = animeDetail.ArtworkCategories.Select(category => new CategoryDto

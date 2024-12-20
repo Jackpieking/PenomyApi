@@ -39,7 +39,10 @@ public class SM32Repository : ISM32Repository
         return result.Distinct();
     }
 
-    public async Task<IEnumerable<long>> GetUserFriendRequestAsync(long userId, CancellationToken token)
+    public async Task<IEnumerable<long>> GetUserFriendRequestAsync(
+        long userId,
+        CancellationToken token
+    )
     {
         return await _userFriendRequestContext
             .Where(x => x.FriendId == userId && x.RequestStatus == RequestStatus.Pending)
@@ -60,7 +63,7 @@ public class SM32Repository : ISM32Repository
                 NickName = x.NickName,
                 AvatarUrl = x.AvatarUrl,
                 Gender = x.Gender,
-                AboutMe = x.AboutMe
+                AboutMe = x.AboutMe,
             })
             .ToListAsync(token);
     }
@@ -87,7 +90,7 @@ public class SM32Repository : ISM32Repository
                 NickName = x.NickName,
                 AvatarUrl = x.AvatarUrl,
                 Gender = x.Gender,
-                AboutMe = x.AboutMe
+                AboutMe = x.AboutMe,
             })
             .ToListAsync(token);
     }

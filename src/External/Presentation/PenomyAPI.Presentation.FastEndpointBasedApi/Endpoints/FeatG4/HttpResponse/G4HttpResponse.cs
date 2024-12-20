@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using PenomyAPI.App.Common.Serializer;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4.DTOs;
 using ProtoBuf;
 

@@ -9,7 +9,7 @@ public class G4Response : IFeatureResponse
 {
     public List<ArtworkCategory> Result { get; set; }
 
-    public List<RecommendedComicByCategory> RecommendedArtworkByCategories { get; set; }
+    public List<RecommendedArtworkByCategory> RecommendedArtworkByCategories { get; set; }
 
     public G4ResponseStatusCode StatusCode { get; set; }
 }

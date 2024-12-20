@@ -38,11 +38,7 @@ public class G15AnimeDetailReadModel
     // Creator detail section.
     public long CreatorId { get; set; }
 
-    public string CreatorName { get; set; }
-
-    public string CreatorAvatarUrl { get; set; }
-
-    public long CreatorTotalFollowers { get; set; }
-
     public ArtworkSeries ArtworkSeries { get; set; }
+
+    public long TotalChapters { get; set; }
 }

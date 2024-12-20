@@ -22,6 +22,8 @@ public class Typs3HttpResponse
 
         public string MangaAvatar { get; set; }
 
+        public int ArtworkType { get; set; }
+
         public long MangaNumberOfStars { get; set; }
 
         public long MangaNumberOfFollowers { get; set; }

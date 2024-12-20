@@ -18,11 +18,11 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4.DTOs
         public IEnumerable<G4RecommendedComicResponseDto> RecommendedArtworks { get; set; }
 
         public static G4ResponseItemDto MapFrom(
-            RecommendedComicByCategory recommendedArtworkByCategory
+            RecommendedArtworkByCategory recommendedArtworkByCategory
         )
         {
             var category = recommendedArtworkByCategory.Category;
-            var recommendedComics = recommendedArtworkByCategory.RecommendedComics;
+            var recommendedComics = recommendedArtworkByCategory.RecommendedArtworks;
 
             return new()
             {
@@ -35,7 +35,7 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG4.DTOs
         }
 
         public static IEnumerable<G4ResponseItemDto> MapFromList(
-            IEnumerable<RecommendedComicByCategory> recommendedArtworkByCategories
+            IEnumerable<RecommendedArtworkByCategory> recommendedArtworkByCategories
         )
         {
             return recommendedArtworkByCategories.Select(MapFrom);

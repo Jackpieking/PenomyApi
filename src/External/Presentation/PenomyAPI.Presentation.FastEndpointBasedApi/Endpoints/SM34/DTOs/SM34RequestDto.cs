@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
-using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SM34.DTOs;
 

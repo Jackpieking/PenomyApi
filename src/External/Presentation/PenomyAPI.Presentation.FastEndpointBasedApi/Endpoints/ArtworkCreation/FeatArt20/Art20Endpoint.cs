@@ -85,10 +85,10 @@ public class Art20Endpoint : Endpoint<Art20CreateChapterRequestDto, Art20HttpRes
             }
         }
 
-        // Check if the chapter image list is null or empty.
+        // Check if the chapter video file is null or empty.
         if (Equals(requestDto.ChapterVideoFile, null))
         {
-            httpResponse = Art20HttpResponse.INVALID_FILE_FORMAT;
+            return Art20HttpResponse.INVALID_FILE_FORMAT;
         }
 
         // Check the upload video file.
