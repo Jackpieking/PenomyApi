@@ -6,7 +6,7 @@ using System;
 
 namespace PenomyAPI.BuildingBlock.FeatRegister.FeatureRegistration.FeatG5;
 
-internal class G5CreatorProfileDetailRequest : FeatureDefinitionRegistration
+internal class G5CreatorProfileDetailReg : FeatureDefinitionRegistration
 {
     public override Type FeatRequestType => typeof(G5CreatorProfileDetailRequest);
 

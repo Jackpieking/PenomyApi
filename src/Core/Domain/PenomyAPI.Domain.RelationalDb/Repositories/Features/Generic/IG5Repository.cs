@@ -1,3 +1,4 @@
+using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
 using PenomyAPI.Domain.RelationalDb.Entities.Generic;
 using PenomyAPI.Domain.RelationalDb.Models.Generic.FeatG5;
 using System.Threading;
@@ -11,6 +12,10 @@ public interface IG5Repository
         long artworkId,
         CancellationToken ct = default
     );
+
+    Task<ArtworkMetaData> GetArtworkMetaDataByIdAsync(
+        long artworkId,
+        CancellationToken cancellationToken);
 
     Task<G5UserArtworkPreferenceReadModel> GetUserArtworkPreferenceAsync(
         long userId,

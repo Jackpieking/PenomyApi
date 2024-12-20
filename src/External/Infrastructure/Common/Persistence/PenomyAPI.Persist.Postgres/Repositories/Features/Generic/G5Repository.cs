@@ -249,4 +249,24 @@ public class G5Repository : IG5Repository
             profile => profile.CreatorId == creatorId,
             cancellationToken);
     }
+
+    public Task<ArtworkMetaData> GetArtworkMetaDataByIdAsync(
+        long artworkId,
+        CancellationToken cancellationToken)
+    {
+        return _dbContext.Set<ArtworkMetaData>()
+            .AsNoTracking()
+            .Where(artwork => artwork.ArtworkId == artworkId)
+            .Select(metadata => new ArtworkMetaData
+            {
+                ArtworkId = artworkId,
+                TotalViews = metadata.TotalViews,
+                TotalComments = metadata.TotalComments,
+                TotalFavorites = metadata.TotalFavorites,
+                TotalStarRates = metadata.TotalStarRates,
+                TotalFollowers = metadata.TotalFollowers,
+                TotalUsersRated = metadata.TotalUsersRated,
+            })
+            .FirstOrDefaultAsync(cancellationToken);
+    }
 }

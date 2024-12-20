@@ -269,9 +269,11 @@ public class G4Repository : IG4Repository
         var userViewHistoryDbSet = _dbContext.Set<UserArtworkViewHistory>();
 
         // Check if the current user has viewed any artwork or not to recommend properly.
-        var userHasViewHistory = await userViewHistoryDbSet.AnyAsync(
+        var totalHistoryItems = await userViewHistoryDbSet.CountAsync(
             viewHistory => viewHistory.UserId == userId,
             cancellationToken);
+
+        var userHasViewHistory = totalHistoryItems >= 2;
 
         // If current user has not viewed any artwork yet, then recommend using default algoritm.
         if (!userHasViewHistory)
@@ -283,8 +285,7 @@ public class G4Repository : IG4Repository
         List<long> artworkIds = await userViewHistoryDbSet
             .AsNoTracking()
             .Where(viewHistory
-                => viewHistory.UserId == userId
-                && viewHistory.ArtworkType == artworkType)
+                => viewHistory.UserId == userId)
             .Select(viewHistory => viewHistory.ArtworkId)
             .Take(NUMBER_OF_TOP_ARTWORKS_TO_TAKE_FOR_FILTERING)
             .ToListAsync(cancellationToken);
