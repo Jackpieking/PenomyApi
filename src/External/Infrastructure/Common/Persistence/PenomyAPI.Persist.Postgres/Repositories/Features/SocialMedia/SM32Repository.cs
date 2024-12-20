@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using PenomyAPI.Domain.RelationalDb.Entities.Chat;
 using PenomyAPI.Domain.RelationalDb.Entities.Generic;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common;
@@ -17,6 +18,7 @@ public class SM32Repository : ISM32Repository
     private readonly DbSet<UserFriend> _userFriendContext;
     private readonly DbSet<UserFriendRequest> _userFriendRequestContext;
     private readonly DbSet<UserProfile> _userProfileContext;
+    private readonly DbSet<ChatGroup> _chatGroupContext;
 
     public SM32Repository(AppDbContext context)
     {
@@ -24,6 +26,7 @@ public class SM32Repository : ISM32Repository
         _userFriendContext = context.Set<UserFriend>();
         _userProfileContext = context.Set<UserProfile>();
         _userFriendRequestContext = context.Set<UserFriendRequest>();
+        _chatGroupContext = context.Set<ChatGroup>();
     }
 
     public async Task<IEnumerable<long>> GetAllUserFriendRequestAsync(
@@ -70,6 +73,7 @@ public class SM32Repository : ISM32Repository
 
     public async Task<IEnumerable<UserProfile>> GetAllUserFriendsAsync(
         long userId,
+        long friendId,
         CancellationToken token
     )
     {
@@ -82,6 +86,11 @@ public class SM32Repository : ISM32Repository
             .Select(x => x.UserId)
             .ToListAsync(token);
         var listFriends = friendIds.Union(friendIds1).Where(x => x != userId).ToList();
+        var myChatGroups = await _chatGroupContext
+            .Where(x =>
+                x.GroupName.Contains(userId.ToString()) && x.GroupName.Contains(friendId.ToString())
+            )
+            .ToListAsync(token);
         return await _userProfileContext
             .Where(x => listFriends.Contains(x.UserId))
             .Select(x => new UserProfile
@@ -91,6 +100,10 @@ public class SM32Repository : ISM32Repository
                 AvatarUrl = x.AvatarUrl,
                 Gender = x.Gender,
                 AboutMe = x.AboutMe,
+                JoinedChatGroupMembers = new ChatGroupMember[]
+                {
+                    new ChatGroupMember { ChatGroupId = myChatGroups[0].Id },
+                },
             })
             .ToListAsync(token);
     }

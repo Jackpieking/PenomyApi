@@ -13,9 +13,7 @@ public class Chat2Handler : IFeatureHandler<Chat2Request, Chat2Response>
 {
     private readonly IChat2Repository _Chat2Repository;
 
-    public Chat2Handler(
-        Lazy<IUnitOfWork> unitOfWork
-    )
+    public Chat2Handler(Lazy<IUnitOfWork> unitOfWork)
     {
         _Chat2Repository = unitOfWork.Value.Chat2Repository;
     }

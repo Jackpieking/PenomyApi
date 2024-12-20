@@ -22,7 +22,11 @@ public class SM32Handler : IFeatureHandler<SM32Request, SM32Response>
 
         try
         {
-            response.FriendIds = await _sm32Repository.GetAllUserFriendsAsync(request.UserId, ct);
+            response.FriendIds = await _sm32Repository.GetAllUserFriendsAsync(
+                request.UserId,
+                request.FriendId,
+                ct
+            );
             response.SendToMeFriendRequestIds = await _sm32Repository.GetUserFriendRequestAsync(
                 request.UserId,
                 ct
