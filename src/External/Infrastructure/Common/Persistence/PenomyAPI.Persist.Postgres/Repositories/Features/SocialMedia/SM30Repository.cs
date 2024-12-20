@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -32,6 +33,17 @@ public class SM30Repository : ISM30Repository
         _userProfile = context.Set<UserProfile>();
     }
 
+    public async Task<bool> UnSendFriendRequest(UserFriendRequest userFriendRequest, CancellationToken token)
+    {
+        var result = new Result<bool>(false);
+
+        var executionStrategy = RepositoryHelper.CreateExecutionStrategy(_dbContext);
+        await executionStrategy.ExecuteAsync(
+            async () => await InternalUnSendFriendAsync(userFriendRequest, token, result)
+        );
+        return result.Value;
+    }
+
     public async Task<bool> SendFriendRequest(
         UserFriendRequest userFriendRequest,
         CancellationToken token
@@ -50,15 +62,12 @@ public class SM30Repository : ISM30Repository
     {
         return await _friendRequestContext.AnyAsync(
             x =>
-                (x.CreatedBy == userId && x.FriendId == friendId)
-                || (
-                    x.CreatedBy == friendId
-                    && x.FriendId == userId
-                    && x.RequestStatus == RequestStatus.Pending
-                ),
+                x.CreatedBy == userId && x.FriendId == friendId
+                                      && x.RequestStatus == RequestStatus.Pending,
             token
         );
     }
+
 
     public async Task<bool> IsUserExistAsync(long friendId, CancellationToken token)
     {
@@ -76,6 +85,36 @@ public class SM30Repository : ISM30Repository
         return await _dbContext
             .Set<UserFriend>()
             .AnyAsync(x => x.UserId == userId && x.FriendId == friendId, token);
+    }
+
+    private async Task InternalUnSendFriendAsync(
+        UserFriendRequest friendRequest,
+        CancellationToken token,
+        Result<bool> result
+    )
+    {
+        IDbContextTransaction transaction = null;
+        try
+        {
+            transaction = await RepositoryHelper.CreateTransactionAsync(_dbContext, token);
+            await _friendRequestContext
+                .Where(x => x.CreatedBy == friendRequest.CreatedBy && x.FriendId == friendRequest.FriendId &&
+                            x.RequestStatus == RequestStatus.Pending)
+                .ExecuteDeleteAsync(token);
+            await _dbContext.SaveChangesAsync(token);
+            await transaction.CommitAsync(token);
+            result.Value = true;
+        }
+        catch (Exception)
+        {
+            if (transaction != null)
+            {
+                await transaction.RollbackAsync(token);
+                await transaction.DisposeAsync();
+            }
+
+            result.Value = false;
+        }
     }
 
     private async Task InternalSendFriendPostAsync(

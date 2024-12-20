@@ -54,14 +54,8 @@ public class Sm31Handler : IFeatureHandler<SM31Request, SM31Response>
                 {
                     FriendId = request.FriendId,
                     UserId = request.UserId,
-                    StartedAt = DateTime.UtcNow,
-                },
-                new()
-                {
-                    FriendId = request.UserId,
-                    UserId = request.FriendId,
-                    StartedAt = DateTime.UtcNow,
-                },
+                    StartedAt = DateTime.UtcNow
+                }
             };
             var result = await _sm31Repository.UnfriendAsync(friends, ct);
             response.StatusCode = result
