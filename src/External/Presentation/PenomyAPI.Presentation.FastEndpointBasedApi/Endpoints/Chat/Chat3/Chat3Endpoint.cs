@@ -20,7 +20,6 @@ public class Chat3Endpoint : Endpoint<Chat3RequestDto, Chat3HttpResponse>
 {
     private readonly Lazy<ISnowflakeIdGenerator> _idGenerator;
 
-
     public Chat3Endpoint(Lazy<ISnowflakeIdGenerator> idGenerator)
     {
         _idGenerator = idGenerator;
@@ -34,7 +33,10 @@ public class Chat3Endpoint : Endpoint<Chat3RequestDto, Chat3HttpResponse>
         AllowFormData();
         AllowFileUploads();
 
-        Description(builder => { builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest); });
+        Description(builder =>
+        {
+            builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest);
+        });
 
         Summary(summary =>
         {
@@ -42,7 +44,10 @@ public class Chat3Endpoint : Endpoint<Chat3RequestDto, Chat3HttpResponse>
             summary.Description = "This endpoint is used for save chat group message.";
             summary.Response(
                 description: "Represent successful operation response.",
-                example: new Chat3HttpResponse { AppCode = Chat3ResponseStatusCode.SUCCESS.ToString() }
+                example: new Chat3HttpResponse
+                {
+                    AppCode = Chat3ResponseStatusCode.SUCCESS.ToString(),
+                }
             );
         });
     }
@@ -55,18 +60,18 @@ public class Chat3Endpoint : Endpoint<Chat3RequestDto, Chat3HttpResponse>
         List<AppFileInfo> mediaFiles = [];
         var stateBag = ProcessorState<StateBag>();
 
-
         var userPostId = _idGenerator.Value.Get();
         var userId = stateBag.AppRequest.UserId;
-        Chat3Request request = new()
-        {
-            UserId = userId,
-            MessageId = _idGenerator.Value.Get(),
-            ChatGroupId = long.Parse(requestDto.ChatGroupId),
-            Content = requestDto.Content,
-            IsReply = requestDto.IsReply,
-            MessageType = requestDto.MessageType
-        };
+        Chat3Request request =
+            new()
+            {
+                UserId = userId,
+                MessageId = _idGenerator.Value.Get(),
+                ChatGroupId = long.Parse(requestDto.ChatGroupId),
+                Content = requestDto.Content,
+                IsReply = requestDto.IsReply,
+                MessageType = requestDto.MessageType,
+            };
         var featResponse = await FeatureExtensions.ExecuteAsync<Chat3Request, Chat3Response>(
             request,
             ct
@@ -78,7 +83,7 @@ public class Chat3Endpoint : Endpoint<Chat3RequestDto, Chat3HttpResponse>
         if (httpResponse.HttpCode == StatusCodes.Status200OK)
             httpResponse.Body = new Chat3ResponseDto
             {
-                MessageId = featResponse.MessageId.ToString()
+                MessageId = featResponse.MessageId.ToString(),
             };
         await SendAsync(httpResponse, httpResponse.HttpCode, ct);
 

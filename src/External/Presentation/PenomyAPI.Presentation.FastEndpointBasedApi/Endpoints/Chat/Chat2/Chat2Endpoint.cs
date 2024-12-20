@@ -24,7 +24,10 @@ public class Chat2Endpoint : Endpoint<EmptyRequest, Chat2HttpResponse>
 
         PreProcessor<AuthPreProcessor<EmptyRequest>>();
 
-        Description(builder => { builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest); });
+        Description(builder =>
+        {
+            builder.ClearDefaultProduces(statusCodes: StatusCodes.Status400BadRequest);
+        });
 
         Summary(summary =>
         {
@@ -32,7 +35,10 @@ public class Chat2Endpoint : Endpoint<EmptyRequest, Chat2HttpResponse>
             summary.Description = "This endpoint is used for user get created chat groups";
             summary.Response(
                 description: "Represent successful operation response.",
-                example: new Chat2HttpResponse { AppCode = Chat2ResponseStatusCode.SUCCESS.ToString() }
+                example: new Chat2HttpResponse
+                {
+                    AppCode = Chat2ResponseStatusCode.SUCCESS.ToString(),
+                }
             );
         });
     }
@@ -44,10 +50,7 @@ public class Chat2Endpoint : Endpoint<EmptyRequest, Chat2HttpResponse>
     {
         var stateBag = ProcessorState<StateBag>();
 
-        var featRequest = new Chat2Request
-        {
-            UserId = stateBag.AppRequest.UserId
-        };
+        var featRequest = new Chat2Request { UserId = stateBag.AppRequest.UserId };
 
         // Get FeatureHandler response.
         var featResponse = await FeatureExtensions.ExecuteAsync<Chat2Request, Chat2Response>(
@@ -70,13 +73,16 @@ public class Chat2Endpoint : Endpoint<EmptyRequest, Chat2HttpResponse>
                     IsPublic = p.IsPublic,
                     CoverPhotoUrl = p.CoverPhotoUrl,
                     ChatGroupType = p.ChatGroupType.ToString(),
-                    Members = p.ChatGroupMembers.ToList().Select(x => new ChatGroupMemberResponseDto
-                    {
-                        MemberId = x.MemberId,
-                        RoleId = x.RoleId,
-                        JoinedAt = x.JoinedAt,
-                        MemberName = x.Member.NickName
-                    })
+                    Members = p
+                        .ChatGroupMembers.ToList()
+                        .Select(x => new ChatGroupMemberResponseDto
+                        {
+                            MemberId = x.MemberId,
+                            RoleId = x.RoleId,
+                            JoinedAt = x.JoinedAt,
+                            MemberName = x.Member.NickName,
+                            AvatarUrl = x.Member.AvatarUrl,
+                        }),
                 };
                 httpResponse.Body.Groups.Add(groupDto);
                 await SendAsync(httpResponse, httpResponse.HttpCode, ct);

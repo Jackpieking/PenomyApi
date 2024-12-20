@@ -9,9 +9,7 @@ public class Chat10Handler : IFeatureHandler<Chat10Request, Chat10Response>
 {
     private readonly IChat10Repository _Chat10Repository;
 
-    public Chat10Handler(
-        Lazy<IUnitOfWork> unitOfWork
-    )
+    public Chat10Handler(Lazy<IUnitOfWork> unitOfWork)
     {
         _Chat10Repository = unitOfWork.Value.Chat10Repository;
     }
@@ -32,13 +30,15 @@ public class Chat10Handler : IFeatureHandler<Chat10Request, Chat10Response>
                 response.StatusCode = Chat10ResponseStatusCode.INVALID_REQUEST;
 
                 return response;
-            };
+            }
+            ;
 
             var chatMessages = await _Chat10Repository.GetChatGroupByGroupIdAsync(
                 request.ChatGroupId,
                 request.PageNum,
                 request.ChatNum,
-                ct);
+                ct
+            );
 
             Chat10UserProfileReadModel chat10UserProfile = new();
             ICollection<Chat10UserProfileReadModel> chat10UserProfileList = [];
@@ -50,7 +50,8 @@ public class Chat10Handler : IFeatureHandler<Chat10Request, Chat10Response>
                 // and create new list message for new user
                 if (chat10UserProfile.UserId != chat.Sender.UserId)
                 {
-                    if (chat10UserProfile.Messages != null) chat10UserProfileList.Add(chat10UserProfile);
+                    if (chat10UserProfile.Messages != null)
+                        chat10UserProfileList.Add(chat10UserProfile);
                     chat10UserProfile = new();
                 }
                 // If this is new user message list add info for list
@@ -64,17 +65,19 @@ public class Chat10Handler : IFeatureHandler<Chat10Request, Chat10Response>
                 // If this message is of current user add to message list
                 if (chat10UserProfile.UserId == chat.Sender.UserId)
                 {
-                    chat10UserProfile.Messages.Add(new Chat10ChatMessageReadModel
-                    {
-                        ChatId = chat.Id,
-                        Content = chat.Content,
-                        Time = chat.CreatedAt,
-                        IsReply = chat.ReplyToAnotherMessage,
-                        // If this is reply message find root message id
-                        ReplyMessageId = chat.ReplyToAnotherMessage
-                            ? await _Chat10Repository.GetMessageReplyByChatIdAsync(chat.Id, ct)
-                            : 0,
-                    });
+                    chat10UserProfile.Messages.Add(
+                        new Chat10ChatMessageReadModel
+                        {
+                            ChatId = chat.Id,
+                            Content = chat.Content,
+                            Time = chat.CreatedAt,
+                            IsReply = chat.ReplyToAnotherMessage,
+                            // If this is reply message find root message id
+                            ReplyMessageId = chat.ReplyToAnotherMessage
+                                ? await _Chat10Repository.GetMessageReplyByChatIdAsync(chat.Id, ct)
+                                : 0,
+                        }
+                    );
                 }
             }
             // Add for end of chat message group

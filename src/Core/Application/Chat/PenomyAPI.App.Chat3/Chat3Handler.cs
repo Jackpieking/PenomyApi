@@ -34,7 +34,7 @@ public class Chat3Handler : IFeatureHandler<Chat3Request, Chat3Response>
                 {
                     IsSuccess = false,
                     ErrorMessages = ["Group not found"],
-                    StatusCode = Chat3ResponseStatusCode.FAILED
+                    StatusCode = Chat3ResponseStatusCode.FAILED,
                 };
             if (
                 !await _Chat3Repository.IsMemberOfChatGroupAsync(
@@ -47,7 +47,7 @@ public class Chat3Handler : IFeatureHandler<Chat3Request, Chat3Response>
                 {
                     IsSuccess = false,
                     ErrorMessages = ["Member not found in group"],
-                    StatusCode = Chat3ResponseStatusCode.USER_NOT_MEMBER
+                    StatusCode = Chat3ResponseStatusCode.USER_NOT_MEMBER,
                 };
             var dateTimeNow = DateTime.UtcNow;
             var likeStatistic = ChatMessageLikeStatistic.Empty(request.MessageId);
@@ -60,7 +60,7 @@ public class Chat3Handler : IFeatureHandler<Chat3Request, Chat3Response>
                 CreatedBy = request.UserId,
                 UpdatedAt = dateTimeNow,
                 MessageType = request.MessageType,
-                ReplyToAnotherMessage = request.IsReply
+                ReplyToAnotherMessage = request.IsReply,
             };
             var result = await _Chat3Repository.SaveMessageAsync(
                 chatGroupMessage,
