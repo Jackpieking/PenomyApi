@@ -7,6 +7,7 @@
         <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt20\PenomyAPI.App.FeatArt20.csproj" />
         <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt21\PenomyAPI.App.FeatArt21.csproj" />
         <ProjectReference Include="..\..\..\Core\Application\ArtworkCreation\PenomyAPI.App.FeatArt22\PenomyAPI.App.FeatArt22.csproj" />
+		<ProjectReference Include="..\..\..\Core\Application\Chat\PenomyAPI.App.Chat10\PenomyAPI.App.Chat10.csproj" />
         <ProjectReference Include="..\..\..\Core\Application\Chat\PenomyAPI.App.Chat3\PenomyAPI.App.Chat3.csproj"  />
         <ProjectReference Include="..\..\..\Core\Application\Chat\PenomyAPI.App.Chat5\PenomyAPI.App.Chat5.csproj"  />
         <ProjectReference Include="..\..\..\Core\Application\Chat\PenomyAPI.App.FeatChat1\PenomyAPI.App.FeatChat1.csproj"  />
