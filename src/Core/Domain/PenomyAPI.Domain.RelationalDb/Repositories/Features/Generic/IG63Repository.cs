@@ -50,24 +50,4 @@ public interface IG63Repository
         int pageNum,
         int creatorNum,
         CancellationToken ct);
-
-    /// <summary>
-    ///     Get all the artworks by the specified <paramref name="userId"/>
-    ///     and <paramref name="artworkType"/> using pagination.
-    /// </summary>
-    /// <remarks>
-    ///     This method uses offset-based pagination to retrieve data.
-    /// </remarks>
-    /// <param name="userId">
-    ///     The user's ID.
-    /// </param>
-    /// <param name="ct">
-    ///     The token to notify the server to cancel the operation.
-    /// </param>
-    /// <returns>
-    ///     The user's favourited artworks.
-    ///     Otherwise, empty.
-    /// </returns>
-    Task<ICollection<string>> GetAllJoinedChatGroupIdStringAsync(
-        long userId);
 }

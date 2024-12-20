@@ -22,14 +22,6 @@ public class G63Repository : IG63Repository
         _chatGroup = dbContext.Set<ChatGroup>();
     }
 
-    public async Task<ICollection<string>> GetAllJoinedChatGroupIdStringAsync(long userId)
-    {
-        return await _chatGroup.AsNoTracking()
-            .Where(c => c.ChatGroupMembers.Any(cm => cm.MemberId == userId))
-            .Select(c => c.Id.ToString())
-            .ToListAsync();
-    }
-
     public async Task<ICollection<CreatorProfile>> GetFollowedCreatorsByUserIdWithPaginationAsync(
         long userId,
         int pageNum,

@@ -1,29 +1,32 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
-using PenomyAPI.Domain.RelationalDb.Repositories.Features.Generic;
+using PenomyAPI.App.Common.Realtime;
+using PenomyAPI.Domain.RelationalDb.Models.Chat.FeatChat10;
+using PenomyAPI.Domain.RelationalDb.Repositories.Features.Chat;
 using PenomyAPI.Domain.RelationalDb.UnitOfWorks;
 
 namespace PenomyAPI.Realtime.SignalR;
 
 [Authorize(AuthenticationSchemes = "Bearer")]
-public class ChatHub : Hub
+public class ChatHub : Hub, IChatHub
 {
     public const string connectPath = "/signalr/chat";
     private readonly IHubContext<ChatHub> _hubContext;
-    private readonly IG63Repository _g63Repository;
+    private readonly IChat2Repository _chat2Repository;
 
     public ChatHub(IHubContext<ChatHub> hubContext, Lazy<IUnitOfWork> unitOfWork)
     {
         _hubContext = hubContext;
-        _g63Repository = unitOfWork.Value.G63Repository;
+        _chat2Repository = unitOfWork.Value.Chat2Repository;
     }
 
     public override Task OnConnectedAsync()
     {
         var userId = Context.User.FindFirst("sub")?.Value ?? string.Empty;
         var groupIds = string.IsNullOrEmpty(userId)
-            ? _g63Repository.GetAllJoinedChatGroupIdStringAsync(
-                long.Parse(userId)
+            ? _chat2Repository.GetAllJoinedChatGroupIdAsync(
+                    long.Parse(userId),
+                    CancellationToken.None
                 ).Result
             : null;
 
@@ -31,7 +34,7 @@ public class ChatHub : Hub
         {
             foreach (var groupId in groupIds)
             {
-                _hubContext.Groups.AddToGroupAsync(Context.ConnectionId, groupId);
+                _hubContext.Groups.AddToGroupAsync(Context.ConnectionId, groupId.ToString());
             }
         }
 
@@ -42,8 +45,9 @@ public class ChatHub : Hub
     {
         var userId = Context.User.FindFirst("sub")?.Value ?? string.Empty;
         var groupIds = string.IsNullOrEmpty(userId)
-            ? _g63Repository.GetAllJoinedChatGroupIdStringAsync(
-                long.Parse(userId)
+            ? _chat2Repository.GetAllJoinedChatGroupIdAsync(
+                    long.Parse(userId),
+                    CancellationToken.None
                 ).Result
             : null;
 
@@ -51,15 +55,15 @@ public class ChatHub : Hub
         {
             foreach (var groupId in groupIds)
             {
-                _hubContext.Groups.RemoveFromGroupAsync(Context.ConnectionId, groupId);
+                _hubContext.Groups.RemoveFromGroupAsync(Context.ConnectionId, groupId.ToString());
             }
         }
 
         return base.OnDisconnectedAsync(exception);
     }
 
-    public async Task SendMessange(string groupId, string name, string imageURL, string message)
+    public async Task ReceiveGroupMessange(string groupId, Chat10UserProfileReadModel userChat)
     {
-        await _hubContext.Clients.Group(groupId).SendAsync(groupId, name, imageURL, message);
+        await _hubContext.Clients.Group(groupId).SendAsync(groupId, userChat);
     }
 }

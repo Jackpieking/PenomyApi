@@ -1,7 +1,6 @@
 ﻿using FastEndpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
-using PenomyAPI.App.Common.Realtime;
 using PenomyAPI.App.SM6;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Common;
@@ -16,13 +15,6 @@ namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.SocialMedia.SM6;
 
 public class SM6Endpoint : Endpoint<SM6RequestDto, SM6HttpResponse>
 {
-    private readonly INotificationHub _notificationHub;
-
-    public SM6Endpoint(INotificationHub notificationHub)
-    {
-        _notificationHub = notificationHub;
-    }
-
     public override void Configure()
     {
         Get("/SM6/group/request");

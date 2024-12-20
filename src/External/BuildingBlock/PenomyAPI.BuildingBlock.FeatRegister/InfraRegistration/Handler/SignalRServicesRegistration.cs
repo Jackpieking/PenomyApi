@@ -14,5 +14,9 @@ public class SignalRServicesRegistration : IServiceRegistration
         services
             .AddSingleton<INotificationHub, NotificationHub>()
             .MakeSingletonLazy<INotificationHub>();
+
+        //services
+        //    .AddSingleton<IChatHub, ChatHub>()
+        //    .MakeSingletonLazy<IChatHub>();
     }
 }
