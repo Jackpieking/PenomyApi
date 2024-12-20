@@ -20,6 +20,9 @@ public sealed class MangaSearchSchema
     [JsonPropertyName(Metadata.FieldTitle.MangaAvatar)]
     public string MangaAvatar { get; set; }
 
+    [JsonPropertyName(Metadata.FieldTitle.ArtworkType)]
+    public int ArtworkType { get; set; }
+
     [JsonPropertyName(Metadata.FieldTitle.MangaNumberOfStars)]
     public long MangaNumberOfStars { get; set; }
 
@@ -44,6 +47,8 @@ public sealed class MangaSearchSchema
             public const string MangaCategories = "MangaCategories";
 
             public const string MangaAvatar = "MangaAvatar";
+
+            public const string ArtworkType = "ArtworkType";
 
             public const string MangaNumberOfStars = "MangaNumberOfStars";
 

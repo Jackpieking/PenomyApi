@@ -1,11 +1,11 @@
-using FastEndpoints.Security;
-using Microsoft.IdentityModel.Tokens;
-using PenomyAPI.App.Common.Tokens;
-using PenomyAPI.Infra.Configuration.Options;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using FastEndpoints.Security;
+using Microsoft.IdentityModel.Tokens;
+using PenomyAPI.App.Common.Tokens;
+using PenomyAPI.Infra.Configuration.Options;
 
 namespace PenomyAPI.Identity.AppAuthenticator;
 

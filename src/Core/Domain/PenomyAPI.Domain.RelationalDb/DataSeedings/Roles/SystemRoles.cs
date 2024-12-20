@@ -1,5 +1,5 @@
-﻿using PenomyAPI.Domain.RelationalDb.Entities.SystemManagement;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using PenomyAPI.Domain.RelationalDb.Entities.SystemManagement;
 
 namespace PenomyAPI.Domain.RelationalDb.DataSeedings.Roles;
 

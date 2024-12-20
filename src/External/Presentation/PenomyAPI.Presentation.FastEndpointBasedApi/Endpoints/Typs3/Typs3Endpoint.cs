@@ -52,7 +52,7 @@ public class Typs3Endpoint : Endpoint<Typs3HttpRequest, Typs3HttpResponse>
 
         query.ExcludeFields = MangaSearchSchema.Metadata.FieldTitle.Embedding;
         query.SortBy = "_text_match:desc";
-        query.PerPage = 5;
+        query.PerPage = 8;
 
         var searchResult = await _typesenseClient.Search<MangaSearchSchema>(
             MangaSearchSchema.Metadata.SchemaName,
@@ -70,6 +70,7 @@ public class Typs3Endpoint : Endpoint<Typs3HttpRequest, Typs3HttpResponse>
                     MangaId = result.Document.MangaId,
                     MangaName = result.Document.MangaName,
                     MangaAvatar = result.Document.MangaAvatar,
+                    ArtworkType = result.Document.ArtworkType,
                     MangaNumberOfStars = result.Document.MangaNumberOfStars,
                     MangaNumberOfFollowers = result.Document.MangaNumberOfFollowers,
                 }

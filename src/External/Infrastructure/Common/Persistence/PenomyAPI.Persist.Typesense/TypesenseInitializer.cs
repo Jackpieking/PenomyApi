@@ -118,6 +118,11 @@ public static class TypesenseInitializer
                             false
                         ),
                         new(
+                            MangaSearchSchema.Metadata.FieldTitle.ArtworkType,
+                            FieldType.Int32,
+                            false
+                        ),
+                        new(
                             MangaSearchSchema.Metadata.FieldTitle.MangaNumberOfStars,
                             FieldType.Int64,
                             false

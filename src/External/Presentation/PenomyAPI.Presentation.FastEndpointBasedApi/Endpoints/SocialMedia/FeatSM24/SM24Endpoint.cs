@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
@@ -6,8 +5,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using PenomyAPI.App.SM24;
 using PenomyAPI.BuildingBlock.FeatRegister.Features;
-using PenomyAPI.Domain.RelationalDb.Entities.ArtworkCreation;
-using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatSM24.Common;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatSM24.DTOs;
 using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatSM24.HttpResponse;

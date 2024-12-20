@@ -1,6 +1,4 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using PenomyAPI.Domain.RelationalDb.Entities.Base;
-using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common;
 
 namespace PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
 

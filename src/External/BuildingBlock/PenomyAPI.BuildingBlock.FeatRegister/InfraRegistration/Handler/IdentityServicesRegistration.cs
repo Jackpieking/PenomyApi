@@ -1,3 +1,6 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Cryptography;
+using System.Text;
 using FastEndpoints;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -10,9 +13,6 @@ using PenomyAPI.BuildingBlock.FeatRegister.InfraRegistration.Common;
 using PenomyAPI.BuildingBlock.FeatRegister.ServiceExtensions;
 using PenomyAPI.Identity.AppAuthenticator;
 using PenomyAPI.Infra.Configuration.Options;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace PenomyAPI.BuildingBlock.FeatRegister.InfraRegistration.Handler;
 
@@ -45,7 +45,6 @@ internal sealed class IdentityServicesRegistration : IServiceRegistration
             .GetRequiredSection("Authentication")
             .GetRequiredSection("Jwt")
             .Get<JwtAuthenticationOptions>();
-
         var tokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = appAuthOption.ValidateIssuer,
@@ -61,6 +60,25 @@ internal sealed class IdentityServicesRegistration : IServiceRegistration
             )
         };
 
+        var adminAuthOption = configuration
+            .GetRequiredSection("Authentication")
+            .GetRequiredSection("AdminJwt")
+            .Get<AdminJwtAuthenticationOptions>();
+        var adminTokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = adminAuthOption.ValidateIssuer,
+            ValidateAudience = adminAuthOption.ValidateAudience,
+            ValidateLifetime = adminAuthOption.ValidateLifetime,
+            ValidateIssuerSigningKey = adminAuthOption.ValidateIssuerSigningKey,
+            RequireExpirationTime = adminAuthOption.RequireExpirationTime,
+            ValidTypes = adminAuthOption.ValidTypes,
+            ValidIssuer = adminAuthOption.ValidIssuer,
+            ValidAudience = adminAuthOption.ValidAudience,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                new HMACSHA256(Encoding.UTF8.GetBytes(adminAuthOption.IssuerSigningKey)).Key
+            )
+        };
+
         var googleAuthOption = configuration
             .GetRequiredSection("Authentication")
             .GetRequiredSection("Google")
@@ -71,6 +89,10 @@ internal sealed class IdentityServicesRegistration : IServiceRegistration
             .AddSingleton(tokenValidationParameters)
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(config => config.TokenValidationParameters = tokenValidationParameters)
+            .AddJwtBearer(
+                "AdminJwt",
+                config => config.TokenValidationParameters = adminTokenValidationParameters
+            )
             .AddGoogle(
                 GoogleDefaults.AuthenticationScheme,
                 config =>

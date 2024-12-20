@@ -1,9 +1,9 @@
-﻿using PenomyAPI.App.FeatG9;
-using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG9.DTOs;
-using ProtoBuf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using PenomyAPI.App.FeatG9;
+using PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG9.DTOs;
+using ProtoBuf;
 
 namespace PenomyAPI.Presentation.FastEndpointBasedApi.Endpoints.FeatG9.HttpResponses;
 
@@ -31,6 +31,6 @@ public sealed class G9HttpResponse
 
     public static string GetAppCode(G9ResponseAppCode appCode)
     {
-        return $"G9.{appCode}.{(int) appCode}";
+        return $"G9.{appCode}.{(int)appCode}";
     }
 }
