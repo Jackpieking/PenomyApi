@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using PenomyAPI.App.Common.Realtime;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.Realtime.SignalR;
 

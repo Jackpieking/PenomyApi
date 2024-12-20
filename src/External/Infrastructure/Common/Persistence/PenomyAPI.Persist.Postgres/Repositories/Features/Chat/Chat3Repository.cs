@@ -1,13 +1,15 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using PenomyAPI.App.Common.Models.Common;
 using PenomyAPI.Domain.RelationalDb.Entities.Chat;
+using PenomyAPI.Domain.RelationalDb.Models.Chat.FeatChat10;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.Chat;
 using PenomyAPI.Persist.Postgres.Data.DbContexts;
 using PenomyAPI.Persist.Postgres.Repositories.Helpers;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.Chat;
 
@@ -89,5 +91,18 @@ public class Chat3Repository : IChat3Repository
 
             result.Value = false;
         }
+    }
+
+    public async Task<Chat10UserProfileReadModel> GetUserChatInfoAsync(long userId, CancellationToken token)
+    {
+        return await _groupMemberContext.AsNoTracking()
+            .Where(o => o.MemberId == userId)
+            .Select(o => new Chat10UserProfileReadModel
+            {
+                UserId = o.MemberId,
+                NickName = o.Member.NickName,
+                AvatarUrl = o.Member.AvatarUrl
+            })
+            .FirstOrDefaultAsync(cancellationToken: token);
     }
 }

@@ -1,10 +1,11 @@
+using Microsoft.EntityFrameworkCore;
+using PenomyAPI.Domain.RelationalDb.Entities.Chat;
+using PenomyAPI.Domain.RelationalDb.Entities.Generic;
+using PenomyAPI.Domain.RelationalDb.Repositories.Features.Chat;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using PenomyAPI.Domain.RelationalDb.Entities.Chat;
-using PenomyAPI.Domain.RelationalDb.Repositories.Features.Chat;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.Chat;
 
@@ -39,5 +40,27 @@ public class Chat2Repository : IChat2Repository
                 }),
             })
             .ToListAsync(token);
+    }
+
+    public async Task<ICollection<long>> GetAllJoinedChatGroupIdAsync(long userId, CancellationToken token)
+    {
+        return await _groupContext.AsNoTracking()
+            .Where(c => c.ChatGroupMembers.Any(cm => cm.MemberId == userId))
+            .Select(c => c.Id)
+            .ToListAsync(cancellationToken: token);
+    }
+
+    public Task<UserProfile> GetUserProfileByIdAsync(long userId)
+    {
+        return _dbContext.Set<UserProfile>()
+            .AsNoTracking()
+            .Where(user => user.UserId == userId)
+            .Select(user => new UserProfile
+            {
+                UserId = user.UserId,
+                NickName = user.NickName,
+                AvatarUrl = user.AvatarUrl,
+            })
+            .FirstOrDefaultAsync();
     }
 }
