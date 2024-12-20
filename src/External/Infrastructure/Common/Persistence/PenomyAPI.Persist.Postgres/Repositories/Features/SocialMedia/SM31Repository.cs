@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using PenomyAPI.App.Common.Models.Common;
+using PenomyAPI.Domain.RelationalDb.Entities.Chat;
 using PenomyAPI.Domain.RelationalDb.Entities.Generic;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common;
@@ -20,6 +21,9 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia;
 public class SM31Repository : ISM31Repository
 {
     private readonly AppDbContext _dbContext;
+    private readonly DbSet<ChatGroup> _chatGroupContext;
+    private readonly DbSet<ChatGroupMember> _chatGroupMemberContext;
+    private readonly DbSet<ChatMessage> _chatMessageContext;
     private readonly DbSet<UserFriend> _userFriendContext;
     private readonly DbSet<UserFriendRequest> _userFriendRequestContext;
     private readonly Lazy<UserManager<PgUser>> _userManager;
@@ -32,12 +36,17 @@ public class SM31Repository : ISM31Repository
         _userFriendContext = context.Set<UserFriend>();
         _userManager = userManager;
         _userProfile = context.Set<UserProfile>();
+        _chatMessageContext = context.Set<ChatMessage>();
+        _chatGroupMemberContext = context.Set<ChatGroupMember>();
+        _chatGroupContext = context.Set<ChatGroup>();
     }
 
     public async Task<bool> IsAlreadyFriendAsync(long userId, long friendId, CancellationToken ct)
     {
         return await _userFriendContext.AnyAsync(
-            x => (x.UserId == userId && x.FriendId == friendId) || (x.UserId == friendId && x.FriendId == userId),
+            x =>
+                (x.UserId == userId && x.FriendId == friendId)
+                || (x.UserId == friendId && x.FriendId == userId),
             ct
         );
     }
@@ -79,25 +88,48 @@ public class SM31Repository : ISM31Repository
         {
             transaction = await RepositoryHelper.CreateTransactionAsync(_dbContext, token);
             var userFriendPairs = friendRequest.First();
-
-            await _userFriendContext
+            await _chatMessageContext
                 .Where(x =>
-                    (x.UserId == userFriendPairs.UserId && x.FriendId == userFriendPairs.FriendId)
-                    || (x.UserId == userFriendPairs.FriendId && x.FriendId == userFriendPairs.UserId)
-                )
-                .ExecuteDeleteAsync(token);
-            await _userFriendRequestContext
-                .Where(x =>
-                    (x.CreatedBy == userFriendPairs.UserId && x.FriendId == userFriendPairs.FriendId &&
-                     x.RequestStatus == RequestStatus.Accepted)
-                    || (
-                        x.CreatedBy == userFriendPairs.FriendId
-                        && x.FriendId == userFriendPairs.UserId
-                        && x.RequestStatus == RequestStatus.Accepted
+                    (
+                        x.CreatedBy == userFriendPairs.UserId
+                        && x.CreatedBy == userFriendPairs.FriendId
                     )
                 )
                 .ExecuteDeleteAsync(token);
 
+            await _chatGroupMemberContext
+                .Where(x =>
+                    x.MemberId == userFriendPairs.UserId || x.MemberId == userFriendPairs.FriendId
+                )
+                .ExecuteDeleteAsync(token);
+
+            await _chatGroupContext
+                .Where(x =>
+                    x.GroupName.Contains(userFriendPairs.UserId.ToString())
+                    && x.GroupName.Contains(userFriendPairs.FriendId.ToString())
+                )
+                .ExecuteDeleteAsync(token);
+
+            await _userFriendContext
+                .Where(x =>
+                    (x.UserId == userFriendPairs.UserId && x.FriendId == userFriendPairs.FriendId)
+                    || (
+                        x.UserId == userFriendPairs.FriendId && x.FriendId == userFriendPairs.UserId
+                    )
+                )
+                .ExecuteDeleteAsync(token);
+            await _userFriendRequestContext
+                .Where(x =>
+                    (
+                        x.CreatedBy == userFriendPairs.UserId
+                        && x.FriendId == userFriendPairs.FriendId
+                    )
+                    || (
+                        x.CreatedBy == userFriendPairs.FriendId
+                        && x.FriendId == userFriendPairs.UserId
+                    )
+                )
+                .ExecuteDeleteAsync(token);
 
             await _dbContext.SaveChangesAsync(token);
             await transaction.CommitAsync(token);

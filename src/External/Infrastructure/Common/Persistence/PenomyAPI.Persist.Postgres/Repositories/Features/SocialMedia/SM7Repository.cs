@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
-using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
+using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia
 {
@@ -29,10 +29,11 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia
                 .Where(o =>
                     o.GroupMembers.Any(gm => gm.MemberId == userId)
                     && o.GroupStatus == SocialGroupStatus.Active
-                    && o.CreatedBy != userId)
-                .OrderByDescending(o => o.GroupPosts.Any()
-                    ? o.GroupPosts.Max(gp => gp.UpdatedAt)
-                    : o.CreatedAt)
+                    && o.CreatedBy != userId
+                )
+                .OrderByDescending(o =>
+                    o.GroupPosts.Any() ? o.GroupPosts.Max(gp => gp.UpdatedAt) : o.CreatedAt
+                )
                 .Skip((pageNum - 1) * groupNum)
                 .Take(groupNum)
                 .Select(o => new SocialGroup
@@ -52,7 +53,7 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia
                     {
                         UpdatedAt = o.GroupPosts.Any()
                             ? o.GroupPosts.Max(gp => gp.UpdatedAt)
-                            : o.CreatedAt
+                            : o.CreatedAt,
                     },
                     GroupPosts = o.GroupPosts.ToList(),
                     GroupMembers = o.GroupMembers.Where(gm => gm.MemberId == userId),
@@ -93,7 +94,7 @@ namespace PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia
                     {
                         UpdatedAt = o.GroupPosts.Any()
                             ? o.GroupPosts.Max(gp => gp.UpdatedAt)
-                            : o.CreatedAt
+                            : o.CreatedAt,
                     },
                     GroupPosts = o.GroupPosts.ToList(),
                     GroupMembers = o.GroupMembers.Where(gm => gm.MemberId == userId).ToList(),
