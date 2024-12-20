@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PenomyAPI.Domain.RelationalDb.Entities.Chat;
 using PenomyAPI.Domain.RelationalDb.Entities.Generic;
@@ -9,6 +5,11 @@ using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia;
 using PenomyAPI.Domain.RelationalDb.Entities.SocialMedia.Common;
 using PenomyAPI.Domain.RelationalDb.Repositories.Features.SocialMedia;
 using PenomyAPI.Persist.Postgres.Data.DbContexts;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PenomyAPI.Persist.Postgres.Repositories.Features.SocialMedia;
 
@@ -86,8 +87,13 @@ public class SM32Repository : ISM32Repository
             .Select(x => x.UserId)
             .ToListAsync(token);
         var listFriends = friendIds.Union(friendIds1).Where(x => x != userId).ToList();
+        var myChatGroups = await _chatGroupContext
+            .Where(x =>
+                x.GroupName.Contains(userId.ToString()) && x.GroupName.Contains(friendId.ToString())
+            )
+            .ToListAsync(token);
 
-        var friendList = await _userProfileContext
+        return await _userProfileContext
             .Where(x => listFriends.Contains(x.UserId))
             .Select(x => new UserProfile
             {
@@ -96,23 +102,10 @@ public class SM32Repository : ISM32Repository
                 AvatarUrl = x.AvatarUrl,
                 Gender = x.Gender,
                 AboutMe = x.AboutMe,
+                JoinedChatGroupMembers = myChatGroups.Any()
+                    ? new ChatGroupMember[] { new() { ChatGroupId = myChatGroups[0].Id } }
+                    : Array.Empty<ChatGroupMember>()
             })
             .ToListAsync(token);
-
-        foreach (var friend in friendList)
-        {
-            var myChatGroups = await _chatGroupContext
-                .Where(x =>
-                    x.GroupName.Contains(userId.ToString())
-                    && x.GroupName.Contains(friend.UserId.ToString())
-                )
-                .FirstOrDefaultAsync(token);
-
-            friend.JoinedChatGroupMembers.Append(
-                new ChatGroupMember { ChatGroupId = myChatGroups.Id }
-            );
-        }
-
-        return friendList;
     }
 }
