@@ -86,12 +86,8 @@ public class SM32Repository : ISM32Repository
             .Select(x => x.UserId)
             .ToListAsync(token);
         var listFriends = friendIds.Union(friendIds1).Where(x => x != userId).ToList();
-        var myChatGroups = await _chatGroupContext
-            .Where(x =>
-                x.GroupName.Contains(userId.ToString()) && x.GroupName.Contains(friendId.ToString())
-            )
-            .ToListAsync(token);
-        return await _userProfileContext
+
+        var friendList = await _userProfileContext
             .Where(x => listFriends.Contains(x.UserId))
             .Select(x => new UserProfile
             {
@@ -100,11 +96,23 @@ public class SM32Repository : ISM32Repository
                 AvatarUrl = x.AvatarUrl,
                 Gender = x.Gender,
                 AboutMe = x.AboutMe,
-                JoinedChatGroupMembers = new ChatGroupMember[]
-                {
-                    new ChatGroupMember { ChatGroupId = myChatGroups.FirstOrDefault().Id },
-                },
             })
             .ToListAsync(token);
+
+        foreach (var friend in friendList)
+        {
+            var myChatGroups = await _chatGroupContext
+                .Where(x =>
+                    x.GroupName.Contains(userId.ToString())
+                    && x.GroupName.Contains(friend.UserId.ToString())
+                )
+                .FirstOrDefaultAsync(token);
+
+            friend.JoinedChatGroupMembers.Append(
+                new ChatGroupMember { ChatGroupId = myChatGroups.Id }
+            );
+        }
+
+        return friendList;
     }
 }
