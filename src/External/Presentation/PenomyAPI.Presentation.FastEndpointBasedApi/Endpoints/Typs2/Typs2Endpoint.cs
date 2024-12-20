@@ -66,6 +66,7 @@ public class Typs2Endpoint : Endpoint<Typs2HttpRequest, Typs2HttpResponse>
                     MangaId = result.Document.MangaId,
                     MangaName = result.Document.MangaName,
                     MangaAvatar = result.Document.MangaAvatar,
+                    ArtworkType = result.Document.ArtworkType,
                     MangaDescription = result.Document.MangaDescription,
                     MangaNumberOfStars = result.Document.MangaNumberOfStars,
                     MangaNumberOfFollowers = result.Document.MangaNumberOfFollowers,

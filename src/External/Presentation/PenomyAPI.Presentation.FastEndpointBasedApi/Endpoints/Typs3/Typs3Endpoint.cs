@@ -70,6 +70,7 @@ public class Typs3Endpoint : Endpoint<Typs3HttpRequest, Typs3HttpResponse>
                     MangaId = result.Document.MangaId,
                     MangaName = result.Document.MangaName,
                     MangaAvatar = result.Document.MangaAvatar,
+                    ArtworkType = result.Document.ArtworkType,
                     MangaNumberOfStars = result.Document.MangaNumberOfStars,
                     MangaNumberOfFollowers = result.Document.MangaNumberOfFollowers,
                 }

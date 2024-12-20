@@ -22,6 +22,8 @@ public class Typs2HttpResponse
 
         public string MangaAvatar { get; init; }
 
+        public int ArtworkType { get; init; }
+
         public string MangaDescription { get; init; }
 
         public long MangaNumberOfStars { get; init; }
