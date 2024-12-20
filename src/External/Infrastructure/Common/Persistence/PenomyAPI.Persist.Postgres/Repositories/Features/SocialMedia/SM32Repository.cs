@@ -102,7 +102,7 @@ public class SM32Repository : ISM32Repository
                 AboutMe = x.AboutMe,
                 JoinedChatGroupMembers = new ChatGroupMember[]
                 {
-                    new ChatGroupMember { ChatGroupId = myChatGroups[0].Id },
+                    new ChatGroupMember { ChatGroupId = myChatGroups.FirstOrDefault().Id },
                 },
             })
             .ToListAsync(token);
