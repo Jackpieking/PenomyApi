@@ -23,7 +23,7 @@ internal sealed class G31Endpoint : Endpoint<G31Request, G31HttpResponse>
         });
         Summary(summary =>
         {
-            summary.Summary = "Endpoint for login feature";
+            summary.Summary = "Endpoint for feature";
             summary.Description = "This endpoint is used for login purpose.";
             summary.ExampleRequest = new()
             {
