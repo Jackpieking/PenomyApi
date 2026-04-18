@@ -4,7 +4,7 @@
     <ProjectReference Include="..\..\..\PenomyAPI.Infra.Configuration\PenomyAPI.Infra.Configuration.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="MailKit" Version="4.8.0" />
+    <PackageReference Include="MailKit" Version="4.16.0" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
